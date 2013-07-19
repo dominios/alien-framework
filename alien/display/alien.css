@@ -1,0 +1,753 @@
+/* 
+    Document   : default ALiEN sytlesheet
+    Created on : 14.4.2012, 9:32:25
+    Author     : Dominik Geršák
+    Description: dark
+*/
+
+/* ******** OVERALL *********************************************************** */
+@charset "utf-8";
+body {
+    width: 100%;
+    height: 100%;
+    background-color: #eee;
+    background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#e8f2ff), to(#b6def6));
+    background: -webkit-linear-gradient(top, #e8f2ff, #b6def6);
+    background: -moz-linear-gradient(top, #e8f2ff, #b6def6);
+    background: -ms-linear-gradient(top, #e8f2ff, #b6def6);
+    background: -o-linear-gradient(top, #e8f2ff, #b6def6);
+    color: #333;
+    font-size: 14px;
+    font-family: segoe ui, trebuchet ms, Calibri;
+    margin: 0px;
+    padding: 0;
+    text-shadow: 1px 1px #fff;
+/*    -moz-user-select: none;
+    -webkit-user-select: none;*/
+}
+
+h1, h2, h3, h4, h5, h6 {
+    font-family: segoe ui light, segoe ui, calibri, arial;
+}
+
+h2 {
+    line-height: 16px;
+    font-size: 20px;
+    border-bottom: 1px solid #666;
+    padding-bottom: 7px;
+    margin-right: 15px;
+}
+
+h3 {
+    line-height: 10px;
+    font-size: 18px;
+    border-bottom: 1px solid #444;
+    padding-bottom: 13px;
+    margin-right: 15px;
+    text-shadow: 2px 2px #eee;
+}
+
+h4 {
+    line-height: 18px;
+    font-size: 16px;
+    margin: 7px 5px;
+    padding-bottom: 3px;
+    border-bottom: 1px solid #555;
+}
+
+h4 img {
+    width: 18px;
+    margin-right: 5px;
+}
+
+h5 {
+    line-height: 22px;
+    font-size: 14px;
+    margin: 6px 4px;   
+    padding-bottom: 3px;
+}
+
+h5 img {
+    width: 22px;
+    margin-right: 2px;
+    vertical-align: top;
+}
+
+a {
+    color: #333;
+}
+
+a:link {
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+a:visited {
+    text-decoration: none;
+}
+
+a img {
+    border: 0;
+}
+
+
+/* ******** LAYOUT ************************************************************ */
+
+#alienlogo {
+    background: none !important;
+    box-shadow: initial;
+    border: 0px;
+    height: 50px;
+}
+
+#alienlogo img {
+    height: 60px;
+}
+
+#topbanner {
+    display: none;
+    position: absolute;
+    z-index: 5;
+    top: 5px;
+    left: 515px;
+    height: 30px;
+/*    background-color: red;*/
+    color: #eee;
+    width: 690px;
+    vertical-align: middle;
+    line-height: 30px;
+}
+
+#toppanel {
+    z-index: 5;
+    background-color: #d7d7ff;
+    background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#d1e5fe), to(#a8d0e9));
+    background: -webkit-linear-gradient(top, #d1e5fe, #a8d0e9);
+    background: -moz-linear-gradient(top, #d1e5fe, #a8d0e9);
+    background: -ms-linear-gradient(top, #d1e5fe, #a8d0e9);
+    background: -o-linear-gradient(top, #d1e5fe, #a8d0e9);
+    box-shadow: 0 0 5px 2px #888;
+    border-bottom: 1px solid #555;
+    padding: 0px;
+    margin: 0px;
+    height: 55px;
+    padding: 5px 0px;
+    color: #333;
+}
+
+#toppanel_menu {
+    position: absolute;
+    z-index: 5;
+    top: 15px;
+    left: 320px;
+}
+
+#toppanel a:link, #toppanel a:visited {
+    display: inline-block;
+    margin-left: 2px;
+    margin-right: 2px;
+    /*margin-top: 1px;*/
+    padding-left: 10px;
+    padding-right: 15px;
+    line-height: 40px;
+    border: 1px solid transparent;
+    vertical-align: middle;
+    text-shadow: 1px 1px #eee;    
+    /*border-right: 1px solid #3a3a3a;*/
+}
+
+#toppanel img {
+    vertical-align: middle;
+    margin-right: 5px;
+}
+
+#toppanel a:hover, #toppanel a:active {
+    border-color: #555;
+    background-color: #aaa;
+    box-shadow: 0 0 0 #000;
+    border-radius: 2px;
+    border-width: 1px;
+    border: 1px solid #777;
+    background: -webkit-linear-gradient(top, #bbb, #888);
+    color: #eee;
+    text-shadow: 1px 1px #000;
+    text-decoration: none;
+    box-shadow: 0px 0px 6px 0px #aaa;
+}
+
+#maincontent {
+    width: 1100px;
+}
+
+
+a:link .nobackground {
+    background-color: transparent;
+}
+
+.leftpanel {
+    display: block;
+    width: 250px;
+    float: left;
+    padding-left: 10px;
+    padding-top: 7px;
+    padding-right: 0px;
+}
+
+.leftpanel a:visited, .leftpanel a:link {
+    display: block;
+    margin-bottom: 4px;
+    margin-right: 5px;
+    line-height: 28px;
+    font-size: 16px;
+    padding: 4px;
+    padding-left: 7px;
+    border: 0px;
+    border-radius: 1px;
+    color: #333;
+    border: 1px solid #bbc;
+    background-color: #e0eef6;
+}
+
+.leftpanel a:hover, .leftpanel a:active {
+    text-decoration: none;
+    background-color: #fbf37b;
+    box-shadow: 0 0 12px #fbf37b;
+    color: #fff;
+    color: black;
+}
+
+.leftpanel a.folder, .leftpanel a.subbutton {
+    line-height: 16px;
+    font-size: 12px;
+    margin-right: 0;
+    border-top: 1px solid #333733;
+    padding: 3px;
+    padding-left: 4px;
+    background-color: #444844;
+}
+
+.leftpanel a.folder:first-child, .leftpanel a.subbutton:first-child {
+/*    border-top: 0;*/
+}
+
+.leftpanel a.folder:hover, .leftpanel a.subbutton:hover {
+    border-top-color: #fbf37b;
+    background-color: #fbf37b;
+}
+
+.leftpanel .folder img, .leftpanel .subbutton img {
+    height: 22px;
+    width: 22px;
+}
+
+#contentPluginsPanel, #contentBrowserPanel {
+    display: block;
+    /*display: none;*/
+    background-color: #555955;
+    padding: 0;
+    margin-top: -4px;
+    margin-right: 5px;
+    border-left: 7px solid #555955;
+    background-color: #444844;
+    padding-left: 1px;
+}
+
+.rightpanel {
+    width: 835px;
+    margin-top: 10px;
+    margin-bottom: 7px;
+    min-height: 535px;
+    float: right;
+    padding-left: 0px;
+    padding-right: 0px;
+    padding-top: 0px;
+    padding-bottom: 8px;
+    background-color: rgba(235, 235, 255, 0.8);
+    border: 1px solid #ccc;
+}
+
+#rightpanelHeader {
+    padding-bottom: 2px;
+    margin-bottom: 5px;
+    border-bottom: 1px solid #ddd;
+    font-size: 20px;
+    height: 34px;
+    line-height: 32px;
+    font-weight: bold;
+    background-color: rgb(240, 240, 255);
+    display: block;
+}
+
+#headerTitle {
+	padding-left: 5px;
+	float: left;
+        font-family: segoe ui light, segoe ui, calibri, arial;
+        text-shadow: 1px 1px #eee;
+}
+
+#headerActionPanel {
+	padding-right: 0px;
+	float: right;
+}
+
+.actionButton {
+	display: inline-block;
+	background-color: #363636;
+	margin-left: 0px;
+	padding-right: 5px;
+	padding-left: 5px;
+	border: 0;
+	border-left: 1px solid #555;
+	line-height: 34px;
+	font-size: 16px;
+}
+
+.actionButton:hover{
+	text-decoration: none;
+    background-color: #fbf37b;
+    border-color: #fbf37b;
+    box-shadow: 0 0 15px #fbf37b;
+	color: black;
+}
+
+/* **************** FORMULARE ***************************************************/
+
+textarea {
+    background-color: #999d99;
+    border-radius: 2px;
+}
+
+select {
+    background-color: #ccc;
+    border-radius: 2px;
+    border: 0px;
+    padding: 2px;
+    padding-left: 4px;
+    color: #333;
+}
+
+select:hover {
+    background-color: #eee;
+    color: #111;
+}
+
+option {
+    background-color: #ccc;
+    border-radius: 2px;
+    border: 0px;
+    padding: 2px;
+    padding-left: 4px;
+    color: #333;
+}
+
+option:hover {
+    background-color: #eee;
+    color: #111;
+}
+
+input, button, .button {
+    font-family: Calibri;
+    background-color: #bbbbc8;
+    border-radius: 2px;
+    border: 0px;
+    padding: 2px;
+    padding-left: 4px;
+    color: #080808;
+    font-weight: bold;
+    line-height: 20px;
+}
+
+button, .button {
+    margin: 2px;
+    cursor: pointer;
+    padding: 2px;
+    padding-left: 4px;
+    padding-right: 4px;
+}
+
+.button {
+    display: inline-block;
+    padding: 3px;
+    padding-right: 5px;
+    padding-left: 5px;
+    vertical-align: middle;
+    line-height: 20px;
+    box-shadow: 0 0 3px #aaf;
+    -moz-user-select: none;
+    -webkit-user-select: none;
+}
+
+.item .button {
+    box-shadow: 0 0 0 #000;
+}
+
+.button img {
+    vertical-align: middle;
+    width: 26px;
+}
+
+input[type="text"]{
+    font-weight: normal;
+}
+
+input:hover, button:hover, textarea:hover {
+    background-color: #fff;
+    color: black;
+    box-shadow: 0 0 10px #bbf;
+}
+
+.button:hover {
+    background-color: #fff;
+    color: black;
+    box-shadow: 0 0 10px #bbf;
+}
+
+.button.neutral:hover {
+    box-shadow: 0 0 10px #4444ff;
+}
+
+.button.negative:hover {
+    box-shadow: 0 0 10px red;
+}
+
+.button.positive:hover {
+    box-shadow: 0 0 10px #73e100;
+}
+a.button:hover {
+    text-decoration: none;
+}
+
+input[disabled]{
+    background-color: black;
+}
+
+input[disabled]:hover{
+    background-color: #111;
+}
+
+input[type="submit"]{
+    cursor: pointer;
+}
+
+fieldset {
+    background-color: #282828;
+    border: 1px solid #555;
+    border-radius: 1px;
+    margin-left: -2px;
+    margin-right: 7px;
+    color: #ccc;
+}
+
+fieldset hr {
+    border: 1px solid #3c3c3c;
+}
+
+legend {
+    padding: 0 5px;
+    font-weight: bold;
+    color: #dfdfdf;
+}
+
+/* ******************* TABULKY **************************************************/
+
+table.noborders {
+    border: 0px;
+}
+
+table.noborders td, th {
+    border: 0px;
+}
+
+img {
+    vertical-align: middle;
+}
+
+.item {
+    border: 1px solid #5c5c5c;
+    border-radius: 1px;
+    padding: 3px;
+    padding-left: 4px;
+    /*padding-right: 4px;*/
+    margin-left: 5px;
+    margin-top: 5px;
+    margin-right: 7px;
+/*    margin-left: 5px;
+    margin-right: 10px;*/
+    background-color: #444;
+/*    cursor: pointer;*/
+    color: #ccc;
+}
+
+.item img {
+    height: 22px;
+    width: 22px;
+}
+
+.item.selectable {
+    cursor: pointer;
+    -moz-user-select: none;
+    -webkit-user-select: none;
+}
+
+.item.selectable:hover {
+    background-color: #888;
+}
+
+.notactivated, .hidden {
+    background-color: #323232;
+    color: #aaa;
+}
+
+.item .button {
+    margin: 0px;
+    padding: 2px;
+    background-color: #4f4f4f;
+    line-height: inherit;
+}
+
+.item .button img {
+    height: 16px;
+    width: 16px;
+}
+
+.item .button:hover {
+    background-color: #fff;
+}
+
+.controlPanel {
+    float: right;
+    display: inline-block;
+}
+
+.controlPanel img {
+    width: 22px;
+    margin: 0px;
+}
+
+.ui-state-default .ui-state-highlight {
+    margin: 0; padding: 0; display: none;
+}
+
+div.image.ui-state-default {
+    border-radius: 1px;
+    border: 0;
+    display: inline-block;
+    background: none;
+    background-color: #222;
+    margin: 3px;    
+    padding: 6px;
+    padding-bottom: 2px;
+    text-align: center;
+}
+
+div.image:hover {
+    background-color: #4c4c4c;
+    cursor: pointer;
+}
+
+div.image .imageTitleBar {
+    /*margin-top: 2px;*/
+    margin-bottom: 3px;
+    color: #ccc;
+}
+
+div.image .imageActionBar {
+    margin-top: 2px;
+    padding: 0;
+    height: 24px;
+    line-height: 24px;
+    vertical-align: bottom;
+    color: #bbb;
+}
+
+/* ********* SPECIAL ********************************************************** */
+
+#loader {
+    display: none;    
+    position: absolute;
+    background-color: rgba(34, 34, 34, 0.9);
+    padding: 10px;
+    width: 60px;
+    height: 55px;
+    text-align: center;
+    z-index: 999;
+}
+
+#notifyArea {
+    display: none;
+    width: 600px;
+    margin: 0px auto;
+    position: relative;
+    z-index: 100;
+    opacity: 0.98;
+}
+
+#window {
+    display: table-column;
+    display: none;
+    /*min-width: 300px;*/
+    min-height: 25px;
+    background-color: red;
+    position: fixed;
+    margin: 20px 0px;
+    padding-top: 0px;
+    padding-bottom: 5px;
+    background-color: #222;
+    border-radius: 2px;
+    border: 1px solid #555;
+    z-index: 99;
+}
+#windowCloser {
+    position: absolute;
+    top: 2px;
+    right: 2px;
+}
+#windowCloser .button {
+    background: none;
+    box-shadow: 0 0 0 0;    
+    width: 18px;
+    height: 18px;
+}
+
+#windowCloser .button:hover {
+    background-color: #555;
+}
+#overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 98;
+    display: block;
+    display: none;
+    background-color: rgba(30,30,50,255);
+    opacity: 0.75;
+    width: 100%;
+    height: 100%;
+}
+
+.ajaxLoader {
+    display: none;
+    position: relative;
+    background-color: #eee;
+    text-align: center;
+    color: black;
+    padding: 3px 8px;
+    margin: 0;
+}
+
+/* pri editacii stranky kvoli JS */
+#selTemplate {
+    display: inline-block;
+    width: 250px;
+}
+
+
+/* SORTABLE JQUERY UI */
+.sortable .ui-state-highlight {
+    border: 0px;
+    background: none;
+    background-color: #FBF37B;
+    height: 49px;
+    border: 1px solid #FBF37B;
+    margin-left: 5px;
+    margin-top: 5px;
+    margin-right: 5px;
+    border-radius: 2px;
+}
+
+.sortable .ui-state-default {
+/*    border: 1px solid #FBF37B;*/
+    border: 0px;
+    background: none;
+    font-weight: normal;
+}
+
+.toggleHideable {
+    -moz-user-select: none;
+    -webkit-user-select: none;
+    cursor: pointer;
+}
+
+.toggleHideable:hover {
+    background-color: #444;
+}
+
+.manual {
+    margin: 5px;
+    padding-right: 3px;
+    width: 1000px;
+    text-align: justify;
+    line-height: 20px;
+}
+
+/* ******** LOGS & NOTIFICATIONS ********************************************** */
+
+.notification {
+    -moz-user-select: none;
+    -webkit-user-select: none;
+    display: block;
+    border-style: solid;
+    border-width: 1px;
+    border-radius: 2px;
+    padding: 5px;
+    padding-left: 10px;
+    margin: 5px;
+}
+
+.notification:hover {
+    cursor: pointer;
+    color: white;
+}
+
+.error {
+    display: block;
+    background-color: #880000;
+    border-color: #ff0000;
+    box-shadow: 0 0 8px #aa3333;
+    color: #ffeeee;
+}
+
+.error:hover {
+    border-color: #ff8888;
+}
+
+.warning {
+    background-color: #fbf37b;
+    box-shadow: 0 0 8px #fbf37b;
+    border-color: yellow;
+    color: black;
+}
+
+.warning:hover {
+    border-color: white;
+    color: black;
+}
+
+.information {
+    background-color: #222288;
+    box-shadow: 0 0 8px #ccccff;
+    border-color: #4444ff;
+    color: #ddddff;
+}
+
+.information:hover {
+    border-color: #7777ff;
+}
+
+.notice {
+    color: lightskyblue;
+}
+
+.success {
+    background-color: #2A2;
+    box-shadow: 0 0 8px #2A2;
+    border-color: #73e100;
+    color: white;
+}
+
+.success:hover {
+    border-color: white;
+}

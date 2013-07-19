@@ -1,0 +1,47 @@
+php_flag magic_quotes_gpc off
+php_flag register_globals off
+php_flag html_errors on
+php_flag display_errors on
+php_value short_open_tag 1
+
+Options +Indexes
+#Options +FollowSymLinks
+
+RewriteEngine on
+
+RewriteBase /ALiEN_V2/alien/
+
+RewriteCond %{SCRIPT_FILENAME} !-d  
+RewriteCond %{SCRIPT_FILENAME} !-f
+
+#RewriteRule ^([a-zA-Z]+.)$ ./index.php?section=$1
+
+
+
+
+
+
+
+#RewriteRule ^images/(.+)$ ../images/$1 [L]
+#RewriteRule ^design/(.+)$ ../design/$1 [L]
+#RewriteRule ^alien/ ../alien [L]
+
+#<FilesMatch "\.ini$">
+#    Order Allow,Deny
+#    Deny from all
+#</FilesMatch>
+#
+#<FilesMatch "\.php$">
+#    Order Allow,Deny
+#    Deny from all
+#</FilesMatch>
+#
+#<FilesMatch "(index\.php)|(login\.php)$">
+#    Order Allow,Deny
+#    Allow from all
+#</FilesMatch>
+#
+#<FilesMatch "ajax_handler\.php$">
+#    Order Allow,Deny
+#    Allow from 127.0.0.1
+#</FilesMatch>
