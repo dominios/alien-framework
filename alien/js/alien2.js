@@ -15,13 +15,34 @@ function showDisplayLayoutType(type){
     });
 }
 
+function evalConsoleInput(input){
+    if(!input) return;    
+    $.ajax({
+        async: true,
+        url: "ajax.php",
+        type: "GET",
+        data: "action=evalConsoleInput&data="+input,
+        timeout: 5000,
+        success: function(data){
+            oldData = $("#ConsoleContent").html();
+            $("#ConsoleContent").html(oldData+data);
+        }
+    });
+}
 
 $(document).ready(function(){
  
     $(function(){
         $(document).tooltip({
-            track: true
+            track: false
         });
-    });
+    });    
   
+});
+
+$(document).keyup(function(e) {
+    if(e.keyCode == 13 && $("input.ConsoleInput:focus")){
+        evalConsoleInput($("input.ConsoleInput").val());
+        $("input.ConsoleInput").val('');
+    }
 });

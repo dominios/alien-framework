@@ -37,7 +37,19 @@ class ContentFolder implements FileItem {
             return;
         }
     }
-    
+
+    public function actionGoTo(){
+        return '?content=browser&folder='.$this->id;
+    }
+
+    public function actionEdit(){
+        return '?content=editFolder&id='.$this->id;
+    }
+
+    public function actionDrop(){
+        return '?content=dropFolder&id='.$this->id;
+    }
+
     public function getIcon(){
         return self::ICON;
     }
@@ -109,36 +121,25 @@ class ContentFolder implements FileItem {
         
         if(!sizeof($this->items)){
             $DBH=Alien::getDatabaseHandler();
-            $STH=$DBH->prepare('SELECT * FROM '.Alien::getDBPrefix().'_content_folders WHERE parent=:p || id_f=:p ORDER BY id_f ASC');
-            $STH->bindValue(':p',$this->id,PDO::PARAM_INT);
+            $STH=$DBH->prepare('SELECT * FROM '.Alien::getDBPrefix().'_content_templates WHERE id_f=:idf');
+            $STH->bindValue(':idf', (int)$this->id, PDO::PARAM_INT);
             $STH->execute();
-            while($row=$STH->fetch()){                
-                if($row['id_f']==$this->id){
-                    continue;
-                } else {
-                    $this->items[]=new ContentFolder(null, $row);
-                }
+            while($row = $STH->fetch()){
+                $this->items[] = new ContentTemplate(null, $row);
             }
 
-            $STH=$DBH->prepare('SELECT * FROM '.Alien::getParameter('db_prefix').'_content_templates WHERE id_f=:idf');
-            $STH->bindValue(':idf',$this->id,PDO::PARAM_INT);
+            $STH=$DBH->prepare('SELECT * FROM '.Alien::getDBPrefix().'_content_pages WHERE id_f=:idf');
+            $STH->bindValue(':idf', (int)$this->id, PDO::PARAM_INT);
             $STH->execute();
-            while($row=$STH->fetch()){
-                $this->items[]=new ContentTemplate(null, $row);
+            while($row = $STH->fetch()){
+                $this->items[] = new ContentPage(null, $row);
             }
 
-            $STH=$DBH->prepare('SELECT * FROM '.Alien::getParameter('db_prefix').'_content_pages WHERE id_f=:idf');
-            $STH->bindValue(':idf',$this->id,PDO::PARAM_INT);
+            $STH=$DBH->prepare('SELECT * FROM '.Alien::getDBPrefix().'_content_items WHERE id_f=:idf');
+            $STH->bindValue(':idf', (int)$this->id, PDO::PARAM_INT);
             $STH->execute();
             while($row=$STH->fetch()){
-                $this->items[]=new ContentPage(null, $row);
-            }
-
-            $STH=$DBH->prepare('SELECT * FROM '.Alien::getParameter('db_prefix').'_content_items WHERE id_f=:idf');
-            $STH->bindValue(':idf',$this->id,PDO::PARAM_INT);
-            $STH->execute();
-            while($row=$STH->fetch()){
-                if(($row['id_type'])==1 || $row['id_type']==11) continue;
+                if(($row['id_type']) == 1 || $row['id_type'] == 11) continue;
 //                $item=ContentItem::getSpecificItem($row['id_i']);
                 $item=ContentItem::getSpecificItem(null, $row);
                 if($item instanceof CodeItem || $item instanceof VariableItem || $item instanceof GalleryListItem || $item instanceof GalleryVariableItem) continue;
@@ -147,7 +148,7 @@ class ContentFolder implements FileItem {
         }
         return $this->items;
     }
-        
+
     public function getChilds($fetched = false){
         if(!sizeof($this->childs)){
             $folders=Array();
@@ -155,10 +156,10 @@ class ContentFolder implements FileItem {
             $STH=$DBH->prepare('SELECT * FROM '.Alien::getDBPrefix().'_content_folders WHERE parent=:p');
             $STH->bindValue(':p',$this->id);
             $STH->execute();
-            while($row=$STH->fetch()){
+            while($row = $STH->fetch()){
                 $f=new self(null, $row);
                 $f->getChilds();
-                $folders[]=$f;
+                $folders[] = $f;
             }
             $this->childs=$folders;
         }
@@ -218,7 +219,7 @@ class ContentFolder implements FileItem {
     
     
     
-    /* hentie presunut ako views */
+    /* hentie presunut ako views
     
     public function renderTree(){
         $DBH=Alien::getDatabaseHandler();
@@ -260,6 +261,7 @@ class ContentFolder implements FileItem {
         echo ('</table></fieldset></form>');
     }
     
+*/
 
 
 
@@ -269,37 +271,6 @@ class ContentFolder implements FileItem {
 
 
 
-    public static function renderFolderContent($id){
-        $_SESSION['returnAction']='?page=content&action=browser&folder='.$id;
-        $folder=new ContentFolder($id);
-        $path='';
-        foreach($folder->getPathFromRoot(true) as $f){
-            $path.='<a href="?page=content&amp;action=browser&amp;folder='.$f->getId().'">'.$f->getName().'</a> / ';
-        }
-        Alien::setHeading('Browsing: '.$path);
-        
-        $buttons='';
-        if(Authorization::permissionTest(NULL, array()) && Authorization::getCurrentUser()->hasFolderModifyAccess($folder->id)){
-            $buttons.='<a class="actionButton" href="?page=content&action=newFolder&parent='.$folder->id.'"><img src="images/icons/folder_add.png">&nbsp;Nová zložka</a>';
-        }
-        if(Authorization::permissionTest(null, array('CONTENT_EDIT')) && Authorization::getCurrentUser()->hasFolderModifyAccess($folder->id)){
-            $buttons.='<a class="actionButton" href="?page=content&action=newItem&folder='.$folder->id.'"><img src="images/icons/plus.png">&nbsp;Pridať objekt</a>';
-        }
-        Alien::setActionMenu($buttons);
-        
-        if(!Authorization::getCurrentUser()->hasFolderReadAccess($folder->id)){
-            return;
-        }
-        
-        if($folder->id!=0){
-            $parent=new self($folder->parent);
-            $parent->renderParentInListOfItems();
-        }
-        foreach($folder->getFolderContent() as $item){
-            $item->renderInFolder();
-        }
-        return;
-    }
 
     /**
      * vsetky foldre
@@ -309,7 +280,7 @@ class ContentFolder implements FileItem {
         $folders=Array();
         $folders[]=new self(0);
         $DBH=Alien::getDatabaseHandler();
-        foreach($DBH->query('SELECT * FROM '.Alien::getParameter('db_prefix').'_content_folders') as $row){
+        foreach($DBH->query('SELECT * FROM '.Alien::getDBPrefix().'_content_folders') as $row){
             $f=new self(null, $row);
             $f->getChilds();
             $folders[]=$f;
@@ -356,9 +327,9 @@ class ContentFolder implements FileItem {
         return !$this->isEmpty();
     }
 
-    /**
+    /** TODO: prerobit ako view
      * vykresli ovladaci panel 
-     */
+     */ /*
     public function renderControlPanel(){
         echo ('<div style="float: right; display: inline-block; position: relative;">');
         $buttons=Array();
@@ -374,19 +345,8 @@ class ContentFolder implements FileItem {
         echo implode(' ',$buttons);
         echo ('</div>');
         echo '<br/>';
-    }
+    }*/
 
-    
-    /**
-     * zobrazi v adresari 
-     */
-    public function renderParentInListOfItems(){
-        $options=$this->getFolderRenderOptions();
-        echo ('<div class="item selectable" onClick="javascript: window.location=\'?page=content&amp;action=browser&amp;folder='.$this->id.'\'"><img src="'.$options['image'].'"> <b>[..] '.$options['name'].'</b>');
-            $this->renderControlPanel();
-            echo ('&nbsp;&nbsp;ID: '.$this->id.'&nbsp;|&nbsp;Typ: Adresár');
-        echo ('</div>');
-    }
 }
 
 ?>

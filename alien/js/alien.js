@@ -565,7 +565,11 @@ function contentShowChooseViewType(tid, pid, box){
 $(document).keyup(function(e) {
   if(e.keyCode === 27) { closeWindow(); }   // esc
   
-  if(e.keyCode === 192) { $("#ConsoleContainer").fadeToggle(75); } 
+  if(e.keyCode === 192) { 
+      $("#ConsoleContainer").fadeToggle(75); 
+      $(".ConsoleInput").focus();
+//      $(".ConsoleInput").val('');
+  } 
 
 });
 

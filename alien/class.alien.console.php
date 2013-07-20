@@ -32,5 +32,22 @@ class AlienConsole {
     public function getMessageList(){
         return $this->messages;
     }
+
+    public static function getSuperglobalData($globalArray){
+        $ret = '';
+        switch($globalArray){
+            case 'SESSION': $arr = $_SESSION; break;
+            case 'POST': $arr = $_POST; break;
+            case 'GET' : $arr = $_GET; break;
+            case 'SERVER' : $arr = $_SERVER; break;
+            case 'COOKIE' : $arr = $_COOKIE; break;
+            default : return '';
+        }
+        foreach($arr as $key => $value){
+            $ret .= $key.' => '.$value.'<br>';
+        }
+        return $ret;
+    }
+    
 }
 ?>

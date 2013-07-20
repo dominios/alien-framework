@@ -28,13 +28,23 @@ function ALiEN_autoloader($class){
         return;
     }
     
-    if($class == 'Authorization'){
+    if($class === 'Authorization'){
         ALiEN_include('authorization.php');
+        return;
+    }
+
+    if($class === 'Notification'){
+        ALiEN_include('class.notification.php');
         return;
     }
     
     if(in_array(strtolower($class), array('user', 'group', 'permission'))){
         ALiEN_include('./core/authorization.'.strtolower($class).'.php');
+        return;
+    }
+
+    if($class === 'FileItem'){
+        ALiEN_include('./content/interface.FileItem.php');
         return;
     }
     

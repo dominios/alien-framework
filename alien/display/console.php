@@ -7,5 +7,5 @@
         }
         ?>
     </section>
-    <div id="ConsoleInput">[admin@alien] $ <input class="ConsoleInput"></div>
+    <div id="ConsoleInput">admin@alien $ <input class="ConsoleInput"></div>
 </section>

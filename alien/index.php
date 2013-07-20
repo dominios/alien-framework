@@ -23,6 +23,7 @@ if(sizeof($_GET)){
 }
 $content .= $controller->getContent();
 
+//$content .= Notification::renderNotifications();
 //
 // output
 //

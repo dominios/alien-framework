@@ -3,6 +3,10 @@ html {
     height: 100%;
 }
 
+#maincontent {
+
+}
+
 #ConsoleContainer {
     position: fixed;
     font-family: consolas;
@@ -13,10 +17,6 @@ html {
     background-color: #eee;
     border: 1px solid #ccc;
     color: #333;
-    opacity: 0.5;
-}
-
-#ConsoleContainer:hover {
     opacity: 0.85;
 }
 
@@ -112,3 +112,6 @@ table .itemRow img {
 .item.selectable:hover {
     background-color: #fbf37b;
 }
+
+/* FORMS */
+
