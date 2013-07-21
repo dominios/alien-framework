@@ -113,5 +113,29 @@ table .itemRow img {
     background-color: #fbf37b;
 }
 
+
+.gridLayout .item {
+    display: block;
+    position: relative;
+    border: 1px solid #ccc;
+    width: 100px;
+    height: 80px;
+    border-radius: 2px;
+    margin: 5px;
+    padding: 5px;
+    padding-top: 10px;
+    float: left;
+    text-align: center;
+}
+
+.gridLayout .item:hover{
+    border-color: #aaa;
+    background-color: #f7f7f7;
+    cursor: pointer;
+}
+
 /* FORMS */
 
+#tabs {
+    font-size: 12px;
+}

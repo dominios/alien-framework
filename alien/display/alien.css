@@ -18,6 +18,7 @@ body {
     background: -o-linear-gradient(top, #e8f2ff, #b6def6);
     color: #333;
     font-size: 14px;
+    line-height: 1.4em;
     font-family: segoe ui, trebuchet ms, Calibri;
     margin: 0px;
     padding: 0;
@@ -256,6 +257,7 @@ a:link .nobackground {
 }
 
 .rightpanel {
+    font-size: 14px;
     width: 835px;
     margin-top: 10px;
     margin-bottom: 7px;
@@ -460,8 +462,8 @@ img {
 }
 
 .item {
-    border: 1px solid #999;
-    box-shadow: 0 0 5px 0px #888;
+    border: 1px solid #bbb;
+    box-shadow: 0 0 6px #ccc;
     border-radius: 1px;
     padding: 3px;
     padding-left: 4px;

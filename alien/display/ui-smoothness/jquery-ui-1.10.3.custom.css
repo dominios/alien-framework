@@ -801,19 +801,19 @@ body .ui-tooltip {
 .ui-widget-content {
 	border: 1px solid #aaaaaa;
 	background: #f3f4fe;
-	color: #222222;
+	color: #333;
 }
 .ui-widget-content a {
-	color: #222222;
+	color: #333;
 }
 .ui-widget-header {
 	border: 1px solid #aaaaaa;
 	background: #cccccc url(images/ui-bg_highlight-soft_75_cccccc_1x100.png) 50% 50% repeat-x;
-	color: #222222;
+	color: #333;
 	font-weight: bold;
 }
 .ui-widget-header a {
-	color: #222222;
+	color: #333;
 }
 
 /* Interaction states

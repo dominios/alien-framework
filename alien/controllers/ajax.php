@@ -43,6 +43,46 @@ function evalConsoleInput($REQ){
     return $ret;
 }
 
+function templateShowFileBrowser($REQ){
+
+    $header = 'Vybrať súbor';
+    $ret = '';
+    $content = '';
+    $dir = 'templates';
+
+    switch($REQ['type']){
+        case 'php': $pattern = '.*\.php$'; $img = 'php.png'; break;
+        case 'ini': $pattern = '.*\.ini$'; $img = 'service.png'; break;
+        case 'css': $pattern = '.*\.css$'; $img = 'css.png'; break;
+        default: return json_encode(Array('header'=>$header, 'content'=>'Invalid request'));
+    }
+
+    $ret = '<div class="gridLayout">';
+
+    if ($dh = opendir($dir)) {
+        while (($file = readdir($dh)) !== false) {
+            if(preg_match('/'.$pattern.'/', $file)){
+                $content .= '<div class="item" onclick="javascript: chooseFile(\'templates/'.$file.'\', \''.ucfirst($REQ['type']).'\');">';
+                $content .= '<img src="'.Alien::$SystemImgUrl.'/'.$img.'" style="width: 48px; height: 48px;">';
+                $content .= '<div style="position: absolute; bottom: 5px; width: 100px; text-align: center;">'.$file.'</div>';
+                $content .= '</div>';
+            }
+        }
+        closedir($dh);
+    }
+
+    if(!strlen($content)){
+        $content .= 'Žiadne súbory požadovaného typu.';
+    }
+
+    $ret .= $content;
+    $ret .= '</div>';
+
+    $content .= '<div style="clear: left;"></div>';
+
+    return json_encode(Array('header'=>$header, 'content'=>$ret));
+}
+
 $action = $_REQUEST['action'];
 $ret = $action($_REQUEST);
 ob_clean();

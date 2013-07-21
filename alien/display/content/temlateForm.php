@@ -2,6 +2,49 @@
     $(document).ready(function(){
         $( "#tabs" ).tabs();
     });
+
+    function createDialog(header, content){
+        $("#dialog-modal").remove();
+        newhtml = "<div id='dialog-modal' title='"+header+"'>";
+        newhtml += "<div id='dialog-content'><p>"+content+"</p></div>";
+        newhtml += "</div>";
+        $("body").html($("body").html()+newhtml);
+        $(function() {
+            $("#dialog-modal").dialog({
+                modal: true,
+                show: {
+                    effect: 'drop',
+                    duration: 100
+                },
+                hide: {
+                    effect: 'drop',
+                    duration: 100
+                }
+            });
+        });
+    }
+
+    function templateShowFileBrowser(type){
+        if(!type) return;
+        $.ajax({
+            async: true,
+            url: "ajax.php",
+            type: "GET",
+            data: "action=templateShowFileBrowser&type="+type,
+            timeout: 5000,
+            success: function(data){
+                json = jQuery.parseJSON(data);
+                createDialog(json.header, json.content);
+            }
+        });
+    }
+
+    function chooseFile(file, type){
+        if(!file || !type) return;
+        $("input[name=template"+type+"]").attr('value', file);
+        $("#dialog-modal").dialog('close');
+    }
+
 </script>
 
 <form name="editTemplateForm" method="POST" action="" id="templateForm">
@@ -18,22 +61,22 @@
             <table>
                 <tr>
                     <td><img src="<?=Alien::$SystemImgUrl;?>template.png" alt="name"> Názov šablóny:</td>
-                    <td colspan="2"><input type="text" name="templateName" value="uvod" size="25"></td>
+                    <td colspan="2"><input type="text" name="templateName" value="<?=$this->Template->getName();?>" size="25"></td>
                 </tr><tr>
                 <td><img src="<?=Alien::$SystemImgUrl;?>note.png" alt="name"> Krátky popis:</td>
-                <td colspan="2"><input type="text" name="templateDesc" value="uvodna stranka" size="45"></td>
+                <td colspan="2"><input type="text" name="templateDesc" value="<?=$this->Template->getDescription();?>" size="45"></td>
             </tr><tr>
-                <td><img src="<?=Alien::$SystemImgUrl;?>html.png" alt="html"> Súbor HTML:</td>
-                <td><input type="text" name="templateHtml" size="35" value="templates/uvod.php"></td>
-                <td><div class="button" onclick="javascript: contentShowChooseFile('php');"><img src="<?=Alien::$SystemImgUrl;?>external_link.png"></div></td>
+                <td><img src="<?=Alien::$SystemImgUrl;?>php.png" alt="php"> Súbor PHP:</td>
+                <td><input type="text" name="templatePhp" size="35" value="<?=$this->Template->getHTMLUrl();?>"></td>
+                <td><div class="button" onclick="templateShowFileBrowser('php');"><img src="<?=Alien::$SystemImgUrl;?>external_link.png"></div></td>
             </tr><tr>
                 <td><img src="<?=Alien::$SystemImgUrl;?>css.png" alt="css"> Súbor CSS:</td>
-                <td><input type="text" name="templateCss" size="35" value=""></td>
-                <td><div class="button" onclick="javascript: contentShowChooseFile('css');"><img src="<?=Alien::$SystemImgUrl;?>external_link.png"></div></td>
+                <td><input type="text" name="templateCss" size="35" value="<?=$this->Template->getCSSUrl();?>"></td>
+                <td><div class="button" onclick="templateShowFileBrowser('css');"><img src="<?=Alien::$SystemImgUrl;?>external_link.png"></div></td>
             </tr><tr>
                 <td><img src="<?=Alien::$SystemImgUrl;?>service.png" alt="css"> Konfiguračný súbor:</td>
-                <td><input type="text" name="templateConfig" size="35" value="templates/uvod.ini"></td>
-                <td><div class="button" onclick="javascript: contentShowChooseFile('ini');"><img src="<?=Alien::$SystemImgUrl;?>external_link.png"></div></td>
+                <td><input type="text" name="templateIni" size="35" value="<?=$this->Template->getConfigUrl();?>"></td>
+                <td><div class="button" onclick="templateShowFileBrowser('ini');"><img src="<?=Alien::$SystemImgUrl;?>external_link.png"></div></td>
             </tr><tr>
                 <td colspan="3"><hr></td>
             </tr><tr>
@@ -45,7 +88,7 @@
             </table>
         </div>
         <div id="tabs-2">
-            <p>Morbi tincidunt, dui sit amet facilisis feugiat, odio metus gravida ante, ut pharetra massa metus id nunc. Duis scelerisque molestie turpis. Sed fringilla, massa eget luctus malesuada, metus eros molestie lectus, ut tempus eros massa ut dolor. Aenean aliquet fringilla sem. Suspendisse sed ligula in ligula suscipit aliquam. Praesent in eros vestibulum mi adipiscing adipiscing. Morbi facilisis. Curabitur ornare consequat nunc. Aenean vel metus. Ut posuere viverra nulla. Aliquam erat volutpat. Pellentesque convallis. Maecenas feugiat, tellus pellentesque pretium posuere, felis lorem euismod felis, eu ornare leo nisi vel felis. Mauris consectetur tortor et purus.</p>
+            <p>Work in progress...</p>
         </div>
     </div>
 

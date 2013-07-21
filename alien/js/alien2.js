@@ -33,7 +33,7 @@ function evalConsoleInput(input){
 $(document).ready(function(){
  
     $(function(){
-        $(document).tooltip({
+        $('.rightpanel').tooltip({
             track: false
         });
     });    
