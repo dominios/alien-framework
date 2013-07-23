@@ -83,6 +83,10 @@ function templateShowFileBrowser($REQ){
     return json_encode(Array('header'=>$header, 'content'=>$ret));
 }
 
+function templateShowFilePreview($REQ){
+    return json_encode(Array('header'=>$REQ['file'], 'content'=>highlight_file($REQ['file'], true)));
+}
+
 $action = $_REQUEST['action'];
 $ret = $action($_REQUEST);
 ob_clean();

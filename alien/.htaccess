@@ -9,7 +9,7 @@ Options +Indexes
 
 RewriteEngine on
 
-RewriteBase /ALiEN_V2/alien/
+RewriteBase /alien/
 
 RewriteCond %{SCRIPT_FILENAME} !-d  
 RewriteCond %{SCRIPT_FILENAME} !-f

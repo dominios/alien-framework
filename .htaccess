@@ -9,7 +9,7 @@ ErrorDocument 500 /alien/errors/Error500.html
 Options -Indexes
 
 RewriteEngine On
-RewriteBase /ALiEN_V2/
+RewriteBase /
 
 RewriteEngine on
 RewriteRule ^error/(.*)$ alien/error/$1 [L,R=301]

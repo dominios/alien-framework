@@ -5,6 +5,11 @@ class Notification {
     private $message;
     private $type;
     private $seen = false;
+
+    const NOT_INFO = 'note';
+    const NOT_SUCCESS = 'success';
+    const NOT_WARNING = 'warning';
+    const NOT_ERROR = 'error';
     
     private static $messageList = array();
     
@@ -26,16 +31,16 @@ class Notification {
             if(@isset($_SESSION['notifications'])){
                 foreach($_SESSION['notifications'] as $note ){
                     switch($note->type){
-                        case 'note':
+                        case self::NOT_INFO:
                             echo ('<div class="notification information"><img src="images/icons/information.png">&nbsp;'.$note->message.'</div>');
                             break;
-                        case 'success':
+                        case self::NOT_SUCCESS:
                             echo ('<div class="notification success"><img src="'.Alien::$SystemImgUrl.'/tick.png">&nbsp;'.$note->message.'</div>');
                             break;
-                        case 'warning':
+                        case self::NOT_WARNING:
                             echo ('<div class="notification warning"><img src="'.Alien::$SystemImgUrl.'/warning.png">&nbsp;'.$note->message.'</div>');
                             break;
-                        case 'error':
+                        case self::NOT_ERROR:
                             echo ('<div class="notification error"><img src="'.Alien::$SystemImgUrl.'/cross.png">&nbsp;'.$note->message.'</div>');
                             break;
                     }

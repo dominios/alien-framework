@@ -23,6 +23,7 @@ class ContentController extends AlienController {
             $folder = new ContentFolder(0);
         } else {
             $folder = new ContentFolder($f);
+            $_SESSION['folder'] = $f;
         }
 
         $DBH = Alien::getDatabaseHandler();
@@ -55,7 +56,9 @@ class ContentController extends AlienController {
         $this->meta_title = 'Úprava šablóny: '.$template->getName();
 
         $view = new AlienView('display/content/temlateForm.php');
+        $view->ReturnAction = '?content=browser&folder='.$_SESSION['folder'];
         $view->Template = $template;
+
         return $view->getContent();
     }
 }

@@ -139,3 +139,11 @@ table .itemRow img {
 #tabs {
     font-size: 12px;
 }
+
+:focus { outline: none; } /* odstrani ten debilny ramcek pri chromu */
+
+textarea:focus, input:focus {
+    box-shadow: 0 0 10px #999;
+    border-color: #999;
+    background-color: #fff;
+}
