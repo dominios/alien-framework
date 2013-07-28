@@ -91,9 +91,8 @@ function highlightLeftmenu(seolink){
 
 // zobrazi z tempu notifikacie
 function showNotifications(){
-    temp = $("#notificationsTemp").html();    
-    $("#notifyArea").html(temp).slideDown(500,function(){
-//        $(this).delay(5000).slideUp(1200);
+    $("#notifyArea").slideDown(500, function(){
+       $(this).delay(4000).slideUp();
     });
 }
 
@@ -589,34 +588,6 @@ $(document).ready(function($) {
     
     $(".button:regex(onClick, location").live('click',function(){
        loaderOn(); 
-    });
-    
-    
-//    $('a.fancybox').fancybox({
-//        openEffect  : 'elastic'
-//    });
-    
-
-    $("#notifyArea:has(div)").fadeIn();
-    $("#notifyArea > .notification").live('click',function(){
-        $(this).slideUp(400,function(){
-            $(this).remove();
-            if($("#notifyArea").children('div.notification').length == 0 ){
-                $("#notifyArea").fadeOut();
-            }
-        });
-    });
-    
-    $(window).load(function(){
-        if($("#notifyArea").children('div').length == 0 ){
-            $("#notifyArea").hide();
-        }
-        $(".notification.information, .notification.success").delay(5000).slideUp(400,function(){
-            $(this).remove();
-            if($("#notifyArea").children('div.notification').length == 0 ){
-                $("#notifyArea").fadeOut();
-            }
-        });
     });
     
     $(".toggleHideable").live('click',function(){

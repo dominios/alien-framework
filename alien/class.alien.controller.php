@@ -3,7 +3,7 @@
 class AlienController {   
     
     protected $defaultAction;
-    private $actions;
+    protected $actions;
     private $view;
 
     protected $meta_title; 
@@ -12,7 +12,7 @@ class AlienController {
     protected $content_main;
    
    public final function __construct() {
-       Alien::getInstance()->getConsole()->putMessage('Using <i>'.get_called_class().'</i>.');
+       Alien::getInstance()->getConsole()->putMessage('Using <i>'.get_called_class().'</i>');
        $this->defaultAction = 'NOP';       
        $actions = Array();       
        if(@isset($_POST['action'])){
@@ -31,7 +31,7 @@ class AlienController {
    }
 
    protected function init_action(){
-       Alien::getInstance()->getConsole()->putMessage('Called <i>AlienController.init_action()</i>.');   
+       Alien::getInstance()->getConsole()->putMessage('Called <i>AlienController::init_action()</i>.');
        $menu = '';
        $menuitems = Alien::getInstance()->getMainmenuItems();
        foreach($menuitems as $item){
@@ -50,16 +50,16 @@ class AlienController {
        $out = '';
        if(method_exists(get_called_class(), 'init_action')){
            $this->init_action();
-           Alien::getInstance()->getConsole()->putMessage('Called <i>'.get_called_class().'.init_action()</i>.');
+           Alien::getInstance()->getConsole()->putMessage('Called <i>'.get_called_class().'::init_action()</i>.');
        }
        foreach($this->actions as $action){    
-            Alien::getInstance()->getConsole()->putMessage('Calling action: <i>'.get_called_class().'.'.$action.'</i>()');
+            Alien::getInstance()->getConsole()->putMessage('Calling action: <i>'.get_called_class().'::'.$action.'</i>()');
             if(!method_exists($this, $action)){           
-                 Alien::getInstance()->getConsole()->putMessage('Action doesn\'t exist!', AlienConsole::CONSOLE_ERROR);
+                 Alien::getInstance()->getConsole()->putMessage('Action <i>'.$action.'</i> doesn\'t exist!', AlienConsole::CONSOLE_ERROR);
             }
             if(!method_exists($this, $action) && $action!=$this->defaultAction){
                  $action = $this->defaultAction;
-                 Alien::getInstance()->getConsole()->putMessage('Calling action <i>'.get_called_class().'.'.$action.'</i>() instead.');
+                 Alien::getInstance()->getConsole()->putMessage('Calling action <i>'.get_called_class().'::'.$action.'</i>() instead.');
             }
             $ret = $this->$action();
             $out .= $ret!==false ? $ret : '';
@@ -71,18 +71,23 @@ class AlienController {
    
    // TODO: konzola zatial natvrdo
    public final function getContent(){       
-       
+
+       $notifications = new AlienView('display/system/notifications.php');
+       $notifications = $notifications->getContent();
+
         $this->doActions();
         
-        $this->view = new AlienView('display/index.php');        
+        $this->view = new AlienView('display/index.php');
+        $this->view->Notifications = $notifications;
         $this->view->Title = $this->meta_title;
         $this->view->MainMenu = $this->content_mainmenu;
         $this->view->LeftBox = $this->content_left;
         $this->view->MainContent = $this->content_main;
+
         $content = $this->view->getContent();
 
-        if(Alien::getParameter('debugMode') && false || 1){
-            $console = new AlienView('display/console.php');
+        if(Alien::getParameter('debugMode') || 1){
+            $console = new AlienView('display/system/console.php');
             $console->Messages = Alien::getInstance()->getConsole()->getMessageList();
             $content .= $console->getContent();
         }

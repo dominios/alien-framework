@@ -35,22 +35,23 @@ class ContentTemplate implements FileItem {
         return AlienContent::getInstance()->templateExists($id);
     }
     
-    public static function getTempatesList(){
+    public static function getTempatesList($fetch = false){
         $DBH = Alien::getDatabaseHandler();
         $arr=array();
-        $STH=$DBH->prepare("SELECT id_t FROM ".Alien::getParameter('db_prefix')."_content_templates");
+        $STH=$DBH->prepare("SELECT id_t FROM ".Alien::getDBPrefix()."_content_templates");
         $STH->execute();
         while($item=$STH->fetch()){
-            $arr[]=new ContentTemplate($item['id_t']);
+            $arr[]= $fetch ? new ContentTemplate($item['id_t']) : $item['id_t'];
         }
         return $arr;
     }
 
-    // DOROBIT PERMISSION TEST
+    // DOROBIT PERMISSION TEST; NOTIFIKACIE ASI SA DAJU DAT PREC
     public static function update(){        
         
         // najprv kontrola spravnosti udajov
-        
+
+        /*
         $continue = true;
         if(empty($_POST['templateName']) || $_POST['templateName']==''){
             new Notification("Názov šablóny nesmie byť prázdny reťazec.", "warning");
@@ -86,35 +87,36 @@ class ContentTemplate implements FileItem {
             new Notification('Šablónu nieje možné uložiť.', 'error');
             return;
         }
+        */
         
         $DBH=Alien::getDatabaseHandler();
         
-        if(@$_POST['templateId']<0){ // nova sablona, zapordne IDcko
+        if(@$_POST['templateId']==0){ // nova sablona
             $new = true;
-            $STH=$DBH->prepare('INSERT INTO '.Alien::getParameter('db_prefix').'_content_templates (id_f, name, html_url, css_url, config_url, description) VALUES (:f, :n, :html, :css, :ini, :d)');
+            $STH=$DBH->prepare('INSERT INTO '.Alien::getDBPrefix().'_content_templates (id_f, name, html_url, css_url, config_url, description) VALUES (:f, :n, :html, :css, :ini, :d)');
         } else {
             $new = false;
-            $STH=$DBH->prepare('UPDATE '.Alien::getParameter('db_prefix').'_content_templates SET id_f=:f, name=:n, html_url=:html, css_url=:css, config_url=:ini, description=:d WHERE id_t=:id');
+            $STH=$DBH->prepare('UPDATE '.Alien::getDBPrefix().'_content_templates SET id_f=:f, name=:n, html_url=:html, css_url=:css, config_url=:ini, description=:d WHERE id_t=:id');
             $STH->bindValue(':id', $_POST['templateId'], PDO::PARAM_INT);
         }
         
-        $STH->bindValue(':f', $_SESSION['folder']);
+        $STH->bindValue(':f', $_SESSION['folder'], PDO::PARAM_INT);
         $STH->bindValue(':n', $_POST['templateName'], PDO::PARAM_STR);
-        $STH->bindValue(':html', $_POST['templateHtml'], PDO::PARAM_STR);
+        $STH->bindValue(':html', $_POST['templatePhp'], PDO::PARAM_STR);
         $STH->bindValue(':css', $_POST['templateCss'], PDO::PARAM_STR);
-        $STH->bindValue(':ini', $_POST['templateConfig'], PDO::PARAM_STR);
+        $STH->bindValue(':ini', $_POST['templateIni'], PDO::PARAM_STR);
         $STH->bindValue(':d', $_POST['templateDesc'], PDO::PARAM_STR);
         
         if($STH->execute()){
-            $new ? new Notification("Nová šablóna bola úspešne vytvorená.","success") : new Notification('Šablóna bola uložená.', 'success');
+            $new ? new Notification("Nová šablóna bola úspešne vytvorená.","success") : new Notification('Šablóna bola uložená.', Notification::SUCCESS);
         } else {
-            $new ? new Notification("Šablónu sa nepodarilo vytvoriť.", "error") : new Notification('Šablónu sa nepodarilo uložiť.', 'error');
+            $new ? new Notification("Šablónu sa nepodarilo vytvoriť.", "error") : new Notification('Šablónu sa nepodarilo uložiť.', Notification::ERROR);
         }
         if(Alien::getParameter('allowRedirects')){
             ob_clean();
             $id = $new ? $DBH->lastInsertId() : $_POST['templateId'];
-            $url='?page=content&action=editTemplate&id='.$id;
-            header('Location: '.$url, true, 301);
+            $url='?content=editTemplate&id='.$id;
+            header('Location: '.$url, false, 301);
             ob_end_flush();
             exit;
         }
@@ -124,13 +126,13 @@ class ContentTemplate implements FileItem {
     public static function drop($id){
         $template=new ContentTemplate($id);
         if($template->isUsed()){
-            new Notification('Nie je možné vymazať šablónu, ktorá sa používa.', 'warning');
-            new Notification('Nastavte všetky stránke tak, aby nepoužívali túto šablónu.', 'notice');
-            new Notification('Nepodarilo sa odstrániť šablónu.', 'error');
+            new Notification('Nie je možné vymazať šablónu, ktorá sa používa.', Notification::WARNING);
+            new Notification('Nastavte všetky stránky tak, aby nepoužívali túto šablónu.', Notification::INFO);
+            new Notification('Nepodarilo sa odstrániť šablónu.', Notification::ERROR);
         } else {
             $DBH=Alien::getDatabaseHandler();
-            $STH=$DBH->prepare('DELETE FROM '.Alien::getParameter('db_prefix').'_content_templates WHERE id_t=:i');
-            $STH->bindValue(':i',$_GET['id']);
+            $STH=$DBH->prepare('DELETE FROM '.Alien::getDBPrefix().'_content_templates WHERE id_t=:i');
+            $STH->bindValue(':i',$_GET['id'], PDO::PARAM_INT);
             if($STH->execute()){
                 new Notification('Šablóna bola zmazaná.', 'success');
             } else {
@@ -139,13 +141,13 @@ class ContentTemplate implements FileItem {
         }
         if(Alien::getParameter('allowRedirects')){
             ob_clean();
-            $url='?page=content&action=browser&folder='.$_SESSION['folder'];
-            header('Location: '.$url, true, 301);
+            $url='?content=browser&folder='.$_SESSION['folder'];
+            header('Location: '.$url, false, 301);
             ob_end_flush();
             exit;
         }
     }
-
+/*
     public static function renderTemplatesList(){
 //        Authorization::permissionTest('?page=home',array(4));
         $cp=('<div class="controlPanel">
@@ -164,7 +166,7 @@ class ContentTemplate implements FileItem {
             $template=new contentTemplate($obj->id_t);
             $template->renderInFolder();
         }   
-    }
+    }*/
 
 /* ******** SPECIFIC  METHODS ****************************************************************** */
 
@@ -265,6 +267,20 @@ class ContentTemplate implements FileItem {
 
     public function getIcon(){
         return self::ICON;
+    }
+
+    public static function isTemplateNameInUse($name, $ignoreId=null){
+        $DBH = Alien::getDatabaseHandler();
+        $Q = $DBH->prepare('SELECT id_t FROM '.Alien::getDBPrefix().'_content_templates WHERE name=:n');
+        $Q->bindValue(':n', $name, PDO::PARAM_STR);
+        $Q->execute();
+        if($ignoreId===null){
+            return $Q->rowCount() ? true : false;
+        } else {
+            if(!$Q->rowCount()) return false;
+            $R = $Q->fetch();
+            return $R['id_t'] == $ignoreId ? false : true;
+        }
     }
 }
 

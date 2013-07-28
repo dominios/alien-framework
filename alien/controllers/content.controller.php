@@ -61,5 +61,34 @@ class ContentController extends AlienController {
 
         return $view->getContent();
     }
+
+    protected function templateFormSubmit(){
+        $errorOutput = Array();
+        $id = (int)$_POST['templateId'];
+        $nazov = $_POST['templateName'];
+        $php = $_POST['templatePhp'];
+        $ini = $_POST['templateIni'];
+        if(!strlen($nazov)){
+            $errorOutput[] = Array('inputName'=>'templateName', 'errorMsg'=>'Názov šablóny nemôže zostať prázdny.');
+        }
+        if(!file_exists($ini)){
+            $errorOutput[] = Array('inputName'=>'templateIni', 'errorMsg'=>'Konfiguračný súbor musí existovat.');
+        }
+        if(!file_exists($php)){
+            $errorOutput[] = Array('inputName'=>'templatePhp', 'errorMsg'=>'Zdrojový súbor šablóny musí existovať.');
+        }
+        if(ContentTemplate::isTemplateNameInUse($nazov, $id)){
+            $errorOutput[] = Array('inputName'=>'templateName', 'errorMsg'=>'Zadaný názov šablóny sa už používa.');
+        }
+        if(sizeof($errorOutput)){
+            AlienConsole::getInstance()->putMessage('Form validation error!', AlienConsole::CONSOLE_WARNING);
+            $_SESSION['formErrorOutput'] = json_encode($errorOutput);
+            return;
+        }
+        ContentTemplate::update();
+        header('Location: ?content=editTemplate&id='.$id, false, 301);
+        ob_end_clean();
+        exit;
+    }
 }
 ?>

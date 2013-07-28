@@ -23,7 +23,11 @@ if(sizeof($_GET)){
 }
 $content .= $controller->getContent();
 
+//$content = str_replace('</body></html>', '', $content);
+//$content .= '<div style="position: absolute; top: 0px; width: 100%;"><div id="notifyArea" style="display: block;"></div></div>';
 //$content .= Notification::renderNotifications();
+//$content .= '<script type="text/javascript"> $(document).ready(function(){ showNotifications(); }); </script>';
+//$content .= '</body></html>';
 //
 // output
 //

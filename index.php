@@ -1,4 +1,4 @@
-<?php die('ALiEN V2 under construction');
+<?php die('ALiEN V2 under construction<br><a href="/alien">alien</a>');
 //$microtime = MicroTime(1);
 //require_once 'alien/init.php';
 //

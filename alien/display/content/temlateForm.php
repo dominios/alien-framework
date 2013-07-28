@@ -1,6 +1,13 @@
 <script type="text/javascript">
     $(document).ready(function(){
         $( "#tabs" ).tabs();
+        markBadInputs();
+        $("input.invalidInput").mouseover(function(){
+            $(this).next('div').fadeIn(400);
+        });
+        $("input.invalidInput").mouseout(function(){
+            $(this).next('div').fadeOut(400);
+        });
     });
 
     function createDialog(header, content){
@@ -67,12 +74,23 @@
             }
         });
     }
+
+    function markBadInputs(){
+        json = jQuery.parseJSON('<?=$_SESSION['formErrorOutput'];?>');
+        if(json == null) return;
+        for(i = 0; i <= json.length; i++){
+            item = json.pop();
+            $("input[name="+item.inputName+"]").addClass('invalidInput');
+            $("<div class=\"inputErrorHelper\">"+item.errorMsg+"</div>").insertAfter($("input[name="+item.inputName+"]"));
+        }
+        <? unset($_SESSION['formErrorOutput']); ?>
+    }
+
 </script>
 
 <form name="editTemplateForm" method="POST" action="" id="templateForm">
-    <input type="hidden" name="action" value="templateSubmit">
+    <input type="hidden" name="action" value="templateFormSubmit">
     <input type="hidden" name="templateId" value="<?=$this->Template->getId();?>">
-
 
     <div id="tabs" style="margin: 0px 10px; box-shadow: 0px 0px 10px #ccc;">
         <ul>

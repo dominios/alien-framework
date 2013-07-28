@@ -15,7 +15,7 @@ class AlienView {
             $content .= ob_get_contents();
             ob_end_clean();
         } else {
-            $content .= 'Could not open view.';
+            AlienConsole::getInstance()->putMessage('Cannot open view <i>'.$this->script.'</i>', AlienConsole::CONSOLE_WARNING);
         }
         return $content;
     }
