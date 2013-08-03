@@ -65,6 +65,12 @@ table.itemList td {
     vertical-align: middle;
 }
 
+table .itemRow {
+    -webkit-transition: box-shadow 0.4s, border 0.4s, border-color 0.4s, background-color 0.4s, color 0.4s;
+    -moz-transition: box-shadow 0.4s, border 0.4s, border-color 0.4s, background-color 0.4s, color 0.4s;
+    transition: box-shadow 0.4s, border 0.4s, border-color 0.4s, background-color 0.4s, color 0.4s;
+}
+
 table .itemRow:nth-child(odd){
     background-color: rgba(250, 250, 255, 0.7);
 }

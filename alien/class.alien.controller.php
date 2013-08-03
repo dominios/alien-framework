@@ -10,7 +10,9 @@ class AlienController {
     protected $content_mainmenu;
     protected $content_left;
     protected $content_main;
-   
+
+    private $notifications = Array();
+
    public final function __construct() {
        Alien::getInstance()->getConsole()->putMessage('Using <i>'.get_called_class().'</i>');
        $this->defaultAction = 'NOP';       
@@ -68,16 +70,31 @@ class AlienController {
        
        $this->content_main = $out;
    }
-   
-   // TODO: konzola zatial natvrdo
-   public final function getContent(){       
 
-       $notifications = new AlienView('display/system/notifications.php');
-       $notifications = $notifications->getContent();
+    protected function redirect($location, $statusCode = 301){
+        ob_clean();
+        $this->saveSessionNotifications();
+        header('Location: '.$location, false, $statusCode);
+        ob_end_flush();
+        exit;
+    }
+
+   // TODO: konzola zatial natvrdo
+   public final function getContent(){
 
         $this->doActions();
+
+       $sessionNotifications = unserialize($_SESSION['notifications']);
+        if(isset($_SESSION['notifications']) && sizeof($sessionNotifications)){
+            $notifications = new AlienView('display/system/notifications.php', $this);
+            $notifications->List = $sessionNotifications;
+            $this->flushNotifications();
+            $notifications = $notifications->getContent();
+        } else {
+            $notifications = '';
+        }
         
-        $this->view = new AlienView('display/index.php');
+        $this->view = new AlienView('display/index.php', $this);
         $this->view->Notifications = $notifications;
         $this->view->Title = $this->meta_title;
         $this->view->MainMenu = $this->content_mainmenu;
@@ -86,8 +103,8 @@ class AlienController {
 
         $content = $this->view->getContent();
 
-        if(Alien::getParameter('debugMode') || 1){
-            $console = new AlienView('display/system/console.php');
+        if(true || Alien::getParameter('debugMode')){
+            $console = new AlienView('display/system/console.php', $this);
             $console->Messages = Alien::getInstance()->getConsole()->getMessageList();
             $content .= $console->getContent();
         }
@@ -99,7 +116,18 @@ class AlienController {
        return '';
    }
    
-   
+   protected function putNotificaion(Notification $notification){
+       $this->notifications[] = $notification;
+   }
+
+    protected function flushNotifications(){
+        unset($this->notifications, $_SESSION['notifications']);
+        $this->notifications = Array();
+    }
+
+    private  function saveSessionNotifications(){
+        $_SESSION['notifications'] = serialize($this->notifications);
+    }
 }
 
 ?>

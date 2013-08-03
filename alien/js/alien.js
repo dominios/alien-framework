@@ -589,7 +589,7 @@ $(document).ready(function($) {
     $(".button:regex(onClick, location").live('click',function(){
        loaderOn(); 
     });
-    
+
     $(".toggleHideable").live('click',function(){
         obj = $(this);
 //        alert('aaa');

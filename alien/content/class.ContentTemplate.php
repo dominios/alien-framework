@@ -31,10 +31,6 @@ class ContentTemplate implements FileItem {
 
 /* ******** STATIC METHODS ********************************************************************* */
     
-    public static function templateExists($id){
-        return AlienContent::getInstance()->templateExists($id);
-    }
-    
     public static function getTempatesList($fetch = false){
         $DBH = Alien::getDatabaseHandler();
         $arr=array();
@@ -106,21 +102,8 @@ class ContentTemplate implements FileItem {
         $STH->bindValue(':css', $_POST['templateCss'], PDO::PARAM_STR);
         $STH->bindValue(':ini', $_POST['templateIni'], PDO::PARAM_STR);
         $STH->bindValue(':d', $_POST['templateDesc'], PDO::PARAM_STR);
-        
-        if($STH->execute()){
-            $new ? new Notification("Nová šablóna bola úspešne vytvorená.","success") : new Notification('Šablóna bola uložená.', Notification::SUCCESS);
-        } else {
-            $new ? new Notification("Šablónu sa nepodarilo vytvoriť.", "error") : new Notification('Šablónu sa nepodarilo uložiť.', Notification::ERROR);
-        }
-        if(Alien::getParameter('allowRedirects')){
-            ob_clean();
-            $id = $new ? $DBH->lastInsertId() : $_POST['templateId'];
-            $url='?content=editTemplate&id='.$id;
-            header('Location: '.$url, false, 301);
-            ob_end_flush();
-            exit;
-        }
-        
+
+        return $STH->execute();
     }
     
     public static function drop($id){
@@ -147,26 +130,6 @@ class ContentTemplate implements FileItem {
             exit;
         }
     }
-/*
-    public static function renderTemplatesList(){
-//        Authorization::permissionTest('?page=home',array(4));
-        $cp=('<div class="controlPanel">
-            <a href="?page=content&amp;task=templates&amp;do=new"><img src="images/icons/layout_add.png" title="refresh" alt="refresh"> Nová šablóna</a>
-            <a href="?page=content&amp;task=templates"><img src="images/icons/refresh.png" title="refresh" alt="refresh"> Refresh</a> 
-            <a href="#" onClick="javascript: viewMan(\'content.template.man\');"><img src="images/icons/help.png" title="manuál"> Manuál</a> 
-        </div>');
-
-        Alien::setHeading(obsahSablony.$cp);
-              
-        $DBH=Alien::getDatabaseHandler();
-        $STH=$DBH->prepare("SELECT id_t FROM ".Alien::getParameter('db_prefix')."_content_templates");
-        $STH->setFetchMode(5);
-        $STH->execute();
-        while($obj=$STH->fetch()){
-            $template=new contentTemplate($obj->id_t);
-            $template->renderInFolder();
-        }   
-    }*/
 
 /* ******** SPECIFIC  METHODS ****************************************************************** */
 

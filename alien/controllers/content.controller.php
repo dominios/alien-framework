@@ -34,7 +34,7 @@ class ContentController extends AlienController {
             $folder = new ContentFolder(null, $STH->fetch());            
         }               
 
-        $view = new AlienView('display/content/browser.php');
+        $view = new AlienView('display/content/browser.php', $this);
         $view->DisplayLayout = 'ROW';
         $view->Folder = $folder;
         $view->Folders= $folder->getChilds(true);
@@ -48,14 +48,14 @@ class ContentController extends AlienController {
     protected function editTemplate(){
         if(!preg_match('/^[0-9]*$/', $_GET['id'])){
             new Notification('Neplatný identifikátor šablóny.', 'error');
-            return 'ERROR';
+            return '';
         }
 
         $template = new ContentTemplate((int)$_GET['id']);
 
         $this->meta_title = 'Úprava šablóny: '.$template->getName();
 
-        $view = new AlienView('display/content/temlateForm.php');
+        $view = new AlienView('display/content/temlateForm.php', $this);
         $view->ReturnAction = '?content=browser&folder='.$_SESSION['folder'];
         $view->Template = $template;
 
@@ -63,32 +63,83 @@ class ContentController extends AlienController {
     }
 
     protected function templateFormSubmit(){
-        $errorOutput = Array();
-        $id = (int)$_POST['templateId'];
+        $id = $_POST['templateId'];
         $nazov = $_POST['templateName'];
         $php = $_POST['templatePhp'];
         $ini = $_POST['templateIni'];
-        if(!strlen($nazov)){
-            $errorOutput[] = Array('inputName'=>'templateName', 'errorMsg'=>'Názov šablóny nemôže zostať prázdny.');
-        }
-        if(!file_exists($ini)){
-            $errorOutput[] = Array('inputName'=>'templateIni', 'errorMsg'=>'Konfiguračný súbor musí existovat.');
-        }
-        if(!file_exists($php)){
-            $errorOutput[] = Array('inputName'=>'templatePhp', 'errorMsg'=>'Zdrojový súbor šablóny musí existovať.');
-        }
-        if(ContentTemplate::isTemplateNameInUse($nazov, $id)){
-            $errorOutput[] = Array('inputName'=>'templateName', 'errorMsg'=>'Zadaný názov šablóny sa už používa.');
-        }
-        if(sizeof($errorOutput)){
-            AlienConsole::getInstance()->putMessage('Form validation error!', AlienConsole::CONSOLE_WARNING);
-            $_SESSION['formErrorOutput'] = json_encode($errorOutput);
+        $css = $_POST['templateCss'];
+        if(!preg_match('/^[0-9]*$/', $id)){
             return;
         }
-        ContentTemplate::update();
-        header('Location: ?content=editTemplate&id='.$id, false, 301);
-        ob_end_clean();
-        exit;
+        if(!strlen($nazov)){
+            FormValidator::getInstance()->putError('templateName', 'Názov šablóny nemôže ostať prázdny.');
+        }
+        if(!file_exists($ini)){
+            FormValidator::getInstance()->putError('templateIni', 'Konfiguračný súbor musí existovať.');
+        }
+        if(!file_exists($php)){
+            FormValidator::getInstance()->putError('templatePhp', 'Zdrojový súbor šablóny musí existovať.');
+        }
+        if(!file_exists($css)){
+            $this->putNotificaion(new Notification('Súbor CSS neexestuje!', Notification::WARNING));
+        }
+        if(ContentTemplate::isTemplateNameInUse($nazov, $id)){
+            FormValidator::getInstance()->putError('templateName', 'Názov šablóny sa už používa.');
+        }
+        if(FormValidator::getInstance()->errorsCount()){
+            AlienConsole::getInstance()->putMessage('Form validation error!', AlienConsole::CONSOLE_WARNING);
+            return;
+        }
+        $result = ContentTemplate::update();
+        if($result){
+            $this->putNotificaion(new Notification('Šablóna bola uložená.', Notification::SUCCESS));
+        } else {
+            $this->putNotificaion(new Notification('Šablónu sa nepodarilo uložiť.', Notification::ERROR));
+        }
+        $this->redirect(' ?content=editTemplate&id='.$id);
     }
+
+    protected function editPage(){
+        if(!preg_match('/^[0-9]*$/', $_GET['id'])){
+            new Notification('Neplatný identifikátor stránky.', 'error');
+            return '';
+        }
+
+        $page = new ContentPage((int)$_GET['id']);
+
+        $this->meta_title = 'Úprava stránky: '.$page->getName();
+        $view = new AlienView('display/content/pageForm.php', $this);
+        $view->ReturnAction = '?content=browser&folder='.$_SESSION['folder'];
+        $view->Page = $page;
+
+        return $view->getContent();
+    }
+
+    protected function pageFormSubmit(){
+        $id = $_POST['pageId'];
+        $nazov = $_POST['pageName'];
+        $seolink = $_POST['pageSeolink'];
+        if(!preg_match('/^[0-9]*$/', $id)){
+            return;
+        }
+        if(!strlen($nazov)){
+            FormValidator::getInstance()->putError('pageName', 'Názov stránky nemôže ostať prázdny.');
+        }
+        if(ContentPage::isSeolinkInUse($seolink, $id)){
+            FormValidator::getInstance()->putError('pageSeolink', 'Zadaný seolink sa už používa.');
+        }
+        if(FormValidator::getInstance()->errorsCount()){
+            AlienConsole::getInstance()->putMessage('Form validation error!', AlienConsole::CONSOLE_WARNING);
+            return;
+        }
+        $result = ContentPage::update();
+        if($result){
+            $this->putNotificaion(new Notification('Stránka bola uložená.', Notification::SUCCESS));
+        } else {
+            $this->putNotificaion(new Notification('Stránku sa nepodarilo uložiť.', Notification::ERROR));
+        }
+        $this->redirect('?content=editPage&id='.$id);
+    }
+
 }
 ?>

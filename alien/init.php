@@ -27,6 +27,11 @@ function ALiEN_autoloader($class){
         ALiEN_include('./controllers/'.strtolower($filename[0]).'.controller.php');
         return;
     }
+
+    if($class === 'FormValidator'){
+        ALiEN_include('class.form.validator.php');
+        return;
+    }
     
     if($class === 'Authorization'){
         ALiEN_include('authorization.php');

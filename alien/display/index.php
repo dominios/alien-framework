@@ -24,7 +24,6 @@
     <link href="display/alien2.css" type="text/css" rel="stylesheet">
 </head>
 <body>
-    <? /* <div style="position: absolute;  top: 0px; width: 500px; margin: 0px auto;"><? //Notification::renderNotifications(); ?></div> */ ?>
     <?=$this->Notifications; ?>
     <div id="topbanner"><strong style="font-size: 20px; margin-left: 25px;"><?=$this->Webname; ?></strong></div>
     
@@ -44,6 +43,5 @@
         </div>
     </div>
     <div style="clear: both;"></div>
-
 </body>
 </html>

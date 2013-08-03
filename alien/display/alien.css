@@ -210,6 +210,9 @@ a:link .nobackground {
     color: #333;
     border: 1px solid #bbc;
     background-color: #e0eef6;
+    -webkit-transition: box-shadow 0.4s, border 0.4s, border-color 0.4s, background-color 0.4s, color 0.4s;
+    -moz-transition: box-shadow 0.4s, border 0.4s, border-color 0.4s, background-color 0.4s, color 0.4s;
+    transition: box-shadow 0.4s, border 0.4s, border-color 0.4s, background-color 0.4s, color 0.4s;
 }
 
 .leftpanel a:hover, .leftpanel a:active {
@@ -362,6 +365,9 @@ input, button, .button {
     font-weight: bold;
     line-height: 26px;
     height: 26px;
+    -webkit-transition: box-shadow 0.4s, border 0.4s, border-color 0.4s, background-color 0.4s, color 0.4s;
+    -moz-transition: box-shadow 0.4s, border 0.4s, border-color 0.4s, background-color 0.4s, color 0.4s;
+    transition: box-shadow 0.4s, border 0.4s, border-color 0.4s, background-color 0.4s, color 0.4s;
 }
 
 button, .button {
@@ -410,15 +416,18 @@ input:hover, button:hover, textarea:hover {
 }
 
 .button.neutral:hover {
-    box-shadow: 0 0 10px #4444ff;
+    box-shadow: 0 0 8px #1198ff;
+    border-color: #0295ff;
 }
 
 .button.negative:hover {
-    box-shadow: 0 0 10px red;
+    box-shadow: 0 0 8px #f88;
+    border-color: #f00;
 }
 
 .button.positive:hover {
-    box-shadow: 0 0 10px #73e100;
+    box-shadow: 0 0 8px #73e100;
+    border-color: #4dc025;
 }
 a.button:hover {
     text-decoration: none;
@@ -484,6 +493,9 @@ img {
     cursor: pointer;
     -moz-user-select: none;
     -webkit-user-select: none;
+    -webkit-transition: box-shadow 0.4s, border 0.4s, border-color 0.4s, background-color 0.4s, color 0.4s;
+    -moz-transition: box-shadow 0.4s, border 0.4s, border-color 0.4s, background-color 0.4s, color 0.4s;
+    transition: box-shadow 0.4s, border 0.4s, border-color 0.4s, background-color 0.4s, color 0.4s;
 }
 
 .item.selectable:hover {
@@ -689,6 +701,7 @@ div.image .imageActionBar {
     padding: 5px;
     padding-left: 10px;
     margin: 5px;
+    text-shadow: 1px 1px #888;
 }
 
 .notification:hover {
@@ -743,5 +756,5 @@ div.image .imageActionBar {
 }
 
 .success:hover {
-    border-color: white;
+    border-color: #A7F852;
 }
