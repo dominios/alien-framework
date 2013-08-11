@@ -11,6 +11,8 @@ class User {
     private $last_active;
     private $ban;
     private $deleted;
+    private $first_name;
+    private $surname;
     
     private $permissions;
     private $groups;
@@ -38,6 +40,8 @@ class User {
         $this->last_active = (int)$row['last_active'];
         $this->ban = $row['ban']===null ? false : (int)$row['ban'];
         $this->deleted = (bool)$row['deleted'];
+        $this->first_name = $row['firstname'];
+        $this->surname = $row['surname'];
         
         $DBH = Alien::getDatabaseHandler();        
         foreach($DBH->query('SELECT id_g FROM '.Alien::getDBPrefix().'_group_members WHERE id_u='.(int)$this->id) as $group){
@@ -138,9 +142,9 @@ class User {
                 $user=new User($id);
                 $logData=Array();
                 $logData['user_id']=$user->id;
-                $logData['user_name']=$user->getName();
+                $logData['user_name']=$user->getLogin();
                 $logData['deleted_by_id']=Authorization::getCurrentUser()->getId();
-                $logData['deleted_by_name']=Authorization::getCurrentUser()->getName();
+                $logData['deleted_by_name']=Authorization::getCurrentUser()->getLogin();
                 $log=new AlienLog(NULL, 104, $logData);
                 $log->setImportant(true);
                 $log->writeLog();
@@ -579,8 +583,16 @@ class User {
         return $this->id;
     }
 
-    public function getName(){        
+    public function getLogin(){
         return $this->login;
+    }
+
+    public function getFirstname(){
+        return $this->first_name;
+    }
+
+    public function getSurname(){
+        return $this->surname;
     }
 
     public function getGroups($fetch = false){
@@ -738,6 +750,8 @@ class User {
         }
     }
 
+    public function touch(){
+        $DBH = Alien::getDatabaseHandler();
+        $DBH->query('UPDATE '.Alien::getDBPrefix().'_users SET last_active = '.time().' WHERE id_u = '.(int)$this->id)->execute();
+    }
 }
-
-?>

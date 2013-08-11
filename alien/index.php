@@ -33,4 +33,4 @@ $content .= $controller->getContent();
 //
 ob_end_clean();
 echo $content;
-?>
+

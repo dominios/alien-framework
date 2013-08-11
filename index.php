@@ -1,14 +1,14 @@
 <?php die('ALiEN V2 under construction<br><a href="/alien">alien</a>');
 
-$to = "domgersak@gmail.com";
-$subject = "Hi!";
-$body = "Hi,\n\nHow are you?";
-$headers = "From: admin@alien.sk" . "\r\n";
-if (mail($to, $subject, $body, $headers)) {
-    echo ("Message successfully sent!");
-} else {
-    echo ("Message delivery failed...");
-}
+//$to = "domgersak@gmail.com";
+//$subject = "Hi!";
+//$body = "Hi,\n\nHow are you?";
+//$headers = "From: admin@alien.sk" . "\r\n";
+//if (mail($to, $subject, $body, $headers)) {
+//    echo ("Message successfully sent!");
+//} else {
+//    echo ("Message delivery failed...");
+//}
 //$microtime = MicroTime(1);
 //require_once 'alien/init.php';
 //

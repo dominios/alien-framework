@@ -50,6 +50,18 @@ class ContentFolder implements FileItem {
         return '?content=dropFolder&id='.$this->id;
     }
 
+    public static function exists($id){
+        $DBH = Alien::getDatabaseHandler();
+        $STH = $DBH->prepare('SELECT 1 FROM '.Alien::getDBPrefix().'_content_folders WHERE id_f=:i LIMIT 1;');
+        $STH->bindValue(':i', (int)$id, PDO::PARAM_INT);
+        $STH->execute();
+        if($STH->rowCount()){
+            return true;
+        } else {
+            return false;
+        }
+    }
+
     public function getIcon(){
         return self::ICON;
     }

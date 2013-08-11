@@ -29,14 +29,14 @@ foreach($this->Users as $user){
     
     echo '<tr class="itemRow">';
     echo '<td><img src="'.Alien::$SystemImgUrl.'/user.png">ID: '.$user->getId().'</td>';
-    echo '<td class="itemLabel">'.$user->getName().'</td>';
+    echo '<td class="itemLabel">'.$user->getLogin().'</td>';
     echo '<td class="itemDesc">'.$user->getEmail().'</td>';
     echo '<td class="itemDesc" style="text-align: center;">'.date('d.m.Y H:i:s', $user->getDateRegistered()).'</td>';
     echo '<td class="itemDesc" style="text-align: center;">'.date('d.m.Y H:i:s', $user->getLastActive()).'</td>';
     echo '<td class="itemCP">';
+        echo '<a href="?users=edit&amp;id='.$user->getId().'"><img src="'.Alien::$SystemImgUrl.'/edit.png"></a>';
         echo '<img src="'.Alien::$SystemImgUrl.'/group.png" title="'.$groupStr.'">';
         echo '<img src="'.Alien::$SystemImgUrl.'/locked.png" title="'.$permStr.'">';
-        echo '<img src="'.Alien::$SystemImgUrl.'/edit.png">';
         echo '<img src="'.Alien::$SystemImgUrl.'/delete.png">';
     echo '</td>';
     echo '</tr>';

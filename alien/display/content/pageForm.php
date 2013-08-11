@@ -33,13 +33,12 @@
         });
     }
 
-    function templateShowFileBrowser(type){
-        if(!type) return;
+    function pageShowTemplatesBrowser(){
         $.ajax({
             async: true,
             url: "ajax.php",
             type: "GET",
-            data: "action=templateShowFileBrowser&type="+type,
+            data: "action=pageShowTemplatesBrowser",
             timeout: 5000,
             success: function(data){
                 json = jQuery.parseJSON(data);
@@ -48,31 +47,11 @@
         });
     }
 
-    function chooseFile(file, type){
-        if(!file || !type) return;
-        $("input[name=template"+type+"]").attr('value', file);
+    function chooseTemplate(id, name){
+        if(!id || !name) return;
+        $("input[name=pageTemplateHelper]").attr('value', name);
+        $("input[name=pageTemplate]").attr('value', id);
         $("#dialog-modal").dialog('close');
-    }
-
-    function templateShowFilePreview(file){
-        if(!file) return;
-        $.ajax({
-            async: true,
-            url: "ajax.php",
-            type: "GET",
-            data: "action=templateShowFilePreview&file="+file,
-            timeout: 5000,
-            success: function(data){
-                json = jQuery.parseJSON(data);
-                createDialog(json.header, json.content);
-                if($("#dialog-modal").width() > 1000){
-                    $("#dialog-modal").width(1000);
-                }
-                if($("#dialog-modal").height() > 550){
-                    $("#dialog-modal").height(550);
-                }
-            }
-        });
     }
 
     function markBadInputs(){
@@ -107,7 +86,12 @@
                     <td colspan="2"><input type="text" name="pageDescription" value="<?=$this->Page->getDescription();?>" style="width: 600px;"></td>
                 </tr><tr>
                     <td><img src="<?=Alien::$SystemImgUrl;?>template.png" alt="name"> Šablóna:</td>
-                    <td colspan="2"><input type="text" name="pageTemplate" value="<?=$this->Page->getTemplate();?>" style="width: 600px;"></td>
+                    <td><input type="text" disabled name="pageTemplateHelper" value="<?=$this->Page->getTemplate(true)->getName();?>" style="width: 505px;"></td>
+                    <td>
+                        <input type="hidden" name="pageTemplate" value="<?=$this->Page->getTemplate();?>">
+                        <div class="button" onclick="javascript: pageShowTemplatesBrowser();"><img src="<?=Alien::$SystemImgUrl;?>external_link.png"></div>
+                        <a class="button" href="?content=editTemplate&id=<?=$this->Page->getTemplate();?>" target="_blank"><img src="<?=Alien::$SystemImgUrl;?>magnifier.png"></a>
+                    </td>
                 </tr><tr>
                     <td><img src="<?=Alien::$SystemImgUrl;?>link.png" alt="name"> Seolink:</td>
                     <td colspan="2"><input type="text" name="pageSeolink" value="<?=$this->Page->getSeolink();?>" style="width: 600px;"></td>

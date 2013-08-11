@@ -1,22 +1,15 @@
 <?php
 
 class AlienController {   
-    
-    protected $defaultAction;
+
+    protected $defaultAction = 'NOP';
     protected $actions;
-    private $view;
 
-    protected $meta_title; 
-    protected $content_mainmenu;
-    protected $content_left;
-    protected $content_main;
+    private $layout;
 
-    private $notifications = Array();
-
-   public final function __construct() {
+    public final function __construct() {
        Alien::getInstance()->getConsole()->putMessage('Using <i>'.get_called_class().'</i>');
-       $this->defaultAction = 'NOP';       
-       $actions = Array();       
+       $actions = Array();
        if(@isset($_POST['action'])){
            $actions[] = $_POST['action'];
        }
@@ -33,25 +26,42 @@ class AlienController {
    }
 
    protected function init_action(){
-       Alien::getInstance()->getConsole()->putMessage('Called <i>AlienController::init_action()</i>.');
-       $menu = '';
-       $menuitems = Alien::getInstance()->getMainmenuItems();
-       foreach($menuitems as $item){
-           // perm test !
+
+        $auth = Authorization::getInstance();
+        if(!$auth->getInstance()->isLoggedIn() && !in_array('login', $this->actions)){
+            unset($this->actions);
+            $this->setLayout(new LoginPageLayout());
+            return;
+        }
+
+       $this->setLayout(new AlienAdminLayout());
+
+        Alien::getInstance()->getConsole()->putMessage('Called <i>AlienController::init_action()</i>.');
+        $menu = '';
+        $menuitems = Alien::getInstance()->getMainmenuItems();
+        foreach($menuitems as $item){
+           // perm test dorobit !
            $menu .= '<a href="'.$item['url'].'" '.(isset($item['onclick']) ? 'onclick="'.$item['onclick'].'"' : '').'><img src="'.Alien::$SystemImgUrl.$item['img'].'">'.$item['label'].'</a>';
-       }
-       
-       $this->meta_title = 'HOME';
-       $this->content_left = '';
-       $this->content_main = '';
-       $this->content_mainmenu = $menu;
+        }
+
+       return new ActionResponse(ActionResponse::RESPONSE_OK, Array(
+            'Title' => 'HOME',
+            'ContentLeft' => '',
+            'ContentMain' => '',
+            'MainMenu' => $menu
+       ), __CLASS__.'::'.__FUNCTION__);
 
    }
 
    private final function doActions(){
-       $out = '';
+
+       $responses = Array();
+
        if(method_exists(get_called_class(), 'init_action')){
-           $this->init_action();
+           $response = $this->init_action();
+           if($response instanceof ActionResponse){
+               array_push($responses, $response);
+           }
            Alien::getInstance()->getConsole()->putMessage('Called <i>'.get_called_class().'::init_action()</i>.');
        }
        foreach($this->actions as $action){    
@@ -63,71 +73,63 @@ class AlienController {
                  $action = $this->defaultAction;
                  Alien::getInstance()->getConsole()->putMessage('Calling action <i>'.get_called_class().'::'.$action.'</i>() instead.');
             }
-            $ret = $this->$action();
-            $out .= $ret!==false ? $ret : '';
+            $response = $this->$action();
+            if($response instanceof ActionResponse){
+                array_push($responses, $response);
+            }
             Alien::getInstance()->getConsole()->putMessage('Action <i>'.$action.'</i>() done.');
        }
-       
-       $this->content_main = $out;
+
+       return $responses;
+
    }
+
+    public function getLayout(){
+        return $this->layout;
+    }
+
+    public function setLayout(ALienLayout $layout){
+        $this->layout = $layout;
+    }
 
     protected function redirect($location, $statusCode = 301){
         ob_clean();
-        $this->saveSessionNotifications();
+        $this->getLayout()->saveSessionNotifications();
         header('Location: '.$location, false, $statusCode);
         ob_end_flush();
         exit;
     }
 
    // TODO: konzola zatial natvrdo
-   public final function getContent(){
+    public final function getContent(){
 
-        $this->doActions();
+        $responses = $this->doActions();
 
-       $sessionNotifications = unserialize($_SESSION['notifications']);
-        if(isset($_SESSION['notifications']) && sizeof($sessionNotifications)){
-            $notifications = new AlienView('display/system/notifications.php', $this);
-            $notifications->List = $sessionNotifications;
-            $this->flushNotifications();
-            $notifications = $notifications->getContent();
-        } else {
-            $notifications = '';
+        foreach($responses as $response){
+            $this->getLayout()->handleResponse($response);
+//            AlienConsole::getInstance()->putMessage('Response from <i>'.$response->getAction().'</i> handled.');
         }
-        
-        $this->view = new AlienView('display/index.php', $this);
-        $this->view->Notifications = $notifications;
-        $this->view->Title = $this->meta_title;
-        $this->view->MainMenu = $this->content_mainmenu;
-        $this->view->LeftBox = $this->content_left;
-        $this->view->MainContent = $this->content_main;
 
-        $content = $this->view->getContent();
-
-        if(true || Alien::getParameter('debugMode')){
-            $console = new AlienView('display/system/console.php', $this);
-            $console->Messages = Alien::getInstance()->getConsole()->getMessageList();
-            $content .= $console->getContent();
-        }
+        $content = $this->layout->renderToString();
 
         return $content;
    }
       
-   protected function NOP(){
-       return '';
-   }
-   
-   protected function putNotificaion(Notification $notification){
-       $this->notifications[] = $notification;
+    protected function NOP(){
+       return;
    }
 
-    protected function flushNotifications(){
-        unset($this->notifications, $_SESSION['notifications']);
-        $this->notifications = Array();
+    private function login(){
+        if(isset($_POST['loginFormSubmit'])){
+            if(!Authorization::getInstance()->isLoggedIn()){
+                Authorization::getInstance()->login($_POST['login'], $_POST['pass']);
+            }
+        }
+        $this->redirect('index.php');
     }
 
-    private  function saveSessionNotifications(){
-        $_SESSION['notifications'] = serialize($this->notifications);
+    private function logout(){
+        Authorization::getInstance()->logout();
+        $this->redirect('index.php');
     }
 }
-
-?>

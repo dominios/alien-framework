@@ -44,6 +44,9 @@ class ConsoleController extends AlienController {
     }
     
     public function phpEval($cmd){
+        //error_reporting(E_ALL);
+        $AUTH_NOINIT = true;
+        require 'init.php';
         return eval($cmd);
     }
     

@@ -1,4 +1,5 @@
 <?php
+
 class ContentPage implements FileItem  {
 
     const ICON = 'page.png';
@@ -36,17 +37,16 @@ class ContentPage implements FileItem  {
         $STH->bindValue(':i', $id, PDO::PARAM_INT);
         $STH->execute();
         if($STH->rowCount()){
-            new Notification('Stránka bola odstránená.', 'success');
+            //new Notification('Stránka bola odstránená.', 'success');
             return true;
         } else {
-            new Notification('Stránku sa nepodarilo odstrániť.', 'error');
+            //new Notification('Stránku sa nepodarilo odstrániť.', 'error');
             return false;
         }
     }
 
     public static function update(){
 
-        $id = $_POST['pageId'];
         $new = $_POST['pageId'] == 0 ? true : false;
 
         $DBH = Alien::getDatabaseHandler();
@@ -163,6 +163,10 @@ class ContentPage implements FileItem  {
             }
 
         }
+    }
+
+    public static function exists($id){
+        return 'est';
     }
 
     public function actionEdit(){

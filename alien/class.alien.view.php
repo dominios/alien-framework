@@ -4,7 +4,7 @@ class AlienView {
     private $script;
     private $controller;
     
-    public function __construct($script, AlienController $controller) {
+    public function __construct($script, AlienController $controller = null) {
         $this->script = $script;
         $this->controller = $controller;
     }
@@ -26,4 +26,3 @@ class AlienView {
         return $this->controller;
     }
 }
-?>

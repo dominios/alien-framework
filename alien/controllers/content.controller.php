@@ -3,16 +3,19 @@
 class ContentController extends AlienController {        
     
     protected function init_action() {
-        parent::init_action();
-        $this->meta_title = 'Prieskumník';        
-        $this->content_left = $this->left();
-    }
 
-    private function left(){
-        $ret = '';
-        $ret .= '<h3>ROOT</h3>';
+        $parentResponse = parent::init_action();
+        if($parentResponse instanceof ActionResponse){
+            $data = $parentResponse->getData();
+        }
 
-        return $ret;
+        $left = '';
+        $left .= '<h3>ROOT</h3>';
+
+        return new ActionResponse(ActionResponse::RESPONSE_OK, Array(
+            'ContentLeft' => $left,
+            'MainMenu' => $data['MainMenu']
+        ), __CLASS__.'::'.__FUNCTION__);
     }
 
     protected function browser(){
@@ -41,25 +44,30 @@ class ContentController extends AlienController {
         $view->Items = $folder->fetchFiles();
         
         //$_SESSION['SDATA'] = serialize($view);
-        return $view->getContent();
-        
+
+        return new ActionResponse(ActionResponse::RESPONSE_OK, Array(
+            'Title' => 'Prieskumník',
+            'ContentMain' => $view->getContent()
+        ), __CLASS__.'::'.__FUNCTION__);
     }
 
     protected function editTemplate(){
         if(!preg_match('/^[0-9]*$/', $_GET['id'])){
-            new Notification('Neplatný identifikátor šablóny.', 'error');
-            return '';
+            new Notification('Neplatný identifikátor šablóny.', Notification::ERROR);
+            return;
         }
 
         $template = new ContentTemplate((int)$_GET['id']);
-
-        $this->meta_title = 'Úprava šablóny: '.$template->getName();
 
         $view = new AlienView('display/content/temlateForm.php', $this);
         $view->ReturnAction = '?content=browser&folder='.$_SESSION['folder'];
         $view->Template = $template;
 
-        return $view->getContent();
+
+        return new ActionResponse(ActionResponse::RESPONSE_OK, Array(
+            'Title' => 'Úprava šablóny: '.$template->getName(),
+            'ContentMain' => $view->getContent()
+        ), __CLASS__.'::'.__FUNCTION__);
     }
 
     protected function templateFormSubmit(){
@@ -81,7 +89,7 @@ class ContentController extends AlienController {
             FormValidator::getInstance()->putError('templatePhp', 'Zdrojový súbor šablóny musí existovať.');
         }
         if(!file_exists($css)){
-            $this->putNotificaion(new Notification('Súbor CSS neexestuje!', Notification::WARNING));
+            $this->getLayout()->putNotificaion(new Notification('Súbor CSS neexestuje!', Notification::WARNING));
         }
         if(ContentTemplate::isTemplateNameInUse($nazov, $id)){
             FormValidator::getInstance()->putError('templateName', 'Názov šablóny sa už používa.');
@@ -92,10 +100,11 @@ class ContentController extends AlienController {
         }
         $result = ContentTemplate::update();
         if($result){
-            $this->putNotificaion(new Notification('Šablóna bola uložená.', Notification::SUCCESS));
+            $this->getLayout()->putNotificaion(new Notification('Šablóna bola uložená.', Notification::SUCCESS));
         } else {
-            $this->putNotificaion(new Notification('Šablónu sa nepodarilo uložiť.', Notification::ERROR));
+            $this->getLayout()->putNotificaion(new Notification('Šablónu sa nepodarilo uložiť.', Notification::ERROR));
         }
+
         $this->redirect(' ?content=editTemplate&id='.$id);
     }
 
@@ -112,7 +121,10 @@ class ContentController extends AlienController {
         $view->ReturnAction = '?content=browser&folder='.$_SESSION['folder'];
         $view->Page = $page;
 
-        return $view->getContent();
+        return new ActionResponse(ActionResponse::RESPONSE_OK, Array(
+            'Title' => 'Úprava stránky: '.$page->getName(),
+            'ContentMain' => $view->getContent()
+        ), __CLASS__.'::'.__FUNCTION__);
     }
 
     protected function pageFormSubmit(){
@@ -134,12 +146,13 @@ class ContentController extends AlienController {
         }
         $result = ContentPage::update();
         if($result){
-            $this->putNotificaion(new Notification('Stránka bola uložená.', Notification::SUCCESS));
+            $this->getLayout()->putNotificaion(new Notification('Stránka bola uložená.', Notification::SUCCESS));
         } else {
-            $this->putNotificaion(new Notification('Stránku sa nepodarilo uložiť.', Notification::ERROR));
+            $this->getLayout()->putNotificaion(new Notification('Stránku sa nepodarilo uložiť.', Notification::ERROR));
         }
+
         $this->redirect('?content=editPage&id='.$id);
     }
 
 }
-?>
+

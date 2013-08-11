@@ -132,6 +132,9 @@ table .itemRow img {
     padding-top: 10px;
     float: left;
     text-align: center;
+    -webkit-transition: box-shadow 0.4s, border 0.4s, border-color 0.4s, background-color 0.4s, color 0.4s;
+    -moz-transition: box-shadow 0.4s, border 0.4s, border-color 0.4s, background-color 0.4s, color 0.4s;
+    transition: box-shadow 0.4s, border 0.4s, border-color 0.4s, background-color 0.4s, color 0.4s;
 }
 
 .gridLayout .item:hover{

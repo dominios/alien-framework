@@ -26,7 +26,8 @@ class ContentTemplate implements FileItem {
         $this->css_url=$row['css_url'];
         $this->config_url=$row['config_url'];
         $this->description=$row['description'];
-        $this->blocks=parse_ini_file($row['config_url']);
+//        $this->blocks=parse_ini_file($row['config_url']);
+        $this->fetchBlocks();
     }
 
 /* ******** STATIC METHODS ********************************************************************* */
@@ -131,6 +132,16 @@ class ContentTemplate implements FileItem {
         }
     }
 
+    public static function exists($id){
+        $DBH = Alien::getDatabaseHandler();
+        $Q = $DBH->query('SELECT 1 FROM '.Alien::getDBPrefix().'_content_templates WHERE id_t="'.(int)$id.'"')->execute();
+        if($Q->rowCount()){
+            return true;
+        } else {
+            return false;
+        }
+
+    }
 /* ******** SPECIFIC  METHODS ****************************************************************** */
 
     public function actionEdit(){
@@ -169,7 +180,7 @@ class ContentTemplate implements FileItem {
      * ziska pole blokov podla configu
      * @return Array 
      */
-    public function getTemplateBlocks(){
+    public function getBlocks(){
         return $this->blocks;
     }
     
@@ -245,6 +256,13 @@ class ContentTemplate implements FileItem {
             return $R['id_t'] == $ignoreId ? false : true;
         }
     }
-}
 
-?>
+    private function fetchBlocks(){
+        $blocks = Array();
+        $ini = parse_ini_file($this->getConfigUrl());
+        foreach($ini as $k => $v){
+            $blocks[$v] = '';
+        }
+        $this->blocks = $blocks;
+    }
+}

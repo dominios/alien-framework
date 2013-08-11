@@ -564,11 +564,17 @@ function contentShowChooseViewType(tid, pid, box){
 $(document).keyup(function(e) {
   if(e.keyCode === 27) { closeWindow(); }   // esc
   
-  if(e.keyCode === 192) { 
-      $("#ConsoleContainer").fadeToggle(75); 
-      $(".ConsoleInput").focus();
-//      $(".ConsoleInput").val('');
-  } 
+  if(e.keyCode === 192) {
+      if($("#ConsoleContainer").css('display')==='none'){
+          $("#ConsoleContainer").fadeIn(75);
+          $(".ConsoleInput").focus();
+      } else {
+          if(!$("#ConsoleContainer").is(":hover")){
+              $("#ConsoleContainer").fadeOut(75);
+              $(".ConsoleInput").delay(75).val('');
+          }
+      }
+  }
 
 });
 

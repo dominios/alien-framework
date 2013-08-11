@@ -15,8 +15,6 @@ final class Alien {
     
     private $queryCounter = null;
     
-    
-    
     private $console;
     
      
@@ -27,7 +25,8 @@ final class Alien {
         $this->connectToDatabase($this->system_settings['db_host'], 
                 $this->system_settings['db_database'], 
                 $this->system_settings['db_username'], 
-                $this->system_settings['db_password']);
+                $this->system_settings['db_password']
+        );
     }
     
     public static final function getInstance(){
@@ -221,7 +220,7 @@ final class Alien {
         $items[] = Array('permission'=>'CONTENT_VIEW', 'url'=>'?content=browser', 'label'=>'Obsah', 'img'=>'magazine.png');
         $items[] = Array('permission'=>'USER_VIEW', 'url'=>'?users=viewList', 'label'=>'Používatelia', 'img'=>'user.png');
         $items[] = Array('permission'=>'GROUP_VIEW', 'url'=>'?groups=viewList', 'label'=>'Skupiny', 'img'=>'group.png');
-        $items[] = Array('permission'=>null, 'url'=>'#', 'onclick'=>'javascript: logout();', 'label'=>'Odhlásiť', 'img'=>'logout.png');
+        $items[] = Array('permission'=>null, 'url'=>'#', 'url'=>'?alien=logout', 'label'=>'Odhlásiť', 'img'=>'logout.png');
         return $items;
     }
 

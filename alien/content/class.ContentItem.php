@@ -12,6 +12,7 @@ abstract class ContentItem {
     public function getName(){
         return $this->name;
     }
-    
+
+    public abstract function getType();
 }
 ?>

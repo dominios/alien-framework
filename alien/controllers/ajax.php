@@ -1,95 +1,153 @@
 <?php
+ob_start();
 require_once 'init.php';
+
+class AjaxController extends AlienController {
+
+    /**
+     * @param $REQ request pole
+     * @return mixed
+     * veci v session prepina grid / row layout
+     */
+    public function displayLayoutType($REQ){
+        $type = $REQ['type'];
+
+        $view = unserialize($_SESSION['SDATA']);
+
+        $view->DisplayLayout = $type;
+
+        return new ActionResponse(ActionResponse::RESPONSE_OK, Array(
+            'result' => $view->getContent()
+        ),  __CLASS__.'::'.__FUNCTION__);
+    }
+
+    /**
+     * @param $REQ request pole
+     * @return string result
+     * parser inputu v terminalovom okne
+     */
+    public function evalConsoleInput($REQ){
+        $action = $REQ['data'];
+        $ret = '';
+
+        $ctrl = new ConsoleController();
+
+        if(preg_match('/^php\s.*$/', $action)){
+            error_reporting(0);
+            $a = explode('php', $action, 2);
+            $action = (string)$a[1];
+            $ret .= (string)eval("".$action);
+            $ret .= '<br>';
+            echo $ret;
+            exit;
+        }
+
+        if(method_exists($ctrl, $action) && !in_array($action, Array('init_action', 'getContent', '__construct', 'NOP', 'nop'))){
+
+            $ret .= ('<span class="ConsoleTime">['.date('d.m.Y H:i:s', time()).']</span> <span class="'.AlienConsole::CONSOLE_MSG.'">'.$action.'<br>'.$ctrl->$action().'</span><br>');
+        } else {
+            $ret .= ('<span class="ConsoleTime">['.date('d.m.Y H:i:s', time()).']</span> <span class="'.AlienConsole::CONSOLE_ERROR.'">Command <i><b>'.$action.'</b></i> not recognized.</span><br>');
+        }
+
+        return new ActionResponse(ActionResponse::RESPONSE_OK, Array(
+            'result' => $ret
+        ),  __CLASS__.'::'.__FUNCTION__);
+    }
+
+    /**
+     * @param $REQ request pole
+     * @return string
+     * generuje JSON pre dialogove okno - zoznam dosutpnych suborov pre sablony (php, css, ini)
+     */
+    public function templateShowFileBrowser($REQ){
+
+        $header = 'Vybrať súbor';
+        $ret = '';
+        $content = '';
+        $dir = 'templates';
+
+        switch($REQ['type']){
+            case 'php': $pattern = '.*\.php$'; $img = 'php.png'; break;
+            case 'ini': $pattern = '.*\.ini$'; $img = 'service.png'; break;
+            case 'css': $pattern = '.*\.css$'; $img = 'css.png'; break;
+            default: return json_encode(Array('header'=>$header, 'content'=>'Invalid request'));
+        }
+
+        $ret = '<div class="gridLayout">';
+
+        if ($dh = opendir($dir)) {
+            while (($file = readdir($dh)) !== false) {
+                if(preg_match('/'.$pattern.'/', $file)){
+                    $content .= '<div class="item" onclick="javascript: chooseFile(\'templates/'.$file.'\', \''.ucfirst($REQ['type']).'\');">';
+                    $content .= '<img src="'.Alien::$SystemImgUrl.'/'.$img.'" style="width: 48px; height: 48px;">';
+                    $content .= '<div style="position: absolute; bottom: 5px; width: 100px; text-align: center;">'.$file.'</div>';
+                    $content .= '</div>';
+                }
+            }
+            closedir($dh);
+        }
+
+        if(!strlen($content)){
+            $content .= 'Žiadne súbory požadovaného typu.';
+        }
+
+        $ret .= $content;
+        $ret .= '</div>';
+
+        $content .= '<div style="clear: left;"></div>';
+
+        return new ActionResponse(ActionResponse::RESPONSE_OK, Array(
+            'result' => json_encode(Array('header'=>$header, 'content'=>$ret))
+        ),  __CLASS__.'::'.__FUNCTION__);
+    }
+
+    /**
+     * @param $REQ request pole
+     * @return string
+     * vrati JSON pre dialogove okno - nahlad suboru
+     */
+    public function templateShowFilePreview($REQ){
+        return new ActionResponse(ActionResponse::RESPONSE_OK, Array(
+            'result' => json_encode(Array('header'=>$REQ['file'], 'content'=>highlight_file($REQ['file'], true)))
+        ),  __CLASS__.'::'.__FUNCTION__);
+    }
+
+    /**
+     * @param $REQ
+     * @return ActionResponse
+     * vrati JSON pre vyber sablony
+     */
+    public function pageShowTemplatesBrowser($REQ){
+
+        $img = 'template.png';
+
+        $templates = ContentTemplate::getTempatesList(true);
+        $content = '';
+        $content .= '<div class="gridLayout">';
+        foreach($templates as $template){
+            $content .= '<div class="item" onclick="javascript: chooseTemplate(\''.$template->getId().'\', \''.$template->getName().'\');">';
+            $content .= '<img src="'.Alien::$SystemImgUrl.'/'.$img.'" style="width: 48px; height: 48px;">';
+            $content .= '<div style="position: absolute; bottom: 5px; width: 100px; text-align: center;">'.$template->getName().'</div>';
+            $content .= '</div>';
+        }
+        $content .= '</div>';
+
+        return new ActionResponse(ActionResponse::RESPONSE_OK, Array(
+            'result' => json_encode(Array('header'=>'Vybrať šablónu', 'content'=>$content))
+        ), __CLASS__.'::'.__FUNCTION__);
+    }
+}
 
 if(!isset($_REQUEST['action'])){
     exit;
+} else {
+
+    $action = $_REQUEST['action'];
+
+    $Controller = new AjaxController();
+    $response = $Controller->$action($_REQUEST);
+    $data = $response->getData();
+
+    ob_clean();
+    echo $data['result'];
 }
-
-ob_start();
-
-function displayLayoutType($REQ){    
-    
-    $type = $REQ['type'];
-    
-    $view = unserialize($_SESSION['SDATA']);    
-    
-    $view->DisplayLayout = $type;
-    return $view->getContent();
-}
-
-function evalConsoleInput($REQ){
-    $action = $REQ['data'];
-    $ret = '';
-    
-    $ctrl = new ConsoleController(); 
-    
-    if(preg_match('/^php\s.*$/', $action)){
-        error_reporting(0);
-        $a = explode('php', $action, 2);
-        $action = (string)$a[1];
-        $ret .= (string)eval("".$action);
-        $ret .= '<br>';
-        echo $ret;
-        exit;
-    }
-    
-    if(method_exists($ctrl, $action) && !in_array($action, Array('init_action', 'getContent', '__construct', 'NOP', 'nop'))){
-        
-        $ret .= ('<span class="ConsoleTime">['.date('d.m.Y H:i:s', time()).']</span> <span class="'.AlienConsole::CONSOLE_MSG.'">'.$action.'<br>'.$ctrl->$action().'</span><br>');
-    } else {
-        $ret .= ('<span class="ConsoleTime">['.date('d.m.Y H:i:s', time()).']</span> <span class="'.AlienConsole::CONSOLE_ERROR.'">Command <i><b>'.$action.'</b></i> not recognized.</span><br>');
-    }
-
-    return $ret;
-}
-
-function templateShowFileBrowser($REQ){
-
-    $header = 'Vybrať súbor';
-    $ret = '';
-    $content = '';
-    $dir = 'templates';
-
-    switch($REQ['type']){
-        case 'php': $pattern = '.*\.php$'; $img = 'php.png'; break;
-        case 'ini': $pattern = '.*\.ini$'; $img = 'service.png'; break;
-        case 'css': $pattern = '.*\.css$'; $img = 'css.png'; break;
-        default: return json_encode(Array('header'=>$header, 'content'=>'Invalid request'));
-    }
-
-    $ret = '<div class="gridLayout">';
-
-    if ($dh = opendir($dir)) {
-        while (($file = readdir($dh)) !== false) {
-            if(preg_match('/'.$pattern.'/', $file)){
-                $content .= '<div class="item" onclick="javascript: chooseFile(\'templates/'.$file.'\', \''.ucfirst($REQ['type']).'\');">';
-                $content .= '<img src="'.Alien::$SystemImgUrl.'/'.$img.'" style="width: 48px; height: 48px;">';
-                $content .= '<div style="position: absolute; bottom: 5px; width: 100px; text-align: center;">'.$file.'</div>';
-                $content .= '</div>';
-            }
-        }
-        closedir($dh);
-    }
-
-    if(!strlen($content)){
-        $content .= 'Žiadne súbory požadovaného typu.';
-    }
-
-    $ret .= $content;
-    $ret .= '</div>';
-
-    $content .= '<div style="clear: left;"></div>';
-
-    return json_encode(Array('header'=>$header, 'content'=>$ret));
-}
-
-function templateShowFilePreview($REQ){
-    return json_encode(Array('header'=>$REQ['file'], 'content'=>highlight_file($REQ['file'], true)));
-}
-
-$action = $_REQUEST['action'];
-$ret = $action($_REQUEST);
-ob_clean();
-echo $ret;
-
-?>
