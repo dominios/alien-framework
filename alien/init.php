@@ -58,23 +58,32 @@ function ALiEN_autoloader($class){
     }
 
     if($class === 'FileItem'){
-        ALiEN_include('./content/interface.FileItem.php');
+        ALiEN_include('./modules/content/interface.FileItem.php');
         return;
     }
     
     if(preg_match('/^(.)*Item$/', $class)){
-        ALiEN_include('./content/class.'.$class.'.php');
+        ALiEN_include('./modules/content/class.'.$class.'.php');
+        return;
+    }
+
+    if(preg_match('/^(.)*ItemView$/', $class)){
+        ALiEN_include('./modules/content/class.'.$class.'.php');
         return;
     }
     
     if(preg_match('/^Content(.)*$/', $class)){
-        ALiEN_include('./content/class.'.$class.'.php');
+        ALiEN_include('./modules/content/class.'.$class.'.php');
         return;
     }
 
 }
 
 function ALiEN_include($file){
+    if(!preg_match('/alien/', getcwd())){
+//        $file = 'alien/'.$file;
+        chdir('alien');
+    }
     if(file_exists($file)){
         require_once $file; 
     } else {

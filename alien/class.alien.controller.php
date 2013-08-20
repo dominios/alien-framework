@@ -4,12 +4,13 @@ class AlienController {
 
     protected $defaultAction = 'NOP';
     protected $actions;
-
     private $layout;
+    private static $currentController;
+    private static $instance = null;
 
     public final function __construct() {
        Alien::getInstance()->getConsole()->putMessage('Using <i>'.get_called_class().'</i>');
-       $actions = Array();
+       $actions = array();
        if(@isset($_POST['action'])){
            $actions[] = $_POST['action'];
        }
@@ -22,10 +23,16 @@ class AlienController {
        if(!sizeof($actions)){
            $actions[] = $this->defaultAction;
        }
-       $this->actions = $actions;       
+       $this->actions = $actions;
+
+        self::$instance = $this;
    }
 
-   protected function init_action(){
+    protected function init_action(){
+
+        Alien::getInstance()->getConsole()->putMessage('Called <i>AlienController::init_action()</i>.');
+
+        self::$currentController = get_called_class();
 
         $auth = Authorization::getInstance();
         if(!$auth->getInstance()->isLoggedIn() && !in_array('login', $this->actions)){
@@ -34,26 +41,17 @@ class AlienController {
             return;
         }
 
-       $this->setLayout(new AlienAdminLayout());
+        $this->setLayout(new AlienAdminLayout());
 
-        Alien::getInstance()->getConsole()->putMessage('Called <i>AlienController::init_action()</i>.');
-        $menu = '';
-        $menuitems = Alien::getInstance()->getMainmenuItems();
-        foreach($menuitems as $item){
-           // perm test dorobit !
-           $menu .= '<a href="'.$item['url'].'" '.(isset($item['onclick']) ? 'onclick="'.$item['onclick'].'"' : '').'><img src="'.Alien::$SystemImgUrl.$item['img'].'">'.$item['label'].'</a>';
-        }
-
-       return new ActionResponse(ActionResponse::RESPONSE_OK, Array(
+        return new ActionResponse(ActionResponse::RESPONSE_OK, Array(
             'Title' => 'HOME',
-            'ContentLeft' => '',
-            'ContentMain' => '',
-            'MainMenu' => $menu
-       ), __CLASS__.'::'.__FUNCTION__);
+            'LeftTitle' => Authorization::getCurrentUser()->getLogin(),
+            'ContentLeft' => Array(Array('url' => '?alien=logout', 'img' => 'logout.png', 'text' => 'Odhlásiť'))
+        ), __CLASS__.'::'.__FUNCTION__);
 
    }
 
-   private final function doActions(){
+    private final function doActions(){
 
        $responses = Array();
 
@@ -131,5 +129,18 @@ class AlienController {
     private function logout(){
         Authorization::getInstance()->logout();
         $this->redirect('index.php');
+    }
+
+    public static function getCurrentControllerClass(){
+        return self::$currentController;
+    }
+
+    public static function isActionInActionList($action){
+        if(in_array($action, self::$instance->actions)){
+            return true;
+        } else {
+            return false;
+        }
+
     }
 }

@@ -34,6 +34,10 @@ foreach($this->Folders as $folder){
 
 foreach($this->Items as $item){
 
+    if(!$item->isBrowseable()){
+        continue;
+    }
+
     if($this->DisplayLayout === 'ROW'){
         echo ('<div class="item selectable" onClick="javascript: window.location=\''.$item->actionEdit().'\'">');
         echo ('<img src="'.Alien::$SystemImgUrl.$item->getIcon().'">'.$item->getName().'');

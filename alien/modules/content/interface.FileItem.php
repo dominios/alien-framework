@@ -7,6 +7,7 @@ interface FileItem {
     public function getId(); // idcko
     public function getName(); // nazov
     public function getIcon(); // ikonka
+    public function isBrowseable(); // ci sa zobrazuje v zoznamoch
 
     public static function exists($id);
 
@@ -14,5 +15,3 @@ interface FileItem {
     public function actionEdit(); // urlcka na formular s upravou
     public function actionDrop(); // urlcka na zmazanie
 }
-
-?>

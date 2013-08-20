@@ -9,11 +9,14 @@ class ContentController extends AlienController {
             $data = $parentResponse->getData();
         }
 
-        $left = '';
-        $left .= '<h3>ROOT</h3>';
+        $menuItems = Array();
+        $menuItems[] = Array('permissions' => null, 'url' => '?content=browser&folder=0', 'img' => 'folder.png', 'text' => 'ROOT');
+
+//        $left = '<a href="?content=browser&folder=0"><img src="'.Alien::$SystemImgUrl.'/white/folder.png"> ROOT</a>';
 
         return new ActionResponse(ActionResponse::RESPONSE_OK, Array(
-            'ContentLeft' => $left,
+            'ContentLeft' => $menuItems,
+            'LeftTitle' => 'Adresárová štruktúra',
             'MainMenu' => $data['MainMenu']
         ), __CLASS__.'::'.__FUNCTION__);
     }

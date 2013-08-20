@@ -1,4 +1,23 @@
-<?php die('ALiEN V2 under construction<br><a href="/alien">alien</a>');
+<?php
+
+require_once 'alien/init.php';
+
+$request = preg_replace('/^\/{1}/', '', $_SERVER['REQUEST_URI']);
+$requestWords = explode('?', $request, 2);
+$seolink = $requestWords[0];
+if(!strlen($seolink)){
+    $seolink = 1;
+}
+
+if(ContentPage::exists($seolink)){
+    $page = new ContentPage($seolink);
+    $template = $page->getTemplate(true);
+    var_dump($template->getBlocks());
+//    include $template->getHtmlUrl();
+}
+
+
+//die('ALiEN V2 under construction<br><a href="/alien">alien</a>');
 
 //$to = "domgersak@gmail.com";
 //$subject = "Hi!";
@@ -42,4 +61,3 @@
 //require_once 'alien/'.$PAGE->getTemplate()->getHtmlUrl();
 //
 //Alien::renderDebugWindow($microtime);
-?>

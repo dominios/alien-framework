@@ -3,6 +3,7 @@
 class ContentPage implements FileItem  {
 
     const ICON = 'page.png';
+    const BROWSEABLE = true;
     
     private $id;
     private $name;
@@ -16,9 +17,17 @@ class ContentPage implements FileItem  {
 
         if($row === null){
             $DBH = Alien::getDatabaseHandler();
-            $Q = $DBH->prepare('SELECT * FROM '.Alien::getDBPrefix().'_content_pages WHERE id_p=:i');
-            $Q->bindValue(':i', $identifier, PDO::PARAM_INT);
+            if(is_numeric($identifier)){
+                $Q = $DBH->prepare('SELECT * FROM '.Alien::getDBPrefix().'_content_pages WHERE id_p=:i');
+                $Q->bindValue(':i', $identifier, PDO::PARAM_INT);
+            } else {
+                $Q = $DBH->prepare('SELECT * FROM '.Alien::getDBPrefix().'_content_pages WHERE seolink=:i');
+                $Q->bindValue(':i', $identifier, PDO::PARAM_STR);
+            }
             $Q->execute();
+            if(!$Q->rowCount()){
+
+            }
             $row = $Q->fetch();
         }
 
@@ -30,7 +39,11 @@ class ContentPage implements FileItem  {
         $this->description = $row['description'];
         $this->folder = $row['id_f'];
     }
-    
+
+    public function isBrowseable(){
+        return self::BROWSEABLE;
+    }
+
     public static function drop($id){
         $DBH=Alien::getDatabaseHandler();
         $STH=$DBH->prepare('DELETE FROM '.Alien::getDBPrefix().'_content_pages WHERE id_p=:i LIMIT 1');
@@ -165,8 +178,17 @@ class ContentPage implements FileItem  {
         }
     }
 
-    public static function exists($id){
-        return 'est';
+    public static function exists($identifier){
+        $DBH = Alien::getDatabaseHandler();
+        if(is_numeric($identifier)){
+            $Q = $DBH->prepare('SELECT 1 FROM '.Alien::getDBPrefix().'_content_pages WHERE id_p=:i');
+            $Q->bindValue(':i', $identifier, PDO::PARAM_INT);
+        } else {
+            $Q = $DBH->prepare('SELECT 1 FROM '.Alien::getDBPrefix().'_content_pages WHERE seolink=:i');
+            $Q->bindValue(':i', $identifier, PDO::PARAM_STR);
+        }
+        $Q->execute();
+        return $Q->rowCount() ? true : false;
     }
 
     public function actionEdit(){

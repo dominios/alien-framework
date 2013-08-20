@@ -69,7 +69,6 @@ abstract class AlienLayout {
         return $content;
     }
 
-
     public function putNotificaion(Notification $notification){
         $this->notifications[] = $notification;
     }

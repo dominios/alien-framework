@@ -140,14 +140,30 @@
             <p>
                 <?
                     $i = 1;
-                    foreach($this->Template->getBlocks() as $k => $v){
+
+                    $blocks = $this->Template->getBlocks();
+
+                    foreach($blocks as $block){
+
+                        $name = $block['name'];
+                        $items = $block['items'];
 
                         $poradie = '';
                         $addViewAction='javascript: window.location=\'?content&amp;addViewToTemplate&amptid='.$this->Template->getId().'&amp;block='.$i.'\'';
 
-                        echo ('<fieldset style="margin-top: 10px;"><legend><img class="toggleHideable less" onClick="javascript: toggleHideable('.$i.');" src="'.Alien::$SystemImgUrl.'/less.png" style="width: 16px; margin-right: 6px;">'.$k.'</legend>');
+                        echo ('<fieldset style="margin-top: 10px;"><legend><img class="toggleHideable less" onClick="javascript: toggleHideable('.$i.');" src="'.Alien::$SystemImgUrl.'/less.png" style="width: 16px; margin-right: 6px;">'.$name.'</legend>');
                         echo ('<div id="hideable-'.$i.'">');
                         echo ('<div id="sortable-'.$i.'" class="sortable">');
+
+                        foreach($items as $item){
+                            $itemView = new AlienView('display/content/itemList.php');
+                            $itemView->Item = $item;
+                            echo $itemView->getContent();
+                        }
+
+
+//                        var_dump(count($block['items']));
+
 //                            echo ('<div class="ui-state-default" id="'.$view->getId().'">');
 //                            echo ('</div>');
 //                            $poradie.=$view->getId().',';
@@ -156,7 +172,7 @@
 
                         $poradie=substr($poradie,0,strlen($poradie)-1);
                         echo ('<input type="hidden" name="order-sortable-'.$i.'" value="'.$poradie.'">');
-                        echo '<div class="button neutral" style="margin-left: 5px; margin-top: 7px; margin-bottom: 10px;" onClick="'.$addViewAction.'"><img src="'.ALien::$SystemImgUrl.'/plus.png">&nbsp;Pridat objekt do: <i>'.$k.'</i></div>';
+                        echo '<div class="button neutral" style="margin-left: 5px; margin-top: 7px; margin-bottom: 10px;" onClick="'.$addViewAction.'"><img src="'.ALien::$SystemImgUrl.'/plus.png">&nbsp;Pridat objekt do: <i>'.$name.'</i></div>';
                         $i++;
                         echo ('</fieldset>');
                     }

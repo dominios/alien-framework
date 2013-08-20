@@ -30,15 +30,22 @@
     <div id="topbanner"><strong style="font-size: 20px; margin-left: 25px;"><?=$this->Webname; ?></strong></div>
     
     <div id="toppanel">
-        <a href="index.php" class="nobackground" id="alienlogo"><img src="display/img/alien_logo_black.png" alt="ALiEN CMS"></a>
+        <a href="index.php" class="nobackground" id="alienlogo"><img src="display/img/alien_logo_white.png" alt="ALiEN CMS"></a>
         <div id="toppanel_menu"><?=$this->MainMenu; ?></div>
     </div>
     
-    <div id="maincontent" style="width: 1100px;">
-        <div class="leftpanel"><?=$this->LeftBox; ?></div>
+    <div id="maincontent">
+        <div class="leftpanel">
+            <h3><?=$this->LeftTitle; ?></h3>
+            <div class="hr"></div>
+            <div id="leftMenu">
+                <?=$this->LeftBox; ?>
+            </div>
+        </div>
         <div class="rightpanel">
             <div id="rightpanelHeader">
                 <div id="headerTitle"><?=$this->Title; ?></div>
+                <div class="hr"></div>
                 <div id="headerActionPanel"><?=$this->ActionMenu; ?></div>
             </div>
             <div style="margin-top: 10px;"><?=$this->MainContent; ?></div>

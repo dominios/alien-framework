@@ -3,6 +3,7 @@
 class ContentTemplate implements FileItem {
 
     const ICON = 'template.png';
+    const BROWSEABLE = true;
     
     private $id;
     private $name;
@@ -28,6 +29,7 @@ class ContentTemplate implements FileItem {
         $this->description=$row['description'];
 //        $this->blocks=parse_ini_file($row['config_url']);
         $this->fetchBlocks();
+        $this->fetchViews();
     }
 
 /* ******** STATIC METHODS ********************************************************************* */
@@ -143,6 +145,10 @@ class ContentTemplate implements FileItem {
 
     }
 /* ******** SPECIFIC  METHODS ****************************************************************** */
+
+    public function isBrowseable(){
+        return self::BROWSEABLE;
+    }
 
     public function actionEdit(){
         return '?content=editTemplate&id='.$this->id;
@@ -260,9 +266,32 @@ class ContentTemplate implements FileItem {
     private function fetchBlocks(){
         $blocks = Array();
         $ini = parse_ini_file($this->getConfigUrl());
+        $i = 1;
         foreach($ini as $k => $v){
-            $blocks[$v] = '';
+            $bl = Array('id' => $i, 'name' => $v, 'items' => Array());
+            $blocks[] = $bl;
+            $i++;
         }
         $this->blocks = $blocks;
+    }
+
+    public function fetchViews(){
+        $DBH = ALien::getDatabaseHandler();
+
+        $blocks = $this->blocks;
+        $newBlocks = Array();
+
+        foreach($blocks as $block){
+            $items = Array();
+            foreach($DBH->query('SELECT * FROM '.Alien::getDBPrefix().'_content_views WHERE id_c = '.(int)$block['id'].' && id_t='.$this->getId().' ORDER BY position') as $R){
+                $item = ContentItemView::getSpecificView($R['id_v'], $R['id_type'], $R);
+                if($item !== null){
+                    $items[] = $item;
+                }
+            }
+            $newBlocks[] = Array('id' => $block['id'], 'name' => $block['name'], 'items' => $items);
+        }
+
+        $this->blocks = $newBlocks;
     }
 }

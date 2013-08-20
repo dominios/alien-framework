@@ -11,16 +11,21 @@ Options -Indexes
 RewriteEngine On
 RewriteBase /
 
-RewriteEngine on
-RewriteRule ^error/(.*)$ alien/error/$1 [L,R=301]
-RewriteRule ^activateregistration.php(.*)$ alien/activateregistration.php$1 [L,R=301]
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond %{REQUEST_FILENAME} !-l
+
+RewriteRule ^(.*)$ index.php [L,QSA]
+
+#RewriteRule ^error/(.*)$ alien/error/$1 [L,R=301]
+#RewriteRule ^activateregistration.php(.*)$ alien/activateregistration.php$1 [L,R=301]
 
 #RewriteCond %{HTTP_HOST} ^patchworkavalon\.sk$ [NC]
 #RewriteRule ^(.*)$ http://www.patchworkavalon.sk/$1 [L,R=301,QSA]
 
-RewriteCond %{REQUEST_FILENAME} !-d
-RewriteCond %{REQUEST_FILENAME} !-f
-RewriteRule . index.php [L,QSA]
+#RewriteCond %{REQUEST_FILENAME} !-d
+#RewriteCond %{REQUEST_FILENAME} !-f
+#RewriteRule ^(.)* index.php [L,QSA]
 
 <FilesMatch "\.ini$">
     Order Allow,Deny

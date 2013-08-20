@@ -2,6 +2,7 @@
 class ContentFolder implements FileItem {    
     
     const ICON = 'folder.png';
+    const BROWSEABLE = true;
     
     private $id;
     private $name;
@@ -36,6 +37,10 @@ class ContentFolder implements FileItem {
             $this->parent=$result['parent'];
             return;
         }
+    }
+
+    public function isBrowseable(){
+        return self::BROWSEABLE;
     }
 
     public function actionGoTo(){
@@ -133,6 +138,7 @@ class ContentFolder implements FileItem {
         
         if(!sizeof($this->items)){
             $DBH=Alien::getDatabaseHandler();
+
             $STH=$DBH->prepare('SELECT * FROM '.Alien::getDBPrefix().'_content_templates WHERE id_f=:idf');
             $STH->bindValue(':idf', (int)$this->id, PDO::PARAM_INT);
             $STH->execute();
@@ -150,12 +156,13 @@ class ContentFolder implements FileItem {
             $STH=$DBH->prepare('SELECT * FROM '.Alien::getDBPrefix().'_content_items WHERE id_f=:idf');
             $STH->bindValue(':idf', (int)$this->id, PDO::PARAM_INT);
             $STH->execute();
-            while($row=$STH->fetch()){
-                if(($row['id_type']) == 1 || $row['id_type'] == 11) continue;
-//                $item=ContentItem::getSpecificItem($row['id_i']);
-                $item=ContentItem::getSpecificItem(null, $row);
-                if($item instanceof CodeItem || $item instanceof VariableItem || $item instanceof GalleryListItem || $item instanceof GalleryVariableItem) continue;
-                else $this->items[]=$item;
+            while($row = $STH->fetch()){
+                $this->items[] = ContentItem::getSpecificItem($row['id_i'], $row['id_type'], $row);
+//                if(($row['id_type']) == 1 || $row['id_type'] == 11) continue;
+////                $item=ContentItem::getSpecificItem($row['id_i']);
+//                $item=ContentItem::getSpecificItem(null, $row);
+//                if($item instanceof CodeItem || $item instanceof VariableItem || $item instanceof GalleryListItem || $item instanceof GalleryVariableItem) continue;
+//                else $this->items[]=$item;
             }
         }
         return $this->items;

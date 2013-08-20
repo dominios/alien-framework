@@ -10,20 +10,17 @@ class UsersController extends AlienController {
         }
 
         return new ActionResponse(ActionResponse::RESPONSE_OK, Array(
-            'ContentLeft' => $this->left(),
+            'LeftTitle' => 'Používatelia',
+            'ContentLeft' => $this->leftMenuItems(),
             'MainMenu' => $data['MainMenu']
         ), __CLASS__.'::'.__FUNCTION__);
     }
 
-    private function left(){
-        $ret = '';
-        $ret .= '<h3>Používatelia</h3>';
-        $ret .= '<a href="?users=viewList"><img src="'.Alien::$SystemImgUrl.'/user.png">Zoznam používateľov</a>';
-        $ret .= '<a href="?users=edit&id=0"><img src="'.Alien::$SystemImgUrl.'/add_user.png">Pridať používateľa</a>';
-//        $ret .= '<a href="?users=groupList"><img src="'.Alien::$SystemImgUrl.'/group.png">Zoznam skupín</a>';
-//        $ret .= '<a href="?users=editGroup&id=0"><img src="'.Alien::$SystemImgUrl.'/add_group.png">Pridať skupinu</a>';
-//        $ret .= '<a href="?users=permissionList"><img src="'.Alien::$SystemImgUrl.'/locked.png">Zoznam oprávnení</a>';
-        return $ret;
+    private function leftMenuItems(){
+        $items = Array();
+        $items[] = Array('permissions' => null, 'url' => '?users=viewList', 'img' => 'user.png', 'text' => 'Zoznam používateľov');
+        $items[] = Array('permissions' => null, 'url' => '?users=edit&id=0', 'img' => 'add_user.png', 'text' => 'Pridať používateľa');
+        return $items;
     }
 
     protected function viewList(){
