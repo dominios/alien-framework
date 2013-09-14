@@ -5,16 +5,15 @@ php_flag display_errors on
 php_value short_open_tag 1
 
 # indexy potom vypnut !
-Options +Indexes
+Options -Indexes
 Options +FollowSymLinks
 
 RewriteEngine on
 RewriteBase /alien/
 
-RewriteCond %{REQUEST_FILENAME} -f
-RewriteCond %{REQUEST_FILENAME} -d
-RewriteCond %{REQUEST_FILENAME} -l
-
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule (.*)$ index.php [L]
 
 #RewriteRule ^([a-zA-Z]+.)$ ./index.php?section=$1
 

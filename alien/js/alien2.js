@@ -5,7 +5,7 @@ function showDisplayLayoutType(type){
     
     $.ajax({
         async: true,
-        url: "ajax.php",
+        url: "/alien/ajax.php",
         type: "GET",
         data: "action=displayLayoutType&type="+type,
         timeout: 5000,
@@ -19,7 +19,7 @@ function evalConsoleInput(input){
     if(!input) return;    
     $.ajax({
         async: true,
-        url: "ajax.php",
+        url: "/alien/ajax.php",
         type: "GET",
         data: "action=evalConsoleInput&data="+input,
         timeout: 5000,

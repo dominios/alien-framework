@@ -18,8 +18,8 @@ class UsersController extends AlienController {
 
     private function leftMenuItems(){
         $items = Array();
-        $items[] = Array('permissions' => null, 'url' => '?users=viewList', 'img' => 'user.png', 'text' => 'Zoznam používateľov');
-        $items[] = Array('permissions' => null, 'url' => '?users=edit&id=0', 'img' => 'add_user.png', 'text' => 'Pridať používateľa');
+        $items[] = Array('permissions' => null, 'url' => AlienController::actionURL('users', 'viewList'), 'img' => 'user.png', 'text' => 'Zoznam používateľov');
+        $items[] = Array('permissions' => null, 'url' => AlienController::actionURL('users', 'edit', array('id' => 0)), 'img' => 'add_user.png', 'text' => 'Pridať používateľa');
         return $items;
     }
 
@@ -49,7 +49,7 @@ class UsersController extends AlienController {
         $View = new AlienView('display/users/edit.php', $this);
         $View->Id = (int)$_GET['id'];
         $View->User = new User((int)$_GET['id']);
-        $View->ReturnAction = '?users=viewList';
+        $View->ReturnAction = AlienController::actionURL('users', 'viewList');
 
         return new ActionResponse(ActionResponse::RESPONSE_OK, Array(
             'Title' => (int)$_GET['id'] ? $View->User->getLogin() : 'Nový používateľ',

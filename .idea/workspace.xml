@@ -2,19 +2,9 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="6c2791b1-44d6-4c38-8b6e-76886ff5462f" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/alien/display/content/itemList.php" />
-      <change type="DELETED" beforePath="C:\xampp\htdocs\ALiEN_V2\alien\content\Items\VariableItem.php" afterPath="" />
-      <change type="DELETED" beforePath="C:\xampp\htdocs\ALiEN_V2\alien\content\Items\VariableItemView.php" afterPath="" />
-      <change type="DELETED" beforePath="C:\xampp\htdocs\ALiEN_V2\alien\content\class.ContentFolder.php" afterPath="" />
-      <change type="DELETED" beforePath="C:\xampp\htdocs\ALiEN_V2\alien\content\class.ContentItem.php" afterPath="" />
-      <change type="DELETED" beforePath="C:\xampp\htdocs\ALiEN_V2\alien\content\class.ContentItemView.php" afterPath="" />
-      <change type="DELETED" beforePath="C:\xampp\htdocs\ALiEN_V2\alien\content\class.ContentPage.php" afterPath="" />
-      <change type="DELETED" beforePath="C:\xampp\htdocs\ALiEN_V2\alien\content\class.ContentTemplate.php" afterPath="" />
-      <change type="DELETED" beforePath="C:\xampp\htdocs\ALiEN_V2\alien\content\interface.FileItem.php" afterPath="" />
-      <change type="DELETED" beforePath="C:\xampp\htdocs\ALiEN_V2\alien\content\interface.PageItem.php" afterPath="" />
-      <change type="DELETED" beforePath="C:\xampp\htdocs\ALiEN_V2\alien\content\interface.TemplateItem.php" afterPath="" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/alien/display/img/group.png" afterPath="$PROJECT_DIR$/alien/display/img/group.png" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.htaccess" afterPath="$PROJECT_DIR$/.htaccess" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/codeStyleSettings.xml" />
+      <change type="MOVED" beforePath="C:\xampp\htdocs\ALiEN_V2\alien\layouts\AlienAdminLayout.php" afterPath="$PROJECT_DIR$/alien/layouts/IndexLayout.php" />
+      <change type="MOVED" beforePath="C:\xampp\htdocs\ALiEN_V2\alien\layouts\LoginPageLayout.php" afterPath="$PROJECT_DIR$/alien/layouts/LoginLayout.php" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/alien/.htaccess" afterPath="$PROJECT_DIR$/alien/.htaccess" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/alien/class.alien.controller.php" afterPath="$PROJECT_DIR$/alien/class.alien.controller.php" />
@@ -23,14 +13,18 @@
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/alien/controllers/content.controller.php" afterPath="$PROJECT_DIR$/alien/controllers/content.controller.php" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/alien/controllers/users.controller.php" afterPath="$PROJECT_DIR$/alien/controllers/users.controller.php" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/alien/display/alien.css" afterPath="$PROJECT_DIR$/alien/display/alien.css" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/alien/display/content/browser.php" afterPath="$PROJECT_DIR$/alien/display/content/browser.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/alien/display/alien2.css" afterPath="$PROJECT_DIR$/alien/display/alien2.css" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/alien/display/content/temlateForm.php" afterPath="$PROJECT_DIR$/alien/display/content/temlateForm.php" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/alien/display/index.php" afterPath="$PROJECT_DIR$/alien/display/index.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/alien/display/login.php" afterPath="$PROJECT_DIR$/alien/display/login.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/alien/display/system/console.php" afterPath="$PROJECT_DIR$/alien/display/system/console.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/alien/display/users/edit.php" afterPath="$PROJECT_DIR$/alien/display/users/edit.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/alien/display/users/viewList.php" afterPath="$PROJECT_DIR$/alien/display/users/viewList.php" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/alien/index.php" afterPath="$PROJECT_DIR$/alien/index.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/alien/init.php" afterPath="$PROJECT_DIR$/alien/init.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/alien/layouts/AlienAdminLayout.php" afterPath="$PROJECT_DIR$/alien/layouts/AlienAdminLayout.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/alien/templates/uvod.ini" afterPath="$PROJECT_DIR$/alien/templates/uvod.ini" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/index.php" afterPath="$PROJECT_DIR$/index.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/alien/js/alien2.js" afterPath="$PROJECT_DIR$/alien/js/alien2.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/alien/modules/content/class.ContentFolder.php" afterPath="$PROJECT_DIR$/alien/modules/content/class.ContentFolder.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/alien/modules/content/class.ContentTemplate.php" afterPath="$PROJECT_DIR$/alien/modules/content/class.ContentTemplate.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/alien/modules/content/interface.FileItem.php" afterPath="$PROJECT_DIR$/alien/modules/content/interface.FileItem.php" />
     </list>
     <ignored path="ALiEN_V2.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -55,80 +49,57 @@
   <component name="ExecutionTargetManager" SELECTED_TARGET="default_target" />
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="class.alien.controller.php" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/alien/class.alien.controller.php">
+      <file leaf-file-name="class.ContentTemplate.php" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/alien/modules/content/class.ContentTemplate.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="16" column="25" selection-start="471" selection-end="471" vertical-scroll-proportion="-12.0">
+            <state line="2" column="36" selection-start="43" selection-end="43" vertical-scroll-proportion="0.0">
               <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="content.controller.php" pinned="false" current="true" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/alien/controllers/content.controller.php">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="58" column="9" selection-start="2185" selection-end="2185" vertical-scroll-proportion="0.64272213">
+              <folding>
+                <element signature="n#init_action#0;n#ContentController#0;n#!!top" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
       </file>
       <file leaf-file-name="index.php" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/index.php">
+        <entry file="file://$PROJECT_DIR$/alien/display/index.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="18" column="0" selection-start="417" selection-end="417" vertical-scroll-proportion="-13.5">
+            <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="class.ContentPage.php" pinned="false" current="true" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/alien/modules/content/class.ContentPage.php">
+      <file leaf-file-name="IndexLayout.php" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/alien/layouts/IndexLayout.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="190" column="45" selection-start="8298" selection-end="8298" vertical-scroll-proportion="1.4828376">
-              <folding>
-                <element signature="n#__construct#0;n#ContentPage#0;n#!!top" expanded="true" />
-                <element signature="n#isBrowseable#0;n#ContentPage#0;n#!!top" expanded="true" />
-                <element signature="n#drop#0;n#ContentPage#0;n#!!top" expanded="true" />
-                <element signature="n#actionEdit#0;n#ContentPage#0;n#!!top" expanded="true" />
-                <element signature="n#actionGoTo#0;n#ContentPage#0;n#!!top" expanded="true" />
-                <element signature="n#actionDrop#0;n#ContentPage#0;n#!!top" expanded="true" />
-                <element signature="n#getIcon#0;n#ContentPage#0;n#!!top" expanded="true" />
-                <element signature="n#isSeolinkInUse#0;n#ContentPage#0;n#!!top" expanded="true" />
-                <element signature="n#getId#0;n#ContentPage#0;n#!!top" expanded="true" />
-                <element signature="n#getName#0;n#ContentPage#0;n#!!top" expanded="true" />
-                <element signature="n#getSeolink#0;n#ContentPage#0;n#!!top" expanded="true" />
-                <element signature="n#getTemplate#0;n#ContentPage#0;n#!!top" expanded="true" />
-                <element signature="n#getTitle#0;n#ContentPage#0;n#!!top" expanded="true" />
-                <element signature="n#getKeywords#0;n#ContentPage#0;n#!!top" expanded="true" />
-                <element signature="n#getDescription#0;n#ContentPage#0;n#!!top" expanded="true" />
-                <element signature="n#isVisible#0;n#ContentPage#0;n#!!top" expanded="true" />
-                <element signature="n#getFolder#0;n#ContentPage#0;n#!!top" expanded="true" />
-                <element signature="n#getVariableItems#0;n#ContentPage#0;n#!!top" expanded="true" />
-                <element signature="n#isUsed#0;n#ContentPage#0;n#!!top" expanded="true" />
-                <element signature="n#getClassName#0;n#ContentPage#0;n#!!top" expanded="true" />
-                <element signature="n#sortItems#0;n#ContentPage#0;n#!!top" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name=".htaccess" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/.htaccess">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="15" column="35" selection-start="362" selection-end="362" vertical-scroll-proportion="0.0">
-              <folding>
-                <marker date="1377018385823" expanded="true" signature="774:848" placeholder="&lt;FilesMatch &quot;\.ini$&quot;&gt;" />
-                <marker date="1377018385823" expanded="true" signature="850:912" placeholder="&lt;IfModule mod_php5.c&gt;" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name=".htaccess" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/alien/.htaccess">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="9" column="0" selection-start="204" selection-end="204" vertical-scroll-proportion="0.0">
+            <state line="6" column="34" selection-start="148" selection-end="148" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="init.php" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/alien/init.php">
+      <file leaf-file-name="class.alien.layout.php" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/alien/class.alien.layout.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="84" column="23" selection-start="2362" selection-end="2362" vertical-scroll-proportion="-13.5">
+            <state line="44" column="32" selection-start="1389" selection-end="1389" vertical-scroll-proportion="0.0">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="class.alien.controller.php" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/alien/class.alien.controller.php">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
@@ -157,38 +128,38 @@
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="HighlightingSettingsPerFile">
-    <setting file="file://$PROJECT_DIR$/alien/display/alien.css" root0="SKIP_INSPECTION" />
     <setting file="file://$PROJECT_DIR$/alien/display/alien2.css" root0="SKIP_INSPECTION" />
+    <setting file="file://$PROJECT_DIR$/alien/display/alien.css" root0="SKIP_INSPECTION" />
     <setting file="file://$PROJECT_DIR$/alien/display/content/temlateForm.php" root0="SKIP_HIGHLIGHTING" root1="FORCE_HIGHLIGHTING" />
   </component>
   <component name="IdeDocumentHistory">
     <option name="changedFiles">
       <list>
-        <option value="$PROJECT_DIR$/alien/content/class.ContentPage.php" />
-        <option value="$PROJECT_DIR$/alien/content/class.CodeItem.php" />
-        <option value="$PROJECT_DIR$/alien/display/index.php" />
-        <option value="$PROJECT_DIR$/alien/class.alien.layout.php" />
-        <option value="$PROJECT_DIR$/alien/controllers/users.controller.php" />
-        <option value="$PROJECT_DIR$/alien/layouts/AlienAdminLayout.php" />
         <option value="$PROJECT_DIR$/alien/display/alien.css" />
+        <option value="$PROJECT_DIR$/alien/modules/content/class.ContentFolder.php" />
+        <option value="$PROJECT_DIR$/alien/display/system/console.php" />
+        <option value="$PROJECT_DIR$/ajax.php" />
+        <option value="$PROJECT_DIR$/class.alien.pdo.php" />
+        <option value="$PROJECT_DIR$/alien/js/alien2.js" />
+        <option value="$PROJECT_DIR$/alien/class.alien.pdo.php" />
+        <option value="$PROJECT_DIR$/alien/class.alien.php" />
+        <option value="$PROJECT_DIR$/alien/display/login.php" />
+        <option value="$PROJECT_DIR$/alien/modules/content/class.ContentTemplate.php" />
+        <option value="$PROJECT_DIR$/alien/display/content/temlateForm.php" />
+        <option value="$PROJECT_DIR$/alien/modules/content/interface.FileItem.php" />
+        <option value="$PROJECT_DIR$/alien/layouts/IndexLayout.php" />
+        <option value="$PROJECT_DIR$/alien/layouts/LoginLayout.php" />
+        <option value="$PROJECT_DIR$/alien/class.alien.layout.php" />
         <option value="$PROJECT_DIR$/alien/controllers/content.controller.php" />
-        <option value="$PROJECT_DIR$/alien/content/.htaccess" />
-        <option value="$PROJECT_DIR$/alien/.htaccess" />
-        <option value="$PROJECT_DIR$/alien/index.php" />
-        <option value="$PROJECT_DIR$/alien/class.alien.controller.php" />
-        <option value="$PROJECT_DIR$/.htaccess" />
-        <option value="$PROJECT_DIR$/alien/init.php" />
-        <option value="$PROJECT_DIR$/alien/modules/content/class.ContentPage.php" />
-        <option value="$PROJECT_DIR$/index.php" />
       </list>
     </option>
   </component>
   <component name="PhpWorkspaceProjectConfiguration" backward_compatibility_performed="true" />
   <component name="ProjectFrameBounds">
-    <option name="x" value="1358" />
+    <option name="x" value="-8" />
     <option name="y" value="-8" />
-    <option name="width" value="1936" />
-    <option name="height" value="1096" />
+    <option name="width" value="1382" />
+    <option name="height" value="754" />
   </component>
   <component name="ProjectInspectionProfilesVisibleTreeState">
     <entry key="Project Default">
@@ -197,15 +168,7 @@
           <State>
             <id />
           </State>
-          <State>
-            <id>JavaScript</id>
-          </State>
         </expanded-state>
-        <selected-state>
-          <State>
-            <id>GeneralJavaScript</id>
-          </State>
-        </selected-state>
       </profile-state>
     </entry>
   </component>
@@ -235,7 +198,6 @@
       <sortByType />
     </navigator>
     <panes>
-      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -290,17 +252,112 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="ALiEN_V2" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="ALiEN_V2" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="alien" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="layouts" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="ALiEN_V2" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="ALiEN_V2" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="alien" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="js" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="ALiEN_V2" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="ALiEN_V2" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="alien" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="display" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="ALiEN_V2" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="ALiEN_V2" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="alien" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="display" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="content" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="ALiEN_V2" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="ALiEN_V2" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="alien" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="controllers" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
         </subPane>
       </pane>
+      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
     <property name="options.splitter.main.proportions" value="0.3" />
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="options.lastSelected" value="preferences.keymap" />
+    <property name="options.lastSelected" value="Errors" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="options.searchVisible" value="true" />
-    <property name="options.splitter.details.proportions" value="0.2" />
+    <property name="options.splitter.details.proportions" value="0.3294423" />
     <property name="dynamic.classpath" value="false" />
   </component>
   <component name="RecentsManager">
@@ -379,28 +436,28 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="1358" y="-8" width="1936" height="1096" extended-state="6" />
+    <frame x="-8" y="-8" width="1382" height="754" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32876712" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32876712" sideWeight="0.5" order="11" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32876712" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32954547" sideWeight="0.6712329" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.20681818" sideWeight="0.99657536" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.16595517" sideWeight="0.6729452" order="1" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.15151516" sideWeight="0.6734007" order="1" side_tool="false" content_ui="combo" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="true" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32876712" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32876712" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Database Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="FLOATING" visible="false" weight="0.32876712" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" x="516" y="65" width="797" height="553" />
+      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32876712" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
+      <window_info id="Database Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="FLOATING" visible="false" weight="0.32876712" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" x="516" y="65" width="797" height="553" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3270548" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32659933" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
-      <window_info id="Command Line Tools Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32876712" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Command Line Tools Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32876712" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
     </layout>
   </component>
   <component name="VcsContentAnnotationSettings">
@@ -457,124 +514,113 @@
       <option name="time" value="6" />
     </breakpoint-manager>
   </component>
+  <component name="XPathView.XPathProjectComponent">
+    <history />
+    <find-history />
+  </component>
+  <component name="XSLT-Support.FileAssociations.UIState">
+    <PATH>
+      <PATH_ELEMENT>
+        <option name="myItemId" value="ALiEN_V2" />
+        <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+      </PATH_ELEMENT>
+      <PATH_ELEMENT>
+        <option name="myItemId" value="ALiEN_V2" />
+        <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+      </PATH_ELEMENT>
+    </PATH>
+  </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/alien/display/content/browser.php">
+    <entry file="file://$PROJECT_DIR$/alien/display/alien.css">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="37" column="17" selection-start="1472" selection-end="1472" vertical-scroll-proportion="0.6551724" />
+        <state line="429" column="25" selection-start="9378" selection-end="9378" vertical-scroll-proportion="0.0206659" />
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/alien/layouts/LoginPageLayout.php">
+    <entry file="file://$PROJECT_DIR$/alien/class.action.response.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="5" column="33" selection-start="94" selection-end="94" vertical-scroll-proportion="0.18939394" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/alien/display/content/temlateForm.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="161" column="25" selection-start="7373" selection-end="7373" vertical-scroll-proportion="-12.6" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/alien/index.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="-1.5461254" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/alien/js/alien2.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="7" column="15" selection-start="120" selection-end="120" vertical-scroll-proportion="0.0" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/alien/js/alien.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="92" column="0" selection-start="2821" selection-end="2821" vertical-scroll-proportion="0.0" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/alien/layouts/LoginLayout.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="2" column="11" selection-start="18" selection-end="18" vertical-scroll-proportion="0.073800735" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/alien/class.alien.view.php">
       <provider selected="true" editor-type-id="text-editor">
         <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/alien/display/index.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="36" column="25" selection-start="1792" selection-end="1792" vertical-scroll-proportion="0.0" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/alien/layouts/AlienAdminLayout.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="77" column="59" selection-start="3132" selection-end="3132" vertical-scroll-proportion="0.0" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/alien/display/alien.css">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="266" column="51" selection-start="6169" selection-end="6169" vertical-scroll-proportion="0.0" />
+        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/alien/controllers/users.controller.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="18" column="0" selection-start="529" selection-end="887" vertical-scroll-proportion="0.62068963" />
+        <state line="16" column="5" selection-start="527" selection-end="528" vertical-scroll-proportion="0.60491496" />
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/alien/controllers/content.controller.php">
+    <entry file="file://$PROJECT_DIR$/alien/modules/content/interface.FileItem.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="23" column="33" selection-start="844" selection-end="844" vertical-scroll-proportion="-4.5" />
+        <state line="13" column="40" selection-start="339" selection-end="408" vertical-scroll-proportion="-10.4" />
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/alien/class.alien.console.php">
+    <entry file="file://$PROJECT_DIR$/alien/layouts/IndexLayout.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0">
+        <state line="6" column="34" selection-start="148" selection-end="148" vertical-scroll-proportion="0.0">
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/alien/class.alien.layout.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="25" column="24" selection-start="586" selection-end="586" vertical-scroll-proportion="0.020293122" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/alien/index.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="47" column="38" selection-start="1295" selection-end="1295" vertical-scroll-proportion="0.9537768">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/alien/.htaccess">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="9" column="0" selection-start="204" selection-end="204" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/.htaccess">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="15" column="35" selection-start="362" selection-end="362" vertical-scroll-proportion="0.0">
-          <folding>
-            <marker date="1377018385823" expanded="true" signature="774:848" placeholder="&lt;FilesMatch &quot;\.ini$&quot;&gt;" />
-            <marker date="1377018385823" expanded="true" signature="850:912" placeholder="&lt;IfModule mod_php5.c&gt;" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/alien/init.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="84" column="23" selection-start="2362" selection-end="2362" vertical-scroll-proportion="-13.5">
+        <state line="44" column="32" selection-start="1389" selection-end="1389" vertical-scroll-proportion="0.0">
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/alien/class.alien.controller.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="16" column="25" selection-start="471" selection-end="471" vertical-scroll-proportion="-12.0">
+        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="-0.0">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/index.php">
+    <entry file="file://$PROJECT_DIR$/alien/modules/content/class.ContentTemplate.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="18" column="0" selection-start="417" selection-end="417" vertical-scroll-proportion="-13.5">
+        <state line="2" column="36" selection-start="43" selection-end="43" vertical-scroll-proportion="0.0">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/alien/modules/content/class.ContentPage.php">
+    <entry file="file://$PROJECT_DIR$/alien/controllers/content.controller.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="190" column="45" selection-start="8298" selection-end="8298" vertical-scroll-proportion="1.4828376">
+        <state line="58" column="9" selection-start="2185" selection-end="2185" vertical-scroll-proportion="0.64272213">
           <folding>
-            <element signature="n#__construct#0;n#ContentPage#0;n#!!top" expanded="true" />
-            <element signature="n#isBrowseable#0;n#ContentPage#0;n#!!top" expanded="true" />
-            <element signature="n#drop#0;n#ContentPage#0;n#!!top" expanded="true" />
-            <element signature="n#actionEdit#0;n#ContentPage#0;n#!!top" expanded="true" />
-            <element signature="n#actionGoTo#0;n#ContentPage#0;n#!!top" expanded="true" />
-            <element signature="n#actionDrop#0;n#ContentPage#0;n#!!top" expanded="true" />
-            <element signature="n#getIcon#0;n#ContentPage#0;n#!!top" expanded="true" />
-            <element signature="n#isSeolinkInUse#0;n#ContentPage#0;n#!!top" expanded="true" />
-            <element signature="n#getId#0;n#ContentPage#0;n#!!top" expanded="true" />
-            <element signature="n#getName#0;n#ContentPage#0;n#!!top" expanded="true" />
-            <element signature="n#getSeolink#0;n#ContentPage#0;n#!!top" expanded="true" />
-            <element signature="n#getTemplate#0;n#ContentPage#0;n#!!top" expanded="true" />
-            <element signature="n#getTitle#0;n#ContentPage#0;n#!!top" expanded="true" />
-            <element signature="n#getKeywords#0;n#ContentPage#0;n#!!top" expanded="true" />
-            <element signature="n#getDescription#0;n#ContentPage#0;n#!!top" expanded="true" />
-            <element signature="n#isVisible#0;n#ContentPage#0;n#!!top" expanded="true" />
-            <element signature="n#getFolder#0;n#ContentPage#0;n#!!top" expanded="true" />
-            <element signature="n#getVariableItems#0;n#ContentPage#0;n#!!top" expanded="true" />
-            <element signature="n#isUsed#0;n#ContentPage#0;n#!!top" expanded="true" />
-            <element signature="n#getClassName#0;n#ContentPage#0;n#!!top" expanded="true" />
-            <element signature="n#sortItems#0;n#ContentPage#0;n#!!top" expanded="true" />
+            <element signature="n#init_action#0;n#ContentController#0;n#!!top" expanded="true" />
           </folding>
         </state>
       </provider>

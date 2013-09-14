@@ -1,6 +1,6 @@
 <?php
 
-class LoginPageLayout extends AlienLayout {
+class LoginLayout extends AlienLayout {
 
     const SRC = 'display/login.php';
 
@@ -8,9 +8,7 @@ class LoginPageLayout extends AlienLayout {
     const useNotifications = false;
 
     public function getPartials(){
-
         return Array();
-
     }
 
     public function handleResponse(ActionResponse $response){

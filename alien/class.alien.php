@@ -2,7 +2,7 @@
 
 final class Alien {
     
-    public static $SystemImgUrl = 'display/img/';
+    public static $SystemImgUrl = '/alien/display/img/';
     
     private static $instance; 
     private $DBH = null;
@@ -37,7 +37,7 @@ final class Alien {
     }
     
     /**
-     *
+     * TODO : nejaky AlienPDO ktory bude vsetko logovat ...
      * @global PDO $DBH db handler
      * @global int $queryCounter pocet vykonanych dotazov
      * @param string $host host
@@ -47,6 +47,7 @@ final class Alien {
      * @return PDO database handler
      */
     private final function connectToDatabase($host,$database,$username,$password){
+        include 'class.alien.pdo.php';
         try {
             # MySQL with PDO_MYSQL
             $DBH = @new PDO("mysql:host=$host;dbname=$database;charset=utf8", $username, $password);

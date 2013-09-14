@@ -6,6 +6,7 @@ class ContentTemplate implements FileItem {
     const BROWSEABLE = true;
     
     private $id;
+    private $folder;
     private $name;
     private $description;
     private $html_url;
@@ -13,13 +14,28 @@ class ContentTemplate implements FileItem {
     private $config_url;
     private $blocks;
     
-    public function __construct($id, $row=null){
-        if($row===null){
+    public function __construct($id = null, $row=null){
+        $new = false;
+        if($row === null){
             $DBH = Alien::getDatabaseHandler();
             $STH=$DBH->prepare("SELECT * FROM ".Alien::getDBPrefix()."_content_templates WHERE id_t=:id LIMIT 1");
             $STH->bindValue(':id',$id);
             $STH->execute();
+            if(!$STH->rowCount()){
+                $new = true;
+            }
             $row=$STH->fetch();
+        }
+        if($new){
+            $this->id = null;
+            $this->name = '';
+            $this->description = '';
+            $this->html_url = '';
+            $this->css_url = '';
+            $this->config_url = '';
+            $this->blocks = array();
+            $this->folder = new ContentFolder($row['id_f']);
+            return;
         }
         $this->id=$row['id_t'];
         $this->name=$row['name'];
@@ -46,93 +62,93 @@ class ContentTemplate implements FileItem {
     }
 
     // DOROBIT PERMISSION TEST; NOTIFIKACIE ASI SA DAJU DAT PREC
-    public static function update(){        
-        
-        // najprv kontrola spravnosti udajov
-
-        /*
-        $continue = true;
-        if(empty($_POST['templateName']) || $_POST['templateName']==''){
-            new Notification("Názov šablóny nesmie byť prázdny reťazec.", "warning");
-            $continue=false;
-        }
-        if(empty($_POST['templateDesc']) || $_POST['templateDesc']==''){
-            new Notification("Je odporúčané vyplniť pomocný popis.","note");
-        }
-        if(empty($_POST['templateHtml']) || $_POST['templateHtml']==''){
-            new Notification("Šablóna musí mať pridelený svoj zdrojový súbor s HTML kódom.","warning");
-            $continue=false;
-        }
-        if(@strtolower(end(explode('.',$_POST['templateHtml'])))!='php' && $_POST['templateHtml']!=''){
-            new Notification("Zdrojovú súbor šablóny musí mať koncovku .php.","note");
-            $continue=false;
-        }            
-        if(empty($_POST['templateCss']) || $_POST['templateCss']==''){
-            new Notification("Odporúča sa priradiť šablóne vlastný CSS štýl.","warning");
-        }
-        if(@strtolower(end(explode('.',$_POST['templateCss'])))!='css' && $_POST['templateCss']!=''){
-            new Notification("Vlastný CSS štýl šablóny musí mať koncovku .css.","note");
-            $continue=false;
-        }  
-        if(empty($_POST['templateConfig']) || $_POST['templateConfig']==''){
-            new Notification("Šablóna musí mať prideleý konfiguračný súbor.","warning");
-            $continue=false;
-        }
-        if(@strtolower(end(explode('.',$_POST['templateConfig'])))!='ini' && $_POST['templateConfig']!=''){
-            new Notification("Konfiguračný súbor musí mať koncovku .ini.","note");
-            $continue=false;
-        }        
-        if(!$continue){
-            new Notification('Šablónu nieje možné uložiť.', 'error');
-            return;
-        }
-        */
-        
-        $DBH=Alien::getDatabaseHandler();
-        
-        if(@$_POST['templateId']==0){ // nova sablona
-            $new = true;
-            $STH=$DBH->prepare('INSERT INTO '.Alien::getDBPrefix().'_content_templates (id_f, name, html_url, css_url, config_url, description) VALUES (:f, :n, :html, :css, :ini, :d)');
-        } else {
-            $new = false;
-            $STH=$DBH->prepare('UPDATE '.Alien::getDBPrefix().'_content_templates SET id_f=:f, name=:n, html_url=:html, css_url=:css, config_url=:ini, description=:d WHERE id_t=:id');
-            $STH->bindValue(':id', $_POST['templateId'], PDO::PARAM_INT);
-        }
-        
-        $STH->bindValue(':f', $_SESSION['folder'], PDO::PARAM_INT);
-        $STH->bindValue(':n', $_POST['templateName'], PDO::PARAM_STR);
-        $STH->bindValue(':html', $_POST['templatePhp'], PDO::PARAM_STR);
-        $STH->bindValue(':css', $_POST['templateCss'], PDO::PARAM_STR);
-        $STH->bindValue(':ini', $_POST['templateIni'], PDO::PARAM_STR);
-        $STH->bindValue(':d', $_POST['templateDesc'], PDO::PARAM_STR);
-
-        return $STH->execute();
-    }
+//    public static function update(){
+//
+//        // najprv kontrola spravnosti udajov
+//
+//        /*
+//        $continue = true;
+//        if(empty($_POST['templateName']) || $_POST['templateName']==''){
+//            new Notification("Názov šablóny nesmie byť prázdny reťazec.", "warning");
+//            $continue=false;
+//        }
+//        if(empty($_POST['templateDesc']) || $_POST['templateDesc']==''){
+//            new Notification("Je odporúčané vyplniť pomocný popis.","note");
+//        }
+//        if(empty($_POST['templateHtml']) || $_POST['templateHtml']==''){
+//            new Notification("Šablóna musí mať pridelený svoj zdrojový súbor s HTML kódom.","warning");
+//            $continue=false;
+//        }
+//        if(@strtolower(end(explode('.',$_POST['templateHtml'])))!='php' && $_POST['templateHtml']!=''){
+//            new Notification("Zdrojovú súbor šablóny musí mať koncovku .php.","note");
+//            $continue=false;
+//        }
+//        if(empty($_POST['templateCss']) || $_POST['templateCss']==''){
+//            new Notification("Odporúča sa priradiť šablóne vlastný CSS štýl.","warning");
+//        }
+//        if(@strtolower(end(explode('.',$_POST['templateCss'])))!='css' && $_POST['templateCss']!=''){
+//            new Notification("Vlastný CSS štýl šablóny musí mať koncovku .css.","note");
+//            $continue=false;
+//        }
+//        if(empty($_POST['templateConfig']) || $_POST['templateConfig']==''){
+//            new Notification("Šablóna musí mať prideleý konfiguračný súbor.","warning");
+//            $continue=false;
+//        }
+//        if(@strtolower(end(explode('.',$_POST['templateConfig'])))!='ini' && $_POST['templateConfig']!=''){
+//            new Notification("Konfiguračný súbor musí mať koncovku .ini.","note");
+//            $continue=false;
+//        }
+//        if(!$continue){
+//            new Notification('Šablónu nieje možné uložiť.', 'error');
+//            return;
+//        }
+//        */
+//
+//        $DBH=Alien::getDatabaseHandler();
+//
+//        if(@$_POST['templateId']==0){ // nova sablona
+//            $new = true;
+//            $STH=$DBH->prepare('INSERT INTO '.Alien::getDBPrefix().'_content_templates (id_f, name, html_url, css_url, config_url, description) VALUES (:f, :n, :html, :css, :ini, :d)');
+//        } else {
+//            $new = false;
+//            $STH=$DBH->prepare('UPDATE '.Alien::getDBPrefix().'_content_templates SET id_f=:f, name=:n, html_url=:html, css_url=:css, config_url=:ini, description=:d WHERE id_t=:id');
+//            $STH->bindValue(':id', $_POST['templateId'], PDO::PARAM_INT);
+//        }
+//
+//        $STH->bindValue(':f', $_SESSION['folder'], PDO::PARAM_INT);
+//        $STH->bindValue(':n', $_POST['templateName'], PDO::PARAM_STR);
+//        $STH->bindValue(':html', $_POST['templatePhp'], PDO::PARAM_STR);
+//        $STH->bindValue(':css', $_POST['templateCss'], PDO::PARAM_STR);
+//        $STH->bindValue(':ini', $_POST['templateIni'], PDO::PARAM_STR);
+//        $STH->bindValue(':d', $_POST['templateDesc'], PDO::PARAM_STR);
+//
+//        return $STH->execute();
+//    }
     
-    public static function drop($id){
-        $template=new ContentTemplate($id);
-        if($template->isUsed()){
-            new Notification('Nie je možné vymazať šablónu, ktorá sa používa.', Notification::WARNING);
-            new Notification('Nastavte všetky stránky tak, aby nepoužívali túto šablónu.', Notification::INFO);
-            new Notification('Nepodarilo sa odstrániť šablónu.', Notification::ERROR);
-        } else {
-            $DBH=Alien::getDatabaseHandler();
-            $STH=$DBH->prepare('DELETE FROM '.Alien::getDBPrefix().'_content_templates WHERE id_t=:i');
-            $STH->bindValue(':i',$_GET['id'], PDO::PARAM_INT);
-            if($STH->execute()){
-                new Notification('Šablóna bola zmazaná.', 'success');
-            } else {
-                new Notification('Šablónu sa nepodarilo zmazať.', 'error');
-            }
-        }
-        if(Alien::getParameter('allowRedirects')){
-            ob_clean();
-            $url='?content=browser&folder='.$_SESSION['folder'];
-            header('Location: '.$url, false, 301);
-            ob_end_flush();
-            exit;
-        }
-    }
+//    public static function drop($id){
+//        $template=new ContentTemplate($id);
+//        if($template->isUsed()){
+//            new Notification('Nie je možné vymazať šablónu, ktorá sa používa.', Notification::WARNING);
+//            new Notification('Nastavte všetky stránky tak, aby nepoužívali túto šablónu.', Notification::INFO);
+//            new Notification('Nepodarilo sa odstrániť šablónu.', Notification::ERROR);
+//        } else {
+//            $DBH=Alien::getDatabaseHandler();
+//            $STH=$DBH->prepare('DELETE FROM '.Alien::getDBPrefix().'_content_templates WHERE id_t=:i');
+//            $STH->bindValue(':i',$_GET['id'], PDO::PARAM_INT);
+//            if($STH->execute()){
+//                new Notification('Šablóna bola zmazaná.', 'success');
+//            } else {
+//                new Notification('Šablónu sa nepodarilo zmazať.', 'error');
+//            }
+//        }
+//        if(Alien::getParameter('allowRedirects')){
+//            ob_clean();
+//            $url='?content=browser&folder='.$_SESSION['folder'];
+//            header('Location: '.$url, false, 301);
+//            ob_end_flush();
+//            exit;
+//        }
+//    }
 
     public static function exists($id){
         $DBH = Alien::getDatabaseHandler();
@@ -146,12 +162,48 @@ class ContentTemplate implements FileItem {
     }
 /* ******** SPECIFIC  METHODS ****************************************************************** */
 
+    public function save(){
+        $DBH = Alien::getDatabaseHandler();
+        $new = $this->id === null ? true : false;
+        if($new){
+            $Q = $DBH->prepare('INSERT INTO '.Alien::getDBPrefix().'_content_templates
+             (id_f, name, html_url, css_url, config_url, description)
+             VALUES (:idf, :name, :html, :css, :ini, :desc);');
+        } else {
+            $Q = $DBH->prepare('UPDATE '.Alien::getDBPrefix().'_content_templates
+            SET id_f=:idf, name=:name, html_url=:html, css_url=:css, config_url=:ini, description=:desc WHERE id_t=:i');
+            $Q->bindValue(':i', $this->id, PDO::PARAM_INT);
+        }
+        $Q->bindValue(':idf', $this->folder->getId(), PDO::PARAM_INT);
+        $Q->bindValue(':name', $this->name, PDO::PARAM_STR);
+        $Q->bindValue(':html', $this->html_url, PDO::PARAM_STR);
+        $Q->bindValue(':css', $this->css_url, PDO::PARAM_STR);
+        $Q->bindValue(':ini', $this->config_url, PDO::PARAM_STR);
+        $Q->bindValue(':desc', $this->description, PDO::PARAM_STR);
+        $ret = $Q->execute();
+        if($new && $ret){
+            $this->id = $DBH->lastInsertId();
+        }
+        return $ret;
+    }
+
+    public function drop(){
+        if($this->id === null){
+            return false;
+        }
+        if($this->isUsed()){
+            return false;
+        }
+        $DBH = Alien::getDatabaseHandler();
+        return $DBH->query('DELETE FROM '.Alien::getDBPrefix().'_content_templates WHERE id_t='.$this->id.' LIMIT 1;')->execute();
+    }
+
     public function isBrowseable(){
         return self::BROWSEABLE;
     }
 
     public function actionEdit(){
-        return '?content=editTemplate&id='.$this->id;
+        return AlienController::actionUrl('content', 'editTemplate', array('id' => $this->id));
     }
 
     public function actionGoTo(){
@@ -159,7 +211,7 @@ class ContentTemplate implements FileItem {
     }
 
     public function actionDrop(){
-        return '?content=dropTemplate&id='.$this->id;
+        return AlienController::actionUrl('content', 'dropTemplate', array('id' => $this->id));
     }
 
     public function getId(){

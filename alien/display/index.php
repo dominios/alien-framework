@@ -6,12 +6,12 @@
     <meta name="description" content="Administračné rozhranie redakčného systému ALiEN CMS.">
     <meta name="author" content="Dominik Geršák">
     <meta name="robots" content="noindex, nofollow">
-    <link rel="shortcut icon" href="images/icons/favicon.ico">
+    <link rel="shortcut icon" href="/alien/images/icons/favicon.ico">
     <!--<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>-->
-    <script type="text/javascript" src="js/jquery.min.js"></script>
+    <script type="text/javascript" src="/alien/js/jquery.min.js"></script>
     <!--<script type="text/javascript" src="http://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>-->
-    <script type="text/javascript" src="js/jquery-ui.js"></script>
-    <link type="text/css" href="display/ui-smoothness/jquery-ui-1.10.3.custom.css" rel="stylesheet">
+    <script type="text/javascript" src="/alien/js/jquery-ui.js"></script>
+    <link type="text/css" href="/alien/display/alien-theme/jquery-ui-1.10.3.custom.css" rel="stylesheet">
 
 
     <!--
@@ -20,17 +20,17 @@
         <script type="text/javascript" src="js/alien.js"></script>
     -->
 
-    <script type="text/javascript" src="js/alien.js"></script>
-    <script type="text/javascript" src="js/alien2.js"></script>
-    <link href="display/alien.css" type="text/css" rel="stylesheet">
-    <link href="display/alien2.css" type="text/css" rel="stylesheet">
+    <script type="text/javascript" src="/alien/js/alien.js"></script>
+    <script type="text/javascript" src="/alien/js/alien2.js"></script>
+    <link href="/alien/display/alien.css" type="text/css" rel="stylesheet">
+    <link href="/alien/display/alien2.css" type="text/css" rel="stylesheet">
 </head>
 <body>
     <?=$this->Notifications; ?>
     <div id="topbanner"><strong style="font-size: 20px; margin-left: 25px;"><?=$this->Webname; ?></strong></div>
     
     <div id="toppanel">
-        <a href="index.php" class="nobackground" id="alienlogo"><img src="display/img/alien_logo_white.png" alt="ALiEN CMS"></a>
+        <a href="index.php" class="nobackground" id="alienlogo"><img src="/alien/display/img/alien_logo_white.png" alt="ALiEN CMS"></a>
         <div id="toppanel_menu"><?=$this->MainMenu; ?></div>
     </div>
     

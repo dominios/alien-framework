@@ -15,7 +15,7 @@
     <input type="hidden" name="action" value="userFormSubmit">
     <input type="hidden" name="userId" value="<?=$this->User->getId();?>">
 
-    <div id="tabs" style="margin: 0px 10px; box-shadow: 0px 0px 10px #ccc;">
+    <div id="tabs" style="margin: 0px 10px; box-shadow: 2px 2px 10px #888;">
         <ul>
             <li><a href="#tabs-1">Používateľ</a></li>
             <li><a href="#tabs-2">Skupiny</a></li>

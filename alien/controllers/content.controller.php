@@ -10,9 +10,7 @@ class ContentController extends AlienController {
         }
 
         $menuItems = Array();
-        $menuItems[] = Array('permissions' => null, 'url' => '?content=browser&folder=0', 'img' => 'folder.png', 'text' => 'ROOT');
-
-//        $left = '<a href="?content=browser&folder=0"><img src="'.Alien::$SystemImgUrl.'/white/folder.png"> ROOT</a>';
+        $menuItems[] = Array('permissions' => null, 'url' => AlienController::actionURL('content', 'browser', array('folder' => 0)), 'img' => 'folder.png', 'text' => 'ROOT');
 
         return new ActionResponse(ActionResponse::RESPONSE_OK, Array(
             'ContentLeft' => $menuItems,
@@ -56,7 +54,7 @@ class ContentController extends AlienController {
 
     protected function editTemplate(){
         if(!preg_match('/^[0-9]*$/', $_GET['id'])){
-            new Notification('Neplatný identifikátor šablóny.', Notification::ERROR);
+            $this->getLayout()->putNotificaion(new Notification('Neplatný identifikátor šablóny.', Notification::ERROR));
             return;
         }
 

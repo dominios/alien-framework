@@ -10,43 +10,51 @@ Alien::getInstance();
 //
 // work
 //
-//$request = str_replace('/alien', '', $_SERVER['REQUEST_URI']);
-//$keys = explode('/', $request, 4);
-//// zacina sa / takze na indexe 0 je prazdny string
-//// 1 - controller
-//// 2 - akcia
-//// 3 - zatial zvysok parametre (GET)
-//$controller = $keys[1];
-//$action = $keys[2];
-//$params = explode('/',$keys[3]);
-//
-//if(count($params) >= 2){
-//    for($i=0; $i < count($params); $i++){
-//        $_GET[$params[$i++]] = $params[$i];
-//    }
-//} else {
-//    $_GET = $params;
-//}
-//
-//$controller = ucfirst($controller).'Controller';
-//try {
-//    $controller = new $controller($action);
-//} catch(Exception $e){
-//    Alien::getInstance()->getConsole()->putMessage('Called controller <i>'.$ctrl.'</i> doesn\'t exist!', AlienConsole::CONSOLE_ERROR);
-//    $controller = new AlienController($action);
-//}
+$actionsArray = array();
+# najprv POST
+if(@sizeof($_POST)){
+    $arr = explode('/', $_POST['action'], 2);
+    $controller = $arr[0];
+    $actionsArray[] = $arr[1];
+}
 
-if(sizeof($_GET)){
-    $ctrl = ucfirst(strtolower(key($_GET))).'Controller';
-    try {
-        $controller = new $ctrl;
-    } catch(Exception $ex){
-        Alien::getInstance()->getConsole()->putMessage('Called controller <i>'.$ctrl.'</i> doesn\'t exist!', AlienConsole::CONSOLE_ERROR);
-        $controller = new AlienController;
+$request = str_replace('/alien', '', $_SERVER['REQUEST_URI']);
+$keys = explode('/', $request, 4);
+// zacina sa / takze na indexe 0 je prazdny string
+// 1 - controller
+// 2 - akcia
+// 3 - zatial zvysok parametre (GET)
+if(empty($controller)) { $controller = $keys[1]; }
+if($keys[2] !== null) { $actionsArray[] = $keys[2]; }
+$params = explode('/',preg_replace('/\?.*/', '', $keys[3])); // vyhodi vsetko ?... cize "stary get"
+
+if(count($params) >= 2){
+    for($i=0; $i < count($params); $i++){
+        $_GET[$params[$i++]] = $params[$i];
     }
 } else {
-    $controller = new AlienController();
+    unset($_GET);
+    $_GET = $params;
 }
+$controller = ucfirst($controller).'Controller';
+try {
+    $controller = new $controller($actionsArray);
+} catch(Exception $e){
+    Alien::getInstance()->getConsole()->putMessage('Called controller <i>'.$ctrl.'</i> doesn\'t exist!', AlienConsole::CONSOLE_ERROR);
+    $controller = new AlienController($actionsArray);
+}
+
+//if(sizeof($_GET)){
+//    $ctrl = ucfirst(strtolower(key($_GET))).'Controller';
+//    try {
+//        $controller = new $ctrl;
+//    } catch(Exception $ex){
+//        Alien::getInstance()->getConsole()->putMessage('Called controller <i>'.$ctrl.'</i> doesn\'t exist!', AlienConsole::CONSOLE_ERROR);
+//        $controller = new AlienController;
+//    }
+//} else {
+//    $controller = new AlienController();
+//}
 
 $content .= $controller->getContent();
 

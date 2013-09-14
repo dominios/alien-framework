@@ -24,8 +24,8 @@ abstract class AlienLayout {
     }
 
     public static final function autoloader(){
-        require_once 'layouts/AlienAdminLayout.php';
-        require_once 'layouts/LoginPageLayout.php';
+        require_once 'layouts/IndexLayout.php';
+        require_once 'layouts/LoginLayout.php';
     }
 
     public abstract function getPartials();
@@ -71,6 +71,7 @@ abstract class AlienLayout {
 
     public function putNotificaion(Notification $notification){
         $this->notifications[] = $notification;
+        $this->saveSessionNotifications();
     }
 
     private function flushNotifications(){

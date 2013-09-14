@@ -37,7 +37,7 @@
         if(!type) return;
         $.ajax({
             async: true,
-            url: "ajax.php",
+            url: "/alien/ajax.php",
             type: "GET",
             data: "action=templateShowFileBrowser&type="+type,
             timeout: 5000,
@@ -58,7 +58,7 @@
         if(!file) return;
         $.ajax({
             async: true,
-            url: "ajax.php",
+            url: "/alien/ajax.php",
             type: "GET",
             data: "action=templateShowFilePreview&file="+file,
             timeout: 5000,
@@ -92,7 +92,7 @@
     <input type="hidden" name="action" value="templateFormSubmit">
     <input type="hidden" name="templateId" value="<?=$this->Template->getId();?>">
 
-    <div id="tabs" style="margin: 0px 10px; box-shadow: 0px 0px 10px #ccc;">
+    <div id="tabs">
         <ul>
             <li><a href="#tabs-1">Obsah</a></li>
             <li><a href="#tabs-2">Konfigurácia</a></li>
@@ -158,7 +158,7 @@
                         foreach($items as $item){
                             $itemView = new AlienView('display/content/itemList.php');
                             $itemView->Item = $item;
-                            echo $itemView->getContent();
+//                            echo $itemView->getContent();
                         }
 
 

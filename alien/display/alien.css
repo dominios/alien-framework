@@ -23,7 +23,7 @@ body {
     font-family: segoe ui, trebuchet ms, Calibri;
     margin: 0px;
     padding: 0;
-    text-shadow: 1px 1px #eee;
+    text-shadow: 1px 1px rgba(190, 190, 190, 0.5);
 /*    -moz-user-select: none;
     -webkit-user-select: none;*/
 }
@@ -426,19 +426,19 @@ option:hover {
 
 input, button, .button {
     font-family: segoe ui;
-    background-color: #f9f9ff;
+    background-color: #ddd;
     box-shadow: 1px 1px 6px #bbb;
     border-radius: 2px;
-    border: 1px solid #bbb;
+    border: 1px solid #aaa;
     padding: 2px;
     padding-left: 4px;
     color: #666;
     font-weight: bold;
     line-height: 26px;
     height: 26px;
-    -webkit-transition: box-shadow 0.4s, border 0.4s, border-color 0.4s, background-color 0.4s, color 0.4s;
-    -moz-transition: box-shadow 0.4s, border 0.4s, border-color 0.4s, background-color 0.4s, color 0.4s;
-    transition: box-shadow 0.4s, border 0.4s, border-color 0.4s, background-color 0.4s, color 0.4s;
+    -webkit-transition: box-shadow 0.2s, border 0.2s, border-color 0.2s, background-color 0.2s, color 0.2s;
+    -moz-transition: box-shadow 0.2s, border 0.2s, border-color 0.2s, background-color 0.2s, color 0.2s;
+    transition: box-shadow 0.2s, border 0.2s, border-color 0.2s, background-color 0.2s, color 0.2s;
 }
 
 button, .button {
@@ -475,7 +475,7 @@ input[type="text"]{
 }
 
 input:hover, button:hover, textarea:hover {
-    background-color: #fff;
+    background-color: #eee;
     color: black;
     box-shadow: 0 0 10px #bbf;
 }

@@ -12,6 +12,8 @@ echo '<th></th>';
 echo '</tr>';
 
 foreach($this->Users as $user){
+
+    $editAction = AlienController::actionURL('users', 'edit', array('id' => $user->getId()));
             
     $groups = Array();
     $groupList = $user->getGroups(true);
@@ -34,7 +36,7 @@ foreach($this->Users as $user){
     echo '<td class="itemDesc" style="text-align: center;">'.date('d.m.Y H:i:s', $user->getDateRegistered()).'</td>';
     echo '<td class="itemDesc" style="text-align: center;">'.date('d.m.Y H:i:s', $user->getLastActive()).'</td>';
     echo '<td class="itemCP">';
-        echo '<a href="?users=edit&amp;id='.$user->getId().'"><img src="'.Alien::$SystemImgUrl.'/edit.png"></a>';
+        echo '<a href="'.$editAction.'"><img src="'.Alien::$SystemImgUrl.'/edit.png"></a>';
         echo '<img src="'.Alien::$SystemImgUrl.'/group.png" title="'.$groupStr.'">';
         echo '<img src="'.Alien::$SystemImgUrl.'/locked.png" title="'.$permStr.'">';
         echo '<img src="'.Alien::$SystemImgUrl.'/delete.png">';
@@ -43,4 +45,4 @@ foreach($this->Users as $user){
 }
 
 echo '</table>';
-?>
+

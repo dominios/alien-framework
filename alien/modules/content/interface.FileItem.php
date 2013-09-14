@@ -11,6 +11,8 @@ interface FileItem {
 
     public static function exists($id);
 
+//    public function save(); // ak je id null vytvorit, inak update
+//    public function drop(); // vymazat
     public function actionGoTo(); // urlcka prejst na objekt
     public function actionEdit(); // urlcka na formular s upravou
     public function actionDrop(); // urlcka na zmazanie

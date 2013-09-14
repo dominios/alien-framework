@@ -1,5 +1,5 @@
 <section id="ConsoleContainer">
-    <header id="ConsoleHeader"><img src="display/img/console.png">Console</header>
+    <header id="ConsoleHeader"><img src="<?=Alien::$SystemImgUrl;?>/console.png">Console</header>
     <section id="ConsoleContent">
         <?
         foreach($this->Messages as $m){

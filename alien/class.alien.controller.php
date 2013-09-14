@@ -8,45 +8,57 @@ class AlienController {
     private static $currentController;
     private static $instance = null;
 
-    public final function __construct() {
+    public final function __construct($args = null) {
        Alien::getInstance()->getConsole()->putMessage('Using <i>'.get_called_class().'</i>');
-       $actions = array();
-       if(@isset($_POST['action'])){
-           $actions[] = $_POST['action'];
-       }
-       if(sizeof($_GET)){
-           $actions[] = $_GET[key($_GET)];
-       }
+       // inicializuje pole, prednost ma POST, potom sa prida akcia z konstruktora (GET)
+//        $actions = array();
+//       if(@isset($_POST['action'])){
+//           $actions[] = $_POST['action'];
+//       }
+//        $actions[] = $action;
+//var_dump($actions); die;
+//       if(sizeof($_GET)){
+//           $actions[] = $_GET[key($_GET)];
+//       }
 //       if(@isset($_GET['action'])){
 //           $actions[] = $_GET['action'];
 //       }
-       if(!sizeof($actions)){
-           $actions[] = $this->defaultAction;
-       }
-       $this->actions = $actions;
+//       if(!sizeof($actions)){
+//           $actions[] = $this->defaultAction;
+//       }
+//       $this->actions = $actions;
 
+        if(is_array($args)){
+            $this->actions = $args;
+        } else {
+            if($args === null){
+                $this->actions[] = $this->defaultAction;
+            } else {
+                $this->actions[] = $args;
+            }
+        }
         self::$instance = $this;
    }
 
     protected function init_action(){
 
-        Alien::getInstance()->getConsole()->putMessage('Called <i>AlienController::init_action()</i>.');
+//        Alien::getInstance()->getConsole()->putMessage('Called <i>AlienController::init_action()</i>.');
 
         self::$currentController = get_called_class();
 
         $auth = Authorization::getInstance();
         if(!$auth->getInstance()->isLoggedIn() && !in_array('login', $this->actions)){
             unset($this->actions);
-            $this->setLayout(new LoginPageLayout());
+            $this->setLayout(new LoginLayout());
             return;
         }
 
-        $this->setLayout(new AlienAdminLayout());
+        $this->setLayout(new IndexLayout());
 
         return new ActionResponse(ActionResponse::RESPONSE_OK, Array(
             'Title' => 'HOME',
             'LeftTitle' => Authorization::getCurrentUser()->getLogin(),
-            'ContentLeft' => Array(Array('url' => '?alien=logout', 'img' => 'logout.png', 'text' => 'Odhlásiť'))
+            'ContentLeft' => Array(Array('url' => AlienController::actionURL('', 'logout'), 'img' => 'logout.png', 'text' => 'Odhlásiť'))
         ), __CLASS__.'::'.__FUNCTION__);
 
    }
@@ -90,12 +102,26 @@ class AlienController {
         $this->layout = $layout;
     }
 
-    protected function redirect($location, $statusCode = 301){
+    protected function redirect($action, $statusCode = 301){
         ob_clean();
         $this->getLayout()->saveSessionNotifications();
-        header('Location: '.$location, false, $statusCode);
+        header('Location: '.$action, false, $statusCode);
         ob_end_flush();
         exit;
+    }
+
+    public static function actionURL($controller, $action, $params = null){
+        $url = '/';
+        if(preg_match('/alien/', getcwd())){
+            $url .= 'alien/';
+        }
+        $url .= $controller.'/'.$action;
+        if(is_array($params)){
+            foreach($params as $k => $v){
+                $url .= '/'.$k.'/'.$v;
+            }
+        }
+        return $url;
     }
 
    // TODO: konzola zatial natvrdo

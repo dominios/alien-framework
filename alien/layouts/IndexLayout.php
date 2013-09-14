@@ -1,6 +1,6 @@
 <?php
 
-class AlienAdminLayout extends AlienLayout {
+class IndexLayout extends AlienLayout {
 
     const SRC = 'display/index.php';
     const useConsole = true;
@@ -35,7 +35,6 @@ class AlienAdminLayout extends AlienLayout {
             $this->LeftTitle = $data['LeftTitle'];
         }
         if(isset($data['ContentLeft']) && is_array($data['ContentLeft'])){
-//            $this->ContentLeft = $data['ContentLeft'];
             $this->ContentLeft = $this->generateLeftMenu($data['ContentLeft']);
         }
         if(isset($data['ContentMain'])){
@@ -48,11 +47,11 @@ class AlienAdminLayout extends AlienLayout {
 
     private function topmenuItems(){
         $items = Array();
-        $items[] = Array('permission'=>'SYSTEM_ACCESS', 'url'=>'?page=system', 'text'=>'Systém', 'img'=>'white/service.png', 'controller' => 'home');
-        $items[] = Array('permission'=>'CONTENT_VIEW', 'url'=>'?content=browser', 'text'=>'Obsah', 'img'=>'white/magazine.png', 'controller' => 'content');
-        $items[] = Array('permission'=>'USER_VIEW', 'url'=>'?users=viewList', 'text'=>'Používatelia', 'img'=>'white/user.png', 'controller' => 'users');
-        $items[] = Array('permission'=>'GROUP_VIEW', 'url'=>'?groups=viewList', 'text'=>'Skupiny', 'img'=>'white/group.png', 'controller' => 'groups');
-        $items[] = Array('permission'=>null, 'url'=>'#', 'url'=>'?alien=logout', 'text'=>'Odhlásiť', 'img'=>'white/logout.png');
+        $items[] = Array('permission'=>'SYSTEM_ACCESS', 'url'=>AlienController::actionURL('system', 'NOP'), 'text'=>'Systém', 'img'=>'white/service.png', 'controller' => 'home');
+        $items[] = Array('permission'=>'CONTENT_VIEW', 'url'=>AlienController::actionURL('content', 'browser'), 'text'=>'Obsah', 'img'=>'white/magazine.png', 'controller' => 'content');
+        $items[] = Array('permission'=>'USER_VIEW', 'url'=>AlienController::actionURL('users', 'viewList'), 'text'=>'Používatelia', 'img'=>'white/user.png', 'controller' => 'users');
+        $items[] = Array('permission'=>'GROUP_VIEW', 'url'=>AlienController::actionURL('groups', 'viewList'), 'text'=>'Skupiny', 'img'=>'white/group.png', 'controller' => 'groups');
+        $items[] = Array('permission'=>null, 'url'=>'#', 'url'=>AlienController::actionURL('', 'logout'), 'text'=>'Odhlásiť', 'img'=>'white/logout.png');
         return $items;
     }
 

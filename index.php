@@ -5,11 +5,11 @@ require_once 'alien/init.php';
 $request = preg_replace('/^\/{1}/', '', $_SERVER['REQUEST_URI']);
 $requestWords = explode('?', $request, 2);
 $seolink = $requestWords[0];
-if(!strlen($seolink)){
+if (!strlen($seolink)) {
     $seolink = 1;
 }
 
-if(ContentPage::exists($seolink)){
+if (ContentPage::exists($seolink)) {
     $page = new ContentPage($seolink);
     $template = $page->getTemplate(true);
     var_dump($template->getBlocks());

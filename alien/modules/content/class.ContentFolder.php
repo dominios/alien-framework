@@ -44,11 +44,11 @@ class ContentFolder implements FileItem {
     }
 
     public function actionGoTo(){
-        return '?content=browser&folder='.$this->id;
+        return AlienController::actionURL('content', 'browser', array('folder' => $this->id));
     }
 
     public function actionEdit(){
-        return '?content=editFolder&id='.$this->id;
+        return AlienController::actionURL('content', 'editFolder', array('id' => $this->id));
     }
 
     public function actionDrop(){
