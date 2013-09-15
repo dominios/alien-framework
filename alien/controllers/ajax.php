@@ -17,7 +17,7 @@ class AjaxController extends AlienController {
         $view->DisplayLayout = $type;
 
         return new ActionResponse(ActionResponse::RESPONSE_OK, Array(
-            'result' => $view->getContent()
+            'result' => $view->renderToString()
         ),  __CLASS__.'::'.__FUNCTION__);
     }
 

@@ -42,7 +42,7 @@ abstract class AlienLayout {
                 $notifications = new AlienView('display/system/notifications.php', null);
                 $notifications->List = $sessionNotifications;
                 $this->flushNotifications();
-                $notifications = $notifications->getContent();
+                $notifications = $notifications->renderToString();
             } else {
                 $notifications = '';
             }
@@ -56,13 +56,13 @@ abstract class AlienLayout {
             }
         }
 
-        $content = $view->getContent();
+        $content = $view->renderToString();
 
         if($Class::useConsole){
             if((true || Alien::getParameter('debugMode')) && Authorization::getCurrentUser()->getId()){
                 $console = new AlienView('display/system/console.php', null);
                 $console->Messages = Alien::getInstance()->getConsole()->getMessageList();
-                $content .= $console->getContent();
+                $content .= $console->renderToString();
             }
         }
 

@@ -9,12 +9,19 @@ if (!strlen($seolink)) {
     $seolink = 1;
 }
 
-if (ContentPage::exists($seolink)) {
-    $page = new ContentPage($seolink);
-    $template = $page->getTemplate(true);
-    var_dump($template->getBlocks());
-//    include $template->getHtmlUrl();
-}
+$pg = new ContentPage($seolink);
+$tmpl = $pg->getTemplate(true);
+$tmpl->fetchViews();
+echo '<pre>';
+var_dump($tmpl->getBlocks());
+echo '</pre>';
+
+//if (ContentPage::exists($seolink)) {
+//    $page = new ContentPage($seolink);
+//    $template = $page->getTemplate(true);
+//    var_dump($template->getBlocks());
+////    include $template->getHtmlUrl();
+//}
 
 
 //die('ALiEN V2 under construction<br><a href="/alien">alien</a>');

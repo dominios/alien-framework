@@ -2,22 +2,25 @@
 
 class CodeItemView extends ContentItemView {
 
-    public function __construct($id, $row = null){
+    const ICON = 'code.png';
+    const NAME = 'HTML kód';
+    const TYPE = 'CodeItem';
+
+    public function __construct($id, $row = null) {
         parent::__construct($id, $row);
     }
 
-    public function getIcon()
-    {
-        // TODO: Implement getIcon() method.
+    public function getIcon() {
+        return self::ICON;
     }
 
-    public function getName()
-    {
-        // TODO: Implement getName() method.
+    public function getName() {
+        return self::NAME . ': ' . $this->getItem(true)->renderToString();
     }
 
-    public function getType()
-    {
-        // TODO: Implement getType() method.
+    public function getType() {
+        return self::TYPE;
     }
+
 }
+

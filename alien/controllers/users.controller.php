@@ -35,7 +35,7 @@ class UsersController extends AlienController {
 
         return new ActionResponse(ActionResponse::RESPONSE_OK, Array(
             'Title' => 'Zoznam používateľov',
-            'ContentMain' => $view->getContent()
+            'ContentMain' => $view->renderToString()
         ), __CLASS__.'::'.__FUNCTION__);
     }
 
@@ -53,7 +53,7 @@ class UsersController extends AlienController {
 
         return new ActionResponse(ActionResponse::RESPONSE_OK, Array(
             'Title' => (int)$_GET['id'] ? $View->User->getLogin() : 'Nový používateľ',
-            'ContentMain' => $View->getContent()
+            'ContentMain' => $View->renderToString()
         ), __CLASS__.'::'.__FUNCTION__);
     }
 

@@ -4,7 +4,7 @@ class ContentTemplate implements FileItem {
 
     const ICON = 'template.png';
     const BROWSEABLE = true;
-    
+
     private $id;
     private $folder;
     private $name;
@@ -13,20 +13,20 @@ class ContentTemplate implements FileItem {
     private $css_url;
     private $config_url;
     private $blocks;
-    
-    public function __construct($id = null, $row=null){
+
+    public function __construct($id = null, $row = null) {
         $new = false;
-        if($row === null){
+        if ($row === null) {
             $DBH = Alien::getDatabaseHandler();
-            $STH=$DBH->prepare("SELECT * FROM ".Alien::getDBPrefix()."_content_templates WHERE id_t=:id LIMIT 1");
-            $STH->bindValue(':id',$id);
+            $STH = $DBH->prepare("SELECT * FROM " . Alien::getDBPrefix() . "_content_templates WHERE id_t=:id LIMIT 1");
+            $STH->bindValue(':id', $id);
             $STH->execute();
-            if(!$STH->rowCount()){
+            if (!$STH->rowCount()) {
                 $new = true;
             }
-            $row=$STH->fetch();
+            $row = $STH->fetch();
         }
-        if($new){
+        if ($new) {
             $this->id = null;
             $this->name = '';
             $this->description = '';
@@ -37,26 +37,26 @@ class ContentTemplate implements FileItem {
             $this->folder = new ContentFolder($row['id_f']);
             return;
         }
-        $this->id=$row['id_t'];
-        $this->name=$row['name'];
-        $this->html_url=$row['html_url'];
-        $this->css_url=$row['css_url'];
-        $this->config_url=$row['config_url'];
-        $this->description=$row['description'];
+        $this->id = $row['id_t'];
+        $this->name = $row['name'];
+        $this->html_url = $row['html_url'];
+        $this->css_url = $row['css_url'];
+        $this->config_url = $row['config_url'];
+        $this->description = $row['description'];
 //        $this->blocks=parse_ini_file($row['config_url']);
         $this->fetchBlocks();
-        $this->fetchViews();
+//        $this->fetchViews();
     }
 
-/* ******** STATIC METHODS ********************************************************************* */
-    
-    public static function getTempatesList($fetch = false){
+    /*     * ******* STATIC METHODS ********************************************************************* */
+
+    public static function getTempatesList($fetch = false) {
         $DBH = Alien::getDatabaseHandler();
-        $arr=array();
-        $STH=$DBH->prepare("SELECT id_t FROM ".Alien::getDBPrefix()."_content_templates");
+        $arr = array();
+        $STH = $DBH->prepare("SELECT id_t FROM " . Alien::getDBPrefix() . "_content_templates");
         $STH->execute();
-        while($item=$STH->fetch()){
-            $arr[]= $fetch ? new ContentTemplate($item['id_t']) : $item['id_t'];
+        while ($item = $STH->fetch()) {
+            $arr[] = $fetch ? new ContentTemplate($item['id_t']) : $item['id_t'];
         }
         return $arr;
     }
@@ -124,7 +124,6 @@ class ContentTemplate implements FileItem {
 //
 //        return $STH->execute();
 //    }
-    
 //    public static function drop($id){
 //        $template=new ContentTemplate($id);
 //        if($template->isUsed()){
@@ -150,27 +149,27 @@ class ContentTemplate implements FileItem {
 //        }
 //    }
 
-    public static function exists($id){
+    public static function exists($id) {
         $DBH = Alien::getDatabaseHandler();
-        $Q = $DBH->query('SELECT 1 FROM '.Alien::getDBPrefix().'_content_templates WHERE id_t="'.(int)$id.'"')->execute();
-        if($Q->rowCount()){
+        $Q = $DBH->query('SELECT 1 FROM ' . Alien::getDBPrefix() . '_content_templates WHERE id_t="' . (int) $id . '"')->execute();
+        if ($Q->rowCount()) {
             return true;
         } else {
             return false;
         }
-
     }
-/* ******** SPECIFIC  METHODS ****************************************************************** */
 
-    public function save(){
+    /*     * ******* SPECIFIC  METHODS ****************************************************************** */
+
+    public function save() {
         $DBH = Alien::getDatabaseHandler();
         $new = $this->id === null ? true : false;
-        if($new){
-            $Q = $DBH->prepare('INSERT INTO '.Alien::getDBPrefix().'_content_templates
+        if ($new) {
+            $Q = $DBH->prepare('INSERT INTO ' . Alien::getDBPrefix() . '_content_templates
              (id_f, name, html_url, css_url, config_url, description)
              VALUES (:idf, :name, :html, :css, :ini, :desc);');
         } else {
-            $Q = $DBH->prepare('UPDATE '.Alien::getDBPrefix().'_content_templates
+            $Q = $DBH->prepare('UPDATE ' . Alien::getDBPrefix() . '_content_templates
             SET id_f=:idf, name=:name, html_url=:html, css_url=:css, config_url=:ini, description=:desc WHERE id_t=:i');
             $Q->bindValue(':i', $this->id, PDO::PARAM_INT);
         }
@@ -181,163 +180,167 @@ class ContentTemplate implements FileItem {
         $Q->bindValue(':ini', $this->config_url, PDO::PARAM_STR);
         $Q->bindValue(':desc', $this->description, PDO::PARAM_STR);
         $ret = $Q->execute();
-        if($new && $ret){
+        if ($new && $ret) {
             $this->id = $DBH->lastInsertId();
         }
         return $ret;
     }
 
-    public function drop(){
-        if($this->id === null){
+    public function drop() {
+        if ($this->id === null) {
             return false;
         }
-        if($this->isUsed()){
+        if ($this->isUsed()) {
             return false;
         }
         $DBH = Alien::getDatabaseHandler();
-        return $DBH->query('DELETE FROM '.Alien::getDBPrefix().'_content_templates WHERE id_t='.$this->id.' LIMIT 1;')->execute();
+        return $DBH->query('DELETE FROM ' . Alien::getDBPrefix() . '_content_templates WHERE id_t=' . $this->id . ' LIMIT 1;')->execute();
     }
 
-    public function isBrowseable(){
+    public function isBrowseable() {
         return self::BROWSEABLE;
     }
 
-    public function actionEdit(){
+    public function actionEdit() {
         return AlienController::actionUrl('content', 'editTemplate', array('id' => $this->id));
     }
 
-    public function actionGoTo(){
+    public function actionGoTo() {
         return $this->actionEdit();
     }
 
-    public function actionDrop(){
+    public function actionDrop() {
         return AlienController::actionUrl('content', 'dropTemplate', array('id' => $this->id));
     }
 
-    public function getId(){
+    public function getId() {
         return $this->id;
     }
-    
-    public function getName(){
+
+    public function getName() {
         return $this->name;
     }
-    
-    public function getHtmlUrl(){
+
+    public function getHtmlUrl() {
         return $this->html_url;
     }
-    
-    public function getCssUrl(){
+
+    public function getCssUrl() {
         return $this->css_url;
     }
-    
-    public function getConfigUrl(){
+
+    public function getConfigUrl() {
         return $this->config_url;
     }
-    
+
     /**
      * ziska pole blokov podla configu
-     * @return Array 
+     * @return Array
      */
-    public function getBlocks(){
+    public function getBlocks() {
         return $this->blocks;
     }
-    
-    public function getDescription(){
+
+    public function getDescription() {
         return $this->description;
     }
-        
-    public function isUsed(){
+
+    public function isUsed() {
         global $DBH;
-        $STH=$DBH->prepare('SELECT 1 FROM '.Alien::getParameter('db_prefix').'_content_pages WHERE id_t=:id');
+        $STH = $DBH->prepare('SELECT 1 FROM ' . Alien::getParameter('db_prefix') . '_content_pages WHERE id_t=:id');
         $STH->bindValue(':id', $this->id, PDO::PARAM_INT);
         $STH->execute();
-        if($STH->rowCount()){
+        if ($STH->rowCount()) {
             return true;
         } else {
             return false;
         }
-    }    
-    
-    public function renderControlPanel(){
+    }
+
+    public function renderControlPanel() {
         echo('<div style="float: right; display: inline-block; position: relative;">');
-        $editAction = '?page=content&amp;action=editTemplate&amp;id='.$this->id;
-        $deleteAction = 'javascript: if(confirm(\'Naozaj odstrániť túto šablónu?\')) window.location=\'?page=content&amp;action=dropTemplate&amp;id='.$this->id.'\'';
-        if(Authorization::permissionTest(null, Array('TEMPLATE_EDIT', 'CONTENT_EDIT'))) echo ('<a href="'.$editAction.'"><img class="button" src="images/icons/layout_edit.png" title="Edit template" alt="Edit"></a>');
-        if(Authorization::permissionTest(null, Array('TEMPLATE_EDIT', 'CONTENT_EDIT'))) echo ($this->isUsed() ? '' : '<a href="#" onClick="'.$deleteAction.'"><img class="button" src="images/icons/layout_delete.png" title="Delete template" alt="delete"></a>');
+        $editAction = '?page=content&amp;action=editTemplate&amp;id=' . $this->id;
+        $deleteAction = 'javascript: if(confirm(\'Naozaj odstrániť túto šablónu?\')) window.location=\'?page=content&amp;action=dropTemplate&amp;id=' . $this->id . '\'';
+        if (Authorization::permissionTest(null, Array('TEMPLATE_EDIT', 'CONTENT_EDIT')))
+            echo ('<a href="' . $editAction . '"><img class="button" src="images/icons/layout_edit.png" title="Edit template" alt="Edit"></a>');
+        if (Authorization::permissionTest(null, Array('TEMPLATE_EDIT', 'CONTENT_EDIT')))
+            echo ($this->isUsed() ? '' : '<a href="#" onClick="' . $deleteAction . '"><img class="button" src="images/icons/layout_delete.png" title="Delete template" alt="delete"></a>');
         echo ('</div><br style="clear: right;">');
     }
-    
+
     public function getFolderRenderOptions() {
-        $options=Array();
-        $options['image']='images/icons/template.png';
-        $options['name']=$this->name;
+        $options = Array();
+        $options['image'] = 'images/icons/template.png';
+        $options['name'] = $this->name;
         return $options;
     }
 
     public function renderInFolder() {
-        $options=$this->getFolderRenderOptions();
-        echo ('<div class="item"><img src="'.$options['image'].'"> <b>'.$options['name'].'</b>');
-            $this->renderControlPanel();
-            echo ('&nbsp;&nbsp;ID: '.$this->id.'&nbsp;|&nbsp;'. $this->description.' &nbsp;|&nbsp;'.obsahZdroj.': '.$this->html_url);
+        $options = $this->getFolderRenderOptions();
+        echo ('<div class="item"><img src="' . $options['image'] . '"> <b>' . $options['name'] . '</b>');
+        $this->renderControlPanel();
+        echo ('&nbsp;&nbsp;ID: ' . $this->id . '&nbsp;|&nbsp;' . $this->description . ' &nbsp;|&nbsp;' . obsahZdroj . ': ' . $this->html_url);
         echo ('</div>');
     }
-    
-    public function sortItems($items){        
-        $DBH=Alien::getDatabaseHandler();        
-        $STH=$DBH->prepare("UPDATE ".Alien::getDBPrefix()."_content_views SET position=:p WHERE id_v=:id");          
-        foreach($items as $string){
-            $i=1;
-            $data=explode(',', $string);
-            foreach($data as $item){
-                $STH->bindValue(':id',$item,PDO::PARAM_INT);
-                $STH->bindValue(':p',$i++,PDO::PARAM_INT);
+
+    public function sortItems($items) {
+        $DBH = Alien::getDatabaseHandler();
+        $STH = $DBH->prepare("UPDATE " . Alien::getDBPrefix() . "_content_views SET position=:p WHERE id_v=:id");
+        foreach ($items as $string) {
+            $i = 1;
+            $data = explode(',', $string);
+            foreach ($data as $item) {
+                $STH->bindValue(':id', $item, PDO::PARAM_INT);
+                $STH->bindValue(':p', $i++, PDO::PARAM_INT);
                 $STH->execute();
             }
-        }        
+        }
         return;
     }
 
-    public function getIcon(){
+    public function getIcon() {
         return self::ICON;
     }
 
-    public static function isTemplateNameInUse($name, $ignoreId=null){
+    public static function isTemplateNameInUse($name, $ignoreId = null) {
         $DBH = Alien::getDatabaseHandler();
-        $Q = $DBH->prepare('SELECT id_t FROM '.Alien::getDBPrefix().'_content_templates WHERE name=:n');
+        $Q = $DBH->prepare('SELECT id_t FROM ' . Alien::getDBPrefix() . '_content_templates WHERE name=:n');
         $Q->bindValue(':n', $name, PDO::PARAM_STR);
         $Q->execute();
-        if($ignoreId===null){
+        if ($ignoreId === null) {
             return $Q->rowCount() ? true : false;
         } else {
-            if(!$Q->rowCount()) return false;
+            if (!$Q->rowCount())
+                return false;
             $R = $Q->fetch();
             return $R['id_t'] == $ignoreId ? false : true;
         }
     }
 
-    private function fetchBlocks(){
+    private function fetchBlocks() {
         $blocks = Array();
         $ini = parse_ini_file($this->getConfigUrl());
         $i = 1;
-        foreach($ini as $k => $v){
-            $bl = Array('id' => $i, 'name' => $v, 'items' => Array());
+        foreach ($ini as $k => $v) {
+            $id = (int) substr($k, 3);
+            $bl = Array('id' => $id, 'name' => $v, 'items' => Array());
             $blocks[] = $bl;
             $i++;
         }
         $this->blocks = $blocks;
     }
 
-    public function fetchViews(){
+    public function fetchViews() {
         $DBH = ALien::getDatabaseHandler();
 
         $blocks = $this->blocks;
         $newBlocks = Array();
 
-        foreach($blocks as $block){
+        foreach ($blocks as $block) {
             $items = Array();
-            foreach($DBH->query('SELECT * FROM '.Alien::getDBPrefix().'_content_views WHERE id_c = '.(int)$block['id'].' && id_t='.$this->getId().' ORDER BY position') as $R){
+            foreach ($DBH->query('SELECT * FROM ' . Alien::getDBPrefix() . '_content_views WHERE id_c = ' . (int) $block['id'] . ' && id_t=' . $this->getId() . ' ORDER BY position') as $R) {
                 $item = ContentItemView::getSpecificView($R['id_v'], $R['id_type'], $R);
-                if($item !== null){
+                if ($item !== null) {
                     $items[] = $item;
                 }
             }
@@ -346,4 +349,5 @@ class ContentTemplate implements FileItem {
 
         $this->blocks = $newBlocks;
     }
+
 }

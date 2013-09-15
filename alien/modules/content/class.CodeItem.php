@@ -2,42 +2,39 @@
 
 class CodeItem extends ContentItem {
 
-    const BROWSEABLE = false;
+    const BROWSEABLE = true;
 
-    public function __construct($id, $row = null){
+    public function __construct($id, $row = null) {
         parent::__construct($id, $row);
     }
 
-    public function isBrowseable(){
+    public function isBrowseable() {
         return self::BROWSEABLE;
     }
 
-    public function getType(){
+    public function getType() {
         return __CLASS__;
     }
 
-    public function getIcon()
-    {
-        // TODO: Implement getIcon() method.
+    public function getIcon() {
+        return __CLASS__;
     }
 
-    public static function exists($id)
-    {
+    public static function exists($id) {
         // TODO: Implement exists() method.
     }
 
-    public function actionGoTo()
-    {
+    public function actionGoTo() {
         // TODO: Implement actionGoTo() method.
     }
 
-    public function actionEdit()
-    {
+    public function actionEdit() {
         // TODO: Implement actionEdit() method.
     }
 
-    public function actionDrop()
-    {
+    public function actionDrop() {
         // TODO: Implement actionDrop() method.
     }
+
 }
+

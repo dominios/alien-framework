@@ -9,7 +9,7 @@ class AlienView {
         $this->controller = $controller;
     }
     
-    public function getContent(){
+    public function renderToString(){
         $content = '';
         if(file_exists($this->script)){
             ob_start();

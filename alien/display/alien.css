@@ -1,4 +1,4 @@
-/* 
+/*
     Document   : default ALiEN sytlesheet
     Created on : 14.4.2012, 9:32:25
     Author     : Dominik Geršák
@@ -24,8 +24,8 @@ body {
     margin: 0px;
     padding: 0;
     text-shadow: 1px 1px rgba(190, 190, 190, 0.5);
-/*    -moz-user-select: none;
-    -webkit-user-select: none;*/
+    /*    -moz-user-select: none;
+        -webkit-user-select: none;*/
 }
 
 h1, h2, h3, h4, h5, h6 {
@@ -72,7 +72,7 @@ h4 img {
 h5 {
     line-height: 22px;
     font-size: 14px;
-    margin: 6px 4px;   
+    margin: 6px 4px;
     padding-bottom: 3px;
 }
 
@@ -123,7 +123,7 @@ a img {
     top: 5px;
     left: 515px;
     height: 30px;
-/*    background-color: red;*/
+    /*    background-color: red;*/
     color: #eee;
     width: 690px;
     vertical-align: middle;
@@ -153,6 +153,15 @@ a img {
     z-index: 5;
     top: 15px;
     left: 320px;
+}
+
+#toppanel > a:first-child {
+    border: 0 !important;
+    opacity: 1 !important;
+}
+
+#toppanel > a:first-child img {
+    opacity: 1 !important;
 }
 
 #toppanel a:link, #toppanel a:visited {
@@ -232,6 +241,8 @@ a:link .nobackground {
     padding: 7px 0px;
     background-color: #3a3a3a;
     border-radius: 3px;
+    box-shadow: 2px 2px 5px #222;
+    border-top: 1px solid #999;
 }
 
 .leftpanel a:visited, .leftpanel a:link {
@@ -293,7 +304,7 @@ a:link .nobackground {
 }
 
 .leftpanel a.folder:first-child, .leftpanel a.subbutton:first-child {
-/*    border-top: 0;*/
+    /*    border-top: 0;*/
 }
 
 .leftpanel a.folder:hover, .leftpanel a.subbutton:hover {
@@ -346,37 +357,37 @@ a:link .nobackground {
 }
 
 #headerTitle {
-	padding-left: 5px;
+    padding-left: 5px;
     margin-bottom: 5px;
-	/*float: left;*/
+    /*float: left;*/
     font-family: segoe ui light, segoe ui, calibri, arial;
     text-shadow: 1px 1px #b3b3b3;
     color: #3a3a3a;
 }
 
 #headerActionPanel {
-	padding-right: 0px;
-	float: right;
+    padding-right: 0px;
+    float: right;
 }
 
 .actionButton {
-	display: inline-block;
-	background-color: #363636;
-	margin-left: 0px;
-	padding-right: 5px;
-	padding-left: 5px;
-	border: 0;
-	border-left: 1px solid #555;
-	line-height: 34px;
-	font-size: 16px;
+    display: inline-block;
+    background-color: #363636;
+    margin-left: 0px;
+    padding-right: 5px;
+    padding-left: 5px;
+    border: 0;
+    border-left: 1px solid #555;
+    line-height: 34px;
+    font-size: 16px;
 }
 
 .actionButton:hover{
-	text-decoration: none;
+    text-decoration: none;
     background-color: #fbf37b;
     border-color: #fbf37b;
     box-shadow: 0 0 15px #fbf37b;
-	color: black;
+    color: black;
 }
 
 hr, .hr {
@@ -621,7 +632,7 @@ div.image.ui-state-default {
     display: inline-block;
     background: none;
     background-color: #222;
-    margin: 3px;    
+    margin: 3px;
     padding: 6px;
     padding-bottom: 2px;
     text-align: center;
@@ -650,7 +661,7 @@ div.image .imageActionBar {
 /* ********* SPECIAL ********************************************************** */
 
 #loader {
-    display: none;    
+    display: none;
     position: absolute;
     background-color: rgba(34, 34, 34, 0.9);
     padding: 10px;
@@ -691,7 +702,7 @@ div.image .imageActionBar {
 }
 #windowCloser .button {
     background: none;
-    box-shadow: 0 0 0 0;    
+    box-shadow: 0 0 0 0;
     width: 18px;
     height: 18px;
 }
@@ -743,7 +754,7 @@ div.image .imageActionBar {
 }
 
 .sortable .ui-state-default {
-/*    border: 1px solid #FBF37B;*/
+    /*    border: 1px solid #FBF37B;*/
     border: 0px;
     background: none;
     font-weight: normal;

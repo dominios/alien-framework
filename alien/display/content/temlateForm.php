@@ -1,19 +1,19 @@
 <script type="text/javascript">
-    $(document).ready(function(){
-        $( "#tabs" ).tabs();
+    $(document).ready(function() {
+        $("#tabs").tabs();
         markBadInputs();
-        $("input.invalidInput").mouseover(function(){
+        $("input.invalidInput").mouseover(function() {
             $(this).next('div').fadeIn(400);
         });
-        $("input.invalidInput").mouseout(function(){
+        $("input.invalidInput").mouseout(function() {
             $(this).next('div').fadeOut(400);
         });
     });
 
-    function createDialog(header, content){
+    function createDialog(header, content) {
         $("#dialog-modal").remove();
-        newhtml = "<div id='dialog-modal' title='"+header+"'>";
-        newhtml += "<div id='dialog-content'><p>"+content+"</p></div>";
+        newhtml = "<div id='dialog-modal' title='" + header + "'>";
+        newhtml += "<div id='dialog-content'><p>" + content + "</p></div>";
         newhtml += "</div>";
         $("body").append(newhtml);
         $(function() {
@@ -33,64 +33,68 @@
         });
     }
 
-    function templateShowFileBrowser(type){
-        if(!type) return;
+    function templateShowFileBrowser(type) {
+        if (!type)
+            return;
         $.ajax({
             async: true,
             url: "/alien/ajax.php",
             type: "GET",
-            data: "action=templateShowFileBrowser&type="+type,
+            data: "action=templateShowFileBrowser&type=" + type,
             timeout: 5000,
-            success: function(data){
+            success: function(data) {
                 json = jQuery.parseJSON(data);
                 createDialog(json.header, json.content);
             }
         });
     }
 
-    function chooseFile(file, type){
-        if(!file || !type) return;
-        $("input[name=template"+type+"]").attr('value', file);
+    function chooseFile(file, type) {
+        if (!file || !type)
+            return;
+        $("input[name=template" + type + "]").attr('value', file);
         $("#dialog-modal").dialog('close');
     }
 
-    function templateShowFilePreview(file){
-        if(!file) return;
+    function templateShowFilePreview(file) {
+        if (!file)
+            return;
         $.ajax({
             async: true,
             url: "/alien/ajax.php",
             type: "GET",
-            data: "action=templateShowFilePreview&file="+file,
+            data: "action=templateShowFilePreview&file=" + file,
             timeout: 5000,
-            success: function(data){
+            success: function(data) {
                 json = jQuery.parseJSON(data);
                 createDialog(json.header, json.content);
-                if($("#dialog-modal").width() > 1000){
+                if ($("#dialog-modal").width() > 1000) {
                     $("#dialog-modal").width(1000);
                 }
-                if($("#dialog-modal").height() > 550){
+                if ($("#dialog-modal").height() > 550) {
                     $("#dialog-modal").height(550);
                 }
             }
         });
     }
 
-    function markBadInputs(){
-        json = jQuery.parseJSON('<?=$_SESSION['formErrorOutput'];?>');
-        if(json == null) return;
-        for(i = 0; i <= json.length; i++){
+    function markBadInputs() {
+        json = jQuery.parseJSON('<?= $_SESSION['formErrorOutput']; ?>');
+        if (json == null)
+            return;
+        for (i = 0; i <= json.length; i++) {
             item = json.pop();
-            $("input[name="+item.inputName+"]").addClass('invalidInput');
-            $("<div class=\"inputErrorHelper\">"+item.errorMsg+"</div>").insertAfter($("input[name="+item.inputName+"]"));
+            $("input[name=" + item.inputName + "]").addClass('invalidInput');
+            $("<div class=\"inputErrorHelper\">" + item.errorMsg + "</div>").insertAfter($("input[name=" + item.inputName + "]"));
         }
-        <? unset($_SESSION['formErrorOutput']); ?>
+<? unset($_SESSION['formErrorOutput']); ?>
     }
 
 </script>
 
 <form name="editTemplateForm" method="POST" action="" id="templateForm">
     <input type="hidden" name="action" value="templateFormSubmit">
-    <input type="hidden" name="templateId" value="<?=$this->Template->getId();?>">
+    <input type="hidden" name="templateId" value="<?= $this->Template->getId(); ?>">
 
     <div id="tabs">
         <ul>
@@ -100,82 +104,84 @@
         <div id="tabs-2">
             <table>
                 <tr>
-                    <td><img src="<?=Alien::$SystemImgUrl;?>template.png" alt="name"> Názov šablóny:</td>
-                    <td colspan="2"><input type="text" name="templateName" value="<?=$this->Template->getName();?>" style="width: 600px;"></td>
+                    <td><img src="<?= Alien::$SystemImgUrl; ?>template.png" alt="name"> Názov šablóny:</td>
+                    <td colspan="2"><input type="text" name="templateName" value="<?= $this->Template->getName(); ?>" style="width: 600px;"></td>
                 </tr><tr>
-                <td><img src="<?=Alien::$SystemImgUrl;?>note.png" alt="name"> Krátky popis:</td>
-                <td colspan="2"><input type="text" name="templateDesc" value="<?=$this->Template->getDescription();?>" style="width: 600px;"></td>
-            </tr><tr>
-                <td><img src="<?=Alien::$SystemImgUrl;?>php.png" alt="php"> Súbor PHP:</td>
-                <td><input type="text" name="templatePhp" value="<?=$this->Template->getHTMLUrl();?>" style="width: 505px;"></td>
-                <td>
-                    <div class="button" onclick="templateShowFileBrowser('php');"><img src="<?=Alien::$SystemImgUrl;?>external_link.png"></div>
-                    <div class="button" onclick="templateShowFilePreview($('input[name=templatePhp]').attr('value'));"><img src="<?=Alien::$SystemImgUrl;?>magnifier.png"></div>
-                </td>
-            </tr><tr>
-                <td><img src="<?=Alien::$SystemImgUrl;?>css.png" alt="css"> Súbor CSS:</td>
-                <td><input type="text" name="templateCss" value="<?=$this->Template->getCSSUrl();?>" style="width: 505px;"></td>
-                <td>
-                    <div class="button" onclick="templateShowFileBrowser('css');"><img src="<?=Alien::$SystemImgUrl;?>external_link.png"></div>
-                    <div class="button" onclick="templateShowFilePreview($('input[name=templateCss]').attr('value'));"><img src="<?=Alien::$SystemImgUrl;?>magnifier.png"></div>
-                </td>
-            </tr><tr>
-                <td><img src="<?=Alien::$SystemImgUrl;?>service.png" alt="css"> Konfiguračný súbor:</td>
-                <td><input type="text" name="templateIni" value="<?=$this->Template->getConfigUrl();?>" style="width: 505px;"></td>
-                <td>
-                    <div class="button" onclick="templateShowFileBrowser('ini');"><img src="<?=Alien::$SystemImgUrl;?>external_link.png"></div>
-                    <div class="button" onclick="templateShowFilePreview($('input[name=templateIni]').attr('value'));"><img src="<?=Alien::$SystemImgUrl;?>magnifier.png"></div>
-                </td>
-            </tr><tr>
-                <td colspan="3"><hr></td>
-            </tr><tr>
-                <td colspan="3">
-                    <div class="button negative" onclick="javascript: window.location='<?=$this->ReturnAction;?>';"><img src="<?=Alien::$SystemImgUrl;?>back.png" alt="cancel"> Zrušiť</div>
-                    <div class="button positive" onclick="javascript: $('#templateForm').submit();"><img src="<?=Alien::$SystemImgUrl;?>save.png" alt="save"> Uložiť šablónu</div>
-                </td>
-            </tr>
+                    <td><img src="<?= Alien::$SystemImgUrl; ?>note.png" alt="name"> Krátky popis:</td>
+                    <td colspan="2"><input type="text" name="templateDesc" value="<?= $this->Template->getDescription(); ?>" style="width: 600px;"></td>
+                </tr><tr>
+                    <td><img src="<?= Alien::$SystemImgUrl; ?>php.png" alt="php"> Súbor PHP:</td>
+                    <td><input type="text" name="templatePhp" value="<?= $this->Template->getHTMLUrl(); ?>" style="width: 505px;"></td>
+                    <td>
+                        <div class="button" onclick="templateShowFileBrowser('php');"><img src="<?= Alien::$SystemImgUrl; ?>external_link.png"></div>
+                        <div class="button" onclick="templateShowFilePreview($('input[name=templatePhp]').attr('value'));"><img src="<?= Alien::$SystemImgUrl; ?>magnifier.png"></div>
+                    </td>
+                </tr><tr>
+                    <td><img src="<?= Alien::$SystemImgUrl; ?>css.png" alt="css"> Súbor CSS:</td>
+                    <td><input type="text" name="templateCss" value="<?= $this->Template->getCSSUrl(); ?>" style="width: 505px;"></td>
+                    <td>
+                        <div class="button" onclick="templateShowFileBrowser('css');"><img src="<?= Alien::$SystemImgUrl; ?>external_link.png"></div>
+                        <div class="button" onclick="templateShowFilePreview($('input[name=templateCss]').attr('value'));"><img src="<?= Alien::$SystemImgUrl; ?>magnifier.png"></div>
+                    </td>
+                </tr><tr>
+                    <td><img src="<?= Alien::$SystemImgUrl; ?>service.png" alt="css"> Konfiguračný súbor:</td>
+                    <td><input type="text" name="templateIni" value="<?= $this->Template->getConfigUrl(); ?>" style="width: 505px;"></td>
+                    <td>
+                        <div class="button" onclick="templateShowFileBrowser('ini');"><img src="<?= Alien::$SystemImgUrl; ?>external_link.png"></div>
+                        <div class="button" onclick="templateShowFilePreview($('input[name=templateIni]').attr('value'));"><img src="<?= Alien::$SystemImgUrl; ?>magnifier.png"></div>
+                    </td>
+                </tr><tr>
+                    <td colspan="3"><hr></td>
+                </tr><tr>
+                    <td colspan="3">
+                        <div class="button negative" onclick="javascript: window.location = '<?= $this->ReturnAction; ?>';"><img src="<?= Alien::$SystemImgUrl; ?>back.png" alt="cancel"> Zrušiť</div>
+                        <div class="button positive" onclick="javascript: $('#templateForm').submit();"><img src="<?= Alien::$SystemImgUrl; ?>save.png" alt="save"> Uložiť šablónu</div>
+                    </td>
+                </tr>
             </table>
         </div>
         <div id="tabs-1">
             <p>
                 <?
-                    $i = 1;
+                $i = 1;
 
-                    $blocks = $this->Template->getBlocks();
+                $blocks = $this->Template->getBlocks();
 
-                    foreach($blocks as $block){
+                foreach ($blocks as $block) {
 
-                        $name = $block['name'];
-                        $items = $block['items'];
+                    $name = $block['name'];
+                    $items = $block['items'];
 
-                        $poradie = '';
-                        $addViewAction='javascript: window.location=\'?content&amp;addViewToTemplate&amptid='.$this->Template->getId().'&amp;block='.$i.'\'';
+                    $poradie = '';
+//                    $addViewAction = 'javascript: window.location=\'?content&amp;addViewToTemplate&amptid=' . $this->Template->getId() . '&amp;block=' . $i . '\'';
+                    $addViewAction = AlienController::actionURL('content', 'addView', array('template' => $this->Template->getId(), 'box' => $i));
 
-                        echo ('<fieldset style="margin-top: 10px;"><legend><img class="toggleHideable less" onClick="javascript: toggleHideable('.$i.');" src="'.Alien::$SystemImgUrl.'/less.png" style="width: 16px; margin-right: 6px;">'.$name.'</legend>');
-                        echo ('<div id="hideable-'.$i.'">');
-                        echo ('<div id="sortable-'.$i.'" class="sortable">');
+                    echo ('<fieldset style="margin-top: 10px;"><legend><img class="toggleHideable less" onClick="javascript: toggleHideable(' . $i . ');" src="' . Alien::$SystemImgUrl . '/less.png" style="width: 16px; margin-right: 6px;">' . $name . '</legend>');
+                    echo ('<div id="hideable-' . $i . '">');
+                    echo ('<div id="sortable-' . $i . '" class="sortable">');
 
-                        foreach($items as $item){
-                            $itemView = new AlienView('display/content/itemList.php');
-                            $itemView->Item = $item;
-//                            echo $itemView->getContent();
-                        }
+                    foreach ($items as $item) {
+                        $itemView = new AlienView('display/content/itemList.php');
+                        $itemView->Item = $item;
+                        echo $itemView->renderToString();
+//                        var_dump($itemView);
+//                        echo $itemView->getContent();
+                    }
 
 
 //                        var_dump(count($block['items']));
-
 //                            echo ('<div class="ui-state-default" id="'.$view->getId().'">');
 //                            echo ('</div>');
 //                            $poradie.=$view->getId().',';
-                        echo ('</div>');
-                        echo ('</div>');
+                    echo ('</div>');
+                    echo ('</div>');
 
-                        $poradie=substr($poradie,0,strlen($poradie)-1);
-                        echo ('<input type="hidden" name="order-sortable-'.$i.'" value="'.$poradie.'">');
-                        echo '<div class="button neutral" style="margin-left: 5px; margin-top: 7px; margin-bottom: 10px;" onClick="'.$addViewAction.'"><img src="'.ALien::$SystemImgUrl.'/plus.png">&nbsp;Pridat objekt do: <i>'.$name.'</i></div>';
-                        $i++;
-                        echo ('</fieldset>');
-                    }
+                    $poradie = substr($poradie, 0, strlen($poradie) - 1);
+                    echo ('<input type="hidden" name="order-sortable-' . $i . '" value="' . $poradie . '">');
+                    echo '<a class="button neutral" style="margin-left: 5px; margin-top: 7px; margin-bottom: 10px;" href="' . $addViewAction . '"><img src="' . ALien::$SystemImgUrl . '/plus.png">&nbsp;Pridat objekt do: <i>' . $name . '</i></a>';
+                    $i++;
+                    echo ('</fieldset>');
+                }
                 ?>
             </p>
         </div>
@@ -212,24 +218,24 @@ echo ('<form name="'.($new ? 'new' : 'edit').'TemplateForm" method="POST" action
     echo ('<input type="hidden" name="action" value="templateSubmit">');
     echo ('<fieldset><legend>Konfigurácia šablóny</legend><table>');
 
-        if(!$new){
-        echo ('<input type="hidden" name="templateId" value="'.$template->getId().'">');
-        } else {
-        echo ('<input type="hidden" name="templateId" value="-1">');
-        }
+            if(!$new){
+            echo ('<input type="hidden" name="templateId" value="'.$template->getId().'">');
+            } else {
+            echo ('<input type="hidden" name="templateId" value="-1">');
+            }
 
-        echo ('<tr>
-            <td><img src="images/icons/layout.png" alt="name"> '.obsahSablonaNazov.':</td><td colspan="2"><input type="text" name="templateName" value="'.($new ? @$_POST['templateName'] : $template->getName()).'" size="25"></td></tr>');
-        echo ('<tr><td><img src="images/icons/text.png" alt="name"> '.obsahSablonaPopis.':</td><td colspan="2"><input type="text" name="templateDesc" value="'.($new ? @$_POST['templateDesc'] : $template->getDescription()).'" size="45"></td></tr>');
-        echo ('<tr><td><img src="images/icons/html.png" alt="html"> '.obsahSablonaHTMLURL.':</td><td><input type="text" name="templateHtml" size="35" value="'.($new ? @$_POST['templateHtml'] : $template->getHtmlUrl()).'"></td><td><div class="button" onClick="javascript: contentShowChooseFile(\'php\');"><img src="images/icons/folder_explore.png"></div></div></td></tr>');
-        echo ('<tr><td><img src="images/icons/css.png" alt="css"> '.obsahSablonaCSSURL.':</td><td><input type="text" name="templateCss" size="35" value="'.($new ? @$_POST['templateCss'] : $template->getCssUrl()).'"></td><td><div class="button" onClick="javascript: contentShowChooseFile(\'css\');"><img src="images/icons/folder_explore.png"></div></td></tr>');
-        echo ('<tr><td><img src="images/icons/cog.png" alt="css"> '.obsahSablonaConfigSubor.':</td><td><input type="text" name="templateConfig" size="35" value="'.($new ? @$_POST['templateConfig'] : $template->getConfigUrl()).'"></td><td><div class="button" onClick="javascript: contentShowChooseFile(\'ini\');"><img src="images/icons/folder_explore.png"></div></td></tr>');
-        echo ('<tr><td colspan="3"><hr></td></tr>');
-        echo ('<tr><td colspan="3">
-            <div class="button negative" onClick="javascript: window.location=\''.$_SESSION['returnAction'].'\';"><img src="images/icons/cancel.png" alt="cancel"> '.zrusit.'</div>
-            <div class="button positive" onClick="javascript: $(\'#templateForm\').submit();"><img src="images/icons/save.png" alt="save"> '.obsahSablonaUlozit.'</div>
-        </tr>');
-        echo ('</table></fieldset></form>');
+            echo ('<tr>
+                <td><img src="images/icons/layout.png" alt="name"> '.obsahSablonaNazov.':</td><td colspan="2"><input type="text" name="templateName" value="'.($new ? @$_POST['templateName'] : $template->getName()).'" size="25"></td></tr>');
+            echo ('<tr><td><img src="images/icons/text.png" alt="name"> '.obsahSablonaPopis.':</td><td colspan="2"><input type="text" name="templateDesc" value="'.($new ? @$_POST['templateDesc'] : $template->getDescription()).'" size="45"></td></tr>');
+            echo ('<tr><td><img src="images/icons/html.png" alt="html"> '.obsahSablonaHTMLURL.':</td><td><input type="text" name="templateHtml" size="35" value="'.($new ? @$_POST['templateHtml'] : $template->getHtmlUrl()).'"></td><td><div class="button" onClick="javascript: contentShowChooseFile(\'php\');"><img src="images/icons/folder_explore.png"></div></div></td></tr>');
+            echo ('<tr><td><img src="images/icons/css.png" alt="css"> '.obsahSablonaCSSURL.':</td><td><input type="text" name="templateCss" size="35" value="'.($new ? @$_POST['templateCss'] : $template->getCssUrl()).'"></td><td><div class="button" onClick="javascript: contentShowChooseFile(\'css\');"><img src="images/icons/folder_explore.png"></div></td></tr>');
+            echo ('<tr><td><img src="images/icons/cog.png" alt="css"> '.obsahSablonaConfigSubor.':</td><td><input type="text" name="templateConfig" size="35" value="'.($new ? @$_POST['templateConfig'] : $template->getConfigUrl()).'"></td><td><div class="button" onClick="javascript: contentShowChooseFile(\'ini\');"><img src="images/icons/folder_explore.png"></div></td></tr>');
+            echo ('<tr><td colspan="3"><hr></td></tr>');
+            echo ('<tr><td colspan="3">
+                    <div class="button negative" onClick="javascript: window.location = \''.$_SESSION['returnAction'].'\';"><img src="images/icons/cancel.png" alt="cancel"> '.zrusit.'</div>
+                    <div class="button positive" onClick="javascript: $(\'#templateForm\').submit();"><img src="images/icons/save.png" alt="save"> '.obsahSablonaUlozit.'</div>
+            </tr>');
+            echo ('</table></fieldset></form>');
 }
 
 if($new) return;

@@ -2,8 +2,8 @@
 
 abstract class ContentItem implements FileItem {
 
-    const Icon = 'file.png';
-    
+    const Icon = 'file_unknown.png';
+
     protected $id;
     protected $name;
     protected $folder;
@@ -11,14 +11,14 @@ abstract class ContentItem implements FileItem {
     protected $content;
     protected $container;
 
-    public function __construct($id, $row = null){
+    public function __construct($id, $row = null) {
 
-        if($row === null){
+        if ($row === null) {
             $DBH = Alien::getDatabaseHandler();
-            $Q = $DBH->prepare('SELECT * FROM '.ALien::getDBPrefix().'_content_items WHERE id_i=:i LIMIT 1;');
+            $Q = $DBH->prepare('SELECT * FROM ' . ALien::getDBPrefix() . '_content_items WHERE id_i=:i LIMIT 1;');
             $Q->bindValue(':i', $id, PDO::PARAM_INT);
             $Q->execute();
-            if(!$Q->rowCount()){
+            if (!$Q->rowCount()) {
                 return null;
             }
             $row = $Q->fetch();
@@ -31,29 +31,29 @@ abstract class ContentItem implements FileItem {
         $this->container = $row['id_c'];
         $this->content = $row['content'];
     }
-    
-    public function getId(){
+
+    public function getId() {
         return $this->id;
     }
-    
-    public function getName(){
+
+    public function getName() {
         return $this->name;
     }
 
     public abstract function getType();
 
-    public static final function getSpecificItem($idItem, $idType = null, $R = null){
+    public static final function getSpecificItem($idItem, $idType = null, $R = null) {
 
-        if($idType !== null){
-            $cond = 'id_type = '.$idType;
+        if ($idType !== null) {
+            $cond = 'id_type = ' . $idType;
         } else {
-            $cond = 'id_i = '.(int)$idItem;
+            $cond = 'id_i = ' . (int) $idItem;
         }
         $DBH = Alien::getDatabaseHandler();
-        $row = $DBH->query('SELECT classname FROM '.Alien::getDBPrefix().'_content_item_types JOIN '.Alien::getDBPrefix().'_content_items USING (id_type) WHERE '.$cond.' LIMIT 1')->fetch();
-        if(sizeof($row) && $row !== null){
+        $row = $DBH->query('SELECT classname FROM ' . Alien::getDBPrefix() . '_content_item_types JOIN ' . Alien::getDBPrefix() . '_content_items USING (id_type) WHERE ' . $cond . ' LIMIT 1')->fetch();
+        if (sizeof($row) && $row !== null) {
             $classname = $row['classname'];
-            if(class_exists($classname)){
+            if (class_exists($classname)) {
 //                var_dump($idItem, $idType, $R); die;
                 return $R === null ? new $classname($idItem) : new $classname(null, $R);
             }
@@ -62,18 +62,21 @@ abstract class ContentItem implements FileItem {
         }
     }
 
-    public function getContainer(){
-        return (int)$this->container;
+    public function getContainer() {
+        return (int) $this->container;
     }
 
-    public function getContent(){
+    public function renderToString() {
         return $this->content;
     }
 
-    public function getFolder(){
+    public function getFolder() {
         return $this->folder;
     }
 
+    public function getIcon() {
+        return self::Icon;
+    }
 
 }
 

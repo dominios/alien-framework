@@ -1,4 +1,5 @@
 <?php
+
 //
 // init
 //
@@ -12,7 +13,7 @@ Alien::getInstance();
 //
 $actionsArray = array();
 # najprv POST
-if(@sizeof($_POST)){
+if (@sizeof($_POST)) {
     $arr = explode('/', $_POST['action'], 2);
     $controller = $arr[0];
     $actionsArray[] = $arr[1];
@@ -24,23 +25,29 @@ $keys = explode('/', $request, 4);
 // 1 - controller
 // 2 - akcia
 // 3 - zatial zvysok parametre (GET)
-if(empty($controller)) { $controller = $keys[1]; }
-if($keys[2] !== null) { $actionsArray[] = $keys[2]; }
-$params = explode('/',preg_replace('/\?.*/', '', $keys[3])); // vyhodi vsetko ?... cize "stary get"
+if (empty($controller)) {
+    $controller = $keys[1];
+}
+if ($keys[2] !== null) {
+    $actionsArray[] = $keys[2];
+}
+$params = explode('/', preg_replace('/\?.*/', '', $keys[3])); // vyhodi vsetko ?... cize "stary get"
 
-if(count($params) >= 2){
-    for($i=0; $i < count($params); $i++){
+if (count($params) >= 2) {
+    unset($_GET);
+    for ($i = 0; $i < count($params); $i++) {
         $_GET[$params[$i++]] = $params[$i];
     }
 } else {
     unset($_GET);
-    $_GET = $params;
+    $_GET['id'] = $params[0];
 }
-$controller = ucfirst($controller).'Controller';
+
+$controller = ucfirst($controller) . 'Controller';
 try {
     $controller = new $controller($actionsArray);
-} catch(Exception $e){
-    Alien::getInstance()->getConsole()->putMessage('Called controller <i>'.$ctrl.'</i> doesn\'t exist!', AlienConsole::CONSOLE_ERROR);
+} catch (Exception $e) {
+    Alien::getInstance()->getConsole()->putMessage('Called controller <i>' . $ctrl . '</i> doesn\'t exist!', AlienConsole::CONSOLE_ERROR);
     $controller = new AlienController($actionsArray);
 }
 
@@ -56,7 +63,7 @@ try {
 //    $controller = new AlienController();
 //}
 
-$content .= $controller->getContent();
+$content .= $controller->renderToString();
 
 //$content = str_replace('</body></html>', '', $content);
 //$content .= '<div style="position: absolute; top: 0px; width: 100%;"><div id="notifyArea" style="display: block;"></div></div>';
