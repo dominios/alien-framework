@@ -1,6 +1,8 @@
 <?php
 
-class ActionResponse {
+namespace Alien;
+
+class Response {
 
     const RESPONSE_OK = 'ok';
     const RESPONSE_ERR = 'error';
@@ -9,21 +11,23 @@ class ActionResponse {
     private $data;
     private $action;
 
-    public function __construct($status = self::RESPONSE_OK, $data = null, $action = ''){
+    public function __construct($status = self::RESPONSE_OK, $data = null, $action = '') {
         $this->status = $status;
         $this->data = $data;
         $this->action = $action;
     }
 
-    public function getStatus(){
+    public function getStatus() {
         return $this->status;
     }
 
-    public function getData(){
+    public function getData() {
         return $this->data;
     }
 
-    public function getAction(){
+    public function getAction() {
         return $this->action;
     }
+
 }
+

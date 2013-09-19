@@ -1,5 +1,9 @@
 <?php
 
+namespace Alien;
+
+use Alien\Controllers\BaseController;
+
 //
 // init
 //
@@ -43,12 +47,13 @@ if (count($params) >= 2) {
     $_GET['id'] = $params[0];
 }
 
-$controller = ucfirst($controller) . 'Controller';
-try {
+$controller = __NAMESPACE__ . '\Controllers\\' . ucfirst($controller) . 'Controller';
+
+if (class_exists($controller)) {
     $controller = new $controller($actionsArray);
-} catch (Exception $e) {
-    Alien::getInstance()->getConsole()->putMessage('Called controller <i>' . $ctrl . '</i> doesn\'t exist!', AlienConsole::CONSOLE_ERROR);
-    $controller = new AlienController($actionsArray);
+} else {
+    Alien::getInstance()->getConsole()->putMessage('Called controller <i>' . $controller . '</i> doesn\'t exist!', Terminal::ERROR);
+    $controller = new BaseController($actionsArray);
 }
 
 //if(sizeof($_GET)){
@@ -76,4 +81,3 @@ $content .= $controller->renderToString();
 ob_end_clean();
 header('Content-Type: text/html; charset=utf-8');
 echo $content;
-

@@ -1,5 +1,10 @@
 <?php
 
+namespace Alien\Models\Content;
+
+use Alien\Alien;
+use \PDO;
+
 class CodeItem extends ContentItem {
 
     const BROWSEABLE = true;

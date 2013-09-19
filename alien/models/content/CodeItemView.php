@@ -1,5 +1,10 @@
 <?php
 
+namespace Alien\Models\Content;
+
+use Alien\Alien;
+use \PDO;
+
 class CodeItemView extends ContentItemView {
 
     const ICON = 'code.png';
@@ -22,5 +27,8 @@ class CodeItemView extends ContentItemView {
         return self::TYPE;
     }
 
+//    public function setItem(CodeItem $item) {
+//        $this->item = $item;
+//    }
 }
 

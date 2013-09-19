@@ -1,3 +1,10 @@
+<?
+
+namespace Alien;
+
+use Alien\Controllers\BaseController;
+?>
+
 <script type="text/javascript">
     $(document).ready(function() {
         $("#tabs").tabs();
@@ -154,14 +161,14 @@
 
                     $poradie = '';
 //                    $addViewAction = 'javascript: window.location=\'?content&amp;addViewToTemplate&amptid=' . $this->Template->getId() . '&amp;block=' . $i . '\'';
-                    $addViewAction = AlienController::actionURL('content', 'addView', array('template' => $this->Template->getId(), 'box' => $i));
+                    $addViewAction = BaseController::actionURL('content', 'addView', array('template' => $this->Template->getId(), 'box' => $i));
 
                     echo ('<fieldset style="margin-top: 10px;"><legend><img class="toggleHideable less" onClick="javascript: toggleHideable(' . $i . ');" src="' . Alien::$SystemImgUrl . '/less.png" style="width: 16px; margin-right: 6px;">' . $name . '</legend>');
                     echo ('<div id="hideable-' . $i . '">');
                     echo ('<div id="sortable-' . $i . '" class="sortable">');
 
                     foreach ($items as $item) {
-                        $itemView = new AlienView('display/content/itemList.php');
+                        $itemView = new View('display/content/itemList.php');
                         $itemView->Item = $item;
                         echo $itemView->renderToString();
 //                        var_dump($itemView);

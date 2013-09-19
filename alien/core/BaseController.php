@@ -1,6 +1,14 @@
 <?php
 
-class AlienController {
+namespace Alien\Controllers;
+
+use Alien\Alien;
+use Alien\Terminal;
+use Alien\Response;
+use Alien\Authorization\Authorization;
+use Alien\Layot\Layout;
+
+class BaseController {
 
     protected $defaultAction = 'NOP';
     protected $actions;
@@ -49,16 +57,16 @@ class AlienController {
         $auth = Authorization::getInstance();
         if (!$auth->getInstance()->isLoggedIn() && !in_array('login', $this->actions)) {
             unset($this->actions);
-            $this->setLayout(new LoginLayout());
+            $this->setLayout(new \Alien\Layot\LoginLayout());
             return;
         }
 
-        $this->setLayout(new IndexLayout());
+        $this->setLayout(new \Alien\Layot\IndexLayout());
 
-        return new ActionResponse(ActionResponse::RESPONSE_OK, Array(
+        return new Response(Response::RESPONSE_OK, Array(
             'Title' => 'HOME',
             'LeftTitle' => Authorization::getCurrentUser()->getLogin(),
-            'ContentLeft' => Array(Array('url' => AlienController::actionURL('', 'logout'), 'img' => 'logout.png', 'text' => 'Odhlásiť'))
+            'ContentLeft' => Array(Array('url' => BaseController::actionURL('', 'logout'), 'img' => 'logout.png', 'text' => 'Odhlásiť'))
                 ), __CLASS__ . '::' . __FUNCTION__);
     }
 
@@ -68,7 +76,7 @@ class AlienController {
 
         if (method_exists(get_called_class(), 'init_action')) {
             $response = $this->init_action();
-            if ($response instanceof ActionResponse) {
+            if ($response instanceof Response) {
                 array_push($responses, $response);
             }
             Alien::getInstance()->getConsole()->putMessage('Called <i>' . get_called_class() . '::init_action()</i>.');
@@ -76,14 +84,14 @@ class AlienController {
         foreach ($this->actions as $action) {
             Alien::getInstance()->getConsole()->putMessage('Calling action: <i>' . get_called_class() . '::' . $action . '</i>()');
             if (!method_exists($this, $action)) {
-                Alien::getInstance()->getConsole()->putMessage('Action <i>' . $action . '</i> doesn\'t exist!', AlienConsole::CONSOLE_ERROR);
+                Alien::getInstance()->getConsole()->putMessage('Action <i>' . $action . '</i> doesn\'t exist!', Terminal::ERROR);
             }
             if (!method_exists($this, $action) && $action != $this->defaultAction) {
                 $action = $this->defaultAction;
                 Alien::getInstance()->getConsole()->putMessage('Calling action <i>' . get_called_class() . '::' . $action . '</i>() instead.');
             }
             $response = $this->$action();
-            if ($response instanceof ActionResponse) {
+            if ($response instanceof Response) {
                 array_push($responses, $response);
             }
             Alien::getInstance()->getConsole()->putMessage('Action <i>' . $action . '</i>() done.');
@@ -96,13 +104,13 @@ class AlienController {
         return $this->layout;
     }
 
-    public function setLayout(ALienLayout $layout) {
+    public function setLayout(Layout $layout) {
         $this->layout = $layout;
     }
 
     protected function redirect($action, $statusCode = 301) {
         ob_clean();
-        if ($this->layout instanceof AlienLayout) {
+        if ($this->layout instanceof Layout) {
             $this->getLayout()->saveSessionNotifications();
         }
         header('Location: ' . $action, false, $statusCode);

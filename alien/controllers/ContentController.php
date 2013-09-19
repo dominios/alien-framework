@@ -1,18 +1,29 @@
 <?php
 
-class ContentController extends AlienController {
+namespace Alien\Controllers;
+
+use Alien\Alien;
+use Alien\View;
+use Alien\Response;
+use Alien\Notification;
+use Alien\Models\Content\Folder;
+use Alien\Models\Content\Template;
+use Alien\Models\Content\Page;
+use PDO;
+
+class ContentController extends BaseController {
 
     protected function init_action() {
 
         $parentResponse = parent::init_action();
-        if ($parentResponse instanceof ActionResponse) {
+        if ($parentResponse instanceof Response) {
             $data = $parentResponse->getData();
         }
 
         $menuItems = Array();
-        $menuItems[] = Array('permissions' => null, 'url' => AlienController::actionURL('content', 'browser', array('folder' => 0)), 'img' => 'folder.png', 'text' => 'ROOT');
+        $menuItems[] = Array('permissions' => null, 'url' => BaseController::actionURL('content', 'browser', array('folder' => 0)), 'img' => 'folder.png', 'text' => 'ROOT');
 
-        return new ActionResponse(ActionResponse::RESPONSE_OK, Array(
+        return new Response(Response::RESPONSE_OK, Array(
             'ContentLeft' => $menuItems,
             'LeftTitle' => 'Adresárová štruktúra',
             'MainMenu' => $data['MainMenu']
@@ -24,9 +35,9 @@ class ContentController extends AlienController {
         $f = isset($_GET['folder']) ? $_GET['folder'] : $_SESSION['folder'];
         $folder = null;
         if (empty($f) || $f === null || $f === '') {
-            $folder = new ContentFolder(0);
+            $folder = new Folder(0);
         } else {
-            $folder = new ContentFolder($f);
+            $folder = new Folder($f);
             $_SESSION['folder'] = $f;
         }
 
@@ -35,10 +46,10 @@ class ContentController extends AlienController {
         $STH->bindValue(':i', $f, PDO::PARAM_INT);
         $STH->execute();
         if ($STH->rowCount() && $folder !== null) {
-            $folder = new ContentFolder(null, $STH->fetch());
+            $folder = new Folder(null, $STH->fetch());
         }
 
-        $view = new AlienView('display/content/browser.php', $this);
+        $view = new View('display/content/browser.php', $this);
         $view->DisplayLayout = 'ROW';
         $view->Folder = $folder;
         $view->Folders = $folder->getChilds(true);
@@ -46,7 +57,7 @@ class ContentController extends AlienController {
 
         //$_SESSION['SDATA'] = serialize($view);
 
-        return new ActionResponse(ActionResponse::RESPONSE_OK, Array(
+        return new Response(Response::RESPONSE_OK, Array(
             'Title' => 'Prieskumník',
             'ContentMain' => $view->renderToString()
                 ), __CLASS__ . '::' . __FUNCTION__);
@@ -58,15 +69,14 @@ class ContentController extends AlienController {
             return;
         }
 
-        $template = new ContentTemplate((int) $_GET['id']);
+        $template = new Template((int) $_GET['id']);
         $template->fetchViews();
 
-        $view = new AlienView('display/content/temlateForm.php', $this);
+        $view = new View('display/content/temlateForm.php', $this);
         $view->ReturnAction = '?content=browser&folder=' . $_SESSION['folder'];
         $view->Template = $template;
 
-
-        return new ActionResponse(ActionResponse::RESPONSE_OK, Array(
+        return new Response(Response::RESPONSE_OK, Array(
             'Title' => 'Úprava šablóny: ' . $template->getName(),
             'ContentMain' => $view->renderToString()
                 ), __CLASS__ . '::' . __FUNCTION__);
@@ -97,7 +107,7 @@ class ContentController extends AlienController {
             FormValidator::getInstance()->putError('templateName', 'Názov šablóny sa už používa.');
         }
         if (FormValidator::getInstance()->errorsCount()) {
-            AlienConsole::getInstance()->putMessage('Form validation error!', AlienConsole::CONSOLE_WARNING);
+            Terminal::getInstance()->putMessage('Form validation error!', Terminal::CONSOLE_WARNING);
             return;
         }
         $result = ContentTemplate::update();
@@ -116,14 +126,14 @@ class ContentController extends AlienController {
             return '';
         }
 
-        $page = new ContentPage((int) $_GET['id']);
+        $page = new Page((int) $_GET['id']);
 
         $this->meta_title = 'Úprava stránky: ' . $page->getName();
-        $view = new AlienView('display/content/pageForm.php', $this);
+        $view = new View('display/content/pageForm.php', $this);
         $view->ReturnAction = '?content=browser&folder=' . $_SESSION['folder'];
         $view->Page = $page;
 
-        return new ActionResponse(ActionResponse::RESPONSE_OK, Array(
+        return new Response(Response::RESPONSE_OK, Array(
             'Title' => 'Úprava stránky: ' . $page->getName(),
             'ContentMain' => $view->renderToString()
                 ), __CLASS__ . '::' . __FUNCTION__);
@@ -143,7 +153,7 @@ class ContentController extends AlienController {
             FormValidator::getInstance()->putError('pageSeolink', 'Zadaný seolink sa už používa.');
         }
         if (FormValidator::getInstance()->errorsCount()) {
-            AlienConsole::getInstance()->putMessage('Form validation error!', AlienConsole::CONSOLE_WARNING);
+            Terminal::getInstance()->putMessage('Form validation error!', Terminal::CONSOLE_WARNING);
             return;
         }
         $result = ContentPage::update();

@@ -1,5 +1,10 @@
 <?php
 
+namespace Alien\Models\Content;
+
+use Alien\Alien;
+use \PDO;
+
 abstract class ContentItem implements FileItem {
 
     const Icon = 'file_unknown.png';
@@ -52,7 +57,7 @@ abstract class ContentItem implements FileItem {
         $DBH = Alien::getDatabaseHandler();
         $row = $DBH->query('SELECT classname FROM ' . Alien::getDBPrefix() . '_content_item_types JOIN ' . Alien::getDBPrefix() . '_content_items USING (id_type) WHERE ' . $cond . ' LIMIT 1')->fetch();
         if (sizeof($row) && $row !== null) {
-            $classname = $row['classname'];
+            $classname = __NAMESPACE__ . '\\' . $row['classname'];
             if (class_exists($classname)) {
 //                var_dump($idItem, $idType, $R); die;
                 return $R === null ? new $classname($idItem) : new $classname(null, $R);

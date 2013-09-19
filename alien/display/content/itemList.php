@@ -1,5 +1,9 @@
+<?
+
+namespace Alien;
+?>
 <div class="item">
-    <img src="<?= ALien::$SystemImgUrl . '/' . $this->Item->getIcon(); ?>"><?= $this->Item->getName(); ?>
+    <img src="<?= Alien::$SystemImgUrl . '/' . $this->Item->getIcon(); ?>"><?= $this->Item->getName(); ?>
     <div class="itemCP">
         <a href="<?= $this->Item->actionEdit(); ?>"><img src="<?= Alien::$SystemImgUrl; ?>/edit.png"></a>
         <a href="<?= $this->Item->actionDrop(); ?>"><img src="<?= Alien::$SystemImgUrl; ?>/delete.png"></a>

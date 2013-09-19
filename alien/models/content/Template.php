@@ -1,6 +1,12 @@
 <?php
 
-class ContentTemplate implements FileItem {
+namespace Alien\Models\Content;
+
+use Alien\Alien;
+use Alien\Controllers\BaseController;
+use \PDO;
+
+class Template implements FileItem {
 
     const ICON = 'template.png';
     const BROWSEABLE = true;
@@ -34,7 +40,7 @@ class ContentTemplate implements FileItem {
             $this->css_url = '';
             $this->config_url = '';
             $this->blocks = array();
-            $this->folder = new ContentFolder($row['id_f']);
+            $this->folder = new Folder($row['id_f']);
             return;
         }
         $this->id = $row['id_t'];
@@ -56,7 +62,7 @@ class ContentTemplate implements FileItem {
         $STH = $DBH->prepare("SELECT id_t FROM " . Alien::getDBPrefix() . "_content_templates");
         $STH->execute();
         while ($item = $STH->fetch()) {
-            $arr[] = $fetch ? new ContentTemplate($item['id_t']) : $item['id_t'];
+            $arr[] = $fetch ? new Template($item['id_t']) : $item['id_t'];
         }
         return $arr;
     }
@@ -202,7 +208,7 @@ class ContentTemplate implements FileItem {
     }
 
     public function actionEdit() {
-        return AlienController::actionUrl('content', 'editTemplate', array('id' => $this->id));
+        return BaseController::actionUrl('content', 'editTemplate', array('id' => $this->id));
     }
 
     public function actionGoTo() {
@@ -210,7 +216,7 @@ class ContentTemplate implements FileItem {
     }
 
     public function actionDrop() {
-        return AlienController::actionUrl('content', 'dropTemplate', array('id' => $this->id));
+        return BaseController::actionUrl('content', 'dropTemplate', array('id' => $this->id));
     }
 
     public function getId() {
@@ -331,7 +337,7 @@ class ContentTemplate implements FileItem {
     }
 
     public function fetchViews() {
-        $DBH = ALien::getDatabaseHandler();
+        $DBH = Alien::getDatabaseHandler();
 
         $blocks = $this->blocks;
         $newBlocks = Array();

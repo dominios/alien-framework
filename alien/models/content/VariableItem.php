@@ -1,5 +1,10 @@
 <?php
 
+namespace Alien\Models\Content;
+
+use Alien\Alien;
+use \PDO;
+
 class VariableItem extends ContentItem {
 
     const BROWSEABLE = false;
@@ -29,7 +34,7 @@ class VariableItem extends ContentItem {
     }
 
     public function actionEdit() {
-        return AlienController::actionURL('content', 'editItem', array('id' => $this->id));
+        return BaseController::actionURL('content', 'editItem', array('id' => $this->id));
     }
 
     public function actionDrop() {

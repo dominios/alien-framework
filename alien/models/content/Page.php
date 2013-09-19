@@ -1,6 +1,13 @@
 <?php
 
-class ContentPage implements FileItem {
+namespace Alien\Models\Content;
+
+use Alien\Alien;
+use Alien\Controllers\BaseController;
+use Alien\Models\Content\Template;
+use \PDO;
+
+class Page implements FileItem {
 
     const ICON = 'page.png';
     const BROWSEABLE = true;
@@ -192,7 +199,7 @@ class ContentPage implements FileItem {
     }
 
     public function actionEdit() {
-        return AlienController::actionUrl('content', 'editPage', array('id' => $this->id));
+        return BaseController::actionUrl('content', 'editPage', array('id' => $this->id));
     }
 
     public function actionGoTo() {
@@ -378,7 +385,7 @@ class ContentPage implements FileItem {
     }
 
     public function getTemplate($fetch = false) {
-        return $fetch ? new ContentTemplate($this->template) : $this->template;
+        return $fetch ? new Template($this->template) : $this->template;
     }
 
     public function getTitle() {

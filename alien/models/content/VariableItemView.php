@@ -1,4 +1,10 @@
 <?php
+
+namespace Alien\Models\Content;
+
+use Alien\Alien;
+use PDO;
+
 class VariableItemView extends ContentItemView {
 
     const Icon = 'variable.png';
@@ -9,37 +15,37 @@ class VariableItemView extends ContentItemView {
     private $name;
     private $items = null;
 
-    public function __construct($id, $row = null){
+    public function __construct($id, $row = null) {
         parent::__construct($id, $row);
     }
 
-    public function getType(){
+    public function getType() {
         return self::Type;
     }
 
-    public function getIcon(){
+    public function getIcon() {
         return self::Icon;
     }
 
-    public function getLimit(){
-        return (int)$this->limit;
+    public function getLimit() {
+        return (int) $this->limit;
     }
 
-    public function getName(){
+    public function getName() {
         return self::Name;
     }
 
-    public function fetchViews(ContentPage $page){
+    public function fetchViews(ContentPage $page) {
 
-        if(!$this->getItem(true) instanceof ContentItem){
+        if (!$this->getItem(true) instanceof ContentItem) {
             return Array();
         } else {
-            if($this->items === null){
+            if ($this->items === null) {
                 $arr = Array();
                 $DBH = Alien::getDatabaseHandler();
-                foreach($DBH->query('SELECT * FROM '.ALien::getDBPrefix().'_content_views WHERE id_c='.(int)$this->getItem(true)->getContainer().' && id_p = '.$page->getId()) as $row){
+                foreach ($DBH->query('SELECT * FROM ' . Alien::getDBPrefix() . '_content_views WHERE id_c=' . (int) $this->getItem(true)->getContainer() . ' && id_p = ' . $page->getId()) as $row) {
                     $item = ContentItemView::getSpecificView($row['id_v'], $row['id_type'], $row);
-                    if($item instanceof ContentItemView){
+                    if ($item instanceof ContentItemView) {
                         $arr[] = $item;
                     }
                 }
@@ -48,4 +54,6 @@ class VariableItemView extends ContentItemView {
             return $this->items;
         }
     }
+
 }
+

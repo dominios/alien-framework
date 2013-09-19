@@ -1,5 +1,11 @@
 <?php
 
+namespace Alien\Models\Content;
+
+use Alien\Alien;
+use Alien\Controllers\BaseController;
+use \PDO;
+
 abstract class ContentItemView {
 
     const Icon = 'file.png';
@@ -50,7 +56,7 @@ abstract class ContentItemView {
         $DBH = Alien::getDatabaseHandler();
         $row = $DBH->query('SELECT classname FROM ' . Alien::getDBPrefix() . '_content_item_types JOIN ' . Alien::getDBPrefix() . '_content_views USING (id_type) WHERE ' . $cond . ' LIMIT 1')->fetch();
         if (sizeof($row) && $row !== null) {
-            $classname = $row['classname'] . 'View';
+            $classname = __NAMESPACE__ . '\\' . $row['classname'] . 'View';
             if (class_exists($classname)) {
 //                var_dump($classname); die;
 //                return $R === null ? new $classname($idView) : new $classname(null, $R);
@@ -119,14 +125,14 @@ abstract class ContentItemView {
 
     public function getTemplate($fetch = false) {
         if ($fetch) {
-            if ($this->item instanceof ContentTemplate) {
+            if ($this->item instanceof Template) {
                 return $this->template;
             } else {
                 $this->item = ContentTemplate($this->template);
                 return $this->template;
             }
         } else {
-            if ($this->item instanceof ContentTemplate) {
+            if ($this->item instanceof Template) {
                 return $this->template->getId();
             } else {
                 return $this->template;
@@ -135,11 +141,11 @@ abstract class ContentItemView {
     }
 
     public function actionEdit() {
-        return AlienController::actionURL('content', 'editView', array('id' => $this->id));
+        return BaseController::actionURL('content', 'editView', array('id' => $this->id));
     }
 
     public function actionDrop() {
-        return AlienController::actionURL('content', 'dropView', array('id' => $this->id));
+        return BaseController::actionURL('content', 'dropView', array('id' => $this->id));
     }
 
 }

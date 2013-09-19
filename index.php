@@ -9,7 +9,7 @@ if (!strlen($seolink)) {
     $seolink = 1;
 }
 
-$pg = new ContentPage($seolink);
+$pg = new \Alien\Models\Content\Page($seolink);
 $tmpl = $pg->getTemplate(true);
 $tmpl->fetchViews();
 echo '<pre>';
