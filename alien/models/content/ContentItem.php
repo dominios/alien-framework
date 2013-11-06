@@ -3,9 +3,10 @@
 namespace Alien\Models\Content;
 
 use Alien\Alien;
+use Alien\DBConfig;
 use \PDO;
 
-abstract class ContentItem implements FileItem {
+abstract class ContentItem implements FileInterface {
 
     const Icon = 'file_unknown.png';
 
@@ -20,7 +21,7 @@ abstract class ContentItem implements FileItem {
 
         if ($row === null) {
             $DBH = Alien::getDatabaseHandler();
-            $Q = $DBH->prepare('SELECT * FROM ' . ALien::getDBPrefix() . '_content_items WHERE id_i=:i LIMIT 1;');
+            $Q = $DBH->prepare('SELECT * FROM ' . DBConfig::table(DBConfig::ITEMS) . ' WHERE id_i=:i LIMIT 1;');
             $Q->bindValue(':i', $id, PDO::PARAM_INT);
             $Q->execute();
             if (!$Q->rowCount()) {
@@ -55,7 +56,7 @@ abstract class ContentItem implements FileItem {
             $cond = 'id_i = ' . (int) $idItem;
         }
         $DBH = Alien::getDatabaseHandler();
-        $row = $DBH->query('SELECT classname FROM ' . Alien::getDBPrefix() . '_content_item_types JOIN ' . Alien::getDBPrefix() . '_content_items USING (id_type) WHERE ' . $cond . ' LIMIT 1')->fetch();
+        $row = $DBH->query('SELECT classname FROM ' . DBConfig::table('item_types') . ' JOIN ' . DBConfig::table('content_items') . ' USING (id_type) WHERE ' . $cond . ' LIMIT 1')->fetch();
         if (sizeof($row) && $row !== null) {
             $classname = __NAMESPACE__ . '\\' . $row['classname'];
             if (class_exists($classname)) {

@@ -2,15 +2,6 @@
 
 namespace Alien\Authorization;
 
-use PDO;
-use Alien\Alien;
-
-//class UnknownPermissionException extends Exception {
-//    public function __construct($message, $code = 0, Exception $previous = null) {
-//        parent::__construct($message, $code, $previous);
-//    }
-//}
-
 class Permission {
 
     private $id;
@@ -18,10 +9,6 @@ class Permission {
     private $value;
     private $label;
 
-    /**
-     * konstruktor
-     * @param int $identifier idcko
-     */
     public function __construct($identifier) {
 
         if (is_string($identifier) && !is_numeric($identifier)) {
@@ -36,8 +23,6 @@ class Permission {
             $this->id = $i;
             $this->description = $permission['sk'];
             $this->label = $permission['label'];
-
-            return;
         } else {
             $permission = Authorization::$Permissions[$identifier];
             $this->id = $identifier;
@@ -48,13 +33,18 @@ class Permission {
 
     /*     * ******* STATIC METHODS ********************************************************************* */
 
+    public static function getList($fetch = false) {
+        return self::getAllPermissionsList(!$fetch);
+    }
+
     /**
      * zisti ci existuje
      * @param int $id idcko
      * @return boolean
      */
-    public static function permissionExists($id) {
-        return AlienContent::getInstance()->permissionExists($id);
+    public static function exists($id) {
+        $p = new Permission($id);
+        return !is_null($p->id) ? true : false;
     }
 
     /**
@@ -111,6 +101,10 @@ class Permission {
 
     public function getLabel() {
         return $this->label;
+    }
+
+    public function getName() {
+        return $this->getLabel();
     }
 
 }

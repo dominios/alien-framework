@@ -18,8 +18,7 @@ final class Alien {
         $this->loadConfig();
         $this->console = Terminal::getInstance();
         date_default_timezone_set($this->system_settings['timezone']);
-        $this->connectToDatabase($this->system_settings['db_host'], $this->system_settings['db_database'], $this->system_settings['db_username'], $this->system_settings['db_password']
-        );
+        $this->connectToDatabase($this->system_settings['db_host'], $this->system_settings['db_database'], $this->system_settings['db_username'], $this->system_settings['db_password']);
     }
 
     public static final function getInstance() {
@@ -57,8 +56,8 @@ final class Alien {
             $sql = $DBH->query('SHOW SESSION STATUS LIKE "Queries";')->fetch();
             $this->queryCounter = $sql['Value'];
         } catch (PDOException $e) {
-            header("HTTP/1.1 500 Internal Server Error");
-            die('error 500 connect na databazu, prerobit na error hlasku!');
+            header("HTTP/1.1 503 Service Unavailable");
+            die('error 503 connect na databazu, prerobit na error hlasku!');
 //            include 'alien/error/Error500.html';
             exit;
         }
@@ -84,6 +83,10 @@ final class Alien {
             $config = parse_ini_file('config.ini', TRUE);
             Alien::getInstance()->connectToDatabase($config['MYSQL']['db_host'], $config['MYSQL']['db_database'], $config['MYSQL']['db_username'], $config['MYSQL']['db_password']);
         }
+
+        require_once 'DatabaseTables.php';
+        DBConfig::setDBPrefix(Alien::getParameter('db_prefix'));
+
         return self::getInstance()->DBH;
     }
 

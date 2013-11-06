@@ -44,5 +44,3 @@ $permission[10]['en']='manage groups';
 $permission[11]['label']='SYSTEM_ACCESS';
 $permission[11]['sk']='prístup k systémovým nastaveniam';
 $permission[11]['en']='access to system settings';
-
-?>

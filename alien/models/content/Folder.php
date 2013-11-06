@@ -6,7 +6,7 @@ use Alien\Alien;
 use Alien\Controllers\BaseController;
 use \PDO;
 
-class Folder implements FileItem {
+class Folder implements FileInterface {
 
     const ICON = 'folder.png';
     const BROWSEABLE = true;
@@ -88,7 +88,7 @@ class Folder implements FileItem {
 
     /* TODO: pozriet ci to je dobre... */
 
-    public function drop() {
+    public function delete() {
         if ($this->isEmpty()) {
             $DBH = Alien::getDatabaseHandler();
             $STH = $DBH->prepare('DELETE FROM ' . Alien::getParameter('db_prefix') . '_content_folders WHERE id_f=:i');

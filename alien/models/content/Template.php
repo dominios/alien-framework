@@ -6,7 +6,7 @@ use Alien\Alien;
 use Alien\Controllers\BaseController;
 use \PDO;
 
-class Template implements FileItem {
+class Template implements FileInterface {
 
     const ICON = 'template.png';
     const BROWSEABLE = true;
@@ -192,7 +192,7 @@ class Template implements FileItem {
         return $ret;
     }
 
-    public function drop() {
+    public function delete() {
         if ($this->id === null) {
             return false;
         }
@@ -345,8 +345,9 @@ class Template implements FileItem {
         foreach ($blocks as $block) {
             $items = Array();
             foreach ($DBH->query('SELECT * FROM ' . Alien::getDBPrefix() . '_content_views WHERE id_c = ' . (int) $block['id'] . ' && id_t=' . $this->getId() . ' ORDER BY position') as $R) {
-                $item = ContentItemView::getSpecificView($R['id_v'], $R['id_type'], $R);
+                $item = Widget::getSpecificWidget($R['id_v'], $R['id_type'], $R);
                 if ($item !== null) {
+                    $item->fetchItem();
                     $items[] = $item;
                 }
             }

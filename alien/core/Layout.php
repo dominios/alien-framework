@@ -27,7 +27,7 @@ abstract class Layout {
             Alien::getInstance()->getConsole()->putMessage('Using <i>' . get_called_class() . '</i>.');
         } else {
             header("HTTP/1.1 500 Internal Server Error");
-            die('AlienLayot::construct() - Bad SRC ' . $Class::SRC);
+            die(__CLASS__ . '::' . __FUNCTION__ . ' - Bad SRC ' . $Class::SRC);
         }
     }
 

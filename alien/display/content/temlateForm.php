@@ -16,30 +16,6 @@ use Alien\Controllers\BaseController;
             $(this).next('div').fadeOut(400);
         });
     });
-
-    function createDialog(header, content) {
-        $("#dialog-modal").remove();
-        newhtml = "<div id='dialog-modal' title='" + header + "'>";
-        newhtml += "<div id='dialog-content'><p>" + content + "</p></div>";
-        newhtml += "</div>";
-        $("body").append(newhtml);
-        $(function() {
-            $("#dialog-modal").dialog({
-                modal: true,
-                width: 'auto',
-                height: 'auto',
-                show: {
-                    effect: 'drop',
-                    duration: 100
-                },
-                hide: {
-                    effect: 'drop',
-                    duration: 100
-                }
-            });
-        });
-    }
-
     function templateShowFileBrowser(type) {
         if (!type)
             return;
@@ -64,38 +40,20 @@ use Alien\Controllers\BaseController;
     }
 
     function templateShowFilePreview(file) {
-        if (!file)
-            return;
-        $.ajax({
-            async: true,
-            url: "/alien/ajax.php",
-            type: "GET",
-            data: "action=templateShowFilePreview&file=" + file,
-            timeout: 5000,
-            success: function(data) {
-                json = jQuery.parseJSON(data);
-                createDialog(json.header, json.content);
-                if ($("#dialog-modal").width() > 1000) {
-                    $("#dialog-modal").width(1000);
-                }
-                if ($("#dialog-modal").height() > 550) {
-                    $("#dialog-modal").height(550);
-                }
-            }
-        });
+        showFilePreview(file);
     }
 
-    function markBadInputs() {
-        json = jQuery.parseJSON('<?= $_SESSION['formErrorOutput']; ?>');
-        if (json == null)
-            return;
-        for (i = 0; i <= json.length; i++) {
-            item = json.pop();
-            $("input[name=" + item.inputName + "]").addClass('invalidInput');
-            $("<div class=\"inputErrorHelper\">" + item.errorMsg + "</div>").insertAfter($("input[name=" + item.inputName + "]"));
-        }
-<? unset($_SESSION['formErrorOutput']); ?>
-    }
+//    function markBadInputs() {
+//    json = jQuery.parseJSON('<? //$_SESSION['formErrorOutput'];    ?>');
+//            if (json == null)
+//            return;
+//            for (i = 0; i <= json.length; i++) {
+//    item = json.pop();
+//            $("input[name=" + item.inputName + "]").addClass('invalidInput');
+//            $("<div class=\"inputErrorHelper\">" + item.errorMsg + "</div>").insertAfter($("input[name=" + item.inputName + "]"));
+//    }
+//<? //unset($_SESSION['formErrorOutput']);    ?>
+//    }
 
 </script>
 
@@ -156,14 +114,14 @@ use Alien\Controllers\BaseController;
 
                 foreach ($blocks as $block) {
 
-                    $name = $block['name'];
+                    $urlname = $block['name'];
                     $items = $block['items'];
 
                     $poradie = '';
 //                    $addViewAction = 'javascript: window.location=\'?content&amp;addViewToTemplate&amptid=' . $this->Template->getId() . '&amp;block=' . $i . '\'';
                     $addViewAction = BaseController::actionURL('content', 'addView', array('template' => $this->Template->getId(), 'box' => $i));
 
-                    echo ('<fieldset style="margin-top: 10px;"><legend><img class="toggleHideable less" onClick="javascript: toggleHideable(' . $i . ');" src="' . Alien::$SystemImgUrl . '/less.png" style="width: 16px; margin-right: 6px;">' . $name . '</legend>');
+                    echo ('<fieldset style="margin-top: 10px;"><legend><img class="toggleHideable less" onClick="javascript: toggleHideable(' . $i . ');" src="' . Alien::$SystemImgUrl . '/less.png" style="width: 16px; margin-right: 6px;">' . $urlname . '</legend>');
                     echo ('<div id="hideable-' . $i . '">');
                     echo ('<div id="sortable-' . $i . '" class="sortable">');
 
@@ -185,7 +143,7 @@ use Alien\Controllers\BaseController;
 
                     $poradie = substr($poradie, 0, strlen($poradie) - 1);
                     echo ('<input type="hidden" name="order-sortable-' . $i . '" value="' . $poradie . '">');
-                    echo '<a class="button neutral" style="margin-left: 5px; margin-top: 7px; margin-bottom: 10px;" href="' . $addViewAction . '"><img src="' . ALien::$SystemImgUrl . '/plus.png">&nbsp;Pridat objekt do: <i>' . $name . '</i></a>';
+                    echo '<a class="button neutral" style="margin-left: 5px; margin-top: 7px; margin-bottom: 10px;" href="' . $addViewAction . '"><img src="' . Alien::$SystemImgUrl . '/add.png">&nbsp;Pridat objekt do: <i>' . $urlname . '</i></a>';
                     $i++;
                     echo ('</fieldset>');
                 }

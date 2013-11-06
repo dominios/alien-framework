@@ -25,7 +25,7 @@ class View {
             $content .= ob_get_contents();
             ob_end_clean();
         } else {
-            Terminal::getInstance()->putMessage('Cannot open view <i>' . $this->script . '</i>', Terminal::CONSOLE_WARNING);
+//            Terminal::getInstance()->putMessage('Cannot open view <i>' . $this->script . '</i>', Terminal::CONSOLE_WARNING);
         }
         return $content;
     }

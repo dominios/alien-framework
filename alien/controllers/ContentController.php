@@ -9,6 +9,7 @@ use Alien\Notification;
 use Alien\Models\Content\Folder;
 use Alien\Models\Content\Template;
 use Alien\Models\Content\Page;
+use Alien\Models\Content\Widget;
 use PDO;
 
 class ContentController extends BaseController {
@@ -128,7 +129,7 @@ class ContentController extends BaseController {
 
         $page = new Page((int) $_GET['id']);
 
-        $this->meta_title = 'Úprava stránky: ' . $page->getName();
+//        $this->meta_title = 'Úprava stránky: ' . $page->getName();
         $view = new View('display/content/pageForm.php', $this);
         $view->ReturnAction = '?content=browser&folder=' . $_SESSION['folder'];
         $view->Page = $page;
@@ -164,6 +165,22 @@ class ContentController extends BaseController {
         }
 
         $this->redirect('?content=editPage&id=' . $id);
+    }
+
+    protected function editWidget() {
+        if (!preg_match('/^[0-9]*$/', $_GET['id'])) {
+            $this->getLayout()->putNotificaion(new Notification('Neplatný identifikátor widgetu.', Notification::ERROR));
+            return '';
+        }
+
+        $view = new View('display/content/widgetForm.php', $this);
+        $view->returnAction = BaseController::actionURL('content', 'browser');
+        $view->widget = Widget::getSpecificWidget($_GET['id']);
+
+        return new Response(Response::RESPONSE_OK, Array(
+            'Title' => 'Úprava widgetu: ',
+            'ContentMain' => $view->renderToString()
+                ), __CLASS__ . '::' . __FUNCTION__);
     }
 
 }

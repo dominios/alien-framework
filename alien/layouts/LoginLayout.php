@@ -6,7 +6,7 @@ use Alien\Response;
 
 class LoginLayout extends Layout {
 
-    const SRC = 'display/login.php';
+    const SRC = 'display/layouts/login/index.php';
     const useConsole = false;
     const useNotifications = false;
 

@@ -1,0 +1,220 @@
+
+span.icon.icon-add, span.icon.icon-add-dark {
+    background-image: url('img/add.png');
+}
+span.icon.icon-add-user, span.icon.icon-add-user-dark {
+    background-image: url('img/add_user.png');
+}
+span.icon.icon-add-user-light {
+    background-image: url('img/white/add_user.png');
+}
+
+span.icon.icon-back, span.icon.icon-back-dark {
+    background-image: url('img/back.png');
+}
+span.icon.icon-bullet, span.icon.icon-bullet-dark {
+    background-image: url('img/bullet.png');
+}
+span.icon.icon-bullet-down, span.icon.icon-bullet-down-dark {
+    background-image: url('img/bullet_down.png');
+}
+span.icon.icon-bullet-up, span.icon.icon-bullet-up-dark {
+    background-image: url('img/bullet_up.png');
+}
+span.icon.icon-checked-user, span.icon.icon-checked-user-dark {
+    background-image: url('img/checked_user.png');
+}
+span.icon.icon-clock, span.icon.icon-clock-dark {
+    background-image: url('img/clock.png');
+}
+span.icon.icon-clock-light {
+    background-image: url('img/white/clock.png');
+}
+
+span.icon.icon-code, span.icon.icon-code-dark {
+    background-image: url('img/code.png');
+}
+span.icon.icon-comments, span.icon.icon-comments-dark {
+    background-image: url('img/comments.png');
+}
+span.icon.icon-console, span.icon.icon-console-dark {
+    background-image: url('img/console.png');
+}
+span.icon.icon-cross, span.icon.icon-cross-dark {
+    background-image: url('img/cross.png');
+}
+span.icon.icon-css, span.icon.icon-css-dark {
+    background-image: url('img/css.png');
+}
+span.icon.icon-delete, span.icon.icon-delete-dark {
+    background-image: url('img/delete.png');
+}
+span.icon.icon-edit, span.icon.icon-edit-dark {
+    background-image: url('img/edit.png');
+}
+span.icon.icon-email, span.icon.icon-email-dark {
+    background-image: url('img/email.png');
+}
+span.icon.icon-external-link, span.icon.icon-external-link-dark {
+    background-image: url('img/external_link.png');
+}
+span.icon.icon-file, span.icon.icon-file-dark {
+    background-image: url('img/file.png');
+}
+span.icon.icon-file-edit, span.icon.icon-file-edit-dark {
+    background-image: url('img/file_edit.png');
+}
+span.icon.icon-file-unknown, span.icon.icon-file-unknown-dark {
+    background-image: url('img/file_unknown.png');
+}
+span.icon.icon-folder, span.icon.icon-folder-dark {
+    background-image: url('img/folder.png');
+}
+span.icon.icon-folder-light {
+    background-image: url('img/white/folder.png');
+}
+
+span.icon.icon-forward, span.icon.icon-forward-dark {
+    background-image: url('img/forward.png');
+}
+span.icon.icon-group, span.icon.icon-group-dark {
+    background-image: url('img/group.png');
+}
+span.icon.icon-group-light {
+    background-image: url('img/white/group.png');
+}
+
+span.icon.icon-home, span.icon.icon-home-dark {
+    background-image: url('img/home.png');
+}
+span.icon.icon-home-light {
+    background-image: url('img/white/home.png');
+}
+
+span.icon.icon-html, span.icon.icon-html-dark {
+    background-image: url('img/html.png');
+}
+span.icon.icon-img-trash, span.icon.icon-img-trash-dark {
+    background-image: url('img/img_trash.png');
+}
+span.icon.icon-img-zoom, span.icon.icon-img-zoom-dark {
+    background-image: url('img/img_zoom.png');
+}
+span.icon.icon-info, span.icon.icon-info-dark {
+    background-image: url('img/info.png');
+}
+span.icon.icon-js, span.icon.icon-js-dark {
+    background-image: url('img/js.png');
+}
+span.icon.icon-key, span.icon.icon-key-dark {
+    background-image: url('img/key.png');
+}
+span.icon.icon-less, span.icon.icon-less-dark {
+    background-image: url('img/less.png');
+}
+span.icon.icon-link, span.icon.icon-link-dark {
+    background-image: url('img/link.png');
+}
+span.icon.icon-locked, span.icon.icon-locked-dark {
+    background-image: url('img/locked.png');
+}
+span.icon.icon-login, span.icon.icon-login-dark {
+    background-image: url('img/login.png');
+}
+span.icon.icon-logout, span.icon.icon-logout-dark {
+    background-image: url('img/logout.png');
+}
+span.icon.icon-logout-light {
+    background-image: url('img/white/logout.png');
+}
+
+span.icon.icon-magazine, span.icon.icon-magazine-dark {
+    background-image: url('img/magazine.png');
+}
+span.icon.icon-magazine-light {
+    background-image: url('img/white/magazine.png');
+}
+
+span.icon.icon-magnifier, span.icon.icon-magnifier-dark {
+    background-image: url('img/magnifier.png');
+}
+span.icon.icon-minus, span.icon.icon-minus-dark {
+    background-image: url('img/minus.png');
+}
+span.icon.icon-more, span.icon.icon-more-dark {
+    background-image: url('img/more.png');
+}
+span.icon.icon-note, span.icon.icon-note-dark {
+    background-image: url('img/note.png');
+}
+span.icon.icon-page, span.icon.icon-page-dark {
+    background-image: url('img/page.png');
+}
+span.icon.icon-php, span.icon.icon-php-dark {
+    background-image: url('img/php.png');
+}
+span.icon.icon-plus, span.icon.icon-plus-dark {
+    background-image: url('img/plus.png');
+}
+span.icon.icon-post, span.icon.icon-post-dark {
+    background-image: url('img/post.png');
+}
+span.icon.icon-refresh, span.icon.icon-refresh-dark {
+    background-image: url('img/refresh.png');
+}
+span.icon.icon-reply, span.icon.icon-reply-dark {
+    background-image: url('img/reply.png');
+}
+span.icon.icon-rss, span.icon.icon-rss-dark {
+    background-image: url('img/rss.png');
+}
+span.icon.icon-save, span.icon.icon-save-dark {
+    background-image: url('img/save.png');
+}
+span.icon.icon-screen, span.icon.icon-screen-dark {
+    background-image: url('img/screen.png');
+}
+span.icon.icon-service, span.icon.icon-service-dark {
+    background-image: url('img/service.png');
+}
+span.icon.icon-service-light {
+    background-image: url('img/white/service.png');
+}
+
+span.icon.icon-settings, span.icon.icon-settings-dark {
+    background-image: url('img/settings.png');
+}
+span.icon.icon-shield, span.icon.icon-shield-dark {
+    background-image: url('img/shield.png');
+}
+span.icon.icon-shutdown, span.icon.icon-shutdown-dark {
+    background-image: url('img/shutdown.png');
+}
+span.icon.icon-structure, span.icon.icon-structure-dark {
+    background-image: url('img/structure.png');
+}
+span.icon.icon-tag, span.icon.icon-tag-dark {
+    background-image: url('img/tag.png');
+}
+span.icon.icon-template, span.icon.icon-template-dark {
+    background-image: url('img/template.png');
+}
+span.icon.icon-tick, span.icon.icon-tick-dark {
+    background-image: url('img/tick.png');
+}
+span.icon.icon-unlocked, span.icon.icon-unlocked-dark {
+    background-image: url('img/unlocked.png');
+}
+span.icon.icon-user, span.icon.icon-user-dark {
+    background-image: url('img/user.png');
+}
+span.icon.icon-user-light {
+    background-image: url('img/white/user.png');
+}
+
+span.icon.icon-variable, span.icon.icon-variable-dark {
+    background-image: url('img/variable.png');
+}
+span.icon.icon-warning, span.icon.icon-warning-dark {
+    background-image: url('img/warning.png');
+}

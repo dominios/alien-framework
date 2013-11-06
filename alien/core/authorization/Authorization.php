@@ -3,6 +3,7 @@
 namespace Alien\Authorization;
 
 use Alien\Alien;
+use Alien\DBConfig;
 use PDO;
 
 class Authorization {
@@ -15,16 +16,17 @@ class Authorization {
 
     private function __construct() {
 
+        self::loadPermissions();
+
         self::$loginTimeOut = Alien::getParameter('loginTimeOut');
 
-//session_destroy();
         $DBH = Alien::getDatabaseHandler();
-        self::loadPermissions();
+
         if (@isset($_SESSION['id_auth'])) {
             self::$auth_id = $_SESSION['id_auth'];
             self::$user = self::getCurrentUser();
         } else {
-            $STH = $DBH->prepare("INSERT INTO " . Alien::getDBPrefix() . "_authorization (id_u, timeout, ip, url) VALUES (:idu, :to, :ip, :url)");
+            $STH = $DBH->prepare("INSERT INTO " . DBConfig::table(DBConfig::AUTHORIZATION) . " (id_u, timeout, ip, url) VALUES (:idu, :to, :ip, :url)");
             $STH->bindValue(':idu', 0, PDO::PARAM_INT);
             $STH->bindValue(':to', time() + self::$loginTimeOut, PDO::PARAM_INT);
             $STH->bindValue(':ip', $_SERVER['REMOTE_ADDR'], PDO::PARAM_STR);
@@ -41,8 +43,8 @@ class Authorization {
      * nacita opravenania zo subora
      */
     public static function loadPermissions() {
-        require_once 'PermissionList.php';
-        self::$Permissions = @$permission;
+        include 'PermissionList.php';
+        self::$Permissions = $permission;
         unset($permission);
     }
 
@@ -172,7 +174,7 @@ class Authorization {
         $db_user = $STH->fetch();
         if (Authorization::getInstance()->isLoggedIn($db_user->id_u))
             ;
-        if (md5($password) === $db_user->password) {
+        if (self::getPasswordHash($password) === $db_user->password) {
             if ($db_user->activated != 1) {
                 // error: not activated
             } elseif (time() < $db_user->ban) {
@@ -250,10 +252,15 @@ class Authorization {
         }
     }
 
-    /* TODO : saltovanie */
+    public static function getPasswordHash($passwd) {
+        $heslo = '';
+        $salt = 'ALiEN_PasSWoRd:SalT--String';
+        for ($i = 0; $i < 10; $i++) {
+            $heslo .= $salt . $passwd;
+            $heslo = sha1($heslo);
+        }
 
-    public function saltPassword($password) {
-
+        return $heslo;
     }
 
 }

@@ -13,8 +13,14 @@ $pg = new \Alien\Models\Content\Page($seolink);
 $tmpl = $pg->getTemplate(true);
 $tmpl->fetchViews();
 echo '<pre>';
-var_dump($tmpl->getBlocks());
+print_r($tmpl->getBlocks());
 echo '</pre>';
+
+//foreach ($tmpl->getBlocks() as $b) {
+//    foreach ($b['items'] as $i) {
+//        echo $i->renderToString();
+//    }
+//}
 
 //if (ContentPage::exists($seolink)) {
 //    $page = new ContentPage($seolink);

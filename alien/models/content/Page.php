@@ -7,7 +7,7 @@ use Alien\Controllers\BaseController;
 use Alien\Models\Content\Template;
 use \PDO;
 
-class Page implements FileItem {
+class Page implements FileInterface {
 
     const ICON = 'page.png';
     const BROWSEABLE = true;
@@ -51,7 +51,7 @@ class Page implements FileItem {
         return self::BROWSEABLE;
     }
 
-    public static function drop($id) {
+    public static function delete($id) {
         $DBH = Alien::getDatabaseHandler();
         $STH = $DBH->prepare('DELETE FROM ' . Alien::getDBPrefix() . '_content_pages WHERE id_p=:i LIMIT 1');
         $STH->bindValue(':i', $id, PDO::PARAM_INT);
@@ -384,6 +384,11 @@ class Page implements FileItem {
         return $this->seolink;
     }
 
+    /**
+     *
+     * @param bool $fetch
+     * @return \Alien\Models\Content\Template
+     */
     public function getTemplate($fetch = false) {
         return $fetch ? new Template($this->template) : $this->template;
     }

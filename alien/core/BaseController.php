@@ -81,6 +81,11 @@ class BaseController {
             }
             Alien::getInstance()->getConsole()->putMessage('Called <i>' . get_called_class() . '::init_action()</i>.');
         }
+
+        if (!sizeof($this->actions)) {
+            $this->actions[] = $this->defaultAction;
+        }
+
         foreach ($this->actions as $action) {
             Alien::getInstance()->getConsole()->putMessage('Calling action: <i>' . get_called_class() . '::' . $action . '</i>()');
             if (!method_exists($this, $action)) {
@@ -88,6 +93,7 @@ class BaseController {
             }
             if (!method_exists($this, $action) && $action != $this->defaultAction) {
                 $action = $this->defaultAction;
+                $this->redirect($action);
                 Alien::getInstance()->getConsole()->putMessage('Calling action <i>' . get_called_class() . '::' . $action . '</i>() instead.');
             }
             $response = $this->$action();
@@ -132,6 +138,14 @@ class BaseController {
             }
         }
         return $url;
+    }
+
+    public static function getActionFromURL($actionURL) {
+        if (preg_match('/^\/alien/', $actionURL)) {
+            $actionURL = str_replace('/alien/', '', $actionURL);
+        }
+        $words = explode('/', $actionURL);
+        return $words[1];
     }
 
     // TODO: konzola zatial natvrdo

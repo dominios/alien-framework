@@ -5,6 +5,10 @@ namespace Alien\Controllers;
 use Alien\Alien;
 use Alien\Terminal;
 use Alien\Response;
+use Alien\Authorization\User;
+use Alien\Authorization\Group;
+use Alien\Authorization\Permission;
+use Alien\View;
 
 class AjaxController extends BaseController {
 
@@ -116,9 +120,18 @@ class AjaxController extends BaseController {
      * @return string
      * vrati JSON pre dialogove okno - nahlad suboru
      */
-    public function templateShowFilePreview($REQ) {
+    public function showFilePreview($REQ) {
+        $content = '';
+        if (Alien::getParameter('useComplexSyntaxHighlighting')) {
+            $geshi = new \GeSHi(file_get_contents($REQ['file']), substr($REQ['file'], -3, 3));
+            $geshi->enable_line_numbers(GESHI_NORMAL_LINE_NUMBERS);
+            $geshi->enable_strict_mode(false);
+            $content .= $geshi->parse_code();
+        } else {
+            $content = highlight_file($REQ['file'], true);
+        }
         return new Response(Response::RESPONSE_OK, Array(
-            'result' => json_encode(Array('header' => $REQ['file'], 'content' => highlight_file($REQ['file'], true)))
+            'result' => json_encode(Array('header' => $REQ['file'], 'content' => $content))
                 ), __CLASS__ . '::' . __FUNCTION__);
     }
 
@@ -145,6 +158,74 @@ class AjaxController extends BaseController {
         return new Response(Response::RESPONSE_OK, Array(
             'result' => json_encode(Array('header' => 'Vybrať šablónu', 'content' => $content))
                 ), __CLASS__ . '::' . __FUNCTION__);
+    }
+
+    /**
+     * @param $REQ
+     * @return ActionResponse
+     * vrati JSON pre dialog pre priadenie skupiny usera
+     */
+    public function userShowAddGroupDialog($REQ) {
+
+        if (User::exists($REQ['userId'])) {
+            $user = new User($REQ['userId']);
+            $activeGroups = $user->getGroups();
+            $allGroups = Group::getList();
+            $diff = array_diff($allGroups, $activeGroups);
+
+            $ret = '';
+
+            if (!sizeof($diff)) {
+                $ret = 'Žiadna ďalšia skupina na pridanie.';
+            } else {
+                $ret .= '<div class="gridLayout">';
+                foreach ($diff as $group) {
+                    $partial = new View('display/common/item.php');
+                    $partial->icon = 'group';
+                    $partial->item = new Group($group);
+                    $partial->onClick = 'javascript: window.location="' . \Alien\Controllers\BaseController::actionURL('users', 'addGroup', array('user' => $user->getId(), 'group' => $group)) . '"';
+                    $ret .= $partial->renderToString();
+                }
+                $ret .= '</div>';
+            }
+            return new Response(Response::RESPONSE_OK, Array(
+                'result' => json_encode(Array('header' => 'Vybrať skupinu', 'content' => $ret))
+                    ), __CLASS__ . '::' . __FUNCTION__);
+        }
+    }
+
+    /**
+     * @param $REQ
+     * @return ActionResponse
+     * vrati JSON pre dialog pre priadenie opravenenia usera
+     */
+    public function userShowAddPermissionDialog($REQ) {
+
+        if (User::exists($REQ['userId'])) {
+            $user = new User($REQ['userId']);
+            $activePermissions = $user->getPermissions();
+            $allPermissions = Permission::getList();
+            $diff = array_diff($allPermissions, $activePermissions);
+
+            $ret = '';
+
+            if (!sizeof($diff)) {
+                $ret = 'Žiadne ďalšie oprávnenie na pridanie.';
+            } else {
+                $ret .= '<div class="gridLayout">';
+                foreach ($diff as $permission) {
+                    $partial = new View('display/common/item.php');
+                    $partial->icon = 'shield';
+                    $partial->item = new Permission($permission);
+                    $partial->onClick = 'javascript: window.location="' . \Alien\Controllers\BaseController::actionURL('users', 'addPermission', array('user' => $user->getId(), 'permission' => $permission)) . '"';
+                    $ret .= $partial->renderToString();
+                }
+                $ret .= '</div>';
+            }
+            return new Response(Response::RESPONSE_OK, Array(
+                'result' => json_encode(Array('header' => 'Vybrať oprávnenie', 'content' => $ret))
+                    ), __CLASS__ . '::' . __FUNCTION__);
+        }
     }
 
 }

@@ -3,6 +3,10 @@ html {
     height: 100%;
 }
 
+.cleaner {
+    clear: both;
+}
+
 #maincontent {
 
 }
@@ -45,29 +49,94 @@ html {
 .console_warning { color: #fc8d00; }
 .console_error { color: red; }
 
+/* *** TABS ******************************************************************* */
 
-/* ITEMS - ROWS */
+section.tabs header ul {
+    display: inline-block;
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    border-bottom: 1px solid #aaa;
+}
+
+section.tabs header ul li {
+    float: left;
+    display: block;
+    position: relative;
+    margin-bottom: -1px;
+}
+
+section.tabs header ul li a {
+    border: 1px solid #aaa;
+    border-top-color: #c2c2c2;
+    color: #666;
+    border-right: 0;
+    display: block;
+    padding: 10px;
+    padding-top: 5px;
+    background: url('img/main_background3.jpg') #d7d3d4;
+    transition: background .2s, color .2s;
+    -webkit-transition: background .2s, color .2s;
+}
+
+section.tabs header ul li:first-child a {
+    border-left-color: #c2c2c2;
+    border-top-left-radius: 2px;
+}
+
+section.tabs header ul li:last-child a {
+    border-right: 1px solid #aaa;
+    border-top-right-radius: 2px;
+}
+
+section.tabs header ul li.active a {
+    border-bottom-color: transparent;
+    color: #000;
+}
+
+section.tabs header ul li:hover a {
+    background: rgba(255, 255, 17, 0.2);
+    text-decoration: none;
+    color: #000;
+}
+
+section.tabs section {
+    padding: 10px;
+    padding-top: 15px;
+    border: 1px solid #aaa;
+    border-bottom-left-radius: 2px;
+    border-bottom-right-radius: 2px;
+    border-left-color: #c2c2c2;
+    border-top: none;
+    margin-top: -5px;
+    box-shadow: 2px 2px 10px rgba(187, 187, 187, 0.8);
+}
+
+/* *** ITEMS - ROWS *********************************************************** */
+
 
 table.itemList {
     border-spacing: 0;
     width: 100%;
-    background: rgba(198, 198, 198, 1);
-    border: 1px solid #888;
-    box-shadow: 2px 2px 10px #888;
-    padding: 2px;
+    border: 1px solid #aaa;
+    border-top-color: #c2c2c2;
+    border-left-color: #c2c2c2;
+    border-radius: 2px;
+    box-shadow: 2px 2px 10px rgba(187, 187, 187, 0.8);
 }
 
 table.itemList tr:first-child {
-    background: rgba(39, 39, 39, 1);
+    background: rgba(255, 255, 17, 0.2);
 }
 
 table.itemList th {
-    border-bottom: 1px solid #bbb;
-    box-shadow: 0px 2px 0px #7c7c7c;
+    border-bottom: 1px solid #aaa;
+    box-shadow: 0px 1px 0px rgba(130, 130, 130, 0.1);
     padding: 8px;
     font-weight: bold;
     text-shadow: 1px 1px rgba(190, 190, 190, 0.2);
-    color: #bbb;
+    color: #222;
     font-weight: normal;
 }
 
@@ -82,7 +151,6 @@ table.itemList tr:last-child td {
 }
 
 table .itemRow {
-    /*background-color: rgba(255, 255, 255, 0.0);*/
     -webkit-transition:  background-color 0.2s, color 0.2s;
     -moz-transition: background-color 0.2s, color 0.2s;
     transition: background-color 0.2s, color 0.2s;
@@ -103,44 +171,14 @@ table .itemRow img {
     height: 18px;
 }
 
-/* ITEMS - GRID */
-
-.gridLayout .item {
-    display: block;
-    width: 80px;
-    height: 75px;
-    background-color: #e8eaf5;
-    border: 1px solid #ccc;
-}
-
-.gridLayout .itemIcon {
-    text-align: center;
-}
-
-.gridLayout .itemIcon img {
-    width: 48px;
-    height: 48px;
-    text-align: center;
-    vertical-align: middle;
-}
-
-.gridLayout .itemText {
-    text-align: center;
-    margin-top: 3px;
-    color: #333;
-}
-
-
-
-.item.selectable:hover {
-    background-color: #fbf37b;
-}
-
+/* *** ITEMS - GRID *********************************************************** */
 
 .gridLayout .item {
     display: block;
     position: relative;
-    border: 1px solid #ccc;
+    line-height: 32px;
+    font-size: 22px;
+    border: 1px solid #bbb;
     width: 100px;
     height: 80px;
     border-radius: 2px;
@@ -149,15 +187,54 @@ table .itemRow img {
     padding-top: 10px;
     float: left;
     text-align: center;
-    -webkit-transition: box-shadow 0.4s, border 0.4s, border-color 0.4s, background-color 0.4s, color 0.4s;
-    -moz-transition: box-shadow 0.4s, border 0.4s, border-color 0.4s, background-color 0.4s, color 0.4s;
-    transition: box-shadow 0.4s, border 0.4s, border-color 0.4s, background-color 0.4s, color 0.4s;
+    box-shadow: 1px 1px 6px #c5c5c5;
+    border-radius: 2px;
+    -webkit-transition: box-shadow 0.2s, border 0.2s, border-color 0.2s, background-color 0.2s, color 0.2s;
+    -moz-transition: box-shadow 0.2s, border 0.2s, border-color 0.2s, background-color 0.2s, color 0.2s;
+    transition: box-shadow 0.2s, border 0.2s, border-color 0.2s, background-color 0.2s, color 0.2s;
 }
+
+.gridLayout .item:nth-child(7){
+    clear: both;
+}
+
+.gridLayout .itemText {
+    text-align: center;
+    margin-top: 3px;
+    color: #333;
+    font-size: 14px;
+    line-height: 18px;
+    height: 36px;
+    width: 100px;
+    display: table-cell;
+    vertical-align: middle;
+    text-align: center;
+}
+
+.item.selectable:hover {
+    /*background-color: #fbf37b;*/
+    background-color: rgba(250, 250, 255, 0.6);
+}
+
 
 .gridLayout .item:hover{
     border-color: #aaa;
     background-color: #f7f7f7;
     cursor: pointer;
+}
+
+.gridLayout .item .itemCP {
+    font-size: 10px;
+    line-height: 10px;
+}
+
+.gridLayout .item .itemCP .button {
+    font-size: 10px;
+    line-height: 10px;
+    background: none;
+    border: none;
+    margin: 0;
+    padding: 0;
 }
 
 /* FORMS */
@@ -185,11 +262,6 @@ table .itemRow img {
     border-bottom-left-radius: 5px;
     border-bottom-right-radius: 5px;
     text-align: left;
-}
-
-
-#tabs {
-    font-size: 12px;
 }
 
 :focus { outline: none; } /* odstrani ten debilny ramcek pri chromu */

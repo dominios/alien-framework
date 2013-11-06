@@ -1,12 +1,11 @@
-<?
-
-namespace Alien;
-?>
 <div class="item">
-    <img src="<?= Alien::$SystemImgUrl . '/' . $this->Item->getIcon(); ?>"><?= $this->Item->getName(); ?>
+    <img src="<?= \Alien\Alien::$SystemImgUrl . '/' . $this->Item->getIcon(); ?>"><?= $this->Item->getName(); ?>
     <div class="itemCP">
-        <a href="<?= $this->Item->actionEdit(); ?>"><img src="<?= Alien::$SystemImgUrl; ?>/edit.png"></a>
-        <a href="<?= $this->Item->actionDrop(); ?>"><img src="<?= Alien::$SystemImgUrl; ?>/delete.png"></a>
+        <? if ($this->Item instanceof Models\Content\ContentItem): ?>
+            <a href="<?= $this->Item->actionEdit(); ?>"><img src="<?= \Alien\Alien::$SystemImgUrl; ?>/edit.png" title="Upraviť objekt"></a>
+        <? endif; ?>
+        <a href="<?= $this->Item->actionEdit(); ?>"><img src="<?= \Alien\Alien::$SystemImgUrl; ?>/service.png" title="Prispôsobiť zobrazovač"></a>
+        <a href="<?= $this->Item->actionDrop(); ?>"><img src="<?= \Alien\Alien::$SystemImgUrl; ?>/delete.png" title="Odstrániť zo zobrazenia"></a>
     </div>
     <?
 //    if ($this->Item instanceof VariableItemView) {
