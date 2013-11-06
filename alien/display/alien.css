@@ -136,6 +136,7 @@ a:hover {
 }
 
 #toppanel ul li {
+    position: relative;
     float: left;
     -webkit-transition: border 0.2s, border-color 0.2s, color 0.2s;
     -moz-transition: border 0.2s, border-color 0.2s, color 0.2s;
@@ -200,6 +201,45 @@ a:hover {
     -moz-transition: border 0.2s, border-color 0.2s, color 0.2s;
     transition: border 0.2s, border-color 0.2s, color 0.2s;
 }
+
+#toppanel .submenu {
+    position: absolute;
+    display: block;
+    width: 100%;
+    top: 50px;
+    background: url('img/toppanel_background2.jpg') #363530;
+}
+
+#toppanel li:hover .submenu ul li a {
+    color: #aaa;
+}
+
+#toppanel li:hover .submenu ul li:hover {
+    border-bottom-color: #CAC54E;
+}
+
+#toppanel li:hover .submenu ul li a:hover {
+    color: #fff;
+}
+
+#toppanel .submenu ul {
+    float: none;
+    display: block;
+}
+
+#toppanel .submenu ul li {
+    display: block;
+    float: none;
+    border-bottom: 1px solid #444;
+    width: 100%;
+    cursor: pointer;
+    overflow: hidden;
+}
+
+#toppanel .submenu ul li a {
+    width: 100%;
+}
+
 
 #maincontent {
     width: 100%;

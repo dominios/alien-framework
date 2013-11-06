@@ -44,6 +44,15 @@ span.icon:hover {
     opacity: 1;
 }
 
+span.icon.icon-xs {
+    height: 0.9em;
+    width: 0.9em;
+    background-size: 0.7em;
+    top: 0.1em;
+    margin-right: 0;
+    margin-left: 0.5em;
+}
+
 .gridLayout .item .icon {
     margin: 0;
     margin-bottom: 1px;
@@ -55,5 +64,13 @@ span.icon:hover {
 
 .gridLayout .item:hover .itemCP .icon {
     display: block;
+}
+
+#toppanel li:hover .submenu ul li a span.icon {
+    opacity: 0.6;
+}
+
+#toppanel li:hover .submenu ul li:hover a span.icon {
+    opacity: 1;
 }
 /* samotne ikony su v icons-data.css kt. sa generuju skrz iconsCssGen.php */

@@ -56,12 +56,33 @@ span.icon.icon-dashboard-light {
 span.icon.icon-delete, span.icon.icon-delete-dark {
     background-image: url('img/delete.png');
 }
+span.icon.icon-down-triangle, span.icon.icon-down-triangle-dark {
+    background-image: url('img/down-triangle.png');
+}
+span.icon.icon-down, span.icon.icon-down-dark {
+    background-image: url('img/down.png');
+}
+span.icon.icon-down-light {
+    background-image: url('img/white/down.png');
+}
+
+span.icon.icon-down-triangle, span.icon.icon-down-triangle-dark {
+    background-image: url('img/down_triangle.png');
+}
+span.icon.icon-down-triangle-light {
+    background-image: url('img/white/down_triangle.png');
+}
+
 span.icon.icon-edit, span.icon.icon-edit-dark {
     background-image: url('img/edit.png');
 }
 span.icon.icon-email, span.icon.icon-email-dark {
     background-image: url('img/email.png');
 }
+span.icon.icon-email-light {
+    background-image: url('img/white/email.png');
+}
+
 span.icon.icon-external-link, span.icon.icon-external-link-dark {
     background-image: url('img/external_link.png');
 }
@@ -217,6 +238,13 @@ span.icon.icon-user, span.icon.icon-user-dark {
 }
 span.icon.icon-user-light {
     background-image: url('img/white/user.png');
+}
+
+span.icon.icon-user-circle, span.icon.icon-user-circle-dark {
+    background-image: url('img/user_circle.png');
+}
+span.icon.icon-user-circle-light {
+    background-image: url('img/white/user_circle.png');
 }
 
 span.icon.icon-variable, span.icon.icon-variable-dark {
