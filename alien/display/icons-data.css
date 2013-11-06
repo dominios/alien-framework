@@ -46,6 +46,13 @@ span.icon.icon-cross, span.icon.icon-cross-dark {
 span.icon.icon-css, span.icon.icon-css-dark {
     background-image: url('img/css.png');
 }
+span.icon.icon-dashboard, span.icon.icon-dashboard-dark {
+    background-image: url('img/dashboard.png');
+}
+span.icon.icon-dashboard-light {
+    background-image: url('img/white/dashboard.png');
+}
+
 span.icon.icon-delete, span.icon.icon-delete-dark {
     background-image: url('img/delete.png');
 }

@@ -53,6 +53,7 @@ class IndexLayout extends Layout {
 
     private function topmenuItems() {
         $items = Array();
+        $items[] = Array('permission' => null, 'url' => BaseController::actionURL('dashboard', 'home'), 'text' => 'Dashboard', 'img' => 'dashboard', 'controller' => 'dashboard');
         $items[] = Array('permission' => 'SYSTEM_ACCESS', 'url' => BaseController::actionURL('system', 'NOP'), 'text' => 'Systém', 'img' => 'service', 'controller' => 'system');
         $items[] = Array('permission' => 'CONTENT_VIEW', 'url' => BaseController::actionURL('content', 'browser'), 'text' => 'Obsah', 'img' => 'magazine', 'controller' => 'content');
         $items[] = Array('permission' => 'USER_VIEW', 'url' => BaseController::actionURL('users', 'viewList'), 'text' => 'Používatelia', 'img' => 'user', 'controller' => 'users');

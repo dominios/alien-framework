@@ -48,4 +48,12 @@ span.icon:hover {
     margin: 0;
     margin-bottom: 1px;
 }
+
+.gridLayout .item .itemCP .icon {
+    display: none;
+}
+
+.gridLayout .item:hover .itemCP .icon {
+    display: block;
+}
 /* samotne ikony su v icons-data.css kt. sa generuju skrz iconsCssGen.php */
