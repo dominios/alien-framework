@@ -84,7 +84,7 @@ final class Alien {
             Alien::getInstance()->connectToDatabase($config['MYSQL']['db_host'], $config['MYSQL']['db_database'], $config['MYSQL']['db_username'], $config['MYSQL']['db_password']);
         }
 
-        require_once 'DatabaseTables.php';
+        require_once 'DBConfig.php';
         DBConfig::setDBPrefix(Alien::getParameter('db_prefix'));
 
         return self::getInstance()->DBH;
