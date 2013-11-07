@@ -18,7 +18,7 @@ class DashboardController extends BaseController {
             $data = $parentResponse->getData();
         }
 
-        return new Response(Response::RESPONSE_OK, Array(
+        return new Response(Response::OK, Array(
             'LeftTitle' => 'Dashboard',
             'ContentLeft' => '',
             'MainMenu' => $data['MainMenu']
@@ -45,7 +45,7 @@ class DashboardController extends BaseController {
         }
         $view->message = $message;
         $result = array('LeftTitle' => 'Správy', 'Title' => 'Zoznam správ', 'ContentMain' => $view->renderToString());
-        return new Response(Response::RESPONSE_OK, $result, __CLASS__ . '::' . __FUNCTION__);
+        return new Response(Response::OK, $result, __CLASS__ . '::' . __FUNCTION__);
     }
 
     protected function newMessage() {
@@ -61,7 +61,7 @@ class DashboardController extends BaseController {
         }
 
         $result = array('LeftTitle' => 'Správy', 'Title' => $title, 'ContentMain' => $view->renderToString());
-        return new Response(Response::RESPONSE_OK, $result, __CLASS__ . '::' . __FUNCTION__);
+        return new Response(Response::OK, $result, __CLASS__ . '::' . __FUNCTION__);
     }
 
     protected function sendMessage() {

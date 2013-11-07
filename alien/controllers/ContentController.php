@@ -24,7 +24,7 @@ class ContentController extends BaseController {
         $menuItems = Array();
         $menuItems[] = Array('permissions' => null, 'url' => BaseController::actionURL('content', 'browser', array('folder' => 0)), 'img' => 'folder.png', 'text' => 'ROOT');
 
-        return new Response(Response::RESPONSE_OK, Array(
+        return new Response(Response::OK, Array(
             'ContentLeft' => $menuItems,
             'LeftTitle' => 'Adresárová štruktúra',
             'MainMenu' => $data['MainMenu']
@@ -58,7 +58,7 @@ class ContentController extends BaseController {
 
         //$_SESSION['SDATA'] = serialize($view);
 
-        return new Response(Response::RESPONSE_OK, Array(
+        return new Response(Response::OK, Array(
             'Title' => 'Prieskumník',
             'ContentMain' => $view->renderToString()
                 ), __CLASS__ . '::' . __FUNCTION__);
@@ -77,7 +77,7 @@ class ContentController extends BaseController {
         $view->ReturnAction = '?content=browser&folder=' . $_SESSION['folder'];
         $view->Template = $template;
 
-        return new Response(Response::RESPONSE_OK, Array(
+        return new Response(Response::OK, Array(
             'Title' => 'Úprava šablóny: ' . $template->getName(),
             'ContentMain' => $view->renderToString()
                 ), __CLASS__ . '::' . __FUNCTION__);
@@ -134,7 +134,7 @@ class ContentController extends BaseController {
         $view->ReturnAction = '?content=browser&folder=' . $_SESSION['folder'];
         $view->Page = $page;
 
-        return new Response(Response::RESPONSE_OK, Array(
+        return new Response(Response::OK, Array(
             'Title' => 'Úprava stránky: ' . $page->getName(),
             'ContentMain' => $view->renderToString()
                 ), __CLASS__ . '::' . __FUNCTION__);
@@ -177,7 +177,7 @@ class ContentController extends BaseController {
         $view->returnAction = BaseController::actionURL('content', 'browser');
         $view->widget = Widget::getSpecificWidget($_GET['id']);
 
-        return new Response(Response::RESPONSE_OK, Array(
+        return new Response(Response::OK, Array(
             'Title' => 'Úprava widgetu: ',
             'ContentMain' => $view->renderToString()
                 ), __CLASS__ . '::' . __FUNCTION__);

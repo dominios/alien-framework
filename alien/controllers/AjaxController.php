@@ -24,7 +24,7 @@ class AjaxController extends BaseController {
 
         $view->DisplayLayout = $type;
 
-        return new Response(Response::RESPONSE_OK, Array(
+        return new Response(Response::OK, Array(
             'result' => $view->renderToString()
                 ), __CLASS__ . '::' . __FUNCTION__);
     }
@@ -57,7 +57,7 @@ class AjaxController extends BaseController {
             $ret .= ('<span class="ConsoleTime">[' . date('d.m.Y H:i:s', time()) . ']</span> <span class="' . Terminal::ERROR . '">Command <i><b>' . $action . '</b></i> not recognized.</span><br>');
         }
 
-        return new Response(Response::RESPONSE_OK, Array(
+        return new Response(Response::OK, Array(
             'result' => $ret
                 ), __CLASS__ . '::' . __FUNCTION__);
     }
@@ -110,7 +110,7 @@ class AjaxController extends BaseController {
 
         $content .= '<div style="clear: left;"></div>';
 
-        return new Response(Response::RESPONSE_OK, Array(
+        return new Response(Response::OK, Array(
             'result' => json_encode(Array('header' => $header, 'content' => $ret))
                 ), __CLASS__ . '::' . __FUNCTION__);
     }
@@ -130,7 +130,7 @@ class AjaxController extends BaseController {
         } else {
             $content = highlight_file($REQ['file'], true);
         }
-        return new Response(Response::RESPONSE_OK, Array(
+        return new Response(Response::OK, Array(
             'result' => json_encode(Array('header' => $REQ['file'], 'content' => $content))
                 ), __CLASS__ . '::' . __FUNCTION__);
     }
@@ -155,7 +155,7 @@ class AjaxController extends BaseController {
         }
         $content .= '</div>';
 
-        return new Response(Response::RESPONSE_OK, Array(
+        return new Response(Response::OK, Array(
             'result' => json_encode(Array('header' => 'Vybrať šablónu', 'content' => $content))
                 ), __CLASS__ . '::' . __FUNCTION__);
     }
@@ -188,7 +188,7 @@ class AjaxController extends BaseController {
                 }
                 $ret .= '</div>';
             }
-            return new Response(Response::RESPONSE_OK, Array(
+            return new Response(Response::OK, Array(
                 'result' => json_encode(Array('header' => 'Vybrať skupinu', 'content' => $ret))
                     ), __CLASS__ . '::' . __FUNCTION__);
         }
@@ -222,7 +222,7 @@ class AjaxController extends BaseController {
                 }
                 $ret .= '</div>';
             }
-            return new Response(Response::RESPONSE_OK, Array(
+            return new Response(Response::OK, Array(
                 'result' => json_encode(Array('header' => 'Vybrať oprávnenie', 'content' => $ret))
                     ), __CLASS__ . '::' . __FUNCTION__);
         }
@@ -256,7 +256,7 @@ class AjaxController extends BaseController {
                 }
                 $ret .= '</div>';
             }
-            return new Response(Response::RESPONSE_OK, Array(
+            return new Response(Response::OK, Array(
                 'result' => json_encode(Array('header' => 'Vybrať používateľa', 'content' => $ret))
                     ), __CLASS__ . '::' . __FUNCTION__);
         }
@@ -290,7 +290,7 @@ class AjaxController extends BaseController {
                 }
                 $ret .= '</div>';
             }
-            return new Response(Response::RESPONSE_OK, Array(
+            return new Response(Response::OK, Array(
                 'result' => json_encode(Array('header' => 'Vybrať oprávnenie', 'content' => $ret))
                     ), __CLASS__ . '::' . __FUNCTION__);
         }

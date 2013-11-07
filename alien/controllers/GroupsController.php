@@ -21,7 +21,7 @@ class GroupsController extends BaseController {
             $data = $parentResponse->getData();
         }
 
-        return new Response(Response::RESPONSE_OK, Array(
+        return new Response(Response::OK, Array(
             'LeftTitle' => 'Skupiny',
             'ContentLeft' => $this->leftMenuItems(),
             'MainMenu' => $data['MainMenu']
@@ -41,7 +41,7 @@ class GroupsController extends BaseController {
         $view->groups = Group::getList(true);
 
         $response = array('Title' => 'Zoznam skupín', 'ContentMain' => $view->renderToString());
-        return new Response(Response::RESPONSE_OK, $response, __CLASS__ . '::' . __FUNCTION__);
+        return new Response(Response::OK, $response, __CLASS__ . '::' . __FUNCTION__);
     }
 
     protected function edit() {
@@ -59,7 +59,7 @@ class GroupsController extends BaseController {
             'Title' => (int) $_GET['id'] ? $group->getName() : 'Nová skupina',
             'ContentMain' => $view->renderToString()
         );
-        return new Response(Response::RESPONSE_OK, $response, __CLASS__ . '::' . __FUNCTION__);
+        return new Response(Response::OK, $response, __CLASS__ . '::' . __FUNCTION__);
     }
 
     protected function groupFormSubmit() {

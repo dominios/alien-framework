@@ -63,7 +63,7 @@ class BaseController {
 
         $this->setLayout(new \Alien\Layot\IndexLayout());
 
-        return new Response(Response::RESPONSE_OK, Array(
+        return new Response(Response::OK, Array(
             'Title' => 'HOME',
             'LeftTitle' => Authorization::getCurrentUser()->getLogin(),
             'ContentLeft' => Array(Array('url' => BaseController::actionURL('', 'logout'), 'img' => 'logout.png', 'text' => 'Odhlásiť'))

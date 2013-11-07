@@ -20,7 +20,7 @@ class SystemController extends BaseController {
             $data = $parentResponse->getData();
         }
 
-        return new Response(Response::RESPONSE_OK, Array(
+        return new Response(Response::OK, Array(
             'LeftTitle' => 'Systém',
             'ContentLeft' => '',
             'MainMenu' => $data['MainMenu']

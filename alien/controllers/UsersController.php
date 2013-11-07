@@ -21,7 +21,7 @@ class UsersController extends BaseController {
             $data = $parentResponse->getData();
         }
 
-        return new Response(Response::RESPONSE_OK, Array(
+        return new Response(Response::OK, Array(
             'LeftTitle' => 'Používatelia',
             'ContentLeft' => $this->leftMenuItems(),
             'MainMenu' => $data['MainMenu']
@@ -39,7 +39,7 @@ class UsersController extends BaseController {
     protected function viewList() {
         $view = new View('display/users/viewList.php', $this);
         $view->Users = User::getList(true);
-        return new Response(Response::RESPONSE_OK, Array(
+        return new Response(Response::OK, Array(
             'Title' => 'Zoznam používateľov',
             'ContentMain' => $view->renderToString()
                 ), __CLASS__ . '::' . __FUNCTION__);
@@ -63,7 +63,7 @@ class UsersController extends BaseController {
         $View->resetPasswordAction = BaseController::actionURL('users', 'resetPassword', array('id' => $_GET['id']));
         $View->deleteUserAction = BaseController::actionURL('users', 'removeUser', array('id' => $_GET['id']));
 
-        return new Response(Response::RESPONSE_OK, Array(
+        return new Response(Response::OK, Array(
             'Title' => (int) $_GET['id'] ? $View->User->getLogin() : 'Nový používateľ',
             'ContentMain' => $View->renderToString()
                 ), __CLASS__ . '::' . __FUNCTION__);
@@ -149,7 +149,7 @@ class UsersController extends BaseController {
     protected function viewLogs() {
         $view = new View('display/users/logs.php');
         $ret = $view->renderToString();
-        return new Response(Response::RESPONSE_OK, Array(
+        return new Response(Response::OK, Array(
             'Title' => 'Posledná aktivita',
             'ContentMain' => $ret
                 ), __CLASS__ . '::' . __FUNCTION__
