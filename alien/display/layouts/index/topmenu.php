@@ -9,7 +9,7 @@ use Alien\Controllers\BaseController;
 <script type="text/javascript">
     $(document).ready(function() {
         $('#toppanel li').has('.submenu').click(function() {
-            $(this).find('.submenu').slideToggle(200);
+            $(this).find('.submenu').slideToggle(400, 'easeInOutElastic');
         });
     });
 </script>

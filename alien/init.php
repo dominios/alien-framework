@@ -16,13 +16,13 @@ Authorization::getInstance();
 
 function class_autoloader($class) {
 
+    if (class_exists($class)) {
+        return;
+    }
+
     // vzdy pracuje pod alien priecinkom!
     if (!preg_match('/\/alien/', getcwd()) && file_exists('alien')) {
         chdir('alien');
-    }
-
-    if (class_exists($class)) {
-        return;
     }
 
     // special pluginy; ma mieru
