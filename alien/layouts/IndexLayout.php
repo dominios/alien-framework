@@ -55,8 +55,8 @@ class IndexLayout extends Layout {
 
         $userSubmenu = array();
         $userSubmenu[] = Array('permission' => null, 'url' => BaseController::actionURL('dashboard', '#'), 'text' => 'Profil', 'img' => 'user');
-        $userSubmenu[] = Array('permission' => null, 'url' => BaseController::actionURL('dashboard', '#'), 'text' => 'Správy', 'img' => 'email');
-        $userSubmenu[] = Array('permission' => null, 'url' => BaseController::actionURL('dashboard', '#'), 'text' => 'Odhlásiť', 'img' => 'logout');
+        $userSubmenu[] = Array('permission' => null, 'url' => BaseController::actionURL('dashboard', 'messages'), 'text' => 'Správy', 'img' => 'email');
+        $userSubmenu[] = Array('permission' => null, 'url' => BaseController::actionURL('base', 'logout'), 'text' => 'Odhlásiť', 'img' => 'logout');
 
         $left = Array();
         $left[] = Array('permission' => null, 'url' => BaseController::actionURL('dashboard', 'home'), 'text' => 'Dashboard', 'img' => 'dashboard', 'controller' => 'dashboard');
@@ -67,7 +67,7 @@ class IndexLayout extends Layout {
 
         $right = array();
         $right[] = Array('permission' => null, 'url' => BaseController::actionURL('dashboard', '#'), 'text' => \Alien\Authorization\Authorization::getCurrentUser()->getEmail(), 'img' => 'user-circle', 'submenu' => $userSubmenu);
-        $right[] = Array('permission' => null, 'url' => BaseController::actionURL('base', 'logout'), 'text' => 'Odhlásiť', 'img' => 'logout');
+//        $right[] = Array('permission' => null, 'url' => BaseController::actionURL('base', 'logout'), 'text' => 'Odhlásiť', 'img' => 'logout');
 
         $menus = array();
         $menus['left'] = $left;

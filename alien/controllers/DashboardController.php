@@ -25,5 +25,9 @@ class DashboardController extends BaseController {
 
     }
 
+    protected function messages() {
+        
+    }
+
 }
 

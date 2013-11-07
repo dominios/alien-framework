@@ -86,6 +86,10 @@ class User implements ActiveRecord {
         return $STH->rowCount() ? true : false;
     }
 
+    public function isDeletable() {
+        return true;
+    }
+
     public function delete() {
         $DBH = Alien::getDatabaseHandler();
         $DBH->exec('UPDATE ' . DBConfig::table(DBConfig::USERS) . ' SET deleted=1 WHERE id_u="' . (int) $this->id . '"');

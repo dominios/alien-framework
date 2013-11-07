@@ -8,6 +8,8 @@ interface ActiveRecord {
 
     public function delete();
 
+    public function isDeletable();
+
     public static function create($initialValues);
 
     public static function exists($id);
