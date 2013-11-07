@@ -11,7 +11,7 @@ echo '<th></th>';
 echo '<th>Meno</th>';
 echo '<th>Popis</th>';
 echo '<th>Dátum vytvorenia</th>';
-//echo '<th>Posledný prístup</th>';
+echo '<th>Počet členov</th>';
 echo '<th></th>';
 echo '</tr>';
 
@@ -24,7 +24,7 @@ foreach ($this->groups as $group) {
     echo '<td class="itemLabel">' . $group->getName() . '</td>';
     echo '<td class="itemDesc">' . $group->getDescription() . '</td>';
     echo '<td class="itemDesc" style="text-align: center;">' . $group->getDateCreated('d.m.Y H:i:s') . '</td>';
-//    echo '<td class="itemDesc" style="text-align: center;">' . date('d.m.Y H:i:s', $group->getLastActive()) . '</td>';
+    echo '<td class="itemDesc" style="text-align: center;">' . count($group->getMembers()) . '</td>';
     echo '<td class="itemCP">';
     echo '<a href="' . $editAction . '"><span class="icon icon-edit"></span></a>';
     echo '</td>';

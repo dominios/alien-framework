@@ -32,7 +32,7 @@ class Group implements \Alien\ActiveRecord {
             }
         }
 
-        $this->id = $row['id_g'];
+        $this->id = (int) $row['id_g'];
         $this->name = $row['name'];
         $this->description = $row['description'];
         $this->dateCreated = (int) $row['dateCreated'];
@@ -41,11 +41,14 @@ class Group implements \Alien\ActiveRecord {
             $DBH = Alien::getDatabaseHandler();
         }
 
+        $this->members = array();
         foreach ($DBH->query('SELECT id_u FROM ' . DBConfig::table(DBConfig::GROUP_MEMBERS) . ' WHERE id_g=' . (int) $this->id) as $R) {
             $this->members[] = $R['id_u'];
         }
+
+        $this->permissions = array();
         foreach ($DBH->query('SELECT id_p FROM ' . DBConfig::table(DBConfig::GROUP_PERMISSIONS) . ' WHERE id_g=' . (int) $this->id) as $R) {
-            $this->permissions[] = $R['id_u'];
+            $this->permissions[] = $R['id_p'];
         }
     }
 
@@ -75,13 +78,17 @@ class Group implements \Alien\ActiveRecord {
 
     public function delete() {
 
-        if (!sizeof($this->members)) {
+        if ($this->isDeletable()) {
             $DBH = Alien::getDatabaseHandler();
-            $Q = $DBH->exec('DELETE FROM ' . DBConfig::table(DBConfig::GROUPS) . 'WHERE id_g=' . (int) $this->id . ' LIMIT 1');
+            $Q = $DBH->exec('DELETE FROM ' . DBConfig::table(DBConfig::GROUPS) . ' WHERE id_g=' . (int) $this->id . ' LIMIT 1');
             return true;
         } else {
             return false;
         }
+    }
+
+    public function isDeletable() {
+        return count($this->getMembers()) > 0 ? false : true;
     }
 
     public static function getList($fetch = false) {
@@ -94,11 +101,14 @@ class Group implements \Alien\ActiveRecord {
     }
 
     public function getPermissions($fetch = false) {
+        if (!count($this->permissions)) {
+            return array();
+        }
         $ret = array();
         $fetchedPermissions = array();
         foreach ($this->permissions as $perm) {
             if ($fetch && $perm instanceof Permission) {
-                $ret[] = $perm->getId();
+                $ret[] = $perm;
             } elseif ($fetch && !($perm instanceof Permission)) {
                 $f = new Permission($perm);
                 $fetchedPermissions[] = $f;
@@ -116,11 +126,14 @@ class Group implements \Alien\ActiveRecord {
     }
 
     public function getMembers($fetch = false) {
+        if (!count($this->members)) {
+            return array();
+        }
         $ret = array();
         $fetchedUsers = array();
         foreach ($this->members as $user) {
             if ($fetch && $user instanceof User) {
-                $ret[] = $user->getId();
+                $ret[] = $user;
             } elseif ($fetch && !($user instanceof User)) {
                 $f = new User($user);
                 $fetchedUsers[] = $f;
@@ -159,6 +172,23 @@ class Group implements \Alien\ActiveRecord {
 
     public function setDescription($description) {
         $this->description = $description;
+    }
+
+    public function addPermission(Permission $permission) {
+        $DBH = Alien::getDatabaseHandler();
+        $STH = $DBH->prepare('INSERT INTO ' . DBConfig::table(DBConfig::GROUP_PERMISSIONS) . ' (id_p,id_g,since) VALUES (:idp,:idg,:s)');
+        $STH->bindValue(':idp', $permission->getId(), PDO::PARAM_INT);
+        $STH->bindValue(':idg', $this->id, PDO::PARAM_INT);
+        $STH->bindValue(':s', time(), PDO::PARAM_INT);
+        $STH->execute();
+    }
+
+    public function removePermission(Permission $permission) {
+        $DBH = Alien::getDatabaseHandler();
+        $STH = $DBH->prepare('DELETE FROM ' . DBConfig::table(DBConfig::GROUP_PERMISSIONS) . ' WHERE id_g=:idg && id_p=:idp LIMIT 1');
+        $STH->bindValue(':idp', $permission->getId(), PDO::PARAM_INT);
+        $STH->bindValue(':idg', $this->id, PDO::PARAM_INT);
+        $STH->execute();
     }
 
 }

@@ -25,11 +25,10 @@ class User implements ActiveRecord {
     public function __construct($id = null, $row = null) {
 
         if ($row === null && $id === null) { // novy user
-            $this->id = 0;
+            $this->id = null;
             return;
         } elseif ($row === null) {
             $DBH = Alien::getDatabaseHandler();
-//            $STH = $DBH->prepare('SELECT * FROM ' . Alien::getDBPrefix() . '_users WHERE id_u=:i');
             $STH = $DBH->prepare('SELECT * FROM ' . DBConfig::table('users') . ' WHERE id_u=:i');
             $STH->bindValue(':i', (int) $id, PDO::PARAM_INT);
             $STH->execute();
@@ -38,7 +37,7 @@ class User implements ActiveRecord {
             $row = $STH->fetch();
         }
 
-        $this->id = $row['id_u'];
+        $this->id = (int) $row['id_u'];
         $this->login = $row['login'];
         $this->email = $row['email'];
         $this->dateRegistered = (int) $row['date_registered'];
@@ -49,10 +48,16 @@ class User implements ActiveRecord {
         $this->firstname = $row['firstname'];
         $this->surname = $row['surname'];
 
-        $DBH = Alien::getDatabaseHandler();
+        if (empty($DBH)) {
+            $DBH = Alien::getDatabaseHandler();
+        }
+
+        $this->groups = array();
         foreach ($DBH->query('SELECT id_g FROM ' . Alien::getDBPrefix() . '_group_members WHERE id_u=' . (int) $this->id) as $group) {
             $this->groups[] = $group['id_g'];
         }
+
+        $this->permissions = array();
         foreach ($DBH->query('SELECT id_p FROM ' . Alien::getDBPrefix() . '_user_permissions WHERE id_u=' . (int) $this->id) as $permission) {
             $this->permissions[] = $permission['id_p'];
         }
@@ -397,6 +402,10 @@ class User implements ActiveRecord {
         return $this->id;
     }
 
+    public function getName() {
+        return $this->getLogin();
+    }
+
     public function getLogin() {
         return $this->login;
     }
@@ -412,15 +421,28 @@ class User implements ActiveRecord {
     }
 
     public function getGroups($fetch = false) {
-        $arr = array();
-        $DBH = Alien::getDatabaseHandler();
-        $STH = $DBH->prepare("SELECT * FROM " . DBConfig::table(DBConfig::GROUP_MEMBERS) . " WHERE id_u=:id ORDER BY since ASC");
-        $STH->bindValue(':id', $this->id, PDO::PARAM_INT);
-        $STH->execute();
-        while ($row = $STH->fetch()) {
-            $arr[] = $fetch ? new Group($row['id_g'], $row) : $row['id_g'];
+        if (!count($this->groups)) {
+            return array();
         }
-        return $arr;
+        $ret = array();
+        $fetchedGroups = array();
+        foreach ($this->groups as $group) {
+            if ($fetch && $group instanceof Group) {
+                $ret[] = $group;
+            } elseif ($fetch && !($group instanceof Group)) {
+                $f = new Group($group);
+                $fetchedGroups[] = $f;
+                $ret[] = $f;
+            } elseif (!$fetch && $group instanceof Group) {
+                $ret[] = $group->getId();
+            } else {
+                $ret[] = $group;
+            }
+        }
+        if (sizeof($fetchedGroups)) {
+            $this->groups = $fetchedGroups;
+        }
+        return $ret;
     }
 
     public function getSinceIsMemberOfGroup($group) {
@@ -540,8 +562,7 @@ class User implements ActiveRecord {
         $this->email = $email;
     }
 
-    public function setBan($ban
-    ) {
+    public function setBan($ban) {
         $this->ban = $ban;
     }
 

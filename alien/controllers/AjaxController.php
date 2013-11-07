@@ -228,4 +228,72 @@ class AjaxController extends BaseController {
         }
     }
 
+    /**
+     * @param $REQ
+     * @return ActionResponse
+     * vrati JSON pre dialog pre priadenie skupiny usera
+     */
+    public function groupShowAddMemberDialog($REQ) {
+
+        if (Group::exists($REQ['groupId'])) {
+            $group = new Group($REQ['groupId']);
+            $activeMembers = $group->getMembers();
+            $allUsers = User::getList();
+            $diff = array_diff($allUsers, $activeMembers);
+
+            $ret = '';
+
+            if (!sizeof($diff)) {
+                $ret = 'Žiadny ďalší používatelia pre pridanie.';
+            } else {
+                $ret .= '<div class="gridLayout">';
+                foreach ($diff as $user) {
+                    $partial = new View('display/common/item.php');
+                    $partial->icon = 'user';
+                    $partial->item = new User($user);
+                    $partial->onClick = 'javascript: window.location="' . \Alien\Controllers\BaseController::actionURL('groups', 'addMember', array('group' => $group->getId(), 'user' => $user)) . '"';
+                    $ret .= $partial->renderToString();
+                }
+                $ret .= '</div>';
+            }
+            return new Response(Response::RESPONSE_OK, Array(
+                'result' => json_encode(Array('header' => 'Vybrať používateľa', 'content' => $ret))
+                    ), __CLASS__ . '::' . __FUNCTION__);
+        }
+    }
+
+    /**
+     * @param $REQ
+     * @return ActionResponse
+     * vrati JSON pre dialog pre priadenie opravenenia usera
+     */
+    public function groupShowAddPermissionDialog($REQ) {
+
+        if (Group::exists($REQ['groupId'])) {
+            $group = new Group($REQ['groupId']);
+            $activePermissions = $group->getPermissions();
+            $allPermissions = Permission::getList();
+            $diff = array_diff($allPermissions, $activePermissions);
+
+            $ret = '';
+
+            if (!sizeof($diff)) {
+                $ret = 'Žiadne ďalšie oprávnenie na pridanie.';
+            } else {
+                $ret .= '<div class="gridLayout">';
+                foreach ($diff as $permission) {
+                    $partial = new View('display/common/item.php');
+                    $partial->icon = 'shield';
+                    $partial->item = new Permission($permission);
+                    $partial->onClick = 'javascript: window.location="' . \Alien\Controllers\BaseController::actionURL('groups', 'addPermission', array('group' => $group->getId(), 'permission' => $permission)) . '"';
+                    $ret .= $partial->renderToString();
+                }
+                $ret .= '</div>';
+            }
+            return new Response(Response::RESPONSE_OK, Array(
+                'result' => json_encode(Array('header' => 'Vybrať oprávnenie', 'content' => $ret))
+                    ), __CLASS__ . '::' . __FUNCTION__);
+        }
+    }
+
 }

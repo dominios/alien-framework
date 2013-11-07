@@ -46,7 +46,7 @@
 
 </script>
 
-<form name="editPageForm" method="POST" action="" id="userForm">
+<form name="editPageForm" method="POST" action="" id="groupForm">
     <input type="hidden" name="action" value="users/userFormSubmit">
     <input type="hidden" name="userId" value="<?= $this->User->getId(); ?>">
     <section class="tabs" id="userTabs">
