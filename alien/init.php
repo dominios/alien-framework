@@ -12,18 +12,12 @@ spl_autoload_register('\Alien\class_autoloader', true);
 
 error_reporting(E_ALL ^ E_NOTICE ^ E_STRICT);
 //error_reporting(E_ALL & E_NOTICE & E_STRICT); // toto je aj so strict, zapnut neskor, teraz to otravuje...
-//
-//if($AUTH_NOINIT){
 Authorization::getInstance();
-//}
 
-/**
- * TODO : nejako normalnejsie, teraz po namespacoch je tu BORDEL !!!
- */
 function class_autoloader($class) {
 
     // vzdy pracuje pod alien priecinkom!
-    if (!preg_match('/alien/', getcwd())) {
+    if (!preg_match('/\/alien/', getcwd()) && file_exists('alien')) {
         chdir('alien');
     }
 
