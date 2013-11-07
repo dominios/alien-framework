@@ -11,6 +11,7 @@ interface BaseDBConfig {
     const GROUP_MEMBERS = 'group_members';
     const USER_PERMISSIONS = 'user_permissions';
     const GROUP_PERMISSIONS = 'group_permissions';
+    const MESSAGES = 'messages';
 
 }
 

@@ -4,7 +4,9 @@ namespace Alien\Layot;
 
 use Alien\View;
 use Alien\Response;
+use Alien\Message;
 use Alien\Controllers\BaseController;
+use Alien\Authorization\Authorization;
 
 class IndexLayout extends Layout {
 
@@ -53,9 +55,16 @@ class IndexLayout extends Layout {
 
     private function topmenuItems() {
 
+        $messagesText = '';
+        $messagesText.= 'Správy';
+        $unread = Message::getUnreadCount(Authorization::getCurrentUser());
+        if ($unread) {
+            $messagesText.='<div id="unreadMessages">' . $unread . '</div>';
+        }
+
         $userSubmenu = array();
         $userSubmenu[] = Array('permission' => null, 'url' => BaseController::actionURL('dashboard', '#'), 'text' => 'Profil', 'img' => 'user');
-        $userSubmenu[] = Array('permission' => null, 'url' => BaseController::actionURL('dashboard', 'messages'), 'text' => 'Správy', 'img' => 'email');
+        $userSubmenu[] = Array('permission' => null, 'url' => BaseController::actionURL('dashboard', 'messages'), 'text' => $messagesText, 'img' => 'email');
         $userSubmenu[] = Array('permission' => null, 'url' => BaseController::actionURL('base', 'logout'), 'text' => 'Odhlásiť', 'img' => 'logout');
 
         $left = Array();

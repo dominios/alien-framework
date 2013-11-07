@@ -83,6 +83,9 @@ span.icon.icon-email-light {
     background-image: url('img/white/email.png');
 }
 
+span.icon.icon-email2, span.icon.icon-email2-dark {
+    background-image: url('img/email2.png');
+}
 span.icon.icon-external-link, span.icon.icon-external-link-dark {
     background-image: url('img/external_link.png');
 }
@@ -121,9 +124,6 @@ span.icon.icon-home-light {
 
 span.icon.icon-html, span.icon.icon-html-dark {
     background-image: url('img/html.png');
-}
-span.icon.icon-img-trash, span.icon.icon-img-trash-dark {
-    background-image: url('img/img_trash.png');
 }
 span.icon.icon-img-zoom, span.icon.icon-img-zoom-dark {
     background-image: url('img/img_zoom.png');
@@ -165,6 +165,12 @@ span.icon.icon-magazine-light {
 
 span.icon.icon-magnifier, span.icon.icon-magnifier-dark {
     background-image: url('img/magnifier.png');
+}
+span.icon.icon-message, span.icon.icon-message-dark {
+    background-image: url('img/message.png');
+}
+span.icon.icon-message-out, span.icon.icon-message-out-dark {
+    background-image: url('img/message_out.png');
 }
 span.icon.icon-minus, span.icon.icon-minus-dark {
     background-image: url('img/minus.png');
@@ -229,6 +235,9 @@ span.icon.icon-template, span.icon.icon-template-dark {
 }
 span.icon.icon-tick, span.icon.icon-tick-dark {
     background-image: url('img/tick.png');
+}
+span.icon.icon-trash, span.icon.icon-trash-dark {
+    background-image: url('img/trash.png');
 }
 span.icon.icon-unlocked, span.icon.icon-unlocked-dark {
     background-image: url('img/unlocked.png');
