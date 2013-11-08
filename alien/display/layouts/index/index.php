@@ -7,24 +7,11 @@
         <meta name="author" content="Dominik Geršák">
         <meta name="robots" content="noindex, nofollow">
         <link rel="shortcut icon" href="/alien/images/icons/favicon.ico">
-        <!--<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>-->
-        <!--<script type="text/javascript" src="/alien/js/jquery.min.js"></script>-->
-        <script src="http://code.jquery.com/jquery-1.8.0.min.js"></script>
-        <!--<script type="text/javascript" src="http://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>-->
+        <script type="text/javascript" src="/alien/js/jquery-1.8.0.min.js"></script>
         <script type="text/javascript" src="/alien/js/jquery-ui.js"></script>
         <link type="text/css" href="/alien/display/alien-theme/jquery-ui-1.10.3.custom.css" rel="stylesheet">
-
-
-        <!--
-            <script type="text/javascript" src="js/ckeditor/ckeditor.js"></script>
-            <script type="text/javascript" src="js/browser.js"></script>
-            <script type="text/javascript" src="js/alien.js"></script>
-        -->
-
         <script type="text/javascript" src="/alien/js/alien.js"></script>
         <script type="text/javascript" src="/alien/js/alien2.js"></script>
-        <!--<script type="text/javascript" src="/alien/js/bgstretcher.js"></script>-->
-        <!--<link href="/alien/display/bgstretcher.css" type="text/css" rel="stylesheet">-->
         <link href="/alien/display/alien.css" type="text/css" rel="stylesheet">
         <link href="/alien/display/alien2.css" type="text/css" rel="stylesheet">
         <link href="/alien/display/icons.css" type="text/css" rel="stylesheet">
