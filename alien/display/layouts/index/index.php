@@ -6,7 +6,7 @@
         <meta name="description" content="Administračné rozhranie redakčného systému ALiEN CMS.">
         <meta name="author" content="Dominik Geršák">
         <meta name="robots" content="noindex, nofollow">
-        <link rel="shortcut icon" href="/alien/images/icons/favicon.ico">
+        <link rel="shortcut icon" href="/alien/display/img/favicon.ico">
         <script type="text/javascript" src="/alien/js/jquery-1.8.0.min.js"></script>
         <script type="text/javascript" src="/alien/js/jquery-ui.js"></script>
         <link type="text/css" href="/alien/display/alien-theme/jquery-ui-1.10.3.custom.css" rel="stylesheet">
