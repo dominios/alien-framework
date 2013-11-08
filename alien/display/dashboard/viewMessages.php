@@ -36,6 +36,8 @@
                     </tr>
                 <? endforeach; ?>
             </table>
+            <div class="hr"></div>
+            <a class="button" href="<?= $this->composeMessageAction; ?>"><span class="icon icon-message"></span>Nová správa</a>
         </article>
         <article id="outbox" style="display: none;">
             <table class="itemList">
@@ -56,6 +58,8 @@
                     </tr>
                 <? endforeach; ?>
             </table>
+            <div class="hr"></div>
+            <a class="button" href="<?= $this->composeMessageAction; ?>"><span class="icon icon-message"></span>Nová správa</a>
         </article>
     </section>
 </section>

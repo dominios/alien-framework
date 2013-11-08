@@ -103,7 +103,7 @@ class Message implements ActiveRecord {
     public static function getListByRecipient(User $user, $fetch = false) {
         $arr = array();
         $DBH = Alien::getDatabaseHandler();
-        foreach ($DBH->query('SELECT * FROM ' . DBConfig::table(DBConfig::MESSAGES) . ' WHERE recipient=' . (int) $user->getId()) as $R) {
+        foreach ($DBH->query('SELECT * FROM ' . DBConfig::table(DBConfig::MESSAGES) . ' WHERE recipient=' . (int) $user->getId() . ' && deletedByRecipient!=1 ORDER BY id DESC') as $R) {
             $arr[] = $fetch ? new Message($R['id'], $R) : $R['id'];
         }
         return $arr;
@@ -118,7 +118,7 @@ class Message implements ActiveRecord {
     public static function getListByAuthor(User $user, $fetch = false) {
         $arr = array();
         $DBH = Alien::getDatabaseHandler();
-        foreach ($DBH->query('SELECT * FROM ' . DBConfig::table(DBConfig::MESSAGES) . ' WHERE author=' . (int) $user->getId()) as $R) {
+        foreach ($DBH->query('SELECT * FROM ' . DBConfig::table(DBConfig::MESSAGES) . ' WHERE author=' . (int) $user->getId() . ' && deletedByAuthor!=1 ORDER BY id DESC') as $R) {
             $arr[] = $fetch ? new Message($R['id'], $R) : $R['id'];
         }
         return $arr;
@@ -194,6 +194,15 @@ class Message implements ActiveRecord {
 
     public function setDeletedByRecipient($deletedByRecipient) {
         $this->deletedByRecipient = $deletedByRecipient;
+    }
+
+    public function setDeletedByUser(User $user, $bool) {
+        if ($user->getId() == $this->author->getId()) {
+            $this->deletedByAuthor = $bool;
+        }
+        if ($user->getId() == $this->recipient->getId()) {
+            $this->deletedByRecipient = $bool;
+        }
     }
 
 }

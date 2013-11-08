@@ -408,12 +408,7 @@ hr, .hr {
 
 /* **************** FORMULARE ***************************************************/
 
-textarea {
-    background-color: #999d99;
-    border-radius: 2px;
-}
-
-input, button, .button, select, option {
+input, button, .button, select, option, textarea {
     font-family: segoe ui;
     background-color: #e9e9e9;
     box-shadow: 1px 1px 4px #ccc;

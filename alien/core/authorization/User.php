@@ -63,6 +63,19 @@ class User implements ActiveRecord {
         }
     }
 
+    public static function getByLogin($login) {
+        $DBH = Alien::getDatabaseHandler();
+        $Q = $DBH->prepare('SELECT * FROM ' . DBConfig::table('users') . ' WHERE login=:l');
+        $Q->bindValue(':l', $login, PDO::PARAM_STR);
+        $Q->execute();
+        if ($Q->rowCount()) {
+            $R = $Q->fetch();
+            return new User($R['id_u'], $R);
+        } else {
+            return false;
+        }
+    }
+
     public function update() {
         $DBH = Alien::getDatabaseHandler();
         $Q = $DBH->prepare('UPDATE ' . DBConfig::table(DBConfig::USERS) . ' SET

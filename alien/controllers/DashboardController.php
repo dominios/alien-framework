@@ -34,7 +34,8 @@ class DashboardController extends BaseController {
         $view->inBox = Message::getListByRecipient(Authorization::getCurrentUser(), true);
         $view->outBox = Message::getListByAuthor(Authorization::getCurrentUser(), true);
         $view->goToMessagePattern = BaseController::actionURL('dashboard', 'messages', array('id' => '%ID%'));
-        $view->replyMessagePattern = BaseController::actionURL('dashboard', 'newMessage', array('id' => '%ID%'));
+        $view->replyMessagePattern = BaseController::actionURL('dashboard', 'composeMessage', array('id' => '%ID%'));
+        $view->composeMessageAction = BaseController::actionURL('dashboard', 'composeMessage');
         $view->deleteMessagePattern = BaseController::actionURL('dashboard', 'deleteMessage', array('id' => '%ID%'));
         $message = Message::exists($_GET['id']) ? new Message($_GET['id']) : null;
         if ($message instanceof Message) {
@@ -48,7 +49,7 @@ class DashboardController extends BaseController {
         return new Response(Response::OK, $result, __CLASS__ . '::' . __FUNCTION__);
     }
 
-    protected function newMessage() {
+    protected function composeMessage() {
         $view = new View('display/dashboard/messageForm.php');
         $view->returnAction = BaseController::actionURL('dashboard', 'messages');
         $view->sender = Authorization::getCurrentUser();
@@ -65,23 +66,24 @@ class DashboardController extends BaseController {
     }
 
     protected function sendMessage() {
-
-        if (User::exists($_POST['messageRecipient'])) {
+        $user = User::getByLogin($_POST['messageRecipient']);
+        if ($user instanceof User) {
             $initial = array();
             $initial['author'] = Authorization::getCurrentUser()->getId();
-            $initial['recipient'] = $_POST['messageRecipient'];
+            $initial['recipient'] = $user->getId();
             $initial['message'] = $_POST['messageText'];
-            $message = Message::create($initial);
+            Message::create($initial);
         }
-
-//        var_dump(($_GET['messageRecipient']));
-//        die;
-
         $this->redirect(BaseController::actionURL('dashboard', 'messages'));
     }
 
     protected function deleteMessage() {
-
+        if (Message::exists($_GET['id'])) {
+            $message = new Message($_GET['id']);
+            $message->setDeletedByUser(Authorization::getCurrentUser(), true);
+            $message->update();
+        }
+        $this->redirect(BaseController::actionURL('dashboard', 'messages'));
     }
 
 }
