@@ -20,9 +20,16 @@ class DashboardController extends BaseController {
 
         return new Response(Response::OK, Array(
             'LeftTitle' => 'Dashboard',
-            'ContentLeft' => '',
+            'ContentLeft' => $this->leftMenuItems(),
             'MainMenu' => $data['MainMenu']
                 ), __CLASS__ . '::' . __FUNCTION__);
+    }
+
+    private function leftMenuItems() {
+        $items = Array();
+        $items[] = Array('permissions' => null, 'url' => BaseController::actionURL('dashboard', 'home'), 'img' => 'dashboard', 'text' => 'Prehľad');
+        $items[] = Array('permissions' => null, 'url' => BaseController::actionURL('dashboard', 'messages'), 'img' => 'message', 'text' => 'Správy');
+        return $items;
     }
 
     protected function home() {

@@ -22,11 +22,12 @@ class ContentController extends BaseController {
         }
 
         $menuItems = Array();
-        $menuItems[] = Array('permissions' => null, 'url' => BaseController::actionURL('content', 'browser', array('folder' => 0)), 'img' => 'folder.png', 'text' => 'ROOT');
+        $menuItems[] = Array('permissions' => null, 'url' => BaseController::actionURL('content', 'homepage', array('folder' => 0)), 'img' => 'home', 'text' => 'Domovská stránka');
+        $menuItems[] = Array('permissions' => null, 'url' => BaseController::actionURL('content', 'browser', array('folder' => 0)), 'img' => 'folder', 'text' => 'ROOT');
 
         return new Response(Response::OK, Array(
             'ContentLeft' => $menuItems,
-            'LeftTitle' => 'Adresárová štruktúra',
+            'LeftTitle' => 'Obsah webu',
             'MainMenu' => $data['MainMenu']
                 ), __CLASS__ . '::' . __FUNCTION__);
     }

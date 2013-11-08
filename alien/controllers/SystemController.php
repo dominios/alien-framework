@@ -22,9 +22,16 @@ class SystemController extends BaseController {
 
         return new Response(Response::OK, Array(
             'LeftTitle' => 'Systém',
-            'ContentLeft' => '',
+            'ContentLeft' => $this->leftMenuItems(),
             'MainMenu' => $data['MainMenu']
                 ), __CLASS__ . '::' . __FUNCTION__);
+    }
+
+    private function leftMenuItems() {
+        $items = Array();
+        $items[] = Array('permissions' => null, 'url' => BaseController::actionURL('system', 'logs'), 'img' => 'book-stack', 'text' => 'Logy');
+        $items[] = Array('permissions' => null, 'url' => BaseController::actionURL('system', 'config'), 'img' => 'service', 'text' => 'Konfigurácia');
+        return $items;
     }
 
 }

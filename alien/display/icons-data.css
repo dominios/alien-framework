@@ -12,6 +12,9 @@ span.icon.icon-add-user-light {
 span.icon.icon-back, span.icon.icon-back-dark {
     background-image: url('img/back.png');
 }
+span.icon.icon-book-stack, span.icon.icon-book-stack-dark {
+    background-image: url('img/book_stack.png');
+}
 span.icon.icon-bullet, span.icon.icon-bullet-dark {
     background-image: url('img/bullet.png');
 }

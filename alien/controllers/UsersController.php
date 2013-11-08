@@ -33,6 +33,7 @@ class UsersController extends BaseController {
         $items[] = Array('permissions' => null, 'url' => BaseController::actionURL('users', 'viewList'), 'img' => 'user', 'text' => 'Zoznam používateľov');
         $items[] = Array('permissions' => null, 'url' => BaseController::actionURL('users', 'edit', array('id' => 0)), 'img' => 'add-user', 'text' => 'Pridať/upraviť používateľa');
         $items[] = Array('permissions' => null, 'url' => BaseController::actionURL('users', 'viewLogs'), 'img' => 'clock', 'text' => 'Posledná aktivita');
+        $items[] = Array('permissions' => null, 'url' => BaseController::actionURL('users', 'newsletter'), 'img' => 'magazine', 'text' => 'Newsletter');
         return $items;
     }
 
