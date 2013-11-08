@@ -38,7 +38,9 @@ class UsersController extends BaseController {
 
     protected function viewList() {
         $view = new View('display/users/viewList.php', $this);
-        $view->Users = User::getList(true);
+        $view->users = User::getList(true);
+        $view->editActionPattern = BaseController::actionURL('users', 'edit', array('id' => '%ID%'));
+        $view->sendMessagePattern = BaseController::actionURL('dashboard', 'composeMessage', array('id' => '%ID%'));
         return new Response(Response::OK, Array(
             'Title' => 'Zoznam používateľov',
             'ContentMain' => $view->renderToString()
@@ -62,6 +64,7 @@ class UsersController extends BaseController {
         $View->returnAction = BaseController::actionURL('users', 'viewList');
         $View->resetPasswordAction = BaseController::actionURL('users', 'resetPassword', array('id' => $_GET['id']));
         $View->deleteUserAction = BaseController::actionURL('users', 'removeUser', array('id' => $_GET['id']));
+        $View->sendMessageAction = BaseController::actionURL('dashboard', 'composeMessage', array('id' => $_GET['id']));
 
         return new Response(Response::OK, Array(
             'Title' => (int) $_GET['id'] ? $View->User->getLogin() : 'Nový používateľ',

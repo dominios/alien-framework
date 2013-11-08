@@ -92,6 +92,7 @@
                         <td colspan="3">
                             <div class="button negative" onclick="javascript: window.location = '<?= $this->returnAction; ?>';"><span class="icon icon-back"></span>Zrušiť</div>
                             <div class="button positive" onclick="javascript: $('#userForm').submit();"><span class="icon icon-save"></span>Uložiť</div>
+                            <div class="button neutral" onclick="javascript: window.location = '<?= $this->sendMessageAction; ?>';"><span class="icon icon-message"></span>Napísať správu</div>
                             <div class="button neutral disabled" onclick="javascript: window.location = '<?= $this->resetPasswordAction; ?>';"><span class="icon icon-shield"></span>Resetovať heslo</div>
                             <div class="button negative disabled" onclick="javascript: window.location = '<?= $this->deleteUserAction; ?>';"><span class="icon icon-delete"></span>Odstrániť používateľa</div>
                         </td>
