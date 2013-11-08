@@ -227,6 +227,9 @@ span.icon.icon-shield, span.icon.icon-shield-dark {
 span.icon.icon-shutdown, span.icon.icon-shutdown-dark {
     background-image: url('img/shutdown.png');
 }
+span.icon.icon-sitemap, span.icon.icon-sitemap-dark {
+    background-image: url('img/sitemap.png');
+}
 span.icon.icon-structure, span.icon.icon-structure-dark {
     background-image: url('img/structure.png');
 }

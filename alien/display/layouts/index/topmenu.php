@@ -7,8 +7,9 @@ use Alien\Controllers\BaseController;
 // perm testy dorobit !
 ?>
 <script type="text/javascript">
-    $(document).ready(function() {
-        $('#toppanel li').has('.submenu').click(function() {
+    $(document).ready(function($) {
+        $('#toppanel li').has('.submenu').click(function(ev) {
+            ev.stopPropagation();
             $(this).find('.submenu').slideToggle(400, 'easeInOutElastic');
         });
     });

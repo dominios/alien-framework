@@ -23,6 +23,7 @@ class ContentController extends BaseController {
 
         $menuItems = Array();
         $menuItems[] = Array('permissions' => null, 'url' => BaseController::actionURL('content', 'homepage', array('folder' => 0)), 'img' => 'home', 'text' => 'Domovská stránka');
+        $menuItems[] = Array('permissions' => null, 'url' => BaseController::actionURL('content', 'sitemap', array('folder' => 0)), 'img' => 'sitemap', 'text' => 'Mapa webu');
         $menuItems[] = Array('permissions' => null, 'url' => BaseController::actionURL('content', 'browser', array('folder' => 0)), 'img' => 'folder', 'text' => 'ROOT');
 
         return new Response(Response::OK, Array(

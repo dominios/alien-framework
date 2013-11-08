@@ -23,12 +23,16 @@
 
         <script type="text/javascript" src="/alien/js/alien.js"></script>
         <script type="text/javascript" src="/alien/js/alien2.js"></script>
+        <!--<script type="text/javascript" src="/alien/js/bgstretcher.js"></script>-->
+        <!--<link href="/alien/display/bgstretcher.css" type="text/css" rel="stylesheet">-->
         <link href="/alien/display/alien.css" type="text/css" rel="stylesheet">
         <link href="/alien/display/alien2.css" type="text/css" rel="stylesheet">
         <link href="/alien/display/icons.css" type="text/css" rel="stylesheet">
         <link href="/alien/display/icons-data.css" type="text/css" rel="stylesheet">
     </head>
     <body>
+
+        <div id="alienBackground"></div>
 
         <section id="notifications">
             <?= $this->Notifications; ?>
@@ -62,5 +66,6 @@
         </section>
 
         <div style="clear: both;"></div>
+
     </body>
 </html>
