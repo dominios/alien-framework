@@ -9,6 +9,8 @@ use Alien\Authorization\User;
 use Alien\Authorization\Group;
 use Alien\Authorization\Permission;
 use Alien\Controllers\BaseController;
+use Alien\Forms\Input;
+use Alien\Forms\Validator;
 
 class UsersController extends BaseController {
 
@@ -58,8 +60,14 @@ class UsersController extends BaseController {
         $user = new User((int) $_GET['id']);
 
         $View = new View('display/users/edit.php', $this);
-        $View->Id = (int) $_GET['id'];
-        $View->User = $user;
+        $View->user = $user;
+
+        $inputEmail = Input::text('userEmail', '', 'admin@alien.com')
+                ->addValidator(Validator::regexp(Validator::PATTERN_EMAIL))
+                ->addValidator(Validator::custom('userUniqueEmail', array('ignoredUserId' => $user->getId())))
+                ->addCssClass('test', 'test2', 'test3');
+        $View->inputEmail = $inputEmail;
+
         $View->userGroups = $user->getGroups(true);
         $View->userPermissions = $user->getPermissions(true);
         $View->returnAction = BaseController::actionURL('users', 'viewList');
@@ -68,7 +76,7 @@ class UsersController extends BaseController {
         $View->sendMessageAction = BaseController::actionURL('dashboard', 'composeMessage', array('id' => $_GET['id']));
 
         return new Response(Response::OK, Array(
-            'Title' => (int) $_GET['id'] ? $View->User->getLogin() : 'Nový používateľ',
+            'Title' => (int) $_GET['id'] ? $View->user->getLogin() : 'Nový používateľ',
             'ContentMain' => $View->renderToString()
                 ), __CLASS__ . '::' . __FUNCTION__);
     }

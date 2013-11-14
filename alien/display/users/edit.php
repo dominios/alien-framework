@@ -46,9 +46,9 @@
 
 </script>
 
-<form name="editPageForm" method="POST" action="" id="groupForm">
+<form name="editUserForm" method="POST" action="" id="userForm">
     <input type="hidden" name="action" value="users/userFormSubmit">
-    <input type="hidden" name="userId" value="<?= $this->User->getId(); ?>">
+    <input type="hidden" name="userId" value="<?= $this->user->getId(); ?>">
     <section class="tabs" id="userTabs">
         <header>
             <ul>
@@ -62,16 +62,17 @@
                 <table>
                     <tr>
                         <td><span class="icon icon-user"></span>Login:</td>
-                        <td colspan="2"><input type="text" name="userLogin" value="<?= $this->User->getLogin(); ?>" autocomplete="off" style="width: 600px;"></td>
+                        <td colspan="2"><input type="text" name="userLogin" value="<?= $this->user->getLogin(); ?>" autocomplete="off" style="width: 600px;"></td>
                     </tr><tr>
                         <td><span class="icon icon-user"></span>Meno:</td>
-                        <td colspan="2"><input type="text" name="userFirstname" value="<?= $this->User->getFirstname(); ?>" autocomplete="off" style="width: 600px;"></td>
+                        <td colspan="2"><input type="text" name="userFirstname" value="<?= $this->user->getFirstname(); ?>" autocomplete="off" style="width: 600px;"></td>
                     </tr><tr>
                         <td><span class="icon icon-user"></span>Priezvisko:</td>
-                        <td colspan="2"><input type="text" name="userSurname" value="<?= $this->User->getSurname(); ?>" autocomplete="off" style="width: 600px;"></td>
+                        <td colspan="2"><input type="text" name="userSurname" value="<?= $this->user->getSurname(); ?>" autocomplete="off" style="width: 600px;"></td>
                     </tr><tr>
                         <td><span class="icon icon-email"></span>Email:</td>
-                        <td colspan="2"><input type="text" name="userEmail" value="<?= $this->User->getEmail(); ?>" autocomplete="off" style="width: 600px;"></td>
+                        <!--<td colspan="2"><input type="text" name="userEmail" value="<?= $this->user->getEmail(); ?>" autocomplete="off" style="width: 600px;"></td>-->
+                        <td colspan="2"><?= $this->inputEmail; ?></td>
                     </tr><tr>
                         <td><span class="icon icon-key"></span>Nové heslo:</td>
                         <td colspan="2"><input type="password" name="userPass2" autocomplete="off" style="width: 600px;"></td>
@@ -82,8 +83,8 @@
                         <td><span class="icon icon-checked-user"></span>Stav účtu:</td>
                         <td colspan="2">
                             <select name="userStatus">
-                                <option value="0" <?= !$this->User->getStatus() ? 'selected' : ''; ?>>Neaktívny</option>
-                                <option value="1" <?= $this->User->getStatus() ? 'selected' : ''; ?>>Aktívny</option>
+                                <option value="0" <?= !$this->user->getStatus() ? 'selected' : ''; ?>>Neaktívny</option>
+                                <option value="1" <?= $this->user->getStatus() ? 'selected' : ''; ?>>Aktívny</option>
                             </select>
                         </td>
                     </tr><tr>
@@ -106,14 +107,14 @@
                         $partialView = new \Alien\View('display/common/item.php');
                         $partialView->icon = 'group';
                         $partialView->item = $group;
-                        $partialView->dropLink = \Alien\Controllers\BaseController::actionURL('users', 'removeGroup', array('user' => $this->User->getId(), 'group' => $group->getId()));
+                        $partialView->dropLink = \Alien\Controllers\BaseController::actionURL('users', 'removeGroup', array('user' => $this->user->getId(), 'group' => $group->getId()));
                         echo $partialView->renderToString();
                     endforeach;
                     ?>
                 </div>
                 <div class="cleaner"></div>
                 <div class="hr"></div>
-                <div class="button neutral" onClick="javascript: userShowAddGroupDialog(<?= $this->User->getId(); ?>);"><span class="icon icon-plus"></span>Pridať skupinu</div>
+                <div class="button neutral" onClick="javascript: userShowAddGroupDialog(<?= $this->user->getId(); ?>);"><span class="icon icon-plus"></span>Pridať skupinu</div>
             </article>
             <article id="permissions" style="display: none;">
                 <div class="gridLayout">
@@ -122,14 +123,14 @@
                         $partialView = new \Alien\View('display/common/item.php');
                         $partialView->icon = 'shield';
                         $partialView->item = $permission;
-                        $partialView->dropLink = \Alien\Controllers\BaseController::actionURL('users', 'removePermission', array('user' => $this->User->getId(), 'permission' => $permission->getId()));
+                        $partialView->dropLink = \Alien\Controllers\BaseController::actionURL('users', 'removePermission', array('user' => $this->user->getId(), 'permission' => $permission->getId()));
                         echo $partialView->renderToString();
                     endforeach;
                     ?>
                 </div>
                 <div class="cleaner"></div>
                 <div class="hr"></div>
-                <div class="button neutral" onClick="javascript: userShowAddPermissionDialog(<?= $this->User->getId(); ?>);"><span class="icon icon-plus"></span>Pridať oprávnenie</div>
+                <div class="button neutral" onClick="javascript: userShowAddPermissionDialog(<?= $this->user->getId(); ?>);"><span class="icon icon-plus"></span>Pridať oprávnenie</div>
             </article>
         </section>
     </section>
