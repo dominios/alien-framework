@@ -36,23 +36,22 @@ function class_autoloader($class) {
     $class = str_replace(__NAMESPACE__ . '\\', '', $class);
 
     // core sa nacita vzdy cele
-    $dh = \opendir('./core');
-    if ($dh) {
-        while (false !== ($file = readdir($dh))) {
-            if (!is_dir('./core/' . $file)) {
-                include_once './core/' . $file;
+    $autoloadDirectories = array();
+    $autoloadDirectories[] = './core';
+    $autoloadDirectories[] = './core/authorization';
+    $autoloadDirectories[] = './core/form';
+
+    foreach ($autoloadDirectories as $dir) {
+        $dh = \opendir($dir);
+        if ($dh) {
+            while (false !== ($file = readdir($dh))) {
+                if (!is_dir($dir . '/' . $file)) {
+                    include_once $dir . '/' . $file;
+                    ;
+                }
             }
+            closedir($dh);
         }
-        closedir($dh);
-    }
-    $dh = \opendir('./core/authorization');
-    if ($dh) {
-        while (false !== ($file = readdir($dh))) {
-            if (!is_dir('./core/authorization/' . $file)) {
-                include_once './core/authorization/' . $file;
-            }
-        }
-        closedir($dh);
     }
 
     // layouty sa tiez nacitaku staticky vsetky podla tej metody
