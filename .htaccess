@@ -2,36 +2,27 @@ php_flag magic_quotes_gpc off
 php_flag register_globals off
 php_flag html_errors on
 php_flag display_errors on
-
-ErrorDocument 404 /alien/errors/Error404.html
-ErrorDocument 500 /alien/errors/Error500.html
-
-Options -Indexes
-
-RewriteEngine On
-RewriteBase /
-
-RewriteCond %{REQUEST_FILENAME} !-f
-RewriteCond %{REQUEST_FILENAME} !-d
-RewriteCond %{REQUEST_FILENAME} !-l
-
-RewriteRule ^(.*)$ index.php [L,QSA]
-
-#RewriteRule ^error/(.*)$ alien/error/$1 [L,R=301]
-#RewriteRule ^activateregistration.php(.*)$ alien/activateregistration.php$1 [L,R=301]
-
-#RewriteCond %{HTTP_HOST} ^patchworkavalon\.sk$ [NC]
-#RewriteRule ^(.*)$ http://www.patchworkavalon.sk/$1 [L,R=301,QSA]
-
-#RewriteCond %{REQUEST_FILENAME} !-d
-#RewriteCond %{REQUEST_FILENAME} !-f
-#RewriteRule ^(.)* index.php [L,QSA]
+php_value short_open_tag 1
 
 <FilesMatch "\.ini$">
     Order Allow,Deny
     Deny from all
 </FilesMatch>
 
-<IfModule mod_php5.c>
-  php_value short_open_tag 1
-</IfModule>
+Options -Indexes
+Options +FollowSymLinks
+
+#ErrorDocument 404 /alien/errors/Error404.html
+#ErrorDocument 500 /alien/errors/Error500.html
+
+RewriteEngine On
+RewriteBase /
+
+#RewriteCond %{HTTP_HOST} ^domain\.sk$ [NC]
+#RewriteRule ^(.*)$ http://www.domain.sk/$1 [L,R=301,QSA]
+
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond %{REQUEST_FILENAME} !-l
+
+RewriteRule ^(.*)$ index.php [L,QSA]
