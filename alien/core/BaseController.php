@@ -178,7 +178,7 @@ class BaseController {
                 Authorization::getInstance()->login($_POST['login'], $_POST['pass']);
             }
         }
-        $this->redirect('index.php');
+        $this->redirect(BaseController::actionURL('dashboard', 'home'));
     }
 
     private function logout() {
