@@ -43,22 +43,6 @@ function showFilePreview(file) {
     });
 }
 
-//function markBadInputs() {
-//    var session;
-//    $.ajaxSetup({cache: false});
-//    $.get('formErrorOutput.php', {request: 'read'}, function(data) {
-//        session = data;
-//    });
-//    json = jQuery.parseJSON('');
-//    if (json == null)
-//        return;
-//    for (i = 0; i <= json.length; i++) {
-//        item = json.pop();
-//        $("input[name=" + item.inputName + "]").addClass('invalidInput');
-//        $("<div class=\"inputErrorHelper\">" + item.errorMsg + "</div>").insertAfter($("input[name=" + item.inputName + "]"));
-//    }
-//}
-
 function showDisplayLayoutType(type) {
 
     if (!type)
@@ -98,7 +82,7 @@ $(document).ready(function($) {
         msg = $(this).attr('data-errorMsg');
         width = $(this).width();
         height = $(this).height();
-        elem = $('<div class="invalidHelpser" style="margin-top: -' + height + 'px;">' + msg + '</div>');
+        elem = $('<div class="invalidHelper" style="margin-top: -' + height + 'px;">' + msg + '</div>');
         $(this).after(elem);
         elem.css('margin-left', width - elem.width() + 'px');
     });

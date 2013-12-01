@@ -6,7 +6,7 @@ use Alien\Alien;
 use Alien\Terminal;
 use Alien\Response;
 use Alien\Authorization\Authorization;
-use Alien\Layot\Layout;
+use Alien\Layout\Layout;
 
 class BaseController {
 
@@ -57,11 +57,11 @@ class BaseController {
         $auth = Authorization::getInstance();
         if (!$auth->getInstance()->isLoggedIn() && !in_array('login', $this->actions)) {
             unset($this->actions);
-            $this->setLayout(new \Alien\Layot\LoginLayout());
+            $this->setLayout(new \Alien\Layout\LoginLayout());
             return;
         }
 
-        $this->setLayout(new \Alien\Layot\IndexLayout());
+        $this->setLayout(new \Alien\Layout\IndexLayout());
 
         return new Response(Response::OK, Array(
             'Title' => 'HOME',

@@ -1,6 +1,6 @@
 <?php
 
-namespace Alien\Layot;
+namespace Alien\Layout;
 
 use Alien\Alien;
 use Alien\View;

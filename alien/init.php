@@ -3,7 +3,7 @@
 namespace Alien;
 
 use \Alien\Authorization\Authorization;
-use \Alien\Layot\Layout;
+use \Alien\Layout\Layout;
 
 ob_start();
 session_start();
