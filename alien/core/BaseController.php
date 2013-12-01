@@ -183,7 +183,7 @@ class BaseController {
 
     private function logout() {
         Authorization::getInstance()->logout();
-        $this->redirect('index.php');
+        $this->redirect('/alien');
     }
 
     public static function getCurrentControllerClass() {
