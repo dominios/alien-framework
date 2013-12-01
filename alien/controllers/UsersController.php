@@ -9,6 +9,7 @@ use Alien\Authorization\User;
 use Alien\Authorization\Group;
 use Alien\Authorization\Permission;
 use Alien\Controllers\BaseController;
+use Alien\Forms\Form;
 use Alien\Forms\Input;
 use Alien\Forms\Validator;
 
@@ -52,32 +53,74 @@ class UsersController extends BaseController {
 
     protected function edit() {
 
-        if (!preg_match('/^[0-9]*$/', $_GET['id'])) {
-            new Notification('Neplatný identifikátor používateľa.', Notification::ERROR);
-            return;
-        }
+//        if (!preg_match('/^[0-9]*$/', $_GET['id'])) {
+//            $this->getLayout()->putNotificaion(new Notification('Neplatný identifikátor používateľa.', Notification::ERROR));
+//            return;
+//        }
 
         $user = new User((int) $_GET['id']);
 
-        $View = new View('display/users/edit.php', $this);
-        $View->user = $user;
+        $form = new Form('post', '', 'editUserForm');
+        $form->setId('userForm');
+        $inputAction = Input::hidden('action', 'users/' . __FUNCTION__)->addToForm($form);
 
-        $inputEmail = Input::text('userEmail', '', 'admin@alien.com')
-                ->addValidator(Validator::regexp(Validator::PATTERN_EMAIL))
-                ->addValidator(Validator::custom('userUniqueEmail', array('ignoredUserId' => $user->getId())))
-                ->addCssClass('test', 'test2', 'test3');
-        $View->inputEmail = $inputEmail;
+        $inputLogin = Input::text('userLogin', '', $user->getLogin())->setAutocomplete(false)->addToForm($form);
+        $inputFirstname = Input::text('userFirstname', '', $user->getFirstname())->setAutocomplete(false)->addToForm($form);
+        $inputSurname = Input::text('userSurname', '', $user->getSurname())->setAutocomplete(false)->addToForm($form);
+        $inputEmail = Input::text('userEmail', '', $user->getEmail())
+                ->setAutocomplete(false)
+                ->addValidator(Validator::regexp(Validator::PATTERN_EMAIL, 'neplatná adresa'))
+                ->addValidator(Validator::custom('userUniqueEmail', array('ignoredUserId' => $user->getId()), 'tento email sa už používa'))
+                ->addToForm($form);
+        $inputPass2 = Input::password('userPass2', '')->addToForm($form);
+        $inputPass3 = Input::password('userPass3', '')->addToForm($form);
 
-        $View->userGroups = $user->getGroups(true);
-        $View->userPermissions = $user->getPermissions(true);
-        $View->returnAction = BaseController::actionURL('users', 'viewList');
-        $View->resetPasswordAction = BaseController::actionURL('users', 'resetPassword', array('id' => $_GET['id']));
-        $View->deleteUserAction = BaseController::actionURL('users', 'removeUser', array('id' => $_GET['id']));
-        $View->sendMessageAction = BaseController::actionURL('dashboard', 'composeMessage', array('id' => $_GET['id']));
+        if ($form->isPostSubmit() && $form->validate()) {
+
+            if (User::exists($_POST['userId'])) {
+                $user = new User($_POST['userId']);
+            } else {
+                $user = User::create(array('email' => $_POST['userEmail']));
+            }
+            $user->setLogin($_POST['userLogin']);
+            $user->setFirstname($_POST['userFirstname']);
+            $user->setSurname($_POST['userSurname']);
+            $user->setEmail($_POST['userEmail']);
+            $user->setStatus($_POST['userStatus']);
+            $user->update();
+
+            if ($_POST['userPass2'] === $_POST['userPass3'] && strlen($_POST['userPass2'])) {
+                $user->setPassword($_POST['userPass2']);
+            }
+
+            $this->redirect(BaseController::actionURL('users', 'edit', array('id' => $user->getId())));
+        }
+
+        $view = new View('display/users/edit.php', $this);
+        $view->user = $user;
+        $view->formStartTag = $form->startTag();
+        $view->formEndTag = $form->endTag();
+        $view->buttonCancel = Input::button(BaseController::actionURL('users', 'viewList'), 'Zrušiť', 'icon-back');
+        $view->buttonSave = Input::button("javascript: $('#userForm').submit();", 'Uložiť', 'icon-save');
+        $view->buttonMessage = Input::button(BaseController::actionURL('dashboard', 'composeMessage', array('id' => $_GET['id'])), 'Poslať správu', 'icon-message');
+        $view->buttonResetPassword = Input::button(BaseController::actionURL('users', 'resetPassword', array('id' => $_GET['id'])), 'Resetovať heslo', 'icon-shield')->setDisabled(true);
+        $view->buttonDelete = Input::button(BaseController::actionURL('users', 'removeUser', array('id' => $_GET['id'])), 'Odstrániť používateľa', 'icon-delete')->setDisabled(true);
+        $view->inputAction = $inputAction;
+        $view->inputEmail = $inputEmail;
+        $view->inputLogin = $inputLogin;
+        $view->inputFirstname = $inputFirstname;
+        $view->inputSurname = $inputSurname;
+        $view->inputPass2 = $inputPass2;
+        $view->inputPass3 = $inputPass3;
+        $view->userGroups = $user->getGroups(true);
+        $view->userPermissions = $user->getPermissions(true);
+
+        $view->buttonAddGroup = Input::button('javascript: userShowAddGroupDialog(' . $user->getId() . ');', 'Pridať skupinu', 'icon-plus');
+        $view->buttonAddPermission = Input::button('javascript: userShowAddPermissionDialog(' . $user->getId() . ');', 'Pridať oprávnenie', 'icon-plus');
 
         return new Response(Response::OK, Array(
-            'Title' => (int) $_GET['id'] ? $View->user->getLogin() : 'Nový používateľ',
-            'ContentMain' => $View->renderToString()
+            'Title' => (int) $_GET['id'] ? $view->user->getLogin() : 'Nový používateľ',
+            'ContentMain' => $view->renderToString()
                 ), __CLASS__ . '::' . __FUNCTION__);
     }
 
@@ -135,27 +178,6 @@ class UsersController extends BaseController {
             $user = new User($_GET['id']);
             $user->resetPassword();
         }
-    }
-
-    protected function userFormSubmit() {
-
-        if (User::exists($_POST['userId'])) {
-            $user = new User($_POST['userId']);
-        } else {
-            $user = User::create(array('email' => $_POST['userEmail']));
-        }
-        $user->setLogin($_POST['userLogin']);
-        $user->setFirstname($_POST['userFirstname']);
-        $user->setSurname($_POST['userSurname']);
-        $user->setEmail($_POST['userEmail']);
-        $user->setStatus($_POST['userStatus']);
-        $user->update();
-
-        if ($_POST['userPass2'] === $_POST['userPass3'] && strlen($_POST['userPass2'])) {
-            $user->setPassword($_POST['userPass2']);
-        }
-
-        $this->redirect(BaseController::actionURL('users', 'edit', array('id' => $user->getId())));
     }
 
     protected function viewLogs() {

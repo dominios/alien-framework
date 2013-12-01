@@ -277,29 +277,20 @@ table .itemRow img {
 
 /* FORMS */
 
-.invalidInput {
+.invalid {
     border-color: #d51111;
     box-shadow: 0px 0px 5px 1px #d03808;
 }
 
-.invalidInput:hover {
-    border-color: #d51111;
+.invalidHelpser {
+    position: absolute;
+    display: block;
+    text-align: right;
+    color: #E4513D;
 }
 
-.inputErrorHelper {
-    opacity: 0.95;
-    position: absolute;
-    display: none;
-    background: #d55244;
-    text-align: center;
-    height: 24px;
-    min-width: 300px;
-    padding: 10px 25px;
-    color: #fff;
-    text-shadow: 1px 1px 5px #666;
-    border-bottom-left-radius: 5px;
-    border-bottom-right-radius: 5px;
-    text-align: left;
+.invalid:hover {
+    border-color: #d51111;
 }
 
 :focus { outline: none; } /* odstrani ten debilny ramcek pri chromu */

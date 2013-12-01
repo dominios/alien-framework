@@ -43,21 +43,21 @@ function showFilePreview(file) {
     });
 }
 
-function markBadInputs() {
-    var session;
-    $.ajaxSetup({cache: false});
-    $.get('formErrorOutput.php', {request: 'read'}, function(data) {
-        session = data;
-    });
-    json = jQuery.parseJSON('');
-    if (json == null)
-        return;
-    for (i = 0; i <= json.length; i++) {
-        item = json.pop();
-        $("input[name=" + item.inputName + "]").addClass('invalidInput');
-        $("<div class=\"inputErrorHelper\">" + item.errorMsg + "</div>").insertAfter($("input[name=" + item.inputName + "]"));
-    }
-}
+//function markBadInputs() {
+//    var session;
+//    $.ajaxSetup({cache: false});
+//    $.get('formErrorOutput.php', {request: 'read'}, function(data) {
+//        session = data;
+//    });
+//    json = jQuery.parseJSON('');
+//    if (json == null)
+//        return;
+//    for (i = 0; i <= json.length; i++) {
+//        item = json.pop();
+//        $("input[name=" + item.inputName + "]").addClass('invalidInput');
+//        $("<div class=\"inputErrorHelper\">" + item.errorMsg + "</div>").insertAfter($("input[name=" + item.inputName + "]"));
+//    }
+//}
 
 function showDisplayLayoutType(type) {
 
@@ -93,22 +93,34 @@ function evalConsoleInput(input) {
 
 $(document).ready(function($) {
 
+    /* vygenerovanie error hlasky pod input */
+    $(".invalid[data-errorMsg]").each(function(i) {
+        msg = $(this).attr('data-errorMsg');
+        width = $(this).width();
+        height = $(this).height();
+        elem = $('<div class="invalidHelpser" style="margin-top: -' + height + 'px;">' + msg + '</div>');
+        $(this).after(elem);
+        elem.css('margin-left', width - elem.width() + 'px');
+    });
+
+    /* terminalove okno */
     $("#ConsoleContainer").hide();
 
+    /* vypnutie jQuery UI tooltipov pre rightpanel */
     $(function() {
         $('.rightpanel').tooltip({
             track: false
         });
     });
 
+    /* pre istotu buttony */
     $('.button.disabled, button.disabled').click(function(e) {
         e.preventDefault();
         e.stopPropagation();
     });
-
     $('.button.disabled').removeAttr('onclick');
 
-
+    /* taby */
     $("section.tabs ul li a").live('click', function() {
         section = $(this).parent().parent().parent().parent();
         sectionId = section.attr('id');

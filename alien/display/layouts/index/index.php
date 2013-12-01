@@ -16,6 +16,7 @@
         <link href="/alien/display/alien2.css" type="text/css" rel="stylesheet">
         <link href="/alien/display/icons.css" type="text/css" rel="stylesheet">
         <link href="/alien/display/icons-data.css" type="text/css" rel="stylesheet">
+        <link href="/alien/display/modal.css" type="text/css" rel="stylesheet">
     </head>
     <body>
 
@@ -53,6 +54,12 @@
         </section>
 
         <div style="clear: both;"></div>
+
+        <div class="md-overlay"></div><!-- the overlay element -->
+
+        <!-- classie.js by @desandro: https://github.com/desandro/classie -->
+        <script src="/alien/js/classie.js"></script>
+        <script src="/alien/js/modalEffects.js"></script>
 
     </body>
 </html>

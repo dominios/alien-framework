@@ -72,4 +72,8 @@ class View {
         return is_string($value) ? $this->escapeValue($this->data[$value], (bool) $stripTags, (string) $allowedTags) : $value;
     }
 
+    public function unescaped($name) {
+        return $this->data[$name];
+    }
+
 }

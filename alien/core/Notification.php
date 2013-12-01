@@ -12,8 +12,6 @@ class Notification {
     const WARNING = 'warning';
     const ERROR = 'error';
 
-    private static $messageList = array();
-
     /**
      * New notification constructor
      * @param string $msg message to display

@@ -65,6 +65,10 @@ a:hover {
     text-decoration: underline;
 }
 
+table.full {
+    width: 100%;
+}
+
 /* ******** LAYOUT ************************************************************ */
 
 #alienlogo {
@@ -423,6 +427,10 @@ input, button, .button, select, option, textarea {
     -webkit-transition: box-shadow 0.2s, border 0.2s, border-color 0.2s, background-color 0.2s, color 0.2s;
     -moz-transition: box-shadow 0.2s, border 0.2s, border-color 0.2s, background-color 0.2s, color 0.2s;
     transition: box-shadow 0.2s, border 0.2s, border-color 0.2s, background-color 0.2s, color 0.2s;
+}
+
+input, select, textarea, option {
+    width: 100%;
 }
 
 select {

@@ -72,6 +72,8 @@ class BaseController {
 
     private final function doActions() {
 
+        $this->actions = array_unique($this->actions);
+
         $responses = Array();
 
         if (method_exists(get_called_class(), 'init_action')) {
@@ -106,6 +108,9 @@ class BaseController {
         return $responses;
     }
 
+    /**
+     * @return Layout layout
+     */
     public function getLayout() {
         return $this->layout;
     }

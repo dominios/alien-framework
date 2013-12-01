@@ -28,12 +28,14 @@ button span.icon, .button  span.icon {
 
 a span.icon,
 button span.icon,
+.button span.icon,
 ul li a span.icon {
-    opacity: 0.6;
+    opacity: 0.8;
 }
 
 a:hover span.icon,
 button:hover span.icon,
+.button:hover span.icon,
 a.highlight span.icon,
 ul li:hover a span.icon,
 section.tabs header ul li.active a span.icon {

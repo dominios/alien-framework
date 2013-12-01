@@ -27,7 +27,7 @@ class User implements ActiveRecord {
         if ($row === null && $id === null) { // novy user
             $this->id = null;
             return;
-        } elseif ($row === null) {
+        } elseif ($row === null && $id > 0) {
             $DBH = Alien::getDatabaseHandler();
             $STH = $DBH->prepare('SELECT * FROM ' . DBConfig::table('users') . ' WHERE id_u=:i');
             $STH->bindValue(':i', (int) $id, PDO::PARAM_INT);
