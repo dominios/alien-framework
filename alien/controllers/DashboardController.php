@@ -26,14 +26,21 @@ class DashboardController extends BaseController {
     }
 
     private function leftMenuItems() {
+        $msgText = 'Správy';
+        if (Message::getUnreadCount(Authorization::getCurrentUser())) {
+            $msgText.= ' (' . Message::getUnreadCount(Authorization::getCurrentUser()) . ')';
+        }
         $items = Array();
         $items[] = Array('permissions' => null, 'url' => BaseController::actionURL('dashboard', 'home'), 'img' => 'dashboard', 'text' => 'Prehľad');
-        $items[] = Array('permissions' => null, 'url' => BaseController::actionURL('dashboard', 'messages'), 'img' => 'message', 'text' => 'Správy');
+        $items[] = Array('permissions' => null, 'url' => BaseController::actionURL('dashboard', 'messages'), 'img' => 'message', 'text' => $msgText);
         return $items;
     }
 
     protected function home() {
+        $view = new View('display/dashboard/home.php');
 
+        $result = array('Title' => 'Dashboard', 'ContentMain' => $view->renderToString());
+        return new Response(Response::OK, $result, __CLASS__ . '::' . __FUNCTION__);
     }
 
     protected function messages() {
