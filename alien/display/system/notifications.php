@@ -6,27 +6,41 @@ use Alien\Notification;
 ?>
 
 <div style="position: absolute; top: 0px; width: 100%;">
-    <div id="notifyArea" style="display: none; width: 500px;">
+    <div id="notifyArea">
         <?
         foreach ($this->List as $note):
             switch ($note->getType()) {
                 case Notification::INFO:
-                    echo ('<div class="notification information"><img src="' . Alien::$SystemImgUrl . '/information.png">&nbsp;' . $note->getMessage() . '</div>');
+                    $icon = 'icon-info';
+                    $class = 'not-info';
+                    $title = 'Informácia';
                     break;
                 case Notification::SUCCESS:
-                    echo ('<div class="notification success"><img src="' . Alien::$SystemImgUrl . '/tick.png">&nbsp;' . $note->getMessage() . '</div>');
+                    $icon = 'icon-ok';
+                    $class = 'not-success';
+                    $title = 'Úspech';
                     break;
                 case Notification::WARNING:
-                    echo ('<div class="notification warning"><img src="' . Alien::$SystemImgUrl . '/warning.png">&nbsp;' . $note->getMessage() . '</div>');
+                    $icon = 'icon-warning';
+                    $class = 'not-warning';
+                    $title = 'Varovanie';
                     break;
                 case Notification::ERROR:
-                    echo ('<div class="notification error"><img src="' . Alien::$SystemImgUrl . '/cross.png">&nbsp;' . $note->getMessage() . '</div>');
+                    $icon = 'icon-cancel';
+                    $class = 'not-error';
+                    $title = 'Chyba';
                     break;
             }
+            echo ('<div class="notify ' . $class . '"><span class="icon ' . $icon . '"></span>' . '<b>' . $title . ':</b> ' . $note->getMessage() . '</div>');
         endforeach;
         ?>
-        <script type="text/javascript"> $(document).ready(function() {
-                showNotifications();
-            });</script>
+        <script type="text/javascript">
+            $(function() {
+                $("#notifyArea").addClass('visible');
+                setTimeout(function() {
+                    $('#notifyArea').removeClass("visible");
+                }, 4000);
+            });
+        </script>
     </div>
 </div>

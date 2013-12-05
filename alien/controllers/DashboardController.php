@@ -37,6 +37,12 @@ class DashboardController extends BaseController {
     }
 
     protected function home() {
+
+        $this->getLayout()->putNotificaion(new \Alien\Notification('test', \Alien\Notification::INFO));
+        $this->getLayout()->putNotificaion(new \Alien\Notification('test', \Alien\Notification::ERROR));
+        $this->getLayout()->putNotificaion(new \Alien\Notification('test', \Alien\Notification::SUCCESS));
+        $this->getLayout()->putNotificaion(new \Alien\Notification('test', \Alien\Notification::WARNING));
+
         $view = new View('display/dashboard/home.php');
 
         $result = array('Title' => 'Dashboard', 'ContentMain' => $view->renderToString());

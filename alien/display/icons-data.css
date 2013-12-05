@@ -12,6 +12,9 @@ span.icon.icon-add-user-light {
 span.icon.icon-back, span.icon.icon-back-dark {
     background-image: url('img/back.png');
 }
+span.icon.icon-backgroundAlien, span.icon.icon-backgroundAlien-dark {
+    background-image: url('img/backgroundAlien.png');
+}
 span.icon.icon-book-stack, span.icon.icon-book-stack-dark {
     background-image: url('img/book_stack.png');
 }
@@ -23,6 +26,9 @@ span.icon.icon-bullet-down, span.icon.icon-bullet-down-dark {
 }
 span.icon.icon-bullet-up, span.icon.icon-bullet-up-dark {
     background-image: url('img/bullet_up.png');
+}
+span.icon.icon-cancel, span.icon.icon-cancel-dark {
+    background-image: url('img/cancel.png');
 }
 span.icon.icon-checked-user, span.icon.icon-checked-user-dark {
     background-image: url('img/checked_user.png');
@@ -184,6 +190,9 @@ span.icon.icon-more, span.icon.icon-more-dark {
 span.icon.icon-note, span.icon.icon-note-dark {
     background-image: url('img/note.png');
 }
+span.icon.icon-ok, span.icon.icon-ok-dark {
+    background-image: url('img/ok.png');
+}
 span.icon.icon-page, span.icon.icon-page-dark {
     background-image: url('img/page.png');
 }
@@ -238,9 +247,6 @@ span.icon.icon-tag, span.icon.icon-tag-dark {
 }
 span.icon.icon-template, span.icon.icon-template-dark {
     background-image: url('img/template.png');
-}
-span.icon.icon-tick, span.icon.icon-tick-dark {
-    background-image: url('img/tick.png');
 }
 span.icon.icon-trash, span.icon.icon-trash-dark {
     background-image: url('img/trash.png');

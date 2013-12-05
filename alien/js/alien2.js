@@ -120,7 +120,7 @@ $(document).ready(function($) {
 });
 
 $(document).keyup(function(e) {
-    if (e.keyCode == 13 && $("input.ConsoleInput:focus")) {
+    if (e.keyCode === 13 && $("input.ConsoleInput:focus")) {
         evalConsoleInput($("input.ConsoleInput").val());
         $("input.ConsoleInput").val('');
     }

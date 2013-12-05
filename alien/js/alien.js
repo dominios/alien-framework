@@ -67,14 +67,6 @@ function viewMan(page) {
 }
 
 
-
-// zobrazi z tempu notifikacie
-function showNotifications() {
-    $("#notifyArea").slideDown(500, function() {
-        $(this).delay(4000).slideUp();
-    });
-}
-//
 //function openWindow() {
 //    w = $("#window");
 //    h = window.outerHeight;

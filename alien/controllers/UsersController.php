@@ -75,25 +75,30 @@ class UsersController extends BaseController {
         $inputPass2 = Input::password('userPass2', '')->addToForm($form);
         $inputPass3 = Input::password('userPass3', '')->addToForm($form);
 
-        if ($form->isPostSubmit() && $form->validate()) {
+        if ($form->isPostSubmit()) {
 
-            if (User::exists($_POST['userId'])) {
-                $user = new User($_POST['userId']);
+            if ($form->validate()) {
+
+                if (User::exists($_POST['userId'])) {
+                    $user = new User($_POST['userId']);
+                } else {
+                    $user = User::create(array('email' => $_POST['userEmail']));
+                }
+                $user->setLogin($_POST['userLogin']);
+                $user->setFirstname($_POST['userFirstname']);
+                $user->setSurname($_POST['userSurname']);
+                $user->setEmail($_POST['userEmail']);
+                $user->setStatus($_POST['userStatus']);
+                $user->update();
+
+                if ($_POST['userPass2'] === $_POST['userPass3'] && strlen($_POST['userPass2'])) {
+                    $user->setPassword($_POST['userPass2']);
+                }
+                $this->getLayout()->putNotificaion(new Notification('Zmeny boli uložené.', Notification::SUCCESS));
+                $this->redirect(BaseController::actionURL('users', 'edit', array('id' => $user->getId())));
             } else {
-                $user = User::create(array('email' => $_POST['userEmail']));
+                $this->getLayout()->putNotificaion(new Notification('Zmeny sa nepodarilo uložiť.', Notification::ERROR));
             }
-            $user->setLogin($_POST['userLogin']);
-            $user->setFirstname($_POST['userFirstname']);
-            $user->setSurname($_POST['userSurname']);
-            $user->setEmail($_POST['userEmail']);
-            $user->setStatus($_POST['userStatus']);
-            $user->update();
-
-            if ($_POST['userPass2'] === $_POST['userPass3'] && strlen($_POST['userPass2'])) {
-                $user->setPassword($_POST['userPass2']);
-            }
-
-            $this->redirect(BaseController::actionURL('users', 'edit', array('id' => $user->getId())));
         }
 
         $view = new View('display/users/edit.php', $this);
