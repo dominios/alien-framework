@@ -6,7 +6,10 @@ use Alien\Alien;
 use Alien\Terminal;
 use Alien\Response;
 use Alien\Authorization\Authorization;
+use Alien\Authorization\User;
+use Alien\Notification;
 use Alien\Layout\Layout;
+use Alien\Message;
 
 class BaseController {
 
@@ -181,6 +184,12 @@ class BaseController {
         if (isset($_POST['loginFormSubmit'])) {
             if (!Authorization::getInstance()->isLoggedIn()) {
                 Authorization::getInstance()->login($_POST['login'], $_POST['pass']);
+                $user = Authorization::getCurrentUser();
+                if ($user instanceof User) {
+                    if (Message::getUnreadCount($user)) {
+                        Notification::information('Máš neprečítané správy.');
+                    }
+                }
             }
         }
         $this->redirect(BaseController::actionURL('dashboard', 'home'));

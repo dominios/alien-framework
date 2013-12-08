@@ -7,6 +7,7 @@ use Alien\View;
 use Alien\Message;
 use Alien\Authorization\User;
 use Alien\Authorization\Authorization;
+use Alien\Notification;
 
 class DashboardController extends BaseController {
 
@@ -88,6 +89,7 @@ class DashboardController extends BaseController {
             $initial['recipient'] = $user->getId();
             $initial['message'] = $_POST['messageText'];
             Message::create($initial);
+            Notification::success('Správa bola odoslaná.');
         }
         $this->redirect(BaseController::actionURL('dashboard', 'messages'));
     }
@@ -97,6 +99,7 @@ class DashboardController extends BaseController {
             $message = new Message($_GET['id']);
             $message->setDeletedByUser(Authorization::getCurrentUser(), true);
             $message->update();
+            Notification::success('Správa bola odstránená.');
         }
         $this->redirect(BaseController::actionURL('dashboard', 'messages'));
     }
