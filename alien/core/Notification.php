@@ -71,10 +71,12 @@ class Notification {
      * @param string $msg message to display
      * @param string $type type of message, one of the following: <b>note</b>, <b>success</b>, <b>warning</b> or <b>error</b>
      */
-    private function __construct($msg, $type) {
+    private function __construct($msg, $type, $inline = false) {
         $this->message = $msg;
         $this->type = $type;
-        NotificationContainer::getInstance()->putNotification($this);
+        if (!$inline) {
+            NotificationContainer::getInstance()->putNotification($this);
+        }
     }
 
     public static function information($msg) {
@@ -99,6 +101,15 @@ class Notification {
 
     public function getType() {
         return $this->type;
+    }
+
+    public static function inline($msg, $type) {
+        $notify = new self($msg, $type, true);
+        ob_start();
+        include_once 'display/system/notifications.php';
+        $ret = renderNotification($notify);
+        ob_end_clean();
+        return $ret;
     }
 
 }

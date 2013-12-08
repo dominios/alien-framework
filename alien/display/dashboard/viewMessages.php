@@ -26,6 +26,13 @@
                     <th>Náhľad</th>
                     <!--<th>Tagy</th>-->
                 </tr>
+                <? if (!sizeof($this->inBox)): ?>
+                    <tr class="">
+                        <td class="itemDesc" colspan="4">
+                            <?= Alien\Notification::inline('Žiadne správy v tomto priečinku.', Alien\Notification::INFO); ?>
+                        </td>
+                    </tr>
+                <? endif; ?>
                 <? foreach ($this->inBox as $message): ?>
                     <tr class="itemRow" onClick="javascrit: window.location = '<?= str_replace('%ID%', $message->getId(), $this->goToMessagePattern); ?>';">
                         <td class="itemDesc"><span class="icon icon-<?= $message->isSeen() ? 'email2' : 'message'; ?>"></span></td>
@@ -48,6 +55,13 @@
                     <th>Náhľad</th>
                     <!--<th>Tagy</th>-->
                 </tr>
+                <? if (!sizeof($this->outBox)): ?>
+                    <tr class="">
+                        <td class="itemDesc" colspan="4">
+                            <?= Alien\Notification::inline('Žiadne správy v tomto priečinku.', Alien\Notification::INFO); ?>
+                        </td>
+                    </tr>
+                <? endif; ?>
                 <? foreach ($this->outBox as $message): ?>
                     <tr class="itemRow" onClick="javascrit: window.location = '<?= str_replace('%ID%', $message->getId(), $this->goToMessagePattern); ?>';">
                         <td class="itemDesc"><span class="icon icon-<?= $message->isSeen() ? 'email2' : 'message'; ?>"></span></td>
