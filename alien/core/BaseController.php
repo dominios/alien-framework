@@ -61,7 +61,11 @@ class BaseController {
             return;
         }
 
-        $this->setLayout(new \Alien\Layout\IndexLayout());
+        $layout = new \Alien\Layout\IndexLayout();
+        if ($layout::useNotifications) {
+            $layout->setNotificationContainer(\Alien\NotificationContainer::getInstance());
+        }
+        $this->setLayout($layout);
 
         return new Response(Response::OK, Array(
             'Title' => 'HOME',
@@ -121,9 +125,10 @@ class BaseController {
 
     protected function redirect($action, $statusCode = 301) {
         ob_clean();
-        if ($this->layout instanceof Layout) {
-            $this->getLayout()->saveSessionNotifications();
-        }
+        \Alien\NotificationContainer::getInstance()->updateSession();
+//        if ($this->layout instanceof Layout) {
+//            $this->getLayout()->saveSessionNotifications();
+//        }
         header('Location: ' . $action, false, $statusCode);
         ob_end_flush();
         exit;

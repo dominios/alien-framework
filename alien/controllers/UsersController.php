@@ -94,10 +94,12 @@ class UsersController extends BaseController {
                 if ($_POST['userPass2'] === $_POST['userPass3'] && strlen($_POST['userPass2'])) {
                     $user->setPassword($_POST['userPass2']);
                 }
-                $this->getLayout()->putNotificaion(new Notification('Zmeny boli uložené.', Notification::SUCCESS));
+//                $this->getLayout()->putNotificaion(new Notification('Zmeny boli uložené.', Notification::SUCCESS));
+                Notification::success('Zmeny boli uložené.');
                 $this->redirect(BaseController::actionURL('users', 'edit', array('id' => $user->getId())));
             } else {
-                $this->getLayout()->putNotificaion(new Notification('Zmeny sa nepodarilo uložiť.', Notification::ERROR));
+//                $this->getLayout()->putNotificaion(new Notification('Zmeny sa nepodarilo uložiť.', Notification::ERROR));
+                Notification::error('Zmeny sa nepodarilo uložiť.');
             }
         }
 

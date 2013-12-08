@@ -5,18 +5,16 @@ namespace Alien\Layout;
 use Alien\Alien;
 use Alien\View;
 use Alien\Response;
-use Alien\Notification;
+use Alien\NotificationContainer;
 use Alien\Authorization\Authorization;
 
 abstract class Layout {
 
     const SRC = '';
     const useNotifications = false;
-
-    protected $notifications = Array();
-
     const useConsole = false;
 
+    protected $notificationContainer = null;
     protected $console;
 
     public function __construct() {
@@ -31,7 +29,7 @@ abstract class Layout {
         }
     }
 
-    public static final function autoloader() {
+    public static final function includeSRC() {
         include_once 'layouts/IndexLayout.php';
         include_once 'layouts/LoginLayout.php';
     }
@@ -47,17 +45,17 @@ abstract class Layout {
         $view->setAutoEscape(false);
         $view->setAutoStripTags(false);
 
-        if ($Class::useNotifications) {
-            $sessionNotifications = unserialize($_SESSION['notifications']);
-            if (isset($_SESSION['notifications']) && sizeof($sessionNotifications)) {
-                $notifications = new View('display/system/notifications.php', null);
-                $notifications->List = $sessionNotifications;
-                $this->flushNotifications();
-                $notifications = $notifications->renderToString();
+        if ($Class::useNotifications && $this->notificationContainer instanceof NotificationContainer) {
+            $list = $this->notificationContainer->getNotifications();
+            if (sizeof($list)) {
+                $partialView = new View('display/system/notifications.php', null);
+                $partialView->list = $list;
+                $partialViewStr = $partialView->renderToString();
+                $this->notificationContainer->flushNotifications();
             } else {
-                $notifications = '';
+                $partialViewStr = '';
             }
-            $view->Notifications = $notifications;
+            $view->notifications = $partialViewStr;
         }
 
         $partials = $this->getPartials();
@@ -80,18 +78,8 @@ abstract class Layout {
         return $content;
     }
 
-    public function putNotificaion(Notification $notification) {
-        $this->notifications[] = $notification;
-        $this->saveSessionNotifications();
-    }
-
-    private function flushNotifications() {
-        unset($this->notifications, $_SESSION['notifications']);
-        $this->notifications = Array();
-    }
-
-    public function saveSessionNotifications() {
-        $_SESSION['notifications'] = serialize($this->notifications);
+    public function setNotificationContainer(NotificationContainer $container) {
+        $this->notificationContainer = $container;
     }
 
 }

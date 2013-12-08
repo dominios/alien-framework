@@ -1,7 +1,7 @@
 <!DOCTYPE HTML>
 <html>
     <head>
-        <title><?= $this->Title; ?> | ALiEN</title>
+        <title><?= $this->title; ?> | ALiEN</title>
         <meta http-equiv="content-type" content="text/html; charset=utf-8">
         <meta name="description" content="Administračné rozhranie redakčného systému ALiEN CMS.">
         <meta name="author" content="Dominik Geršák">
@@ -23,33 +23,33 @@
         <div id="alienBackground"></div>
 
         <section id="notifications">
-            <?= $this->Notifications; ?>
+            <?= $this->notifications; ?>
         </section>
 
         <section id="topbanner">
-            <strong style="font-size: 20px; margin-left: 25px;"><?= $this->Webname; ?></strong>
+            <strong style="font-size: 20px; margin-left: 25px;"><?= $this->webName; ?></strong>
         </section>
 
         <section id="toppanel">
-            <a href="index.php" class="nobackground" id="alienlogo"><img src="/alien/display/img/alien_logo_white.png" alt="ALiEN CMS"></a>
-            <div id="toppanel_menu"><?= $this->MainMenu; ?></div>
+            <a href="#" class="nobackground" id="alienlogo"><img src="/alien/display/img/alien_logo_white.png" alt="ALiEN CMS"></a>
+            <div id="toppanel_menu"><?= $this->mainMenu; ?></div>
         </section>
 
         <section id="maincontent">
             <section class="leftpanel">
-                <h3><?= $this->LeftTitle; ?></h3>
+                <h3><?= $this->leftTitle; ?></h3>
                 <div class="hr" style="margin: 5px 0;"></div>
                 <div id="leftMenu">
-                    <?= $this->LeftBox; ?>
+                    <?= $this->leftBox; ?>
                 </div>
             </section>
             <section class="rightpanel">
                 <div id="rightpanelHeader">
-                    <div id="headerTitle"><?= $this->Title; ?></div>
+                    <div id="headerTitle"><?= $this->title; ?></div>
                     <div class="hr" style="margin: 5px 0;"></div>
-                    <div id="headerActionPanel"><?= $this->ActionMenu; ?></div>
+                    <div id="headerActionPanel"><?= $this->actionMenu; ?></div>
                 </div>
-                <div style="margin-top: 20px;"><?= $this->MainContent; ?></div>
+                <div style="margin-top: 20px;"><?= $this->mainContent; ?></div>
             </section>
         </section>
 

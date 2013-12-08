@@ -55,7 +55,7 @@ function class_autoloader($class) {
     }
 
     // layouty sa tiez nacitaku staticky vsetky podla tej metody
-    Layout::autoloader();
+    Layout::includeSRC();
 
     // vypis do terminalu co sa kedy autoloaduje
     Alien::getInstance()->getConsole()->putMessage('Autoloading class <i>' . '\\' . $class . '</i>');

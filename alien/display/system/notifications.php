@@ -8,7 +8,12 @@ use Alien\Notification;
 <div style="position: absolute; top: 0px; width: 100%;">
     <div id="notifyArea">
         <?
-        foreach ($this->List as $note):
+        foreach ($this->list as $note):
+
+            if (!($note instanceof Notification)):
+                continue;
+            endif;
+
             switch ($note->getType()) {
                 case Notification::INFO:
                     $icon = 'icon-info';
