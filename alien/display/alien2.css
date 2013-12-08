@@ -438,7 +438,7 @@ textarea:focus, input:focus {
     opacity: 0;
     width: 300px;
     margin: 0px auto;
-    margin-top: 50px;
+    margin-top: 40px;
     position: relative;
     z-index: 100;
     transition: opacity .6s, margin .4s;

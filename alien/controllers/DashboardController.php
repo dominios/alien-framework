@@ -37,10 +37,10 @@ class DashboardController extends BaseController {
     }
 
     protected function home() {
-
+        $content = '';
         $view = new View('display/dashboard/home.php');
-
-        $result = array('Title' => 'Dashboard', 'ContentMain' => $view->renderToString());
+        $content .= $view->renderToString();
+        $result = array('Title' => 'Dashboard', 'ContentMain' => $content);
         return new Response(Response::OK, $result, __CLASS__ . '::' . __FUNCTION__);
     }
 

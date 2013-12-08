@@ -53,12 +53,12 @@ class User implements ActiveRecord {
         }
 
         $this->groups = array();
-        foreach ($DBH->query('SELECT id_g FROM ' . Alien::getDBPrefix() . '_group_members WHERE id_u=' . (int) $this->id) as $group) {
+        foreach ($DBH->query('SELECT id_g FROM ' . DBConfig::table(DBConfig::GROUP_MEMBERS) . ' WHERE id_u=' . (int) $this->id) as $group) {
             $this->groups[] = $group['id_g'];
         }
 
         $this->permissions = array();
-        foreach ($DBH->query('SELECT id_p FROM ' . Alien::getDBPrefix() . '_user_permissions WHERE id_u=' . (int) $this->id) as $permission) {
+        foreach ($DBH->query('SELECT id_p FROM ' . DBConfig::table(DBConfig::USER_PERMISSIONS) . ' WHERE id_u=' . (int) $this->id) as $permission) {
             $this->permissions[] = $permission['id_p'];
         }
     }
@@ -253,42 +253,25 @@ class User implements ActiveRecord {
         $mail->Send();
     }
 
-    public function getPermissions($fetch = false) {
-
+    public function getPermissions($fetch = false, $includeGroups = false) {
         $arr = array();
-        $DBH = Alien::getDatabaseHandler();
-        foreach ($DBH->query('SELECT * FROM ' . DBConfig::table(DBConfig::USER_PERMISSIONS) . ' WHERE id_u=' . $this->id) as $R) {
-            $arr[] = $fetch ? new Permission($R['id_p']) : $R['id_p'];
+        foreach ($this->permissions as $p) {
+            if ($p instanceof Permission) {
+                $arr[] = $fetch ? $p : $p->getId();
+            } else {
+                $arr[] = $fetch ? new Permission($p) : $p;
+            }
+        }
+        if ($includeGroups === true) {
+            $groups = $this->getGroups(true);
+            foreach ($groups as $group) {
+                $perms = $group->getPermissions($fetch ? true : false);
+                foreach ($perms as $p) {
+                    $arr[] = $fetch ? $p->getId() : $p;
+                }
+            }
         }
         return $arr;
-
-//        $DBH = Alien::getDatabaseHandler();
-//
-//        $allow_perms = Array();
-//
-//        // najprv cisty user z db
-//        foreach ($DBH->query('SELECT id_p FROM ' . Alien::getDBPrefix() . '_user_permissions WHERE id_u=' . (int) $this->id . ' AND value >= 1 AND ( timeout > ' . time() . ' OR timeout IS NULL)') as $row) {
-//            $allow_perms[] = $row['id_p'];
-//        }
-//        unset($row);
-//        // skupiny
-//        foreach ($this->groups as $g) {
-//            foreach ($DBH->query('SELECT id_p FROM ' . Alien::getDBPrefix() . '_group_permissions WHERE id_g=' . (int) $g . ' AND value >= 1 AND ( timeout > ' . time() . ' OR timeout IS NULL)') as $row) {
-//                if (!in_array($row['id_p'], $allow_perms)) {
-//                    $allow_perms[] = $row['id_p'];
-//                }
-//            }
-//        }
-//        unset($row);
-//        if ($fetch) {
-//            $perms = Array();
-//            foreach ($allow_perms as $p) {
-//                $perms[] = new Permission($p);
-//            }
-//            return $perms;
-//        } else {
-//            return $allow_perms;
-//        }
     }
 
     /**
@@ -361,25 +344,29 @@ class User implements ActiveRecord {
      * @return boolean <b>true</b> if user has needed permission(s), otherwise <b>false</b>.
      */
     public function hasPermission($permissions, $LOGIC = 'AND') {
+
+        $userPermissions = $this->getPermissions(true, true);
+
         // if ROOT return true, override for everything
-        $userPermissions = $this->getPermissions(true);
         if (in_array(1, $userPermissions)) {
             return true;
         }
-
-        $args = $permissions;
 
         switch (strtoupper($LOGIC)) {
             case 'OR': $LOGIC = 'OR';
                 break;
             case 'AND': $LOGIC = 'AND';
                 break;
-            case 'XOR': $LOGIC = 'XOR';
-                break;
             default: $LOGIC = 'AND';
                 break;
         }
 
+        $args = $permissions;
+        if (!is_array($args) && ( is_string($args) || is_numeric($args))) {
+            $temp = $args;
+            unset($args);
+            $args = array($temp);
+        }
         foreach ($args as $arg) {
             if (is_string($arg)) {
                 $p = new Permission($arg);
@@ -406,13 +393,8 @@ class User implements ActiveRecord {
                     }
                 }
             }
-            if ($LOGIC == 'XOR') {
-// DOROBIT !!
-            }
         }
-        return
-
-                $LOGIC == 'AND' ? true : false;
+        return $LOGIC === 'AND' ? true : false;
     }
 
     public function getId() {

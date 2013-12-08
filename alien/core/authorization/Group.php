@@ -105,6 +105,7 @@ class Group implements \Alien\ActiveRecord {
             return array();
         }
         $ret = array();
+
         $fetchedPermissions = array();
         foreach ($this->permissions as $perm) {
             if ($fetch && $perm instanceof Permission) {
