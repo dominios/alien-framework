@@ -3,6 +3,7 @@
 namespace Alien\Layot;
 
 use Alien\Controllers\BaseController;
+use Alien\Authorization\Authorization;
 
 // perm testy dorobit !
 ?>
@@ -19,6 +20,10 @@ use Alien\Controllers\BaseController;
 if (!function_exists('topmenuItemToString')) {
 
     function topmenuItemToString($item) {
+
+        if (!in_array($item['permission'], array('', NULL)) && !Authorization::getCurrentUser()->hasPermission((string) $item['permission'])) {
+            return;
+        }
 
         $link = '';
         $submenu = '';

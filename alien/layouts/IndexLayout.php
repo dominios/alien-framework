@@ -76,7 +76,6 @@ class IndexLayout extends Layout {
 
         $right = array();
         $right[] = Array('permission' => null, 'url' => BaseController::actionURL('dashboard', '#'), 'text' => \Alien\Authorization\Authorization::getCurrentUser()->getEmail(), 'img' => 'user-circle', 'submenu' => $userSubmenu);
-//        $right[] = Array('permission' => null, 'url' => BaseController::actionURL('base', 'logout'), 'text' => 'Odhlásiť', 'img' => 'logout');
 
         $menus = array();
         $menus['left'] = $left;

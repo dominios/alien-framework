@@ -8,6 +8,7 @@ use Alien\Notification;
 use Alien\Authorization\User;
 use Alien\Authorization\Group;
 use Alien\Authorization\Permission;
+use Alien\Authorization\Authorization;
 use Alien\Controllers\BaseController;
 use Alien\Forms\Form;
 use Alien\Forms\Input;
@@ -41,6 +42,12 @@ class UsersController extends BaseController {
     }
 
     protected function viewList() {
+
+        if (!Authorization::getCurrentUser()->hasPermission('USER_VIEW')) {
+            Notification::error('Nedostatočné oprávnenia.');
+            $this->redirect(BaseController::actionURL('dashboard', 'home'));
+        }
+
         $view = new View('display/users/viewList.php', $this);
         $view->users = User::getList(true);
         $view->editActionPattern = BaseController::actionURL('users', 'edit', array('id' => '%ID%'));
@@ -53,10 +60,15 @@ class UsersController extends BaseController {
 
     protected function edit() {
 
-//        if (!preg_match('/^[0-9]*$/', $_GET['id'])) {
-//            $this->getLayout()->putNotificaion(new Notification('Neplatný identifikátor používateľa.', Notification::ERROR));
-//            return;
-//        }
+        if (!preg_match('/^[0-9]*$/', $_GET['id'])) {
+            Notification::error('Neplatný identifikátor používateľa.');
+            $this->redirect(BaseController::actionURL('users', 'view'));
+        }
+
+        if (!Authorization::getCurrentUser()->hasPermission(array('USERS_VIEW', 'USER_ADMIN'))) {
+            Notification::error('Nedostatočné oprávnenia.');
+            $this->redirect(BaseController::actionURL('dashboard', 'home'));
+        }
 
         $user = new User((int) $_GET['id']);
 
@@ -94,11 +106,9 @@ class UsersController extends BaseController {
                 if ($_POST['userPass2'] === $_POST['userPass3'] && strlen($_POST['userPass2'])) {
                     $user->setPassword($_POST['userPass2']);
                 }
-//                $this->getLayout()->putNotificaion(new Notification('Zmeny boli uložené.', Notification::SUCCESS));
                 Notification::success('Zmeny boli uložené.');
                 $this->redirect(BaseController::actionURL('users', 'edit', array('id' => $user->getId())));
             } else {
-//                $this->getLayout()->putNotificaion(new Notification('Zmeny sa nepodarilo uložiť.', Notification::ERROR));
                 Notification::error('Zmeny sa nepodarilo uložiť.');
             }
         }
@@ -132,6 +142,12 @@ class UsersController extends BaseController {
     }
 
     protected function removeUser() {
+
+        if (!Authorization::getCurrentUser()->hasPermission(array('USERS_VIEW', 'USER_ADMIN'))) {
+            Notification::error('Nedostatočné oprávnenia.');
+            $this->redirect(BaseController::actionURL('dashboard', 'home'));
+        }
+
         if (User::exists($_GET['id'])) {
             $user = new User($_GET['id']);
             $user->delete();
@@ -140,6 +156,12 @@ class UsersController extends BaseController {
     }
 
     protected function addGroup() {
+
+        if (!Authorization::getCurrentUser()->hasPermission(array('USERS_VIEW', 'USER_ADMIN'))) {
+            Notification::error('Nedostatočné oprávnenia.');
+            $this->redirect(BaseController::actionURL('dashboard', 'home'));
+        }
+
         if (User::exists($_GET['user']) && Group::exists($_GET['group'])) {
             $user = new User($_GET['user']);
             $group = new Group($_GET['group']);
@@ -149,6 +171,12 @@ class UsersController extends BaseController {
     }
 
     protected function removeGroup() {
+
+        if (!Authorization::getCurrentUser()->hasPermission(array('USERS_VIEW', 'USER_ADMIN'))) {
+            Notification::error('Nedostatočné oprávnenia.');
+            $this->redirect(BaseController::actionURL('dashboard', 'home'));
+        }
+
         if (User::exists($_GET['user']) && Group::exists($_GET['group'])) {
             $user = new User($_GET['user']);
             $group = new Group($_GET['group']);
@@ -158,6 +186,12 @@ class UsersController extends BaseController {
     }
 
     protected function addPermission() {
+
+        if (!Authorization::getCurrentUser()->hasPermission(array('USERS_VIEW', 'USER_ADMIN'))) {
+            Notification::error('Nedostatočné oprávnenia.');
+            $this->redirect(BaseController::actionURL('dashboard', 'home'));
+        }
+
         if (User::exists($_GET['user']) && Permission::exists($_GET['permission'])) {
             $user = new User($_GET['user']);
             $permission = new Permission($_GET['permission']);
@@ -167,6 +201,12 @@ class UsersController extends BaseController {
     }
 
     protected function removePermission() {
+
+        if (!Authorization::getCurrentUser()->hasPermission(array('USERS_VIEW', 'USER_ADMIN'))) {
+            Notification::error('Nedostatočné oprávnenia.');
+            $this->redirect(BaseController::actionURL('dashboard', 'home'));
+        }
+
         if (User::exists($_GET['user']) && Permission::exists($_GET['permission'])) {
             $user = new User($_GET['user']);
             $permission = new Permission($_GET['permission']);
@@ -176,6 +216,12 @@ class UsersController extends BaseController {
     }
 
     protected function resetPassword() {
+
+        if (!Authorization::getCurrentUser()->hasPermission(array('USERS_VIEW', 'USER_ADMIN'))) {
+            Notification::error('Nedostatočné oprávnenia.');
+            $this->redirect(BaseController::actionURL('dashboard', 'home'));
+        }
+
         if (!preg_match('/^[0-9]*$/', $_GET['id'])) {
             new Notification('Neplatný identifikátor používateľa.', Notification::ERROR);
             return;

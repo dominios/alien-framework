@@ -29,6 +29,7 @@ $permission[7]['label']='USER_ADMIN';
 $permission[7]['sk']='upravovať používateľov';
 $permission[7]['en']='edit users';
 
+// toto sa uz nepouziva, miesto toho je len celkovo USER_ADMIN
 $permission[8]['label']='USER_GROUPS';
 $permission[8]['sk']='nastavovať oprávnenia používateľom';
 $permission[8]['en']='manage user\'s groups';
