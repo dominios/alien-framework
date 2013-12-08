@@ -1,8 +1,8 @@
-<section id="ConsoleContainer">
-    <header id="ConsoleHeader"><img src="<?= \Alien\Alien::$SystemImgUrl; ?>/console.png">Console</header>
+<section id="ConsoleContainer" style="display: none;">
+    <header id="ConsoleHeader"><span class="icon icon-console"></span>Console</header>
     <section id="ConsoleContent">
         <?
-        foreach ($this->Messages as $m) {
+        foreach ($this->messages as $m) {
             echo ('<span class="ConsoleTime">[' . date('d.m.Y H:i:s', $m['time']) . ']</span> <span class="' . $m['level'] . '">' . $m['msg'] . '</span><br>');
         }
         ?>

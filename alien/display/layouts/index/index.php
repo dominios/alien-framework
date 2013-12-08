@@ -55,6 +55,8 @@
 
         <div style="clear: both;"></div>
 
+        <?= $this->terminal; ?>
+
         <div class="md-overlay"></div><!-- the overlay element -->
 
         <!-- classie.js by @desandro: https://github.com/desandro/classie -->

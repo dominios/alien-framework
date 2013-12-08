@@ -67,15 +67,15 @@ abstract class Layout {
             }
         }
 
-        $content = $view->renderToString();
-
         if ($Class::useConsole) {
             if ((true || Alien::getParameter('debugMode')) && Authorization::getCurrentUser()->getId()) {
                 $console = new View('display/system/console.php', null);
-                $console->Messages = Alien::getInstance()->getConsole()->getMessageList();
-                $content .= $console->renderToString();
+                $console->messages = Alien::getInstance()->getConsole()->getMessageList();
+                $view->terminal = $console->renderToString();
             }
         }
+
+        $content = $view->renderToString();
 
         return $content;
     }
