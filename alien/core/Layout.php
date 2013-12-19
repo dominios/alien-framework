@@ -41,7 +41,10 @@ abstract class Layout {
     public final function renderToString() {
 
         $Class = get_called_class();
-        $view = new View($Class::SRC, null);
+//        $view = new View($Class::SRC, null);
+
+        $view = new View($this->getSRC());
+
         $view->setAutoEscape(false);
         $view->setAutoStripTags(false);
 
@@ -80,6 +83,11 @@ abstract class Layout {
 
     public function setNotificationContainer(NotificationContainer $container) {
         $this->notificationContainer = $container;
+    }
+
+    protected function getSRC() {
+        $class = get_called_class();
+        return $class::SRC;
     }
 
 }
