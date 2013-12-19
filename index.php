@@ -9,11 +9,11 @@ if (!strlen($seolink)) {
     $seolink = 1;
 }
 
-$pg = new \Alien\Models\Content\Page($seolink);
-$tmpl = $pg->getTemplate(true);
-$tmpl->fetchViews();
+$template = new Alien\Models\Content\Template(1);
 echo '<pre>';
-print_r($tmpl->getBlocks());
+$content = $template->renderToString();
+//echo htmlspecialchars($content);
+print_r($template->getPartials());
 echo '</pre>';
 
 //foreach ($tmpl->getBlocks() as $b) {

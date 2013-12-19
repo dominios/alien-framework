@@ -10,6 +10,9 @@ use Alien\Models\Content\Folder;
 use Alien\Models\Content\Template;
 use Alien\Models\Content\Page;
 use Alien\Models\Content\Widget;
+use Alien\Forms\Form;
+use Alien\Forms\Input;
+use Alien\Forms\Validator;
 use PDO;
 
 class ContentController extends BaseController {
@@ -67,17 +70,36 @@ class ContentController extends BaseController {
     }
 
     protected function editTemplate() {
+
         if (!preg_match('/^[0-9]*$/', $_GET['id'])) {
-            $this->getLayout()->putNotificaion(new Notification('Neplatný identifikátor šablóny.', Notification::ERROR));
+            Notification::ERROR('Neplatný identifikátor šablóny.');
             return;
         }
 
-        $template = new Template((int) $_GET['id']);
-        $template->fetchViews();
-
         $view = new View('display/content/temlateForm.php', $this);
-        $view->ReturnAction = '?content=browser&folder=' . $_SESSION['folder'];
-        $view->Template = $template;
+
+        $template = new Template((int) $_GET['id']);
+//        $template->fetchViews();
+
+        $form = new Form('post', '', 'templateForm');
+        $inputAction = Input::hidden('action', BaseController::actionURL('content', 'editTemplate'))->addToForm($form);
+        $inputTemplateId = Input::hidden('templateId', '', $template->getId())->addToForm($form);
+        $inputName = Input::text('templateName', '', $template->getName())->addToForm($form);
+        $inputDescription = Input::text('templateDescription', '', $template->getDescription())->addToForm($form);
+        $inputSrc = Input::text('templateSrc', '', $template->getSrcURL())->addToForm($form);
+        $inputIni = Input::text('templateIni', '', $template->getIniURL())->addToForm($form);
+        $buttonSrcChoose = Input::button('javascript: templateShowFileBrowser(\'php\');', '', 'icon-external-link');
+        $buttonSrcMagnify = Input::button('javascript: templateShowFilePreview($(\'input[name=templatePhp]\').attr(\'value\'));', '', 'icon-magnifier');
+        $view->buttonSrcChoose = $buttonSrcChoose;
+        $view->buttonSrcMagnify = $buttonSrcMagnify;
+        $buttonIniChoose = Input::button('javascript: templateShowFileBrowser(\'ini\');', '', 'icon-external-link');
+        $buttonIniMagnify = Input::button('javascript: templateShowFilePreview($(\'input[name=templateIni]\').attr(\'value\'));', '', 'icon-magnifier');
+        $view->buttonIniChoose = $buttonIniChoose;
+        $view->buttonIniMagnify = $buttonIniMagnify;
+
+        $view->returnAction = BaseController::actionURL('content', 'browser', array('folder' => $_SESSION['folder']));
+        $view->template = $template;
+        $view->form = $form;
 
         return new Response(Response::OK, Array(
             'Title' => 'Úprava šablóny: ' . $template->getName(),

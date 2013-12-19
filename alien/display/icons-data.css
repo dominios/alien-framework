@@ -205,6 +205,13 @@ span.icon.icon-plus, span.icon.icon-plus-dark {
 span.icon.icon-post, span.icon.icon-post-dark {
     background-image: url('img/post.png');
 }
+span.icon.icon-puzzle, span.icon.icon-puzzle-dark {
+    background-image: url('img/puzzle.png');
+}
+span.icon.icon-puzzle-light {
+    background-image: url('img/white/puzzle.png');
+}
+
 span.icon.icon-refresh, span.icon.icon-refresh-dark {
     background-image: url('img/refresh.png');
 }
