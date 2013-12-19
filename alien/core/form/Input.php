@@ -257,4 +257,20 @@ class Input {
         return $this;
     }
 
+    public function getName() {
+        return $this->name;
+    }
+
+    public function getType() {
+        return $this->type;
+    }
+
+    public function getSize() {
+        return $this->size;
+    }
+
+    public function getPlaceholder() {
+        return $this->placeholder;
+    }
+
 }

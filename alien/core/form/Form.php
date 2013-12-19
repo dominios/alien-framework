@@ -10,6 +10,11 @@ class Form {
     private $name;
     private $elements = array();
 
+    /**
+     * @param string $method
+     * @param string $action
+     * @param string $name
+     */
     public function __construct($method, $action, $name) {
         $this->method = strtoupper($method);
         $this->name = $name;
@@ -58,6 +63,15 @@ class Form {
     public function addElement(Input $element) {
         $this->elements[] = $element;
         return $this;
+    }
+
+    public function getElement($name) {
+        foreach ($this->elements as $elem) {
+            if ($elem->getName() === $name) {
+                return $elem;
+            }
+        }
+        return false;
     }
 
     public function validate() {
