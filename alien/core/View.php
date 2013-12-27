@@ -17,6 +17,10 @@ class View {
         $this->controller = $controller;
     }
 
+    public function __toString() {
+        return $this->renderToString();
+    }
+
     public function renderToString() {
         $content = '';
         if (file_exists($this->script)) {
@@ -28,6 +32,16 @@ class View {
 //            Terminal::getInstance()->putMessage('Cannot open view <i>' . $this->script . '</i>', Terminal::CONSOLE_WARNING);
         }
         return $content;
+    }
+
+    public function partial($src, $data = null) {
+        $view = new View($src);
+        if (is_array($data) && sizeof($data)) {
+            foreach ($data as $k => $v) {
+                $view->$k = $v;
+            }
+        }
+        return $view;
     }
 
     public function getController() {
