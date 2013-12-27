@@ -1,7 +1,5 @@
 <script type="text/javascript">
     $(document).ready(function() {
-        $("#tabs").tabs();
-        markBadInputs();
         $("input.invalidInput").mouseover(function() {
             $(this).next('div').fadeIn(400);
         });
@@ -74,7 +72,7 @@
                         <?= $this->buttonIniMagnify; ?>
                     </td>
                 </tr><tr>
-                    <td colspan="3"><hr></td>
+                    <td colspan="3"><div class="hr"></div></td>
                 </tr><tr>
                     <td colspan="3">
                         <div class="button negative" onclick="javascript: window.location = '<?= $this->returnAction; ?>';"><span class="icon icon-back"></span>Zrušiť</div>
@@ -83,7 +81,8 @@
                 </tr>
             </table>
         </article>
-        <article id="content">
+        <article id="content" class="tab-hidden">
+            <p>ldsajdksad</p><p>sdjakdjsakdas</p>
             <p>
                 <?
                 $i = 1;

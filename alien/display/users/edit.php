@@ -86,7 +86,7 @@
                 </tr>
             </table>
         </article>
-        <article id="groups" style="display: none;">
+        <article id="groups" class="tab-hidden">
             <div class="gridLayout">
                 <?
                 foreach ($this->userGroups as $group):
@@ -102,7 +102,7 @@
             <div class="hr"></div>
             <?= $this->buttonAddGroup; ?>
         </article>
-        <article id="permissions" style="display: none;">
+        <article id="permissions" class="tab-hidden">
             <div class="gridLayout">
                 <?
                 foreach ($this->userPermissions as $permission):

@@ -20,6 +20,14 @@ html {
     clear: both;
 }
 
+.notransition {
+    -webkit-transition: none !important;
+    -moz-transition: none !important;
+    -o-transition: none !important;
+    -ms-transition: none !important;
+    transition: none !important;
+}
+
 #maincontent {
 
 }
@@ -84,72 +92,6 @@ section#messageDetail {
     color: #ccc;
     text-shadow: 1px 1px #444;
     border-radius: 7px;
-}
-
-
-/* *** TABS ******************************************************************* */
-
-
-section.tabs header ul {
-    display: inline-block;
-    list-style-type: none;
-    margin: 0;
-    padding: 0;
-    width: 100%;
-    border-bottom: 1px solid #aaa;
-}
-
-section.tabs header ul li {
-    float: left;
-    display: block;
-    position: relative;
-    margin-bottom: -1px;
-}
-
-section.tabs header ul li a {
-    border: 1px solid #aaa;
-    border-top-color: #c2c2c2;
-    color: #666;
-    border-right: 0;
-    display: block;
-    padding: 10px;
-    padding-top: 5px;
-    background: url('img/main_background3.jpg') #d7d3d4;
-    transition: background .2s, color .2s;
-    -webkit-transition: background .2s, color .2s;
-}
-
-section.tabs header ul li:first-child a {
-    border-left-color: #c2c2c2;
-    border-top-left-radius: 2px;
-}
-
-section.tabs header ul li:last-child a {
-    border-right: 1px solid #aaa;
-    border-top-right-radius: 2px;
-}
-
-section.tabs header ul li.active a {
-    border-bottom-color: transparent;
-    color: #000;
-}
-
-section.tabs header ul li:hover a {
-    background: rgba(255, 255, 17, 0.2);
-    text-decoration: none;
-    color: #000;
-}
-
-section.tabs section {
-    padding: 10px;
-    padding-top: 15px;
-    border: 1px solid #aaa;
-    border-bottom-left-radius: 2px;
-    border-bottom-right-radius: 2px;
-    border-left-color: #c2c2c2;
-    border-top: none;
-    margin-top: -5px;
-    box-shadow: 2px 2px 10px rgba(187, 187, 187, 0.8);
 }
 
 

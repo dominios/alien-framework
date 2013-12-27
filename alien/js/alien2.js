@@ -104,21 +104,6 @@ $(document).ready(function($) {
     });
     $('.button.disabled').removeAttr('onclick');
 
-    /* taby */
-    $("section.tabs ul li a").live('click', function(ev) {
-        section = $(this).parent().parent().parent().parent();
-        href = $(this).attr('href');
-        $(section).find('li').has('a[href=' + href + ']').toggleClass('active');
-        $(section).find('li').has('a[href!=' + href + ']').removeClass('active');
-        $(section).find('article').hide();
-        activeHref = $(section).find('li.active').find('a').attr('href');
-        $(section).find('article' + activeHref).show();
-        ev.stopPropagation();
-        ev.preventDefault();
-    });
-
-
-
 });
 
 $(document).keyup(function(e) {

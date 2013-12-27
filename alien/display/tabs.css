@@ -1,0 +1,95 @@
+section.tabs {
+    position: relative;
+    height: 100%;
+    width: 100%;
+    display: block;
+}
+
+section.tabs header {
+    z-index: 10;
+    overflow: hidden;
+}
+
+section.tabs header ul {
+    display: inline-block;
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    width: 100%;
+}
+
+section.tabs header ul li {
+    float: left;
+    display: block;
+    position: relative;
+    margin-bottom: -1px;
+    margin-right: 3px;
+    border-top-left-radius: 3px;
+    border-top-right-radius: 3px;
+}
+
+section.tabs header ul li a {
+    border-top: 1px solid #ddd;
+    border-left: 1px solid #ddd;
+    color: #666;
+    border-right: 1px solid #aaa;
+    display: block;
+    padding: 12px;
+    padding-top: 5px;
+    background: rgba(80,80,80,0.1);
+    transition: background .2s, color .2s;
+    -webkit-transition: background .2s, color .2s;
+    border-top-left-radius: 3px;
+    border-top-right-radius: 3px;
+}
+
+section.tabs header ul li:first-child a {
+    border-left-color: #ddd;
+}
+
+section.tabs header ul li.active a {
+    color: #000;
+    background: inherit;
+}
+
+section.tabs header ul li:hover a {
+    background: rgba(255, 255, 17, 0.2);
+    text-decoration: none;
+    color: #000;
+}
+
+section.tabs section {
+    z-index: 5;
+    overflow: hidden;
+    position: relative;
+    margin: 0;
+    margin-right: 20px;
+    margin-bottom: 20px;
+    padding: 10px;
+    padding-top: 15px;
+    border: 1px solid #aaa;
+    border-bottom-left-radius: 3px;
+    border-bottom-right-radius: 3px;
+    border-left-color: #ddd;
+    border-top: none;
+    margin-top: -3px;
+    box-shadow: 2px 2px 10px rgba(187, 187, 187, 0.8);
+    transition: height .4s ease-in-out;
+    -webkit-transition: height .4s ease-in-out;
+    height: auto;
+    width: 100%;
+}
+
+section.tabs section article {
+    position: absolute;
+    display: block;
+    overflow: hidden;
+    transition: all .4s ease-in-out;
+    -webkit-transition: all .4s ease-in-out;
+}
+
+section.tabs section article.tab-hidden {
+    opacity: 0;
+    background-color: inherit;
+    color: inherit;
+}

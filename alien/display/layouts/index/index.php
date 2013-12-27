@@ -12,8 +12,10 @@
         <link type="text/css" href="/alien/display/alien-theme/jquery-ui-1.10.3.custom.css" rel="stylesheet">
         <script type="text/javascript" src="/alien/js/alien.js"></script>
         <script type="text/javascript" src="/alien/js/alien2.js"></script>
+        <script type="text/javascript" src="/alien/js/tabs.js"></script>
         <link href="/alien/display/alien.css" type="text/css" rel="stylesheet">
         <link href="/alien/display/alien2.css" type="text/css" rel="stylesheet">
+        <link href="/alien/display/tabs.css" type="text/css" rel="stylesheet">
         <link href="/alien/display/icons.css" type="text/css" rel="stylesheet">
         <link href="/alien/display/icons-data.css" type="text/css" rel="stylesheet">
         <link href="/alien/display/modal.css" type="text/css" rel="stylesheet">
