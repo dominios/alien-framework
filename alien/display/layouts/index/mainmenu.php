@@ -1,6 +1,6 @@
 <?php
 
-namespace Alien\Layuot;
+namespace Alien\Layout;
 
 use Alien\Controllers\BaseController;
 
