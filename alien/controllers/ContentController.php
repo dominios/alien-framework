@@ -25,15 +25,54 @@ class ContentController extends BaseController {
         }
 
         $menuItems = Array();
-        $menuItems[] = Array('permissions' => null, 'url' => BaseController::actionURL('content', 'homepage', array('folder' => 0)), 'img' => 'home', 'text' => 'Domovská stránka');
-        $menuItems[] = Array('permissions' => null, 'url' => BaseController::actionURL('content', 'sitemap', array('folder' => 0)), 'img' => 'sitemap', 'text' => 'Mapa webu');
+        $menuItems[] = Array('permissions' => null, 'url' => BaseController::actionURL('content', 'homepage'), 'img' => 'home', 'text' => 'Domovská stránka');
+        $menuItems[] = Array('permissions' => null, 'url' => BaseController::actionURL('content', 'sitemap'), 'img' => 'sitemap', 'text' => 'Mapa webu');
         $menuItems[] = Array('permissions' => null, 'url' => BaseController::actionURL('content', 'browser', array('folder' => 0)), 'img' => 'folder', 'text' => 'ROOT');
+        $menuItems[] = Array('permissions' => null, 'url' => BaseController::actionURL('content', 'viewTemplates'), 'img' => 'template', 'text' => 'Šablóny');
+        $menuItems[] = Array('permissions' => null, 'url' => BaseController::actionURL('content', 'viewTemplateBlocks'), 'img' => 'code', 'text' => 'Boxy šablón');
+        $menuItems[] = Array('permissions' => null, 'url' => BaseController::actionURL('content', 'viewPages'), 'img' => 'page', 'text' => 'Stránky');
+        $menuItems[] = Array('permissions' => null, 'url' => BaseController::actionURL('content', 'viewGalleries'), 'img' => 'gallery', 'text' => 'Galérie');
+        $menuItems[] = Array('permissions' => null, 'url' => BaseController::actionURL('content', 'viewNews'), 'img' => 'magazine', 'text' => 'Novinky');
+        $menuItems[] = Array('permissions' => null, 'url' => BaseController::actionURL('content', 'viewDocuments'), 'img' => 'book-stack', 'text' => 'Dokumenty');
+        $menuItems[] = Array('permissions' => null, 'url' => BaseController::actionURL('content', 'viewMenus'), 'img' => 'list', 'text' => 'Menu');
 
         return new Response(Response::OK, Array(
             'ContentLeft' => $menuItems,
             'LeftTitle' => 'Obsah webu',
             'MainMenu' => $data['MainMenu']
                 ), __CLASS__ . '::' . __FUNCTION__);
+    }
+
+    private function viewList($type) {
+
+        switch ($type) {
+            case 'template':
+                $items = Template::fetchAll(true);
+                $name = 'šablón';
+                break;
+            case 'page':
+//                $items = Page::fetchAll(true);
+                $name = 'stránok';
+            default: $items = array();
+                break;
+        }
+
+        $view = new View('display/content/viewList.php');
+        $view->items = $items;
+
+
+        return new Response(Response::OK, Array(
+            'Title' => 'Zoznam ' . $name,
+            'ContentMain' => $view->renderToString()
+                ), __CLASS__ . '::' . __FUNCTION__);
+    }
+
+    protected function viewTemplates() {
+        return $this->viewList('template');
+    }
+
+    protected function viewPages() {
+        return $this->viewList('page');
     }
 
     protected function browser() {
@@ -87,7 +126,6 @@ class ContentController extends BaseController {
         $inputName = Input::text('templateName', '', $template->getName())->addToForm($form);
         $inputDescription = Input::text('templateDescription', '', $template->getDescription())->addToForm($form);
         $inputSrc = Input::text('templateSrc', '', $template->getSrcURL())->addToForm($form);
-        $inputIni = Input::text('templateIni', '', $template->getIniURL())->addToForm($form);
         $buttonSrcChoose = Input::button('javascript: templateShowFileBrowser(\'php\');', '', 'icon-external-link');
         $buttonSrcMagnify = Input::button('javascript: templateShowFilePreview($(\'input[name=templatePhp]\').attr(\'value\'));', '', 'icon-magnifier');
         $view->buttonSrcChoose = $buttonSrcChoose;
@@ -208,4 +246,3 @@ class ContentController extends BaseController {
     }
 
 }
-

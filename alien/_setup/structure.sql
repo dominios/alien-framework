@@ -81,7 +81,7 @@ CREATE TABLE `test_authorization` (
   `ip` varchar(20) NOT NULL,
   `url` varchar(250) NOT NULL,
   PRIMARY KEY (`id_auth`)
-) ENGINE=MyISAM AUTO_INCREMENT=323 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=336 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -182,6 +182,21 @@ CREATE TABLE `test_content_pages` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
+-- Table structure for table `test_content_template_blocks`
+--
+
+DROP TABLE IF EXISTS `test_content_template_blocks`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `test_content_template_blocks` (
+  `id_b` int(8) unsigned NOT NULL AUTO_INCREMENT,
+  `label` varchar(30) NOT NULL,
+  PRIMARY KEY (`id_b`),
+  UNIQUE KEY `UNIQUE` (`label`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
 -- Table structure for table `test_content_templates`
 --
 
@@ -194,7 +209,6 @@ CREATE TABLE `test_content_templates` (
   `name` varchar(25) NOT NULL,
   `description` varchar(100) DEFAULT NULL,
   `src` varchar(50) NOT NULL,
-  `ini` varchar(50) NOT NULL,
   PRIMARY KEY (`id_t`)
 ) ENGINE=MyISAM AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -450,4 +464,4 @@ CREATE TABLE `test_users` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2013-12-24 22:31:49
+-- Dump completed on 2013-12-27 23:52:46

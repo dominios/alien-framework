@@ -58,18 +58,11 @@
                     <td><span class="icon icon-note"></span> Krátky popis:</td>
                     <td colspan="2"><?= $this->form->getElement('templateDescription'); ?></td>
                 </tr><tr>
-                    <td><span class="icon icon-php"></span> Zdrojový súbor:</td>
+                    <td><span class="icon icon-code"></span> Zdrojový súbor:</td>
                     <td><?= $this->form->getElement('templateSrc'); ?></td>
                     <td>
                         <?= $this->buttonSrcChoose; ?>
                         <?= $this->buttonSrcMagnify; ?>
-                    </td>
-                </tr><tr>
-                    <td><span class="icon icon-service"></span> Konfiguračný súbor:</td>
-                    <td><?= $this->form->getElement('templateIni'); ?></td>
-                    <td>
-                        <?= $this->buttonIniChoose; ?>
-                        <?= $this->buttonIniMagnify; ?>
                     </td>
                 </tr><tr>
                     <td colspan="3"><div class="hr"></div></td>

@@ -2,15 +2,16 @@
 
 namespace Alien\Models\Content;
 
+use Alien\ActiveRecord;
 use Alien\Alien;
 use Alien\Layout\Layout;
 use Alien\Controllers\BaseController;
 use Alien\DBConfig;
 use \PDO;
 
-class Template extends Layout implements FileInterface {
+class Template extends Layout implements ActiveRecord, FileInterface {
 
-    const ICON = 'template.png';
+    const ICON = 'template';
     const BROWSEABLE = true;
 
     private $id;
@@ -18,7 +19,6 @@ class Template extends Layout implements FileInterface {
     private $name;
     private $description;
     private $src;
-    private $ini;
     private $blocks;
 
     public function __construct($id = null, $row = null) {
@@ -38,7 +38,6 @@ class Template extends Layout implements FileInterface {
             $this->name = '';
             $this->description = '';
             $this->src = '';
-            $this->ini = '';
             $this->blocks = array();
             $this->folder = new Folder($row['id_f']);
             return;
@@ -46,27 +45,17 @@ class Template extends Layout implements FileInterface {
         $this->id = $row['id_t'];
         $this->name = $row['name'];
         $this->src = $row['src'];
-        $this->ini = $row['ini'];
         $this->description = $row['description'];
 //        $this->blocks=parse_ini_file($row['config_url']);
 //        $this->fetchBlocks();
 //        $this->fetchViews();
-
-        $this->initBlocks();
     }
 
     protected function getSRC() {
         return $this->src;
     }
 
-    protected function initBlocks() {
-        ob_start();
-        $blocks = include $this->getIniURL();
-        ob_end_clean();
-        $this->blocks = $blocks;
-    }
-
-    public static function getTempatesList($fetch = false) {
+    public static function fetchAll($fetch = false) {
         $DBH = Alien::getDatabaseHandler();
         $arr = array();
         $STH = $DBH->prepare("SELECT * FROM " . DBConfig::table(DBConfig::TEMPLATES));
@@ -93,11 +82,11 @@ class Template extends Layout implements FileInterface {
         $new = $this->id === null ? true : false;
         if ($new) {
             $Q = $DBH->prepare('INSERT INTO ' . DBConfig::table(DBConfig::TEMPLATES) . '
-             (id_f, name, src, ini, description)
-             VALUES (:idf, :name, :src, :ini, :desc);');
+             (id_f, name, src, description)
+             VALUES (:idf, :name, :src, :desc);');
         } else {
             $Q = $DBH->prepare('UPDATE ' . DBConfig::table(DBConfig::TEMPLATES) . '
-            SET id_f=:idf, name=:name, src=:src, ini=:ini, description=:desc
+            SET id_f=:idf, name=:name, src=:src, description=:desc
             WHERE id_t=:i'
             );
             $Q->bindValue(':i', $this->id, PDO::PARAM_INT);
@@ -105,7 +94,6 @@ class Template extends Layout implements FileInterface {
         $Q->bindValue(':idf', $this->folder->getId(), PDO::PARAM_INT);
         $Q->bindValue(':name', $this->name, PDO::PARAM_STR);
         $Q->bindValue(':src', $this->src, PDO::PARAM_STR);
-        $Q->bindValue(':ini', $this->ini, PDO::PARAM_STR);
         $Q->bindValue(':desc', $this->description, PDO::PARAM_STR);
         $ret = $Q->execute();
         if ($new && $ret) {
@@ -152,10 +140,6 @@ class Template extends Layout implements FileInterface {
 
     public function getSrcURL() {
         return $this->src;
-    }
-
-    public function getIniURL() {
-        return $this->ini;
     }
 
     public function getDescription() {
@@ -224,8 +208,9 @@ class Template extends Layout implements FileInterface {
         if ($ignoreId === null) {
             return $Q->rowCount() ? true : false;
         } else {
-            if (!$Q->rowCount())
+            if (!$Q->rowCount()) {
                 return false;
+            }
             $R = $Q->fetch();
             return $R['id_t'] == $ignoreId ? false : true;
         }
@@ -270,12 +255,28 @@ class Template extends Layout implements FileInterface {
             'description' => '',
             'keywords' => array()
         );
-        $blocks = $this->blocks;
+        $blocks = array();
         $partials = array_merge($meta, $blocks);
         return $partials;
     }
 
     public function handleResponse(\Alien\Response $response) {
+
+    }
+
+    public function isDeletable() {
+        
+    }
+
+    public function update() {
+
+    }
+
+    public static function create($initialValues) {
+
+    }
+
+    public static function getList($fetch = false) {
 
     }
 

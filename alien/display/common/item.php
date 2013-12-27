@@ -6,11 +6,4 @@
             <a class="button" href="<?= $this->dropLink; ?>"><span class="icon icon-delete"></span></a>
             <? endif; ?>
     </div>
-
-    <?
-//    if ($this->Item instanceof VariableItemView) {
-////    var_dump($this->Item->getItem(true)->getContainer() );
-//        var_dump($this->Item->fetchViews(new ContentPage(1)));
-//    }
-    ?>
 </div>

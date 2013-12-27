@@ -18,6 +18,9 @@ span.icon.icon-backgroundAlien, span.icon.icon-backgroundAlien-dark {
 span.icon.icon-book-stack, span.icon.icon-book-stack-dark {
     background-image: url('img/book_stack.png');
 }
+span.icon.icon-box, span.icon.icon-box-dark {
+    background-image: url('img/box.png');
+}
 span.icon.icon-bullet, span.icon.icon-bullet-dark {
     background-image: url('img/bullet.png');
 }
@@ -43,6 +46,10 @@ span.icon.icon-clock-light {
 span.icon.icon-code, span.icon.icon-code-dark {
     background-image: url('img/code.png');
 }
+span.icon.icon-code-light {
+    background-image: url('img/white/code.png');
+}
+
 span.icon.icon-comments, span.icon.icon-comments-dark {
     background-image: url('img/comments.png');
 }
@@ -117,6 +124,9 @@ span.icon.icon-folder-light {
 span.icon.icon-forward, span.icon.icon-forward-dark {
     background-image: url('img/forward.png');
 }
+span.icon.icon-gallery, span.icon.icon-gallery-dark {
+    background-image: url('img/gallery.png');
+}
 span.icon.icon-group, span.icon.icon-group-dark {
     background-image: url('img/group.png');
 }
@@ -151,6 +161,9 @@ span.icon.icon-less, span.icon.icon-less-dark {
 }
 span.icon.icon-link, span.icon.icon-link-dark {
     background-image: url('img/link.png');
+}
+span.icon.icon-list, span.icon.icon-list-dark {
+    background-image: url('img/list.png');
 }
 span.icon.icon-locked, span.icon.icon-locked-dark {
     background-image: url('img/locked.png');
@@ -204,6 +217,9 @@ span.icon.icon-plus, span.icon.icon-plus-dark {
 }
 span.icon.icon-post, span.icon.icon-post-dark {
     background-image: url('img/post.png');
+}
+span.icon.icon-private, span.icon.icon-private-dark {
+    background-image: url('img/private.png');
 }
 span.icon.icon-puzzle, span.icon.icon-puzzle-dark {
     background-image: url('img/puzzle.png');
