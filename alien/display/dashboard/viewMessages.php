@@ -46,7 +46,7 @@
             <div class="hr"></div>
             <a class="button" href="<?= $this->composeMessageAction; ?>"><span class="icon icon-message"></span>Nová správa</a>
         </article>
-        <article id="outbox" style="display: none;">
+        <article id="outbox" class="tab-hidden">
             <table class="itemList">
                 <tr class="itemHeaderRow">
                     <th width="26"></th>
