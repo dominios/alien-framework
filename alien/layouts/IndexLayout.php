@@ -19,6 +19,7 @@ class IndexLayout extends Layout {
     private $leftTitle = '';
     private $contentLeft = '';
     private $contentMain = '';
+    private $floatPanel = '';
 
     public function __construct() {
         $this->mainMenu = $this->generateTopMenu($this->topmenuItems());
@@ -30,7 +31,8 @@ class IndexLayout extends Layout {
             'mainMenu' => $this->mainMenu,
             'leftBox' => $this->contentLeft,
             'mainContent' => $this->contentMain,
-            'leftTitle' => $this->leftTitle
+            'leftTitle' => $this->leftTitle,
+            'floatPanel' => $this->floatPanel
         );
     }
 
@@ -50,6 +52,9 @@ class IndexLayout extends Layout {
         }
         if (isset($data['MainMenu']) && is_array($data['MainMenu'])) {
             $this->mainMenu = $data['MainMenu'];
+        }
+        if (isset($data['FloatPanel'])) {
+            $this->floatPanel = $data['FloatPanel'];
         }
     }
 
@@ -96,4 +101,3 @@ class IndexLayout extends Layout {
     }
 
 }
-

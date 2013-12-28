@@ -308,7 +308,7 @@ a.button:hover {
 
 input[disabled]{
     background-color: #e7e7e7;
-    cursor: url(img/impossible.ico), auto;
+    cursor: url(/alien/display/img/impossible.ico), auto;
 }
 
 input[disabled]:hover{
@@ -317,7 +317,7 @@ input[disabled]:hover{
 
 button.disabled, .button.disabled {
     background-color: #ccc;
-    cursor: url(img/impossible.ico), auto;
+    cursor: url(/alien/display/img/impossible.ico), auto;
 }
 
 button.disabled:hover, .button.disabled:hover {

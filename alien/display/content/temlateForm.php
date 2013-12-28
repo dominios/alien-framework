@@ -1,12 +1,4 @@
 <script type="text/javascript">
-    $(document).ready(function() {
-        $("input.invalidInput").mouseover(function() {
-            $(this).next('div').fadeIn(400);
-        });
-        $("input.invalidInput").mouseout(function() {
-            $(this).next('div').fadeOut(400);
-        });
-    });
     function templateShowFileBrowser(type) {
         if (!type)
             return;
@@ -34,6 +26,15 @@
         showFilePreview(file);
     }
 
+    $(function() {
+        $("section.tabs").find('li a').live('click', function() {
+            if ($(this).attr('href') === '#content') {
+                $("section#rightFloatPanel").removeClass('disabled');
+            } else {
+                $("section#rightFloatPanel").addClass('disabled');
+            }
+        });
+    });
 </script>
 
 <?= $this->form->startTag(); ?>
@@ -124,6 +125,5 @@
         </article>
     </section>
 </section>
-
 
 <?= $this->form->endTag(); ?>

@@ -55,17 +55,6 @@ class Template extends Layout implements ActiveRecord, FileInterface {
         return $this->src;
     }
 
-    public static function fetchAll($fetch = false) {
-        $DBH = Alien::getDatabaseHandler();
-        $arr = array();
-        $STH = $DBH->prepare("SELECT * FROM " . DBConfig::table(DBConfig::TEMPLATES));
-        $STH->execute();
-        while ($item = $STH->fetch()) {
-            $arr[] = $fetch ? new Template($item['id_t'], $item) : $item['id_t'];
-        }
-        return $arr;
-    }
-
     public static function exists($id) {
         $DBH = Alien::getDatabaseHandler();
         $Q = $DBH->query('SELECT 1 FROM ' . DBConfig::table(DBConfig::TEMPLATES) . '
@@ -265,7 +254,7 @@ class Template extends Layout implements ActiveRecord, FileInterface {
     }
 
     public function isDeletable() {
-        
+
     }
 
     public function update() {
@@ -277,7 +266,14 @@ class Template extends Layout implements ActiveRecord, FileInterface {
     }
 
     public static function getList($fetch = false) {
-
+        $DBH = Alien::getDatabaseHandler();
+        $arr = array();
+        $STH = $DBH->prepare("SELECT * FROM " . DBConfig::table(DBConfig::TEMPLATES));
+        $STH->execute();
+        while ($item = $STH->fetch()) {
+            $arr[] = $fetch ? new Template($item['id_t'], $item) : $item['id_t'];
+        }
+        return $arr;
     }
 
 }

@@ -13,8 +13,8 @@
         <script type="text/javascript" src="/alien/js/alien.js"></script>
         <script type="text/javascript" src="/alien/js/alien2.js"></script>
         <script type="text/javascript" src="/alien/js/tabs.js"></script>
-        <link href="/alien/display/alien.css" type="text/css" rel="stylesheet">
-        <link href="/alien/display/alien2.css" type="text/css" rel="stylesheet">
+        <link href="/alien/display/layouts/index/alien.css" type="text/css" rel="stylesheet">
+        <link href="/alien/display/layouts/index/alien2.css" type="text/css" rel="stylesheet">
         <link href="/alien/display/tabs.css" type="text/css" rel="stylesheet">
         <link href="/alien/display/icons.css" type="text/css" rel="stylesheet">
         <link href="/alien/display/icons-data.css" type="text/css" rel="stylesheet">
@@ -53,17 +53,16 @@
                 </div>
                 <div style="margin-top: 20px;"><?= $this->mainContent; ?></div>
             </section>
+            <section id="rightFloatPanel" class="disabled">
+                <div class="inner">
+                    <?= $this->floatPanel; ?>
+                </div>
+            </section>
         </section>
 
-        <div style="clear: both;"></div>
+        <div class="cleaner"></div>
 
         <?= $this->terminal; ?>
-
-        <div class="md-overlay"></div><!-- the overlay element -->
-
-        <!-- classie.js by @desandro: https://github.com/desandro/classie -->
-        <script src="/alien/js/classie.js"></script>
-        <script src="/alien/js/modalEffects.js"></script>
 
     </body>
 </html>

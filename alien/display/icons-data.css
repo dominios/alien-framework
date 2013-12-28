@@ -294,6 +294,13 @@ span.icon.icon-user-circle-light {
 span.icon.icon-variable, span.icon.icon-variable-dark {
     background-image: url('img/variable.png');
 }
+span.icon.icon-varx, span.icon.icon-varx-dark {
+    background-image: url('img/varx.png');
+}
+span.icon.icon-varx-light {
+    background-image: url('img/white/varx.png');
+}
+
 span.icon.icon-warning, span.icon.icon-warning-dark {
     background-image: url('img/warning.png');
 }

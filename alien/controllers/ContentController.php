@@ -8,6 +8,7 @@ use Alien\Response;
 use Alien\Notification;
 use Alien\Models\Content\Folder;
 use Alien\Models\Content\Template;
+use Alien\Models\Content\TemplateBlock;
 use Alien\Models\Content\Page;
 use Alien\Models\Content\Widget;
 use Alien\Forms\Form;
@@ -29,7 +30,8 @@ class ContentController extends BaseController {
         $menuItems[] = Array('permissions' => null, 'url' => BaseController::actionURL('content', 'sitemap'), 'img' => 'sitemap', 'text' => 'Mapa webu');
         $menuItems[] = Array('permissions' => null, 'url' => BaseController::actionURL('content', 'browser', array('folder' => 0)), 'img' => 'folder', 'text' => 'ROOT');
         $menuItems[] = Array('permissions' => null, 'url' => BaseController::actionURL('content', 'viewTemplates'), 'img' => 'template', 'text' => 'Šablóny');
-        $menuItems[] = Array('permissions' => null, 'url' => BaseController::actionURL('content', 'viewTemplateBlocks'), 'img' => 'code', 'text' => 'Boxy šablón');
+        $menuItems[] = Array('permissions' => null, 'url' => BaseController::actionURL('content', 'viewTemplateBlocks'), 'img' => 'varx', 'text' => 'Boxy šablón');
+        $menuItems[] = Array('permissions' => null, 'url' => BaseController::actionURL('content', 'viewBoxes'), 'img' => 'box', 'text' => 'Skupiny objektov');
         $menuItems[] = Array('permissions' => null, 'url' => BaseController::actionURL('content', 'viewPages'), 'img' => 'page', 'text' => 'Stránky');
         $menuItems[] = Array('permissions' => null, 'url' => BaseController::actionURL('content', 'viewGalleries'), 'img' => 'gallery', 'text' => 'Galérie');
         $menuItems[] = Array('permissions' => null, 'url' => BaseController::actionURL('content', 'viewNews'), 'img' => 'magazine', 'text' => 'Novinky');
@@ -47,18 +49,26 @@ class ContentController extends BaseController {
 
         switch ($type) {
             case 'template':
-                $items = Template::fetchAll(true);
+                $items = Template::getList(true);
                 $name = 'šablón';
                 break;
             case 'page':
-//                $items = Page::fetchAll(true);
+//                $items = Page::getList(true);
                 $name = 'stránok';
+                break;
+            case 'block':
+                $items = TemplateBlock::getList(true);
+                $name = 'blokov šablón';
+                break;
             default: $items = array();
                 break;
         }
 
+        $newButton = Input::button(BaseController::actionURL('content', 'newBlock'), 'Pridať', 'icon-plus');
+
         $view = new View('display/content/viewList.php');
         $view->items = $items;
+        $view->buttonNew = $newButton;
 
 
         return new Response(Response::OK, Array(
@@ -69,6 +79,10 @@ class ContentController extends BaseController {
 
     protected function viewTemplates() {
         return $this->viewList('template');
+    }
+
+    protected function viewTemplateBlocks() {
+        return $this->viewList('block');
     }
 
     protected function viewPages() {
@@ -139,9 +153,12 @@ class ContentController extends BaseController {
         $view->template = $template;
         $view->form = $form;
 
+        $viewFloatPanel = new View('display/content/templateFloatPanel.php');
+
         return new Response(Response::OK, Array(
             'Title' => 'Úprava šablóny: ' . $template->getName(),
-            'ContentMain' => $view->renderToString()
+            'ContentMain' => $view->renderToString(),
+            'FloatPanel' => $viewFloatPanel->renderToString()
                 ), __CLASS__ . '::' . __FUNCTION__);
     }
 

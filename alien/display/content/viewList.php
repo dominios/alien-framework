@@ -10,10 +10,12 @@ if (!count($this->items)) {
         $params = array(
             'item' => $item,
             'icon' => $item->getIcon(),
-            'onClick' => 'window: location=\'' . $item->actionGoTo() . '\'',
+            'onClick' => strlen($item->actionGoTo()) ? 'window: location=\'' . $item->actionGoTo() . '\'' : '',
             'dropLink' => $item->actionDrop()
         );
         echo($this->partial('display/common/item.php', $params));
     endforeach;
     ?>
 </div>
+
+<div class="cleaner"></div>
