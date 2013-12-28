@@ -72,6 +72,13 @@ span.icon.icon-dashboard-light {
 span.icon.icon-delete, span.icon.icon-delete-dark {
     background-image: url('img/delete.png');
 }
+span.icon.icon-document, span.icon.icon-document-dark {
+    background-image: url('img/document.png');
+}
+span.icon.icon-document-light {
+    background-image: url('img/white/document.png');
+}
+
 span.icon.icon-down-triangle, span.icon.icon-down-triangle-dark {
     background-image: url('img/down-triangle.png');
 }
@@ -188,6 +195,13 @@ span.icon.icon-magazine-light {
 span.icon.icon-magnifier, span.icon.icon-magnifier-dark {
     background-image: url('img/magnifier.png');
 }
+span.icon.icon-menu, span.icon.icon-menu-dark {
+    background-image: url('img/menu.png');
+}
+span.icon.icon-menu-light {
+    background-image: url('img/white/menu.png');
+}
+
 span.icon.icon-message, span.icon.icon-message-dark {
     background-image: url('img/message.png');
 }
@@ -200,6 +214,13 @@ span.icon.icon-minus, span.icon.icon-minus-dark {
 span.icon.icon-more, span.icon.icon-more-dark {
     background-image: url('img/more.png');
 }
+span.icon.icon-move, span.icon.icon-move-dark {
+    background-image: url('img/move.png');
+}
+span.icon.icon-move-light {
+    background-image: url('img/white/move.png');
+}
+
 span.icon.icon-note, span.icon.icon-note-dark {
     background-image: url('img/note.png');
 }
@@ -212,6 +233,13 @@ span.icon.icon-page, span.icon.icon-page-dark {
 span.icon.icon-php, span.icon.icon-php-dark {
     background-image: url('img/php.png');
 }
+span.icon.icon-php2, span.icon.icon-php2-dark {
+    background-image: url('img/php2.png');
+}
+span.icon.icon-php2-light {
+    background-image: url('img/white/php2.png');
+}
+
 span.icon.icon-plus, span.icon.icon-plus-dark {
     background-image: url('img/plus.png');
 }

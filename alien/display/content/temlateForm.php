@@ -27,6 +27,7 @@
     }
 
     $(function() {
+        $("section#rightFloatPanel").removeClass('disabled');
         $("section.tabs").find('li a').live('click', function() {
             if ($(this).attr('href') === '#content') {
                 $("section#rightFloatPanel").removeClass('disabled');
@@ -45,13 +46,13 @@
 <section class="tabs" id="userTabs">
     <header>
         <ul>
-            <li class="active"><a href="#config"><span class="icon icon-service"></span>Konfigurácia</a></li>
-            <li><a href="#content"><span class="icon icon-puzzle"></span>Obsah</a></li>
+            <li><a href="#config"><span class="icon icon-service"></span>Konfigurácia</a></li>
+            <li class="active"><a href="#content"><span class="icon icon-puzzle"></span>Obsah</a></li>
         </ul>
     </header>
     <section>
-        <article id="config">
-            <table clas="full">
+        <article id="config" class="tab-hidden">
+            <table class="full">
                 <tr>
                     <td><span class="icon icon-template"></span> Názov šablóny:</td>
                     <td colspan="2"><?= $this->form->getElement('templateName'); ?></td>
@@ -75,53 +76,9 @@
                 </tr>
             </table>
         </article>
-        <article id="content" class="tab-hidden">
-            <p>ldsajdksad</p><p>sdjakdjsakdas</p>
-            <p>
-                <?
-                $i = 1;
-
-//                $blocks = $this->Template->getBlocks();
-
-                $blocks = array();
-
-                foreach ($blocks as $block) {
-
-                    $urlname = $block['name'];
-                    $items = $block['items'];
-
-                    $poradie = '';
-//                    $addViewAction = 'javascript: window.location=\'?content&amp;addViewToTemplate&amptid=' . $this->Template->getId() . '&amp;block=' . $i . '\'';
-                    $addViewAction = BaseController::actionURL('content', 'addView', array('template' => $this->Template->getId(), 'box' => $i));
-
-                    echo ('<fieldset style="margin-top: 10px;"><legend><img class="toggleHideable less" onClick="javascript: toggleHideable(' . $i . ');" src="' . Alien::$SystemImgUrl . '/less.png" style="width: 16px; margin-right: 6px;">' . $urlname . '</legend>');
-                    echo ('<div id="hideable-' . $i . '">');
-                    echo ('<div id="sortable-' . $i . '" class="sortable">');
-
-                    foreach ($items as $item) {
-                        $itemView = new View('display/content/itemList.php');
-                        $itemView->Item = $item;
-                        echo $itemView->renderToString();
-//                        var_dump($itemView);
-//                        echo $itemView->getContent();
-                    }
-
-
-//                        var_dump(count($block['items']));
-//                            echo ('<div class="ui-state-default" id="'.$view->getId().'">');
-//                            echo ('</div>');
-//                            $poradie.=$view->getId().',';
-                    echo ('</div>');
-                    echo ('</div>');
-
-                    $poradie = substr($poradie, 0, strlen($poradie) - 1);
-                    echo ('<input type="hidden" name="order-sortable-' . $i . '" value="' . $poradie . '">');
-                    echo '<a class="button neutral" style="margin-left: 5px; margin-top: 7px; margin-bottom: 10px;" href="' . $addViewAction . '"><img src="' . Alien::$SystemImgUrl . '/add.png">&nbsp;Pridat objekt do: <i>' . $urlname . '</i></a>';
-                    $i++;
-                    echo ('</fieldset>');
-                }
-                ?>
-            </p>
+        <article id="content">
+            <?
+            ?>
         </article>
     </section>
 </section>

@@ -9,7 +9,7 @@ use Alien\DBConfig;
 
 class TemplateBlock implements FileInterface, ActiveRecord {
 
-    const ICON = 'varx';
+    const ICON = 'puzzle';
 
     private $label;
 

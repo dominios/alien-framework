@@ -15,6 +15,7 @@
         <script type="text/javascript" src="/alien/js/tabs.js"></script>
         <link href="/alien/display/layouts/index/alien.css" type="text/css" rel="stylesheet">
         <link href="/alien/display/layouts/index/alien2.css" type="text/css" rel="stylesheet">
+        <link href="/alien/display/sidebar.css" type="text/css" rel="stylesheet">
         <link href="/alien/display/tabs.css" type="text/css" rel="stylesheet">
         <link href="/alien/display/icons.css" type="text/css" rel="stylesheet">
         <link href="/alien/display/icons-data.css" type="text/css" rel="stylesheet">
@@ -38,6 +39,7 @@
         </section>
 
         <section id="maincontent">
+
             <section class="leftpanel">
                 <h3><?= $this->leftTitle; ?></h3>
                 <div class="hr" style="margin: 5px 0;"></div>
@@ -45,6 +47,7 @@
                     <?= $this->leftBox; ?>
                 </div>
             </section>
+
             <section class="rightpanel">
                 <div id="rightpanelHeader">
                     <div id="headerTitle"><?= $this->title; ?></div>
@@ -53,11 +56,13 @@
                 </div>
                 <div style="margin-top: 20px;"><?= $this->mainContent; ?></div>
             </section>
-            <section id="rightFloatPanel" class="disabled">
+
+            <section id="rightFloatPanel" class="sidebar sidebar-small sidebar-left disabled">
                 <div class="inner">
                     <?= $this->floatPanel; ?>
                 </div>
             </section>
+
         </section>
 
         <div class="cleaner"></div>

@@ -27,16 +27,17 @@ class ContentController extends BaseController {
 
         $menuItems = Array();
         $menuItems[] = Array('permissions' => null, 'url' => BaseController::actionURL('content', 'homepage'), 'img' => 'home', 'text' => 'Domovská stránka');
-        $menuItems[] = Array('permissions' => null, 'url' => BaseController::actionURL('content', 'sitemap'), 'img' => 'sitemap', 'text' => 'Mapa webu');
-        $menuItems[] = Array('permissions' => null, 'url' => BaseController::actionURL('content', 'browser', array('folder' => 0)), 'img' => 'folder', 'text' => 'ROOT');
-        $menuItems[] = Array('permissions' => null, 'url' => BaseController::actionURL('content', 'viewTemplates'), 'img' => 'template', 'text' => 'Šablóny');
-        $menuItems[] = Array('permissions' => null, 'url' => BaseController::actionURL('content', 'viewTemplateBlocks'), 'img' => 'varx', 'text' => 'Boxy šablón');
-        $menuItems[] = Array('permissions' => null, 'url' => BaseController::actionURL('content', 'viewBoxes'), 'img' => 'box', 'text' => 'Skupiny objektov');
         $menuItems[] = Array('permissions' => null, 'url' => BaseController::actionURL('content', 'viewPages'), 'img' => 'page', 'text' => 'Stránky');
+//        $menuItems[] = Array('permissions' => null, 'url' => BaseController::actionURL('content', 'browser', array('folder' => 0)), 'img' => 'folder', 'text' => 'ROOT');
+        $menuItems[] = Array('permissions' => null, 'url' => BaseController::actionURL('content', 'viewTemplates'), 'img' => 'template', 'text' => 'Šablóny', 'regex' => 'template');
+        $menuItems[] = Array('permissions' => null, 'url' => BaseController::actionURL('content', 'viewBlocks'), 'img' => 'puzzle', 'text' => 'Boxy šablón', 'regex' => 'block');
+        $menuItems[] = Array('permissions' => null, 'url' => BaseController::actionURL('content', 'viewBoxes'), 'img' => 'box', 'text' => 'Skupiny objektov');
+        $menuItems[] = Array('permissions' => null, 'url' => BaseController::actionURL('content', 'viewTexts'), 'img' => 'document', 'text' => 'Texty');
         $menuItems[] = Array('permissions' => null, 'url' => BaseController::actionURL('content', 'viewGalleries'), 'img' => 'gallery', 'text' => 'Galérie');
         $menuItems[] = Array('permissions' => null, 'url' => BaseController::actionURL('content', 'viewNews'), 'img' => 'magazine', 'text' => 'Novinky');
         $menuItems[] = Array('permissions' => null, 'url' => BaseController::actionURL('content', 'viewDocuments'), 'img' => 'book-stack', 'text' => 'Dokumenty');
         $menuItems[] = Array('permissions' => null, 'url' => BaseController::actionURL('content', 'viewMenus'), 'img' => 'list', 'text' => 'Menu');
+        $menuItems[] = Array('permissions' => null, 'url' => BaseController::actionURL('content', 'sitemap'), 'img' => 'sitemap', 'text' => 'Mapa webu');
 
         return new Response(Response::OK, Array(
             'ContentLeft' => $menuItems,
@@ -81,7 +82,7 @@ class ContentController extends BaseController {
         return $this->viewList('template');
     }
 
-    protected function viewTemplateBlocks() {
+    protected function viewBlocks() {
         return $this->viewList('block');
     }
 
@@ -153,7 +154,7 @@ class ContentController extends BaseController {
         $view->template = $template;
         $view->form = $form;
 
-        $viewFloatPanel = new View('display/content/templateFloatPanel.php');
+        $viewFloatPanel = new View('display/content/partial/templateToolBox.php');
 
         return new Response(Response::OK, Array(
             'Title' => 'Úprava šablóny: ' . $template->getName(),
