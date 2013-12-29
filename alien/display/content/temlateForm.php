@@ -35,6 +35,40 @@
                 $("section#rightFloatPanel").addClass('disabled');
             }
         });
+
+        $(".template-block").sortable({
+            items: ".item",
+            cursor: "move",
+            placeholder: "ui-state-highlight",
+            delay: 200,
+            opacity: 0.65,
+            revert: 200,
+            scroll: true,
+            stop: function(ev, ui) {
+                type = ui.item.attr('data-type');
+                if (!type) {
+                    return;
+                }
+                $.ajax({
+                    async: true,
+                    url: "/alien/ajax.php",
+                    type: "GET",
+                    data: "action=widgetGenerateItem&type=" + type,
+                    timeout: 5000,
+                    success: function(data) {
+                        json = jQuery.parseJSON(data);
+                        ui.item.replaceWith(json.item);
+                    }
+                });
+            }
+        });
+
+        $(".item-creatable").draggable({
+            connectToSortable: '.template-block',
+            revert: 'invalid',
+            helper: 'clone',
+        });
+
     });
 </script>
 
@@ -78,6 +112,27 @@
         </article>
         <article id="content">
             <?
+            $blocks = $this->template->fetchBlocks();
+            foreach ($blocks as $block):
+                $block->setTemplate($this->template);
+                ?>
+                <div class="template-block">
+                    <h2><?= $block->getName(); ?></h2>
+                    <?
+                    $params = array(
+                        'layout' => 'row',
+                        'sortable' => true,
+                        'items' => $block->getWidgets()
+                    );
+                    echo $this->partial('display/content/viewList.php', $params);
+//                    foreach ($block->getWidgets() as $widget):
+//
+//                        echo '<div class="template-widget">' . $widget['id_v'] . '</div>';
+//                    endforeach;
+                    ?>
+                </div>
+                <?
+            endforeach;
             ?>
         </article>
     </section>

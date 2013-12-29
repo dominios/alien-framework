@@ -296,4 +296,16 @@ class AjaxController extends BaseController {
         }
     }
 
+    function widgetGenerateItem($REQ) {
+        $item = \Alien\Models\Content\Widget::getSpecificWidget(4);
+        $view = new View('display/common/item.php');
+        $view->class = array('ui-state-default');
+        $view->item = $item;
+        $view->icon = $item->getIcon();
+        $view->dropLink = '';
+        return new Response(Response::OK, Array(
+            'result' => json_encode(Array('item' => $view->renderToString()))
+                ), __CLASS__ . '::' . __FUNCTION__);
+    }
+
 }

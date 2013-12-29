@@ -7,7 +7,7 @@ use \PDO;
 
 class CodeItemWidget extends Widget {
 
-    const ICON = 'code.png';
+    const ICON = 'code';
     const NAME = 'HTML kód';
     const TYPE = 'CodeItem';
 
@@ -20,7 +20,7 @@ class CodeItemWidget extends Widget {
     }
 
     public function getName() {
-        return self::NAME . ': ' . $this->getItem(true)->renderToString();
+        return $this->getItem(true) instanceof ContentItem ? $this->getItem(true)->getName() : self::NAME;
     }
 
     public function getType() {
@@ -31,4 +31,3 @@ class CodeItemWidget extends Widget {
 //        $this->item = $item;
 //    }
 }
-

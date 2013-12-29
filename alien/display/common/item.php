@@ -1,4 +1,4 @@
-<div class="item" <?= $this->onClick != '' ? 'onClick="' . $this->onClick . '"' : '' ?>>
+<div class="item <?= implode(' ', $this->class); ?>" <?= $this->onClick != '' ? 'onClick="' . $this->onClick . '"' : '' ?>>
     <span class="icon icon-<?= $this->icon; ?>"></span>
     <div class="itemText"><?= $this->item->getName(); ?></div>
     <div class="itemCP">

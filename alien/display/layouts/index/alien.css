@@ -64,7 +64,8 @@ a:hover {
 }
 
 table.full {
-    width: 100%;
+    width: 96%;
+    margin: 0px auto;
 }
 
 /* ******** LAYOUT ************************************************************ */
@@ -423,7 +424,7 @@ hr, .hr {
 
 /* ******************* TABULKY **************************************************/
 
-table.noborders {
+/*table.noborders {
     border: 0px;
 }
 
@@ -433,9 +434,9 @@ table.noborders td, th {
 
 img {
     vertical-align: middle;
-}
+}*/
 
-.item {
+/*.item {
     border: 1px solid #bbb;
     box-shadow: 0 0 6px #ccc;
     border-radius: 1px;
@@ -444,18 +445,18 @@ img {
     margin-left: 5px;
     margin-top: 5px;
     margin-right: 7px;
-    background-color: rgba(250, 250, 255, 0.4);
+
     color: #555;
     position: relative;
-}
+}*/
 
-.item img {
+/*.item img {
     height: 22px;
     width: 22px;
     margin-right: 5px;
-}
+}*/
 
-.item.selectable {
+/*.item.selectable {
     cursor: pointer;
     -moz-user-select: none;
     -webkit-user-select: none;
@@ -466,21 +467,21 @@ img {
 
 .item.selectable:hover {
     background-color: #888;
-}
+}*/
 
-.notactivated, .hidden {
+/*.notactivated, .hidden {
     background-color: #323232;
     color: #aaa;
-}
+}*/
 
-.item .button {
+/*.item .button {
     margin: 0px;
     padding: 2px;
     background-color: #4f4f4f;
     line-height: inherit;
-}
+}*/
 
-.item .button img {
+/*.item .button img {
     height: 16px;
     width: 16px;
 }
@@ -489,13 +490,9 @@ img {
     background-color: #fff;
 }
 
-.item .itemCP {
-    position: absolute;
-    top: 3px;
-    right: 3px;
-}
+*/
 
-.controlPanel {
+/*.controlPanel {
     float: right;
     display: inline-block;
 }
@@ -503,10 +500,12 @@ img {
 .controlPanel img {
     width: 22px;
     margin: 0px;
-}
+}*/
 
 .ui-state-default .ui-state-highlight {
-    margin: 0; padding: 0; display: none;
+    margin: 0;
+    padding: 0;
+    display: none;
 }
 
 div.image.ui-state-default {

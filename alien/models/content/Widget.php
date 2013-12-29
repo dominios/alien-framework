@@ -15,9 +15,9 @@ abstract class Widget {
     const WIDGET_FOLDER = 'widgets';
 
     protected $id;
-    protected $id_c;
+    protected $container;
     protected $type;
-    protected $item;
+    protected $item = null;
     protected $position;
     protected $visible;
     protected $params;
@@ -30,7 +30,7 @@ abstract class Widget {
 
         if ($row === null) {
             $DBH = Alien::getDatabaseHandler();
-            $Q = $DBH->prepare('SELECT * FROM ' . DBConfig::table('widgets') . ' WHERE id_v = :i');
+            $Q = $DBH->prepare('SELECT * FROM ' . DBConfig::table(DBConfig::WIDGETS) . ' WHERE id = :i');
             $Q->bindValue(':i', $id, PDO::PARAM_INT);
             $Q->execute();
             if (!$Q->rowCount()) {
@@ -39,41 +39,47 @@ abstract class Widget {
             $row = $Q->fetch();
         }
 
-        $this->id = $row['id_v'];
-        $this->id_c = $row['id_c'];
-        $this->type = $row['id_type'];
-        $this->item = $row['id_i'];
+        $this->id = $row['id'];
+        $this->container = $row['container'];
+        $this->type = $row['type'];
+        $this->item = $row['item'];
+        $this->item = $this->fetchItem();
         $this->position = (int) $row['position'];
         $this->visible = (bool) $row['visible'];
         $this->params = unserialize($row['params']);
-        $this->page = $row['id_p'];
-        $this->template = $row['id_t'];
+        $this->page = $row['page'];
+        $this->template = $row['template'];
         $this->class = $row['class'];
         $this->script = $row['script'];
     }
 
-    public static final function getSpecificWidget($idView, $idType = null, $R = null) {
+    public static final function getSpecificWidget($idView, $idType = null, $row = null) {
 
-        if ($idType !== null) {
-            $cond = 'id_type = ' . $idType;
-        } else {
-            $cond = 'id_v = ' . (int) $idView;
+        if ($row === null) {
+
+            if ($idType !== null) {
+                $cond = 'type = ' . $idType;
+            } else {
+                $cond = 'id = ' . (int) $idView;
+            }
+
+            $DBH = Alien::getDatabaseHandler();
+            $row = $DBH->query('SELECT * FROM ' . DBConfig::table(DBConfig::WIDGETS)
+                            . ' WHERE ' . $cond
+                            . ' LIMIT 1;')->fetch();
         }
-        $DBH = Alien::getDatabaseHandler();
-        $row = $DBH->query('SELECT classname FROM ' . DBConfig::table('item_types') . ' JOIN ' . DBConfig::table('widgets') . ' USING (id_type) WHERE ' . $cond . ' LIMIT 1')->fetch();
+
         if (sizeof($row) && $row !== null) {
-            $classname = __NAMESPACE__ . '\\' . $row['classname'] . 'Widget';
+            $classname = __NAMESPACE__ . '\\' . $row['type'];
             if (class_exists($classname)) {
-                $widget = new $classname($idView, $R);
+                $widget = new $classname($idView, $row);
                 return $widget;
             }
-        } else {
-            return null;
         }
+        return null;
     }
 
     public final function renderToString() {
-        $ret = '';
         $item = $this->getItem(true);
         $file = './' . Widget::WIDGET_FOLDER . '/' . $this->script;
 
@@ -91,8 +97,8 @@ abstract class Widget {
         return $this->id;
     }
 
-    public function getIdContainer() {
-        return $this->id_c;
+    public function getContainer() {
+        return $this->container;
     }
 
     public function getParams() {
@@ -104,6 +110,9 @@ abstract class Widget {
     }
 
     public function getItem($fetch = false) {
+        if ($this->item === null) {
+            return null;
+        }
         if ($fetch) {
             if ($this->item instanceof ContentItem) {
                 return $this->item;

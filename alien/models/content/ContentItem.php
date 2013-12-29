@@ -21,7 +21,7 @@ abstract class ContentItem implements FileInterface {
 
         if ($row === null) {
             $DBH = Alien::getDatabaseHandler();
-            $Q = $DBH->prepare('SELECT * FROM ' . DBConfig::table(DBConfig::ITEMS) . ' WHERE id_i=:i LIMIT 1;');
+            $Q = $DBH->prepare('SELECT * FROM ' . DBConfig::table(DBConfig::ITEMS) . ' WHERE id=:i LIMIT 1;');
             $Q->bindValue(':i', $id, PDO::PARAM_INT);
             $Q->execute();
             if (!$Q->rowCount()) {
@@ -30,11 +30,11 @@ abstract class ContentItem implements FileInterface {
             $row = $Q->fetch();
         }
 
-        $this->id = $row['id_i'];
+        $this->id = $row['id'];
         $this->name = $row['name'];
-        $this->folder = $row['id_f'];
-        $this->type = $row['id_type'];
-        $this->container = $row['id_c'];
+        $this->folder = $row['folder'];
+        $this->type = $row['type'];
+        $this->container = $row['container'];
         $this->content = $row['content'];
     }
 
@@ -48,24 +48,25 @@ abstract class ContentItem implements FileInterface {
 
     public abstract function getType();
 
-    public static final function getSpecificItem($idItem, $idType = null, $R = null) {
+    public static final function getSpecificItem($idItem, $row = null) {
 
-        if ($idType !== null) {
-            $cond = 'id_type = ' . $idType;
-        } else {
-            $cond = 'id_i = ' . (int) $idItem;
+        if ($row === null) {
+
+            $DBH = Alien::getDatabaseHandler();
+            $row = $DBH->query('SELECT * FROM ' . DBConfig::table(DBConfig::ITEMS)
+                            . ' WHERE id = "' . (int) $idItem . '"'
+                            . ' LIMIT 1;')->fetch();
         }
-        $DBH = Alien::getDatabaseHandler();
-        $row = $DBH->query('SELECT classname FROM ' . DBConfig::table('item_types') . ' JOIN ' . DBConfig::table('content_items') . ' USING (id_type) WHERE ' . $cond . ' LIMIT 1')->fetch();
+
         if (sizeof($row) && $row !== null) {
-            $classname = __NAMESPACE__ . '\\' . $row['classname'];
+
+            $classname = __NAMESPACE__ . '\\' . $row['type'];
             if (class_exists($classname)) {
-//                var_dump($idItem, $idType, $R); die;
-                return $R === null ? new $classname($idItem) : new $classname(null, $R);
+                $item = new $classname($idItem, $row);
+                return $item;
             }
-        } else {
-            return null;
         }
+        return null;
     }
 
     public function getContainer() {
@@ -85,4 +86,3 @@ abstract class ContentItem implements FileInterface {
     }
 
 }
-

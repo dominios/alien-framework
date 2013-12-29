@@ -205,18 +205,20 @@ class Template extends Layout implements ActiveRecord, FileInterface {
         }
     }
 
-//    private function fetchBlocks() {
-//        $blocks = Array();
-//        $ini = parse_ini_file($this->getConfigUrl());
-//        $i = 1;
-//        foreach ($ini as $k => $v) {
-//            $id = (int) substr($k, 3);
-//            $bl = Array('id' => $id, 'name' => $v, 'items' => Array());
-//            $blocks[] = $bl;
-//            $i++;
-//        }
-//        $this->blocks = $blocks;
-//    }
+    public function fetchBlocks() {
+        $blocks = Array();
+        $DBH = Alien::getDatabaseHandler();
+        $query = 'SELECT * FROM ' . DBConfig::table(DBConfig::BLOCKS) . ' b'
+                . ' JOIN ' . DBConfig::table(DBConfig::WIDGETS) . ' w ON b.id_b = w.container'
+                . ' WHERE w.template = "' . (int) $this->id . '"'
+                . ' GROUP BY w.container;';
+        foreach ($DBH->query($query) as $row) {
+            $blocks[] = new TemplateBlock($row['id_b'], $row);
+        }
+        $this->blocks = $blocks;
+        return $blocks;
+    }
+
 //    public function fetchViews() {
 //        $DBH = Alien::getDatabaseHandler();
 //

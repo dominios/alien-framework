@@ -17,13 +17,12 @@ interface BaseDBConfig {
 
 interface ContentDBExtension {
 
-    const WIDGETS = 'content_views';
+    const WIDGETS = 'content_widgets';
     const ITEMS = 'content_items';
     const PAGES = 'content_pages';
     const TEMPLATES = 'content_templates';
     const BLOCKS = 'content_template_blocks';
     const FOLDERS = 'content_folders';
-    const ITEM_TYPES = 'content_item_types';
     const CONTAINERS = 'content_containers';
 
 }
