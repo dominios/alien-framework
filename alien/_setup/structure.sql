@@ -81,7 +81,7 @@ CREATE TABLE `test_authorization` (
   `ip` varchar(20) NOT NULL,
   `url` varchar(250) NOT NULL,
   PRIMARY KEY (`id_auth`)
-) ENGINE=MyISAM AUTO_INCREMENT=336 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=348 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -129,20 +129,6 @@ CREATE TABLE `test_content_folders` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Table structure for table `test_content_item_types`
---
-
-DROP TABLE IF EXISTS `test_content_item_types`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `test_content_item_types` (
-  `id_type` int(8) NOT NULL AUTO_INCREMENT,
-  `classname` varchar(20) NOT NULL,
-  PRIMARY KEY (`id_type`)
-) ENGINE=MyISAM AUTO_INCREMENT=8 DEFAULT CHARSET=utf8;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
 -- Table structure for table `test_content_items`
 --
 
@@ -150,14 +136,14 @@ DROP TABLE IF EXISTS `test_content_items`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `test_content_items` (
-  `id_i` int(8) NOT NULL AUTO_INCREMENT,
-  `id_c` int(8) DEFAULT NULL,
-  `id_f` int(8) DEFAULT '0',
-  `id_type` int(8) NOT NULL,
+  `id` int(8) unsigned NOT NULL AUTO_INCREMENT,
+  `container` int(8) DEFAULT NULL,
+  `folder` int(8) DEFAULT '0',
+  `type` varchar(30) NOT NULL,
   `name` varchar(70) DEFAULT NULL,
   `content` text,
-  PRIMARY KEY (`id_i`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -193,7 +179,7 @@ CREATE TABLE `test_content_template_blocks` (
   `label` varchar(30) NOT NULL,
   PRIMARY KEY (`id_b`),
   UNIQUE KEY `UNIQUE` (`label`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -214,26 +200,26 @@ CREATE TABLE `test_content_templates` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Table structure for table `test_content_views`
+-- Table structure for table `test_content_widgets`
 --
 
-DROP TABLE IF EXISTS `test_content_views`;
+DROP TABLE IF EXISTS `test_content_widgets`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `test_content_views` (
-  `id_v` int(8) NOT NULL AUTO_INCREMENT,
-  `id_type` int(8) NOT NULL,
-  `id_i` int(8) NOT NULL,
-  `id_p` int(8) DEFAULT NULL,
-  `id_t` int(8) DEFAULT NULL,
-  `id_c` int(2) DEFAULT NULL,
+CREATE TABLE `test_content_widgets` (
+  `id` int(8) unsigned NOT NULL AUTO_INCREMENT,
+  `item` int(8) NOT NULL,
+  `type` varchar(30) NOT NULL,
+  `page` int(8) DEFAULT NULL,
+  `template` int(8) DEFAULT NULL,
+  `container` int(2) DEFAULT NULL,
   `position` int(5) DEFAULT NULL,
   `visible` tinyint(4) NOT NULL DEFAULT '0',
   `class` varchar(50) DEFAULT NULL,
   `script` varchar(50) DEFAULT NULL,
   `params` text,
-  PRIMARY KEY (`id_v`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -464,4 +450,4 @@ CREATE TABLE `test_users` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2013-12-27 23:52:46
+-- Dump completed on 2013-12-29 20:24:49
