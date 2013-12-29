@@ -8,17 +8,18 @@ use Alien\Models\Content\TemplateBlock;
 <script type="text/javascript">
     $(function() {
         $(".toggled-content").hide();
+        $("#<?= $_SESSION['temp_toolbox']; ?>").show();
         $(".toggler").click(function(ev) {
             id = $(this).attr('data-toggle');
-            $("#" + id).slideToggle(200);
-            $(".toggled-content:not(#" + id + ")").slideUp(200);
+            $("#" + id).slideToggle(300, 'easeInOutBack');
+            $(".toggled-content:not(#" + id + ")").slideUp(300, 'easeInOutBack');
+            setSession('toolbox', id);
             ev.preventDefault();
         });
     });
 </script>
 
 <?
-
 echo '<h1><span class="icon icon-settings"></span>Panel nástrojov</h1>';
 echo '<div class="hr"></div>';
 

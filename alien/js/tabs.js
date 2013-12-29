@@ -30,7 +30,6 @@ $(function() {
         newHeight = $(activeArticle).attr('data-height');
         activeArticle.css('height', newHeight).removeClass('tab-hidden');
         $(section).find('section').css('height', !newHeight ? 0 + 'px' : newHeight);
-        ev.stopPropagation();
         ev.preventDefault();
     });
 });

@@ -1,3 +1,15 @@
+function setSession(key, value) {
+    if (!key) {
+        return;
+    }
+    $.ajax({
+        async: true,
+        url: '/setSession.php',
+        type: 'GET',
+        data: 'key=' + key + '&value=' + value
+    });
+}
+
 function createDialog(header, content) {
     $("#dialog-modal").remove();
     newhtml = "<div id='dialog-modal' title='" + header + "'>";
