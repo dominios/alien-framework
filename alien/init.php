@@ -83,6 +83,7 @@ function class_autoloader($class) {
         if (file_exists($file)) {
             include_once $file;
         } else {
+            Alien::getInstance()->getConsole()->putMessage('Autoloading class failed <i>' . $file . '</i>', Terminal::ERROR);
             $file = './models/' . $dir . '/' . $class . 'Interface' . '.php';
             if (file_exists($file)) {
                 include_once $file;
@@ -94,4 +95,3 @@ function class_autoloader($class) {
 
     return;
 }
-
