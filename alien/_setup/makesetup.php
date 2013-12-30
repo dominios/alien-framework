@@ -11,7 +11,7 @@ $dbase = 'test';
 
 $DIR = 'C:\xampp\mysql\bin\\';
 $DUMP_STRUCT = 'mysqldump.exe --debug-info --host ' . $host . ' --user ' . $user . ' --databases ' . $dbase . ' --no-create-db --add-drop-table --no-data';
-$DUMP_DATA = 'mysqldump.exe --debug-info --host ' . $host . ' --user ' . $user . ' --databases ' . $dbase . ' --no-create-db --extended-insert';
+$DUMP_DATA = 'mysqldump.exe --debug-info --host ' . $host . ' --user ' . $user . ' --databases ' . $dbase . ' --ignore-table=test.test_images --no-create-db --extended-insert';
 $TARGET1 = ' > "D:\SRC\alien.localhost\alien_v2\alien\_setup\structure.sql"';
 $TARGET2 = ' > "D:\SRC\alien.localhost\alien_v2\alien\_setup\data.sql"';
 
