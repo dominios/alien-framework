@@ -246,8 +246,14 @@ class Template extends Layout implements ActiveRecord, FileInterface {
             'description' => '',
             'keywords' => array()
         );
-        $blocks = array();
-        $partials = array_merge($meta, $blocks);
+
+        $vars = array();
+        $blocks = $this->fetchBlocks();
+        foreach ($blocks as $block) {
+            $vars[$block->getName()] = $block->getWidgets($this);
+        }
+
+        $partials = array_merge($meta, $vars);
         return $partials;
     }
 

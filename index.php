@@ -11,7 +11,7 @@ if (!strlen($seolink)) {
 
 $template = new Alien\Models\Content\Template(1);
 echo '<pre>';
-$content = $template->renderToString();
+//$content = $template->renderToString();
 //echo htmlspecialchars($content);
 print_r($template->getPartials());
 echo '</pre>';

@@ -34,9 +34,12 @@ class TemplateBlock implements FileInterface, ActiveRecord {
         return $this;
     }
 
-    public function getWidgets() {
+    public function getWidgets(Template $template = null) {
+        if ($template == null) {
+            $template = $this->template;
+        }
         $ret = array();
-        if ($this->template instanceof Template) {
+        if ($template instanceof Template) {
             $DBH = Alien::getDatabaseHandler();
             $query = 'SELECT * FROM ' . DBConfig::table(DBConfig::WIDGETS)
                     . ' WHERE container = "' . (int) $this->id . '";';
