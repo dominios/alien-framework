@@ -116,6 +116,12 @@ $(document).ready(function($) {
     });
     $('.button.disabled').removeAttr('onclick');
 
+    /* toolbox draggable */
+    $(".sidebar-draggable").draggable({
+        cursor: "move",
+        handle: 'header'
+    });
+
 });
 
 $(document).keyup(function(e) {

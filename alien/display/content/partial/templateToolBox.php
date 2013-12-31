@@ -20,8 +20,10 @@ use Alien\Models\Content\TemplateBlock;
 </script>
 
 <?
+echo '<header>';
 echo '<h1><span class="icon icon-settings"></span>Panel nástrojov</h1>';
 echo '<div class="hr"></div>';
+echo '</header>';
 
 echo '<h2>Pridať box<span class="toggler icon icon-xs icon-menu" style="float: right;" data-toggle="boxmenu"></span></h2>';
 echo '<div class="toggled-content" id="boxmenu">';

@@ -15,6 +15,9 @@
         <script type="text/javascript" src="/alien/js/tabs.js"></script>
         <link href="/alien/display/layouts/index/alien.css" type="text/css" rel="stylesheet">
         <link href="/alien/display/layouts/index/alien2.css" type="text/css" rel="stylesheet">
+        <link href="/alien/display/layouts/index/layout.css" type="text/css" rel="stylesheet">
+        <link href="/alien/display/forms.css" type="text/css" rel="stylesheet">
+        <link href="/alien/display/alerts.css" type="text/css" rel="stylesheet">
         <link href="/alien/display/sidebar.css" type="text/css" rel="stylesheet">
         <link href="/alien/display/tabs.css" type="text/css" rel="stylesheet">
         <link href="/alien/display/icons.css" type="text/css" rel="stylesheet">
@@ -29,10 +32,6 @@
             <?= $this->notifications; ?>
         </section>
 
-        <section id="topbanner">
-            <strong style="font-size: 20px; margin-left: 25px;"><?= $this->webName; ?></strong>
-        </section>
-
         <section id="toppanel">
             <a href="#" class="nobackground" id="alienlogo"><img src="/alien/display/img/alien_logo_white.png" alt="ALiEN CMS"></a>
             <div id="toppanel_menu"><?= $this->mainMenu; ?></div>
@@ -40,13 +39,17 @@
 
         <section id="maincontent">
 
-            <section class="leftpanel">
-                <h3><?= $this->leftTitle; ?></h3>
-                <div class="hr" style="margin: 5px 0;"></div>
-                <div id="leftMenu">
-                    <?= $this->leftBox; ?>
+            <aside id="leftpanel" class="sidebar">
+                <div class="inner">
+                    <header>
+                        <h1><span class="icon icon-settings"></span><?= $this->leftTitle; ?></h1>
+                        <div class="hr"></div>
+                    </header>
+                    <nav id="leftMenu">
+                        <?= $this->leftBox; ?>
+                    </nav>
                 </div>
-            </section>
+            </aside>
 
             <section class="rightpanel">
                 <div id="rightpanelHeader">
@@ -57,11 +60,11 @@
                 <div style="margin-top: 20px;"><?= $this->mainContent; ?></div>
             </section>
 
-            <section id="rightFloatPanel" class="sidebar sidebar-small sidebar-left disabled">
+            <aside id="rightFloatPanel" class="sidebar sidebar-small sidebar-left disabled sidebar-draggable">
                 <div class="inner">
                     <?= $this->floatPanel; ?>
                 </div>
-            </section>
+            </aside>
 
         </section>
 

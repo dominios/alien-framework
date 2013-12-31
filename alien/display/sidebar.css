@@ -1,6 +1,6 @@
 .sidebar {
     padding: 4px 0px;
-    background: url('/alien/display/img/main_background3.jpg') #cfced3;
+    /*background: url('/alien/display/img/main_background3.jpg') #cfced3;*/
     border-radius: 3px;
     box-shadow: 2px 2px 6px #888;
     border-top: 1px solid #ddd;
@@ -12,12 +12,28 @@
     height: 100%;
 }
 
+.sidebar header {
+    background-color: rgba(255, 232, 140, 0.57);
+    transition: all .2s ease;
+    -webkit-transition: all .2s ease;
+}
+
+.sidebar header:hover {
+    background-color: rgba(226, 191, 53, 0.57);
+}
+
+
+.sidebar-draggable header {
+    cursor: move;
+}
+
 .sidebar .inner h1, .sidebar .inner h2 {
     font-size: 13px;
     line-height: 16px;
     border: none;
     margin: 0;
     padding: 8px 5px;
+    padding-left: 10px;
 }
 
 .sidebar .inner h1 {
@@ -63,7 +79,7 @@
     text-decoration: none;
     color: #000;
     border-right-color: #444;
-    background-color: rgba(50, 50, 50, 0.2);
+    background-color: rgba(114, 171, 224, 0.28)
 }
 
 .sidebar.sidebar-left .inner a:hover {

@@ -27,12 +27,12 @@
     }
 
     $(function() {
-        $("section#rightFloatPanel").removeClass('disabled');
+        $("aside#rightFloatPanel").removeClass('disabled');
         $("section.tabs").find('li a').live('click', function() {
             if ($(this).attr('href') === '#content') {
-                $("section#rightFloatPanel").removeClass('disabled');
+                $("aside#rightFloatPanel").removeClass('disabled');
             } else {
-                $("section#rightFloatPanel").addClass('disabled');
+                $("aside#rightFloatPanel").addClass('disabled');
             }
         });
 

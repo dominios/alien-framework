@@ -63,14 +63,14 @@ $permissions = $this->group->getPermissions(true);
                         <td colspan="3"><div class="hr"></div></td>
                     </tr><tr>
                         <td colspan="3">
-                            <div class="button negative" onclick="javascript: window.location = '<?= $this->returnAction; ?>';"><span class="icon icon-back"></span>Zrušiť</div>
-                            <div class="button positive" onclick="javascript: $('#groupForm').submit();"><span class="icon icon-save"></span>Uložiť</div>
+                            <div class="button negative" onclick="javascript: window.location = '<?= $this->returnAction; ?>';"><span class="icon icon-cancel-light"></span>Zrušiť</div>
+                            <div class="button positive" onclick="javascript: $('#groupForm').submit();"><span class="icon icon-tick-light"></span>Uložiť</div>
                             <div class="button negative <?= ($this->group->isDeletable() ? '' : 'disabled') ?>" onclick="javascript: window.location = '<?= $this->deleteAction; ?>';"><span class="icon icon-delete"></span>Odstrániť skupinu</div>
                         </td>
                     </tr>
                 </table>
             </article>
-            <article id="members" style="display: none;">
+            <article id="members" class="tab-hidden">
                 <div class="gridLayout">
                     <?
                     foreach ($members as $member):

@@ -177,7 +177,7 @@ class Input {
                 $ret .= '<input type="password" name="' . $this->name . '" value="' . $this->value . '" ' . implode(' ', $attr) . '>';
                 break;
             case 'button':
-                $icon = strlen($this->icon) ? '<span class="icon ' . $this->icon . '"></span>' : '';
+                $icon = strlen($this->icon) ? '<span class="icon ' . $this->icon . ($this->disabled ? '' : '-light') . '"></span>' : '';
                 if (preg_match('/javascript/', $this->value)) {
                     $attr[] = 'onClick="' . ( $this->disabled ? 'javascript: return false;' : $this->value ) . '"';
                     $attr[] = 'href="#"';
