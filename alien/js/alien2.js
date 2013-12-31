@@ -119,7 +119,13 @@ $(document).ready(function($) {
     /* toolbox draggable */
     $(".sidebar-draggable").draggable({
         cursor: "move",
-        handle: 'header'
+        handle: 'header',
+        containment: 'body'
+    });
+
+    /* minimalizovanie main menu */
+    $("#mainmenuMinimizer").click(function() {
+        $("#leftpanel").toggleClass('mainmenu-minimized');
     });
 
 });

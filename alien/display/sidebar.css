@@ -1,15 +1,15 @@
 .sidebar {
     padding: 4px 0px;
-    /*background: url('/alien/display/img/main_background3.jpg') #cfced3;*/
     border-radius: 3px;
     box-shadow: 2px 2px 6px #888;
     border-top: 1px solid #ddd;
 }
 
 .sidebar .inner {
-    background-color: rgba(50, 50, 50, 0.1);
+    position: relative;
     width: 100%;
     height: 100%;
+    background-color: rgba(50, 50, 50, 0.1);
 }
 
 .sidebar header {
@@ -18,12 +18,7 @@
     -webkit-transition: all .2s ease;
 }
 
-.sidebar header:hover {
-    background-color: rgba(226, 191, 53, 0.57);
-}
-
-
-.sidebar-draggable header {
+.sidebar-draggable header:hover {
     cursor: move;
 }
 
@@ -33,7 +28,6 @@
     border: none;
     margin: 0;
     padding: 8px 5px;
-    padding-left: 10px;
 }
 
 .sidebar .inner h1 {
@@ -49,14 +43,15 @@
 .sidebar .inner a, .sidebar.sidebar-right .inner a {
     display: block;
     line-height: 28px;
-    font-size: 16px;
+    font-size: 14px;
     padding: 4px;
     padding-left: 7px;
     border-radius: 1px;
-    color: #444;
-    border-bottom: 1px solid #aaa;
+    color: #555;
+    border-bottom: 1px solid #ccc;
     text-shadow: 1px 1px transparent;
-    background-color: rgba(50, 50, 50, 0.1);
+    white-space: nowrap;
+    background-color: rgba(212, 230, 240, 0.16);
     -webkit-transition: box-shadow 0.2s, border 0.2s, border-color 0.2s, background-color 0.2s, color 0.2s;
     -moz-transition: box-shadow 0.2s, border 0.2s, border-color 0.2s, background-color 0.2s, color 0.2s;
     transition: box-shadow 0.2s, border 0.2s, border-color 0.2s, background-color 0.2s, color 0.2s;
@@ -75,14 +70,14 @@
     border-bottom: none;
 }
 
-.sidebar .inner a:hover {
+.sidebar .inner a:hover, .sidebar .inner a.highlight {
     text-decoration: none;
     color: #000;
     border-right-color: #444;
-    background-color: rgba(114, 171, 224, 0.28)
+    background-color: rgba(206, 248, 193, 0.34);
 }
 
-.sidebar.sidebar-left .inner a:hover {
+.sidebar.sidebar-left .inner a:hover, .sidebar.sidebar-left .inner a.highlight {
     border-left-color: #444;
 }
 

@@ -1,0 +1,163 @@
+.navbar {
+    position: relative;
+    display: block;
+    width: 1000px;
+    height: 50px;
+    margin: 0px auto;
+    background: url('/alien/display/img/toppanel_background2.jpg') #363530;
+    border: none;
+    border-radius: 2px;
+}
+
+.navbar, .navbar a {
+    color: #aaa;
+    text-shadow: 1px 1px #222;
+    text-decoration: none;
+}
+
+.navbar-full {
+    width: 100%;
+}
+
+.navbar-header {
+    height: 50px;
+    width: auto;
+    margin-left: 5px;
+    display: inline-block;
+}
+
+.navbar-header * {
+    height: 100%;
+    width: auto;
+}
+
+.navbar ul {
+    position: relative;
+    list-style-type: none;
+    display: inline-block;
+    margin: 0;
+    padding: 0;
+    height: 50px;
+    width: auto;
+}
+
+.navbar ul.navbar-right {
+    float: right;
+    margin-right: 10px;
+}
+
+.navbar ul li {
+    position: relative;
+    display: inline-block;
+    float: left;
+    height: 47px;
+    line-height: 47px;
+    width: auto;
+    cursor: pointer;
+    border: 0;
+    border-bottom: 3px solid transparent;
+    transition: border .3s, color .3s;
+    -webkit-transition: border .3s, color .3s;
+    transition-timing-function: ease;
+    -webkit-transition-timing-function: ease;
+}
+
+.navbar ul li a {
+    display: inline-block;
+    position: relative;
+    width: auto;
+    padding: 0 10px;
+    transition: border .3s, color .3s;
+    -webkit-transition: border .3s, color .3s;
+    transition-timing-function: ease;
+    -webkit-transition-timing-function: ease;
+}
+
+.navbar ul li a span.icon {
+    opacity: 0.6;
+}
+
+.navbar ul li:not(.navbar-search):hover a {
+    color: #fff;
+}
+
+.navbar li.highlight {
+    background-color: rgba(0, 0, 0, 0.5);
+}
+
+.navbar li.highlight a {
+    color: #fff;
+}
+
+.navbar li.highlight, .navbar li:hover:not(.navbar-no-hover) {
+    border-bottom: 3px solid #E0E004;
+}
+
+.navbar li.highlight a span.icon {
+    opacity: 1;
+}
+
+.navbar .navbar-search {
+    height: 50px;
+    width: auto;
+    display: inline-block;
+    margin: 0px 12px;
+    margin-left: 20px;
+    padding: 0;
+}
+
+.navbar .navbar-search.navbar-right {
+    margin: 0px 12px;
+    margin-right: 20px;
+}
+
+.navbar .navbar-search input, .navbar .navbar-search .button.searchSubmit {
+    height: 28px;
+    line-height: 28px;
+    width: auto;
+    display: inline-block;
+    margin: 0;
+    padding: 0;
+    background: rgba(119, 119, 119, 0.76);
+    border-radius: 0;
+    border: none;
+}
+
+.navbar .navbar-search input[type='text'] {
+    border-top-left-radius: 13px;
+    border-bottom-left-radius: 13px;
+    padding-left: 15px;
+    color: #eee;
+    font-family: segoe ui;
+}
+
+.navbar .navbar-search input[type='text']:focus {
+    box-shadow: none;
+    border: none;
+}
+
+.navbar .navbar-search .button.searchSubmit {
+    border-top-right-radius: 13px;
+    border-bottom-right-radius: 13px;
+}
+
+.navbar .navbar-search .button.searchSubmit span.icon {
+    top: 0.18em;
+}
+
+.navbar .navbar-search input[type='text']::-webkit-input-placeholder { /* WebKit browsers */
+    color: #ddd;
+    font-family: segoe ui light;
+}
+.navbar .navbar-search input[type='text']:-moz-placeholder { /* Mozilla Firefox 4 to 18 */
+    color: #ddd;
+    font-family: segoe ui light;
+}
+.navbar .navbar-search input[type='text']::-moz-placeholder { /* Mozilla Firefox 19+ */
+    color: #ddd;
+    font-family: segoe ui light;
+}
+.navbar .navbar-search input[type='text']:-ms-input-placeholder { /* Internet Explorer 10+ */
+    color: #ddd;
+    font-family: segoe ui light;
+}

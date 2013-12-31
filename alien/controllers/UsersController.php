@@ -117,8 +117,8 @@ class UsersController extends BaseController {
         $view->user = $user;
         $view->formStartTag = $form->startTag();
         $view->formEndTag = $form->endTag();
-        $view->buttonCancel = Input::button(BaseController::actionURL('users', 'viewList'), 'Zrušiť', 'icon-back');
-        $view->buttonSave = Input::button("javascript: $('#userForm').submit();", 'Uložiť', 'icon-save');
+        $view->buttonCancel = Input::button(BaseController::actionURL('users', 'viewList'), 'Zrušiť', 'icon-back')->addCssClass('negative');
+        $view->buttonSave = Input::button("javascript: $('#userForm').submit();", 'Uložiť', 'icon-tick')->addCssClass('positive');
         $view->buttonMessage = Input::button(BaseController::actionURL('dashboard', 'composeMessage', array('id' => $_GET['id'])), 'Poslať správu', 'icon-message');
         $view->buttonResetPassword = Input::button(BaseController::actionURL('users', 'resetPassword', array('id' => $_GET['id'])), 'Resetovať heslo', 'icon-shield')->setDisabled(true);
         $view->buttonDelete = Input::button(BaseController::actionURL('users', 'removeUser', array('id' => $_GET['id'])), 'Odstrániť používateľa', 'icon-delete')->setDisabled(true);

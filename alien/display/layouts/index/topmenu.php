@@ -13,6 +13,10 @@ use Alien\Authorization\Authorization;
             ev.stopPropagation();
             $(this).find('.submenu').slideToggle(400, 'easeInOutElastic');
         });
+
+        $(".button.searchSubmit").click(function() {
+            $("#searchForm").submit();
+        });
     });
 </script>
 <?
@@ -56,16 +60,25 @@ if (!function_exists('topmenuItemToString')) {
 
 $menu = '';
 
-$menu .= '<ul style="margin-left: 280px;">';
+$menu .= '<ul>';
 foreach ($this->items['left'] as $item) {
     $menu .= topmenuItemToString($item);
 }
 $menu .= '</ul>';
 
-$menu .= '<ul style="float: right; margin-right: 10px;">';
+$menu .= '<ul class="navbar-right">';
 foreach ($this->items['right'] as $item) {
     $menu .= topmenuItemToString($item);
 }
+$menu .= '</ul>';
+
+$menu .= '<ul class="navbar-search navbar-right">';
+$menu .= '<li class="navbar-no-hover">';
+$menu .= '<form method="POST" action="???" id="searchForm">';
+$menu .= '<input type="text" name="searchString" placeholder="Search ...">';
+$menu .= '<div class="button searchSubmit"><span class="icon icon-magnifier-light"></span></div>';
+$menu .= '</form>';
+$menu .= '</li>';
 $menu .= '</ul>';
 
 echo $menu;

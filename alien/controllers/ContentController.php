@@ -143,12 +143,12 @@ class ContentController extends BaseController {
         $inputSrc = Input::text('templateSrc', '', $template->getSrcURL())->addToForm($form);
         $buttonSrcChoose = Input::button('javascript: templateShowFileBrowser(\'php\');', '', 'icon-external-link');
         $buttonSrcMagnify = Input::button('javascript: templateShowFilePreview($(\'input[name=templatePhp]\').attr(\'value\'));', '', 'icon-magnifier');
+        $buttonCancel = Input::button(BaseController::actionURL('content', 'viewTemplates'), 'Zrušiť', 'icon-cancel')->addCssClass('negative');
+        $buttonSubmit = Input::button('javascript: $(\'#templateForm\').submit();', 'Uložiť', 'icon-tick')->addCssClass('positive');
+        $view->buttonCancel = $buttonCancel;
+        $view->buttonSubmit = $buttonSubmit;
         $view->buttonSrcChoose = $buttonSrcChoose;
         $view->buttonSrcMagnify = $buttonSrcMagnify;
-        $buttonIniChoose = Input::button('javascript: templateShowFileBrowser(\'ini\');', '', 'icon-external-link');
-        $buttonIniMagnify = Input::button('javascript: templateShowFilePreview($(\'input[name=templateIni]\').attr(\'value\'));', '', 'icon-magnifier');
-        $view->buttonIniChoose = $buttonIniChoose;
-        $view->buttonIniMagnify = $buttonIniMagnify;
 
         $view->returnAction = BaseController::actionURL('content', 'browser', array('folder' => $_SESSION['folder']));
         $view->template = $template;

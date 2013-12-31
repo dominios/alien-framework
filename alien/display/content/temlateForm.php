@@ -104,8 +104,8 @@
                     <td colspan="3"><div class="hr"></div></td>
                 </tr><tr>
                     <td colspan="3">
-                        <div class="button negative" onclick="javascript: window.location = '<?= $this->returnAction; ?>';"><span class="icon icon-back"></span>Zrušiť</div>
-                        <div class="button positive" onclick="javascript: $('#templateForm').submit();"><span class="icon icon-save"></span>Uložiť šablónu</div>
+                        <?= $this->buttonCancel; ?>
+                        <?= $this->buttonSubmit; ?>
                     </td>
                 </tr>
             </table>

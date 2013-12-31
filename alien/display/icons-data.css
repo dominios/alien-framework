@@ -267,6 +267,13 @@ span.icon.icon-key-light {
     background-image: url('img/white/key.png');
 }
 
+span.icon.icon-left-round, span.icon.icon-left-round-dark {
+    background-image: url('img/left_round.png');
+}
+span.icon.icon-left-round-light {
+    background-image: url('img/white/left_round.png');
+}
+
 span.icon.icon-less, span.icon.icon-less-dark {
     background-image: url('img/less.png');
 }

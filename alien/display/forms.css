@@ -28,7 +28,7 @@ select {
 }
 
 button, .button {
-    background-color: rgb(24, 153, 255);
+    background-color: rgb(111, 179, 224);
     color: #fff;
     /*text-shadow: 1px 1px #ddd;*/
     border: none;
@@ -66,10 +66,21 @@ input:hover, button:hover, textarea:hover, select:hover {
 .button.neutral:hover {
 }
 
+
+.button.negative {
+    background: #d9534f;
+}
+
 .button.negative:hover {
+    background: #AF1212;
+}
+
+.button.positive {
+    background: rgb(154, 188, 50);
 }
 
 .button.positive:hover {
+    background: rgb(137, 170, 37);
 }
 
 a.button:hover {
