@@ -22,6 +22,10 @@
     -webkit-transition: opacity .3s;
 }
 
+.badge.hidden {
+    opacity: 0;
+}
+
 .badge.badge-right {
     float: right;
     top: 0.5em;

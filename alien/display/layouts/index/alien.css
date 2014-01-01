@@ -50,55 +50,7 @@ table.full {
 
 /* ******** LAYOUT ************************************************************ */
 
-#toppanel .submenu {
-    position: absolute;
-    top: 100%;
-    display: block;
-    display: none;
-    min-width: 100%;
-    height: auto;
-    background: url('/alien/display/img/toppanel_background2.jpg') #363530;
-    background-repeat: repeat;
-}
 
-#toppanel li:hover .submenu ul li a {
-    color: #aaa;
-}
-
-/*#toppanel li:hover .submenu ul li:hover {
-    border-bottom-color: #CAC54E;
-}*/
-
-#toppanel li:hover .submenu ul li a:hover {
-    color: #fff;
-}
-
-#toppanel .submenu ul {
-    float: none;
-}
-
-#toppanel .submenu ul li {
-    display: block;
-    float: none;
-    border-bottom: 1px solid #444;
-    width: 100%;
-    cursor: pointer;
-    /*overflow: hidden;*/
-}
-
-#toppanel .submenu ul li a {
-    width: 100%;
-}
-
-
-#maincontent {
-    width: 100%;
-    height: 100%;
-}
-
-a:link .nobackground {
-    background-color: transparent;
-}
 
 
 
@@ -111,20 +63,6 @@ a:link .nobackground {
     border-left: 7px solid #555955;
     background-color: #444844;
     padding-left: 1px;
-}
-
-.rightpanel {
-    float: left;
-    font-size: 14px;
-    min-width: 800px;
-    max-width: 800px;
-    margin-left: 300px;
-    margin-top: 10px;
-    margin-bottom: 7px;
-    padding-left: 0px;
-    padding-right: 0px;
-    padding-top: 0px;
-    padding-bottom: 8px;
 }
 
 

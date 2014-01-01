@@ -75,7 +75,7 @@
     -webkit-transition-timing-function: ease;
 }
 
-.navbar ul li a span.icon {
+.navbar ul li a .icon {
     opacity: 0.6;
 }
 
@@ -95,8 +95,35 @@
     border-bottom: 3px solid #E0E004;
 }
 
-.navbar li.highlight a span.icon {
+.navbar li.highlight a .icon,
+.navbar ul li:not(.navbar-search):hover a .icon{
     opacity: 1;
+}
+
+.navbar .submenu {
+    position: absolute;
+    top: 100%;
+    display: block;
+    display: none;
+    min-width: 100%;
+    height: auto;
+    background: url('/alien/display/img/toppanel_background2.jpg') #363530;
+    background-repeat: repeat;
+    overflow: hidden;
+    float: none;
+}
+
+.navbar ul li .submenu li {
+    width: 100%;
+    border-width: 1px;
+}
+
+.navbar ul li .submenu li a {
+    width: 100%;
+}
+
+.navbar ul li .submenu li:hover:not(.navbar-no-hover) {
+    border-width: 1px;
 }
 
 .navbar .navbar-search {
@@ -162,17 +189,4 @@
 .navbar .navbar-search input[type='text']:-ms-input-placeholder { /* Internet Explorer 10+ */
     color: #ddd;
     font-family: segoe ui light;
-}
-
-.navbar ul li .submenu li {
-    width: 100%;
-    border-width: 1px;
-}
-
-.navbar ul li .submenu li a {
-    width: 100%;
-}
-
-.navbar ul li .submenu li:hover:not(.navbar-no-hover) {
-    border-width: 1px;
 }

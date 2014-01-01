@@ -126,6 +126,7 @@ $(document).ready(function($) {
     /* minimalizovanie main menu */
     $("#mainmenuMinimizer").click(function() {
         $("#leftpanel").toggleClass('mainmenu-minimized');
+        $("#rightpanel").toggleClass('rightpanel-full');
         setSession('mainmenu', $("#leftpanel").hasClass('mainmenu-minimized') ? false : true);
     });
 

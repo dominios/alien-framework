@@ -42,22 +42,24 @@
             <?= $this->mainMenu; ?>
         </nav>
 
-        <aside id="leftpanel" class="sidebar <?= $_SESSION['temp_mainmenu'] == 'true' ? '' : 'mainmenu-minimized'; ?>">
-            <div class="inner">
-                <header>
-                    <div class="hr"></div>
-                    <h1><span class="icon icon-left-round" id="mainmenuMinimizer"></span><?= $this->leftTitle; ?></h1>
-                    <div class="hr"></div>
-                </header>
-                <nav>
-                    <?= $this->leftBox; ?>
-                </nav>
-            </div>
-        </aside>
 
-        <section id="maincontent">
 
-            <section class="rightpanel">
+        <div id="container">
+
+            <aside id="leftpanel" class="sidebar <?= $_SESSION['temp_mainmenu'] == 'true' ? '' : 'mainmenu-minimized'; ?>">
+                <div class="inner">
+                    <header>
+                        <div class="hr"></div>
+                        <h1><span class="icon icon-left-round" id="mainmenuMinimizer"></span><?= $this->leftTitle; ?></h1>
+                        <div class="hr"></div>
+                    </header>
+                    <nav>
+                        <?= $this->leftBox; ?>
+                    </nav>
+                </div>
+            </aside>
+
+            <section id="rightpanel" class="<?= $_SESSION['temp_mainmenu'] == 'true' ? '' : 'rightpanel-full'; ?>">
                 <div id="rightpanelHeader">
                     <h1><?= $this->title; ?></h1>
                     <div class="hr"></div>
@@ -72,7 +74,7 @@
                 </div>
             </aside>
 
-        </section>
+        </div>
 
         <div class="cleaner"></div>
 
