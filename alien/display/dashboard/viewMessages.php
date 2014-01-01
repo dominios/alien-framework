@@ -1,7 +1,7 @@
 <section class="tabs" id="messageTabs">
     <header>
         <ul>
-            <li class="active"><a href="#inbox"><span class="icon icon-message"></span>Prijatá pošta</a></li>
+            <li class="active"><a href="#inbox"><span class="icon icon-message"></span>Prijatá pošta<?= (\Alien\Message::getUnreadCount(\Alien\Authorization\Authorization::getCurrentUser()) ? '<span class="badge badge-normal">' . \Alien\Message::getUnreadCount(\Alien\Authorization\Authorization::getCurrentUser()) . '</badge>' : ''); ?></a></li>
             <li><a href="#outbox"><span class="icon icon-message-out"></span>Odoslaná pošta</a></li>
         </ul>
     </header>
@@ -20,7 +20,7 @@
 
             <table class="itemList">
                 <tr class="itemHeaderRow">
-                    <th width="26"></th>
+                    <th></th>
                     <th>Odosielateľ</th>
                     <th>Dátum</th>
                     <th>Náhľad</th>
@@ -35,7 +35,14 @@
                 <? endif; ?>
                 <? foreach ($this->inBox as $message): ?>
                     <tr class="itemRow" onClick="javascrit: window.location = '<?= str_replace('%ID%', $message->getId(), $this->goToMessagePattern); ?>';">
-                        <td class="itemDesc"><span class="icon icon-<?= $message->isSeen() ? 'email2' : 'message'; ?>"></span></td>
+                        <td class="itemDesc">
+                            <span class="icon icon-<?= $message->isSeen() ? 'email2' : 'message'; ?>"></span>
+                            <?
+                            if (!$message->isSeen()) {
+                                echo '<span class="badge badge-success">NEW</span>';
+                            }
+                            ?>
+                        </td>
                         <td class="itemDesc"><?= $message->getAuthor()->getName(); ?></td>
                         <td class="itemDesc"><?= $message->getDateSent('d.m.Y H:i:s'); ?></td>
                         <td class="itemDesc"><?= substr($message->getMessage(), 0, 40) . '...'; ?></td>
@@ -49,7 +56,7 @@
         <article id="outbox" class="tab-hidden">
             <table class="itemList">
                 <tr class="itemHeaderRow">
-                    <th width="26"></th>
+                    <th></th>
                     <th>Prijímateľ</th>
                     <th>Dátum</th>
                     <th>Náhľad</th>
@@ -64,7 +71,14 @@
                 <? endif; ?>
                 <? foreach ($this->outBox as $message): ?>
                     <tr class="itemRow" onClick="javascrit: window.location = '<?= str_replace('%ID%', $message->getId(), $this->goToMessagePattern); ?>';">
-                        <td class="itemDesc"><span class="icon icon-<?= $message->isSeen() ? 'email2' : 'message'; ?>"></span></td>
+                        <td class="itemDesc">
+                            <span class="icon icon-<?= $message->isSeen() ? 'email2' : 'message'; ?>"></span>
+                            <?
+                            if (!$message->isSeen()) {
+                                echo '<span class="badge badge-normal">UNSEEN</span>';
+                            }
+                            ?>
+                        </td>
                         <td class="itemDesc"><?= $message->getRecipient()->getName(); ?></td>
                         <td class="itemDesc"><?= $message->getDateSent('d.m.Y H:i:s'); ?></td>
                         <td class="itemDesc"><?= substr($message->getMessage(), 0, 40) . '...'; ?></td>

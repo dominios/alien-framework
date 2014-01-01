@@ -169,6 +169,10 @@
     border-width: 1px;
 }
 
+.navbar ul li .submenu li a {
+    width: 100%;
+}
+
 .navbar ul li .submenu li:hover:not(.navbar-no-hover) {
     border-width: 1px;
 }

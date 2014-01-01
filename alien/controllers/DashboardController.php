@@ -29,7 +29,7 @@ class DashboardController extends BaseController {
     private function leftMenuItems() {
         $msgText = 'Správy';
         if (Message::getUnreadCount(Authorization::getCurrentUser())) {
-            $msgText.= ' (' . Message::getUnreadCount(Authorization::getCurrentUser()) . ')';
+            $msgText.= '<span class="badge badge-info badge-right">' . Message::getUnreadCount(Authorization::getCurrentUser()) . ' UNREAD</span>';
         }
         $items = Array();
         $items[] = Array('permissions' => null, 'url' => BaseController::actionURL('dashboard', 'home'), 'img' => 'dashboard', 'text' => 'Prehľad');

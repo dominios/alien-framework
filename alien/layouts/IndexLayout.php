@@ -64,7 +64,7 @@ class IndexLayout extends Layout {
         $messagesText.= 'Správy';
         $unread = Message::getUnreadCount(Authorization::getCurrentUser());
         if ($unread) {
-            $messagesText.='<div id="unreadMessages">' . $unread . '</div>';
+            $messagesText.='<span class="badge badge-circular">' . $unread . '</span>';
         }
 
         $userSubmenu = array();

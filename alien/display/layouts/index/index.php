@@ -15,12 +15,13 @@
         <script type="text/javascript" src="/alien/js/tabs.js"></script>
         <link href="/alien/display/layouts/index/alien.css" type="text/css" rel="stylesheet">
         <link href="/alien/display/layouts/index/alien2.css" type="text/css" rel="stylesheet">
+        <link href="/alien/display/icons.css" type="text/css" rel="stylesheet">
+        <link href="/alien/display/badges.css" type="text/css" rel="stylesheet">
         <link href="/alien/display/forms.css" type="text/css" rel="stylesheet">
         <link href="/alien/display/alerts.css" type="text/css" rel="stylesheet">
         <link href="/alien/display/navbar.css" type="text/css" rel="stylesheet">
         <link href="/alien/display/sidebar.css" type="text/css" rel="stylesheet">
         <link href="/alien/display/tabs.css" type="text/css" rel="stylesheet">
-        <link href="/alien/display/icons.css" type="text/css" rel="stylesheet">
         <link href="/alien/display/icons-data.css" type="text/css" rel="stylesheet">
         <link href="/alien/display/modal.css" type="text/css" rel="stylesheet">
         <!-- posledne, mozu byt overridy -->
@@ -41,7 +42,7 @@
             <?= $this->mainMenu; ?>
         </nav>
 
-        <aside id="leftpanel" class="sidebar">
+        <aside id="leftpanel" class="sidebar <?= $_SESSION['temp_mainmenu'] == 'true' ? '' : 'mainmenu-minimized'; ?>">
             <div class="inner">
                 <header>
                     <div class="hr"></div>
