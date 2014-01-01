@@ -74,10 +74,10 @@ section#messageDetail {
 }
 
 #unreadMessages {
-    float: right;
+    /*float: right;*/
     margin-right: 20px;
     margin-top: 12px;
-    display: table-cell;
+    display: inline-block;
     background-color: rgba(77, 192, 23, 0.2);
     width: 2.2em;
     height: 2em;

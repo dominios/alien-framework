@@ -78,6 +78,7 @@ class IndexLayout extends Layout {
         $left[] = Array('permission' => 'CONTENT_VIEW', 'url' => BaseController::actionURL('content', 'browser'), 'text' => 'Obsah', 'img' => 'puzzle', 'controller' => 'content');
         $left[] = Array('permission' => 'USER_VIEW', 'url' => BaseController::actionURL('users', 'viewList'), 'text' => 'Používatelia', 'img' => 'user', 'controller' => 'users');
         $left[] = Array('permission' => 'GROUP_VIEW', 'url' => BaseController::actionURL('groups', 'viewList'), 'text' => 'Skupiny', 'img' => 'group', 'controller' => 'groups');
+        $left[] = Array('permission' => null, 'url' => BaseController::actionURL('commerce', 'dashboard'), 'text' => 'E-shop', 'img' => 'cart', 'controller' => 'commerce');
 
         $right = array();
         $right[] = Array('permission' => null, 'url' => BaseController::actionURL('dashboard', '#'), 'text' => \Alien\Authorization\Authorization::getCurrentUser()->getEmail(), 'img' => 'user-circle', 'submenu' => $userSubmenu);

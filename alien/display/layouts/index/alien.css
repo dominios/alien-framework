@@ -48,20 +48,22 @@ table.full {
 
 #toppanel .submenu {
     position: absolute;
+    top: 100%;
     display: block;
     display: none;
-    width: 100%;
-    top: 50px;
+    min-width: 100%;
+    height: auto;
     background: url('/alien/display/img/toppanel_background2.jpg') #363530;
+    background-repeat: repeat-y;
 }
 
 #toppanel li:hover .submenu ul li a {
     color: #aaa;
 }
 
-#toppanel li:hover .submenu ul li:hover {
+/*#toppanel li:hover .submenu ul li:hover {
     border-bottom-color: #CAC54E;
-}
+}*/
 
 #toppanel li:hover .submenu ul li a:hover {
     color: #fff;
@@ -69,7 +71,6 @@ table.full {
 
 #toppanel .submenu ul {
     float: none;
-    display: block;
 }
 
 #toppanel .submenu ul li {
@@ -78,7 +79,7 @@ table.full {
     border-bottom: 1px solid #444;
     width: 100%;
     cursor: pointer;
-    overflow: hidden;
+    /*overflow: hidden;*/
 }
 
 #toppanel .submenu ul li a {

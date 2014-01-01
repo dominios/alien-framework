@@ -65,6 +65,13 @@ span.icon.icon-cancel-light {
     background-image: url('img/white/cancel.png');
 }
 
+span.icon.icon-cart, span.icon.icon-cart-dark {
+    background-image: url('img/cart.png');
+}
+span.icon.icon-cart-light {
+    background-image: url('img/white/cart.png');
+}
+
 span.icon.icon-checked-user, span.icon.icon-checked-user-dark {
     background-image: url('img/checked_user.png');
 }

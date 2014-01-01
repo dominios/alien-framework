@@ -31,25 +31,30 @@ if (!function_exists('topmenuItemToString')) {
 
         $link = '';
         $submenu = '';
-
-        $icon = '<span class="icon icon-' . $item['img'] . '-light"></span>';
+        $icon = strlen($item['img']) ? '<span class="icon icon-' . $item['img'] . '-light"></span>' : '';
         $href = preg_match('/#$/', $item['url']) ? '#' : $item['url'];
+
         $class = '';
         if (stristr(BaseController::getCurrentControllerClass(), $item['controller'])) {
             $class = 'highlight';
         }
+
+        $hasSubmenu = is_array($item['submenu']) && sizeof($item['submenu']);
+
         $link .= '<li ' . ($class != '' ? 'class="' . $class . '"' : '') . '>';
         $link .= '<a href="' . $href . '" ' . (isset($item['onclick']) ? 'onclick="' . $item['onclick'] . '"' : '') . '>';
         $link .= $icon;
         $link .= $item['text'];
-        if (is_array($item['submenu']) && sizeof($item['submenu'])) {
-            $submenu .='<span class="icon icon-xs icon-down-triangle-light"></span>';
-            $submenu .= '<div class="submenu"><ul>';
+
+        if ($hasSubmenu) {
+            $link .= '<span class="icon icon-xs icon-down-triangle-light"></span>';
+            $submenu .= '<ul class="submenu">';
             foreach ($item['submenu'] as $j) {
                 $submenu .= topmenuItemToString($j);
             }
-            $submenu .= '</ul></div>';
+            $submenu .= '</ul>';
         }
+
         $link .= '</a>';
         $link .= $submenu;
         $link .= '</li>';

@@ -34,6 +34,8 @@ class DashboardController extends BaseController {
         $items = Array();
         $items[] = Array('permissions' => null, 'url' => BaseController::actionURL('dashboard', 'home'), 'img' => 'dashboard', 'text' => 'Prehľad');
         $items[] = Array('permissions' => null, 'url' => BaseController::actionURL('dashboard', 'messages'), 'img' => 'message', 'text' => $msgText);
+        $items[] = Array('permissions' => null, 'url' => BaseController::actionURL('dashboard', 'profil'), 'img' => 'user', 'text' => 'Môj profil');
+        $items[] = Array('permissions' => null, 'url' => BaseController::actionURL('base', 'logout'), 'img' => 'logout', 'text' => 'Odhlásiť');
         return $items;
     }
 
@@ -105,4 +107,3 @@ class DashboardController extends BaseController {
     }
 
 }
-
