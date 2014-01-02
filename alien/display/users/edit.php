@@ -33,9 +33,9 @@
     }
 </script>
 
-<?= $this->unescaped(formStartTag); ?>
-<?= $this->inputAction; ?>
-<input type="hidden" name="userId" value="<?= $this->user->getId(); ?>">
+<?= $this->form->startTag(); ?>
+<?= $this->form->getElement('action'); ?>
+<?= $this->form->getElement('userId'); ?>
 <section class="tabs" id="userTabs">
     <header>
         <ul>
@@ -49,22 +49,22 @@
             <table class="full">
                 <tr>
                     <td style="width: 180px;"><span class="icon icon-user"></span>Login:</td>
-                    <td colspan="2"><?= $this->inputLogin; ?></td>
+                    <td colspan="2"><?= $this->form->getElement('userLogin'); ?></td>
                 </tr><tr>
                     <td><span class="icon icon-user"></span>Meno:</td>
-                    <td colspan="2"><?= $this->inputFirstname; ?></td>
+                    <td colspan="2"><?= $this->form->getElement('userFirstname'); ?></td>
                 </tr><tr>
                     <td><span class="icon icon-user"></span>Priezvisko:</td>
-                    <td colspan="2"><?= $this->inputSurname; ?></td>
+                    <td colspan="2"><?= $this->form->getElement('userSurname'); ?></td>
                 </tr><tr>
                     <td><span class="icon icon-email"></span>Email:</td>
-                    <td colspan="2"><?= $this->inputEmail; ?></td>
+                    <td colspan="2"><?= $this->form->getElement('userEmail'); ?></td>
                 </tr><tr>
                     <td><span class="icon icon-key"></span>Nové heslo:</td>
-                    <td colspan="2"><?= $this->inputPass2; ?></td>
+                    <td colspan="2"><?= $this->form->getElement('userPass2'); ?></td>
                 </tr><tr>
                     <td><span class="icon icon-key"></span>Potvrdiť heslo:</td>
-                    <td colspan="2"><?= $this->inputPass3; ?></td>
+                    <td colspan="2"><?= $this->form->getElement('userPass3'); ?></td>
                 </tr><tr>
                     <td><span class="icon icon-checked-user"></span>Stav účtu:</td>
                     <td colspan="2">
@@ -77,11 +77,11 @@
                     <td colspan="3"><div class="hr"></div></td>
                 </tr><tr>
                     <td colspan="3">
-                        <?= $this->buttonCancel; ?>
-                        <?= $this->buttonSave; ?>
-                        <?= $this->buttonMessage; ?>
-                        <?= $this->buttonResetPassword; ?>
-                        <?= $this->buttonDelete; ?>
+                        <?= $this->form->getElement('buttonCancel'); ?>
+                        <?= $this->form->getElement('buttonSave'); ?>
+                        <?= $this->form->getElement('buttonMessage'); ?>
+                        <?= $this->form->getElement('buttonResetPassword'); ?>
+                        <?= $this->form->getElement('buttonDelete'); ?>
                     </td>
                 </tr>
             </table>
@@ -93,14 +93,14 @@
                     $partialView = new \Alien\View('display/common/item.php');
                     $partialView->icon = 'group';
                     $partialView->item = $group;
-                    $partialView->dropLink = \Alien\Controllers\BaseController::actionURL('users', 'removeGroup', array('user' => $this->user->getId(), 'group' => $group->getId()));
+                    $partialView->dropLink = \Alien\Controllers\ BaseController:: actionURL('users', 'removeGroup', array('user' => $this->user->getId(), 'group' => $group->getId()));
                     echo $partialView->renderToString();
                 endforeach;
                 ?>
             </div>
             <div class="cleaner"></div>
             <div class="hr"></div>
-            <?= $this->buttonAddGroup; ?>
+            <?= $this->form->getElement('buttonAddGroup'); ?>
         </article>
         <article id="permissions" class="tab-hidden">
             <div class="gridLayout">
@@ -109,15 +109,15 @@
                     $partialView = new \Alien\View('display/common/item.php');
                     $partialView->icon = 'shield';
                     $partialView->item = $permission;
-                    $partialView->dropLink = \Alien\Controllers\BaseController::actionURL('users', 'removePermission', array('user' => $this->user->getId(), 'permission' => $permission->getId()));
+                    $partialView->dropLink = \Alien\Controllers\ BaseController::actionURL('users', 'removePermission', array('user' => $this->user->getId(), 'permission' => $permission->getId()));
                     echo $partialView->renderToString();
                 endforeach;
                 ?>
             </div>
             <div class="cleaner"></div>
             <div class="hr"></div>
-            <?= $this->buttonAddPermission; ?>
+            <?= $this->form->getElement('buttonAddPermission'); ?>
         </article>
     </section>
 </section>
-<?= $this->unescaped(formEndTag); ?>
+<?= $this->form->endTag(); ?>

@@ -92,6 +92,19 @@ function class_autoloader($class) {
         return;
     }
 
+    // formulare
+    if (preg_match('/form/i', $class)) {
+        $class = str_replace('Forms\\', '', $class);
+        $arr = explode('\\', $class, 2);
+        $dir = strtolower($arr[0]);
+        $class = $arr[1];
+        $file = './forms/' . $dir . '/' . $class . '.php';
+        if (file_exists($file)) {
+            include_once $file;
+        }
+        return;
+    }
+
 
     return;
 }

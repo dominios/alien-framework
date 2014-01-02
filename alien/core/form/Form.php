@@ -4,10 +4,10 @@ namespace Alien\Forms;
 
 class Form {
 
-    private $method;
-    private $action;
-    private $id;
-    private $name;
+    protected $method;
+    protected $action;
+    protected $id;
+    protected $name;
     private $elements = array();
 
     /**
@@ -15,7 +15,7 @@ class Form {
      * @param string $action
      * @param string $name
      */
-    public function __construct($method, $action, $name) {
+    public function __construct($method = 'post', $action = '', $name = '') {
         $this->method = strtoupper($method);
         $this->name = $name;
         $this->action = $action;
@@ -82,5 +82,23 @@ class Form {
         return $ret;
     }
 
-}
+    public function getAction() {
+        return $this->action;
+    }
 
+    public function setAction($action) {
+        $this->action = $action;
+        return $this;
+    }
+
+    public function setMethod($method) {
+        $this->method = strtoupper($method);
+        return $this;
+    }
+
+    public function setName($name) {
+        $this->name = $name;
+        return $this;
+    }
+
+}

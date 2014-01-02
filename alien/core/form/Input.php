@@ -261,6 +261,11 @@ class Input {
         return $this->name;
     }
 
+    public function setName($name) {
+        $this->name = $name;
+        return $this;
+    }
+
     public function getType() {
         return $this->type;
     }
