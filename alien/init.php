@@ -2,7 +2,7 @@
 
 namespace Alien;
 
-use \Alien\Authorization\Authorization;
+use \Alien\Models\Authorization\Authorization;
 use \Alien\Layout\Layout;
 
 ob_start();
@@ -38,7 +38,7 @@ function class_autoloader($class) {
     // core sa nacita vzdy cele
     $autoloadDirectories = array();
     $autoloadDirectories[] = './core';
-    $autoloadDirectories[] = './core/authorization';
+//    $autoloadDirectories[] = './core/authorization';
     $autoloadDirectories[] = './core/form';
 
     foreach ($autoloadDirectories as $dir) {

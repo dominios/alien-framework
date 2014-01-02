@@ -5,8 +5,8 @@ namespace Alien\Controllers;
 use Alien\Response;
 use Alien\View;
 use Alien\Message;
-use Alien\Authorization\User;
-use Alien\Authorization\Authorization;
+use Alien\Models\Authorization\User;
+use Alien\Models\Authorization\Authorization;
 use Alien\Notification;
 
 class DashboardController extends BaseController {

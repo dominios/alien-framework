@@ -1,6 +1,6 @@
 <?php
 
-namespace Alien\Authorization;
+namespace Alien\Models\Authorization;
 
 use PDO;
 use Alien\Alien;

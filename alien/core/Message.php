@@ -3,7 +3,7 @@
 namespace Alien;
 
 use \PDO;
-use Alien\Authorization\User;
+use Alien\Models\Authorization\User;
 
 class Message implements ActiveRecord {
 
@@ -206,4 +206,3 @@ class Message implements ActiveRecord {
     }
 
 }
-

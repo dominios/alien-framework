@@ -5,9 +5,9 @@ namespace Alien\Controllers;
 use Alien\View;
 use Alien\Response;
 use Alien\Notification;
-use Alien\Authorization\Group;
-use Alien\Authorization\User;
-use Alien\Authorization\Permission;
+use Alien\Models\Authorization\Group;
+use Alien\Models\Authorization\User;
+use Alien\Models\Authorization\Permission;
 use Alien\Controllers\BaseController;
 
 class GroupsController extends BaseController {

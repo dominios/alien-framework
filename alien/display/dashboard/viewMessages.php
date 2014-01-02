@@ -1,7 +1,7 @@
 <section class="tabs" id="messageTabs">
     <header>
         <ul>
-            <li class="active"><a href="#inbox"><span class="icon icon-message"></span>Prijatá pošta<?= (\Alien\Message::getUnreadCount(\Alien\Authorization\Authorization::getCurrentUser()) ? '<span class="badge badge-normal">' . \Alien\Message::getUnreadCount(\Alien\Authorization\Authorization::getCurrentUser()) . '</badge>' : ''); ?></a></li>
+            <li class="active"><a href="#inbox"><span class="icon icon-message"></span>Prijatá pošta<?= (\Alien\Message::getUnreadCount(\Alien\Models\Authorization\Authorization::getCurrentUser()) ? '<span class="badge badge-normal">' . \Alien\Message::getUnreadCount(\Alien\Models\Authorization\Authorization::getCurrentUser()) . '</badge>' : ''); ?></a></li>
             <li><a href="#outbox"><span class="icon icon-message-out"></span>Odoslaná pošta</a></li>
         </ul>
     </header>

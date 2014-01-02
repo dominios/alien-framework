@@ -5,9 +5,9 @@ namespace Alien\Controllers;
 use Alien\Alien;
 use Alien\Terminal;
 use Alien\Response;
-use Alien\Authorization\User;
-use Alien\Authorization\Group;
-use Alien\Authorization\Permission;
+use Alien\Models\Authorization\User;
+use Alien\Models\Authorization\Group;
+use Alien\Models\Authorization\Permission;
 use Alien\View;
 
 class AjaxController extends BaseController {

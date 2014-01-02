@@ -1,6 +1,6 @@
 <?php
 
-namespace Alien\Authorization;
+namespace Alien\Models\Authorization;
 
 use Alien\Alien;
 use Alien\DBConfig;

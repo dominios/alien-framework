@@ -6,7 +6,7 @@ use Alien\View;
 use Alien\Response;
 use Alien\Message;
 use Alien\Controllers\BaseController;
-use Alien\Authorization\Authorization;
+use Alien\Models\Authorization\Authorization;
 
 class IndexLayout extends Layout {
 
@@ -81,7 +81,7 @@ class IndexLayout extends Layout {
         $left[] = Array('permission' => null, 'url' => BaseController::actionURL('commerce', 'dashboard'), 'text' => 'E-shop', 'img' => 'cart', 'controller' => 'commerce');
 
         $right = array();
-        $right[] = Array('permission' => null, 'url' => BaseController::actionURL('dashboard', '#'), 'text' => \Alien\Authorization\Authorization::getCurrentUser()->getEmail(), 'img' => 'user-circle', 'submenu' => $userSubmenu);
+        $right[] = Array('permission' => null, 'url' => BaseController::actionURL('dashboard', '#'), 'text' => \Alien\Models\Authorization\Authorization::getCurrentUser()->getEmail(), 'img' => 'user-circle', 'submenu' => $userSubmenu);
 
         $menus = array();
         $menus['left'] = $left;

@@ -6,7 +6,7 @@ use Alien\Alien;
 use Alien\View;
 use Alien\Response;
 use Alien\NotificationContainer;
-use Alien\Authorization\Authorization;
+use Alien\Models\Authorization\Authorization;
 
 abstract class Layout {
 
@@ -91,4 +91,3 @@ abstract class Layout {
     }
 
 }
-
