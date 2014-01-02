@@ -66,24 +66,7 @@ table.full {
 }
 
 
-#rightFloatPanel {
-    float: left;
-    position: relative;
-    display: block;
-    min-width: 170px;
-    transition: opacity .3s;
-    -webkit-transition: opacity .3s;
-    top: 40px;
-    left: 50px;
-}
 
-#rightFloatPanel.disabled {
-    opacity: 0 !important;
-}
-
-#rightFloatPanel:hover {
-    opacity: 1;
-}
 
 #headerTitle {
     padding-left: 5px;

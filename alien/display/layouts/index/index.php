@@ -42,11 +42,18 @@
             <?= $this->mainMenu; ?>
         </nav>
 
+        <div id="container"<?= $_SESSION['temp_layoutFullsize'] == 'true' ? '' : ' class="layout-fullsize"'; ?>>
 
+            <section id="mainPanel" class="column">
+                <div id="rightpanelHeader">
+                    <h1><?= $this->title; ?></h1>
+                    <div class="hr"></div>
+                    <!--<div id="headerActionPanel"><?= $this->actionMenu; ?></div>-->
+                </div>
+                <div style="margin-top: 35px;"><?= $this->mainContent; ?></div>
+            </section>
 
-        <div id="container">
-
-            <aside id="leftpanel" class="sidebar <?= $_SESSION['temp_mainmenu'] == 'true' ? '' : 'mainmenu-minimized'; ?>">
+            <aside id="leftPanel" class="column sidebar">
                 <div class="inner">
                     <header>
                         <div class="hr"></div>
@@ -59,20 +66,13 @@
                 </div>
             </aside>
 
-            <section id="rightpanel" class="<?= $_SESSION['temp_mainmenu'] == 'true' ? '' : 'rightpanel-full'; ?>">
-                <div id="rightpanelHeader">
-                    <h1><?= $this->title; ?></h1>
-                    <div class="hr"></div>
-                    <!--<div id="headerActionPanel"><?= $this->actionMenu; ?></div>-->
-                </div>
-                <div style="margin-top: 35px;"><?= $this->mainContent; ?></div>
-            </section>
-
             <aside id="rightFloatPanel" class="sidebar sidebar-small sidebar-left disabled sidebar-draggable">
                 <div class="inner">
                     <?= $this->floatPanel; ?>
                 </div>
             </aside>
+
+            <div class="cleaner"></div>
 
         </div>
 
