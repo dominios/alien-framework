@@ -1,3 +1,4 @@
+.gitignore
 .phpstorm_dbconnector/
 nbproject/
 .idea/
