@@ -23,7 +23,6 @@
         <link href="/alien/display/sidebar.css" type="text/css" rel="stylesheet">
         <link href="/alien/display/tabs.css" type="text/css" rel="stylesheet">
         <link href="/alien/display/icons-data.css" type="text/css" rel="stylesheet">
-        <link href="/alien/display/modal.css" type="text/css" rel="stylesheet">
         <!-- posledne, mozu byt overridy -->
         <link href="/alien/display/layouts/index/layout.css" type="text/css" rel="stylesheet">
     </head>
