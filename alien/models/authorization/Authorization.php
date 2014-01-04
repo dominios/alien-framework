@@ -26,7 +26,7 @@ class Authorization {
             self::$auth_id = $_SESSION['id_auth'];
             self::$user = self::getCurrentUser();
         } else {
-            $STH = $DBH->prepare("INSERT INTO " . DBConfig::table(DBConfig::AUTHORIZATION) . " (id_u, timeout, ip, url) VALUES (:idu, :to, :ip, :url)");
+            $STH = $DBH->prepare("INSERT INTO " . DBConfig::table(DBConfig::AUTHORIZATION) . " (id_u, timeout, ip, url) VALUES (:idu, :to, :ip, :url);");
             $STH->bindValue(':idu', 0, PDO::PARAM_INT);
             $STH->bindValue(':to', time() + self::$loginTimeOut, PDO::PARAM_INT);
             $STH->bindValue(':ip', $_SERVER['REMOTE_ADDR'], PDO::PARAM_STR);
@@ -66,7 +66,7 @@ class Authorization {
     public static function getCurrentUser() {
         if (self::$user == null) {
             $DBH = Alien::getDatabaseHandler();
-            $STH = $DBH->prepare("SELECT id_u FROM " . Alien::getDBPrefix() . "_authorization WHERE id_auth=:id ORDER BY id_auth DESC LIMIT 1");
+            $STH = $DBH->prepare("SELECT id_u FROM " . DBConfig::table(DBConfig::AUTHORIZATION) . " WHERE id_auth=:id ORDER BY id_auth DESC LIMIT 1;");
             $STH->bindValue(':id', self::$auth_id);
             $STH->execute();
             $row = $STH->fetch();
@@ -88,14 +88,6 @@ class Authorization {
             return true;
         } else {
             if ($location == null || $location == false) {
-
-//                $str='';
-//                foreach($permissions as $p){
-//                    $x=new Permission($p);
-//                    $str.=$x->getLabel().' ';
-//                }
-//                new Notification('Potrebné oprávnenia: '.$str,'note');
-
                 return false;
             } else {
 
@@ -118,24 +110,11 @@ class Authorization {
         return self::$auth_id;
     }
 
-    /**
-     * testuje aktualnu session
-     */
     private function validateSession() {
 
         $DBH = Alien::getDatabaseHandler();
 
-//        if(empty($_SESSION['id_auth'])){
-//            $STH = $DBH->prepare('INSERT INTO '.Alien::getDBPrefix().'_authorization (id_u, timeout, ip, url) VALUES (:id, :to, :ip, :url)');
-//            $STH->bindValue(':id', 0, PDO::PARAM_INT);
-//            $STH->bindValue(':to', time() + self::$loginTimeOut, PDO::PARAM_INT);
-//            $STH->bindValue(':ip', $_SERVER['REMOTE_ADDR'], PDO::PARAM_STR);
-//            $STH->bindValue(':url', $_SERVER['REQUEST_URI'], PDO::PARAM_STR);
-//            $STH->execute();
-//        }
-
-
-        $STH = $DBH->prepare("SELECT timeout FROM " . Alien::getDBPrefix() . "_authorization WHERE id_auth=:id ORDER BY id_auth DESC LIMIT 1");
+        $STH = $DBH->prepare("SELECT timeout FROM " . DBConfig::table(DBConfig::AUTHORIZATION) . " WHERE id_auth=:id ORDER BY id_auth DESC LIMIT 1;");
         $STH->bindValue(':id', self::$auth_id, PDO::PARAM_INT);
         $STH->execute();
         if (!$STH->rowCount()) {
@@ -148,7 +127,7 @@ class Authorization {
             return;
         } else {
 
-            $STH = $DBH->prepare('UPDATE ' . Alien::getDBPrefix() . '_authorization SET timeout=:to, url=:url WHERE id_auth = :id;');
+            $STH = $DBH->prepare('UPDATE ' . DBConfig::table(DBConfig::AUTHORIZATION) . ' SET timeout=:to, url=:url WHERE id_auth = :id;');
             $STH->bindValue(':id', self::$auth_id, PDO::PARAM_INT);
             $STH->bindValue(':to', time() + self::$loginTimeOut, PDO::PARAM_INT);
             $STH->bindValue(':url', $_SERVER['REQUEST_URI'], PDO::PARAM_STR);
@@ -164,7 +143,7 @@ class Authorization {
 
         $DBH = Alien::getDatabaseHandler();
 
-        $STH = $DBH->prepare('SELECT id_u, login, password, activated, ban FROM ' . Alien::getDBPrefix() . '_users WHERE login=:login && deleted!=1 LIMIT 1');
+        $STH = $DBH->prepare('SELECT id_u, login, password, activated, ban FROM ' . DBConfig::table(DBConfig::USERS) . ' WHERE login=:login && deleted!=1 LIMIT 1;');
         $STH->bindValue(':login', $login, PDO::PARAM_STR);
         $STH->execute();
         if (!$STH->rowCount()) {
@@ -179,37 +158,17 @@ class Authorization {
                 // error: not activated
             } elseif (time() < $db_user->ban) {
                 // error: banned access
-//                new NoticeBannedLoginAttempt($db_user->id_u, $db_user->login);
             } else {
                 // success
                 self::$user = new User($db_user->id_u);
                 $timeout = time() + self::$loginTimeOut;
                 $_SESSION['loginTimeOut'] = $timeout;
-                $STH = $DBH->prepare("UPDATE " . Alien::getDBPrefix() . "_authorization SET id_u=:id_u, timeout=:to, url=:url WHERE id_auth=:id_a LIMIT 1");
+                $STH = $DBH->prepare("UPDATE " . DBConfig::table(DBConfig::AUTHORIZATION) . " SET id_u=:id_u, timeout=:to, url=:url WHERE id_auth=:id_a LIMIT 1;");
                 $STH->bindValue(':id_a', self::$auth_id, PDO::PARAM_INT);
                 $STH->bindValue(':id_u', self::$user->getId(), PDO::PARAM_INT);
                 $STH->bindValue(':to', $timeout, PDO::PARAM_INT);
                 $STH->bindValue(':url', $_SERVER['REQUEST_URI'], PDO::PARAM_STR);
                 $STH->execute();
-                $STH = $DBH->prepare('UPDATE ' . Alien::getDBPrefix() . '_users SET last_active=:time WHERE id_u=:id');
-                $STH->bindValue(':id', self::$user->getId(), PDO::PARAM_INT);
-                $STH->bindValue(':time', time());
-                $STH->execute();
-
-//                $logData=array();
-//                $logData['user_id']=self::$user->getId();
-//                $logData['user_name']=self::$user->getName();
-//                $logData['action']='login';
-//                $log=new AlienLog(null, 101, $logData);
-//                $log->setImportant(true);
-//                $log->writeLog();
-//                if(Alien::getParameter('allowRedirects')){
-//                    if(isset($_POST['loginAction'])){
-//                        $url = $_POST['loginAction'];
-//                    } else {
-//                        $url = '?page=home';
-//                    }
-//                }
             }
         } else {
             // error: bad password/login
@@ -220,24 +179,6 @@ class Authorization {
     public function logout() {
         unset($_SESSION);
         session_destroy();
-//        $logData=array();
-//        $logData['user_id']=self::$user->getId();
-//        $logData['user_name']=self::$user->getName();
-//        $logData['action']='logout';
-//        $log=new AlienLog(null, 102, $logData);
-//        $log->setImportant(true);
-//        $log->writeLog();
-//        if(Alien::getParameter('allowRedirects')){
-//            if(isset($_POST['loginAction'])){
-//                $url = $_POST['loginAction'];
-//            } else {
-//                $url = '?page=home';
-//            }
-//            ob_clean();
-//            header("Location: ".$url, true, 301);
-//            ob_end_flush();
-//            exit;
-//        }
     }
 
     public function isLoggedIn($userId = null) {

@@ -29,7 +29,7 @@ class User implements ActiveRecord {
             return;
         } elseif ($row === null && $id > 0) {
             $DBH = Alien::getDatabaseHandler();
-            $STH = $DBH->prepare('SELECT * FROM ' . DBConfig::table('users') . ' WHERE id_u=:i');
+            $STH = $DBH->prepare('SELECT * FROM ' . DBConfig::table(DBConfig::USERS) . ' WHERE id_u=:i;');
             $STH->bindValue(':i', (int) $id, PDO::PARAM_INT);
             $STH->execute();
             if (!$STH->rowCount())
@@ -53,19 +53,19 @@ class User implements ActiveRecord {
         }
 
         $this->groups = array();
-        foreach ($DBH->query('SELECT id_g FROM ' . DBConfig::table(DBConfig::GROUP_MEMBERS) . ' WHERE id_u=' . (int) $this->id) as $group) {
+        foreach ($DBH->query('SELECT id_g FROM ' . DBConfig::table(DBConfig::GROUP_MEMBERS) . ' WHERE id_u=' . (int) $this->id . ';') as $group) {
             $this->groups[] = $group['id_g'];
         }
 
         $this->permissions = array();
-        foreach ($DBH->query('SELECT id_p FROM ' . DBConfig::table(DBConfig::USER_PERMISSIONS) . ' WHERE id_u=' . (int) $this->id) as $permission) {
+        foreach ($DBH->query('SELECT id_p FROM ' . DBConfig::table(DBConfig::USER_PERMISSIONS) . ' WHERE id_u=' . (int) $this->id . ';') as $permission) {
             $this->permissions[] = $permission['id_p'];
         }
     }
 
     public static function getByLogin($login) {
         $DBH = Alien::getDatabaseHandler();
-        $Q = $DBH->prepare('SELECT * FROM ' . DBConfig::table('users') . ' WHERE login=:l');
+        $Q = $DBH->prepare('SELECT * FROM ' . DBConfig::table(DBConfig::USERS) . ' WHERE login=:l;');
         $Q->bindValue(':l', $login, PDO::PARAM_STR);
         $Q->execute();
         if ($Q->rowCount()) {
@@ -80,7 +80,7 @@ class User implements ActiveRecord {
         $DBH = Alien::getDatabaseHandler();
         $Q = $DBH->prepare('UPDATE ' . DBConfig::table(DBConfig::USERS) . ' SET
             login=:login, email=:email, activated=:status, ban=:ban, firstname=:fn, surname=:sn
-            WHERE id_u=:id');
+            WHERE id_u=:id;');
         $Q->bindValue(':id', $this->id, PDO::PARAM_INT);
         $Q->bindValue(':login', $this->login, PDO::PARAM_STR);
         $Q->bindValue(':email', $this->email, PDO::PARAM_STR);
@@ -93,7 +93,7 @@ class User implements ActiveRecord {
 
     public static function exists($id) {
         $DBH = Alien::getDatabaseHandler();
-        $STH = $DBH->prepare('SELECT 1 FROM ' . DBConfig::table(DBConfig::USERS) . ' WHERE id_u=:i LIMIT 1');
+        $STH = $DBH->prepare('SELECT 1 FROM ' . DBConfig::table(DBConfig::USERS) . ' WHERE id_u=:i LIMIT 1;');
         $STH->bindValue(':i', (int) $id, PDO::PARAM_INT);
         $STH->execute();
         return $STH->rowCount() ? true : false;
@@ -105,112 +105,15 @@ class User implements ActiveRecord {
 
     public function delete() {
         $DBH = Alien::getDatabaseHandler();
-        $DBH->exec('UPDATE ' . DBConfig::table(DBConfig::USERS) . ' SET deleted=1 WHERE id_u="' . (int) $this->id . '"');
+        $DBH->exec('UPDATE ' . DBConfig::table(DBConfig::USERS) . ' SET deleted=1 WHERE id_u="' . (int) $this->id . '";');
     }
 
     public static function create($initialValues) {
-
         $DBH = Alien::getDatabaseHandler();
-        $Q = $DBH->prepare('INSERT INTO ' . DBConfig::table(DBConfig::USERS) . ' (email, date_registered) VALUES (:e, :dr)');
+        $Q = $DBH->prepare('INSERT INTO ' . DBConfig::table(DBConfig::USERS) . ' (email, date_registered) VALUES (:e, :dr);');
         $Q->bindValue(':e', $initialValues['email'], PDO:: PARAM_STR);
         $Q->bindValue(':dr', time(), PDO::PARAM_INT);
         return $Q->execute() ? new User($DBH->lastInsertId()) : false;
-
-
-
-
-
-
-//        Authorization::permissionTest("?page=security&action=newUserForm", array('users_create'));
-//        $write = true;
-//        $DBH = Alien::getDatabaseHandler();
-//        if (!empty($_POST['surname'])) {
-//            echo "<script type=\"text/javascript\">alert('GO AWAY SPAM!');</script>";
-//            $write = FALSE;
-//            return;
-//        } else {
-//            if (@$_POST['newPass1'] == '') {
-//                new Notification("Heslo nemôže byť prázdny reťazec.", "warning");
-//                $write = false;
-//            }
-//            if ($_POST['newPass1'] != $_POST['newPass2']) {
-//                new Notification("Zadané heslá sa nezhodujú.", "warning");
-//                $write = FALSE;
-//            }
-//            $STH = $DBH->prepare("SELECT id_u FROM " . Alien::getParameter('db_prefix') . "_users WHERE login=:login LIMIT 1");
-//            $STH->bindValue(':login', $_POST['newLogin'], PDO::PARAM_STR);
-//            $STH->execute();
-//            if ($STH->rowCount()) {
-//                new Notification("Zadaný login sa už využíva, je nutné zvoliť iný.", "warning");
-//                $write = FALSE;
-//            }
-//            $STH = $DBH->prepare("SELECT id_u FROM " . Alien::getParameter('db_prefix') . "_users WHERE email=:email LIMIT 1");
-//            $STH->bindValue(':email', $_POST['newEmail'], PDO::PARAM_STR);
-//            $STH->execute();
-//            if ($STH->rowCount()) {
-//                new Notification("Tento email sa už využíva, zadať iný.", "warning");
-//                $write = FALSE;
-//            }
-//            $pattern = "^.+(\..+)*@.+\..+$";
-//            if (@!ereg($pattern, $_POST['newEmail'])) {
-//                new Notification("Zadaný reťazec pre email nieje platná emailová adresa.", "warning");
-//                $write = FALSE;
-//            }
-//            if (@md5($_POST['inputCaptcha']) != $_SESSION['captchaCode']) {
-//                new Notification("Kód bol z obrázka opísaný nesprávne.", "warning");
-//                $write = FALSE;
-//            }
-//            if (!$write) {
-//                new Notification("Nového používateľa sa nepodarilo vytvoriť.", "error");
-//                return;
-//            } else {
-//
-//                $name = $_POST['newLogin'];
-//                $email = $_POST['newEmail'];
-//                $pass = $_POST['newPass1'];
-//
-//                $STH = $DBH->prepare('INSERT INTO ' . Alien::getDBPrefix() . '_users (login, password, email, activated) VALUES (:l, :p, :e, :a)');
-//                $STH->bindValue(':l', $name, PDO::PARAM_STR);
-//                $STH->bindValue(':p', md5($pass), PDO::PARAM_STR);
-//                $STH->bindValue(':e', $email, PDO::PARAM_STR);
-//                $STH->bindValue(':a', 0, PDO::PARAM_INT);
-//                $STH->execute();
-//
-//                $link = "http://" . $_SERVER["SERVER_NAME"] . ":" . $_SERVER["SERVER_PORT"] . "/activateregistration.php?id=" . md5($DBH->lastInsertId());
-//
-//                $message = '';
-//                $message .= "<p>Ahoj " . $name . "</p>\r\n";
-//                $message .= "<p>Vaša registrácia na " . Alien::getParameter('weburl') . ' prebehla úspešne!</p>\r\n';
-//
-//                switch (Alien::getParameter('registrationConfirmation')) {
-//                    case 'auto':
-////                        $message .= "";
-//                        $STH = $DBH->prepare('UPDATE ' . Alien::getDBPrefix() . '_users SET active=1 WHERE id_u=:i');
-//                        $STH->bindValue(':i', $DBH->lastInsertId(), PDO::PARAM_INT);
-//                        $STH->execute();
-//                        break;
-//                    case 'email':
-//                        $message .= "<p>Pre potvrdenie Vášku účtu, kliknite na nalsedujúci odkaz:</p>\r\n";
-//                        $message .= "<p>" . $link . "</p>\r\n";
-//                        break;
-//                    case 'admin':
-//                        $message .= "<p>Vaša registrácia teraz počká na potvrdenie administrátorom. Do tej doby sa ešte nebudete môcť prihlásiť.</p>\r\n";
-//                        break;
-//                }
-//
-//                $message .= "<p>Vaše prihlasovacie údaje:<br>Login: " . $name . "<br>Heslo: " . $pass . "</p>\r\n";
-//                $message .= "<p>V prípade akýchkoľvek problémov neváhajte a kontaktujte nás.</p>\r\n";
-//                $message .= "<p><i>Poznámka: Toto je automaticky generovaný email, prosíme, aby ste na neho neodpovedali.</i></p>\r\n";
-//
-//                if (Alien::getParameter('registrationEmailSend')) {
-//                    $mail = new PHPMailer();
-//                    $mail->SetFrom(Alien::getParameter('adminAddress'), Alien::getParameter('adminName'));
-//                    $mail->AddAddress($email);
-//                    $mail->MsgHTML($message);
-//                    $mail->Send();
-//                }
-//            }
-//        }
     }
 
     public static function getList($fetch = false) {
@@ -221,8 +124,6 @@ class User implements ActiveRecord {
         }
         return $arr;
     }
-
-    /*     * ******* SPECIFIC METHODS ********************************************************************** */
 
     public function resetPassword() {
 
@@ -272,68 +173,6 @@ class User implements ActiveRecord {
             }
         }
         return $arr;
-    }
-
-    /**
-     * ci moze citat dany folder
-     * @param int $folder idcko
-     * @return boolean
-     */
-    public function hasFolderReadAccess($folder) {
-        if ($this->hasPermission(array('ROOT', 'ALL_FOLDERS'), 'OR')) {
-            return true;
-        }
-//        if($this->hasPermission(array('ALL_FOLDERS'))){
-//            return true;
-//        }
-        $DBH = Alien::getDatabaseHandler();
-        $STH = $DBH->prepare('SELECT view FROM ' . Alien::getDBPrefix() . '_folder_user_permissions WHERE id_f=:f && id_u=:u');
-        $STH->bindValue(':f', $folder, PDO ::PARAM_INT);
-        $STH->bindValue(':u', $this->id);
-        $STH->execute();
-        if ($STH->rowCount()) {
-            $result = $STH->fetch();
-            if ($result['view'] == 1) {
-                return true;
-            }
-        }
-        foreach ($this->getGroups() as $group) {
-            if ($group->hasFolderReadAccess($folder)) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    /**
-     * ci moze updavovat folder
-     * @param int $folder idcko
-     * @return boolean
-     */
-    public function hasFolderModifyAccess($folder) {
-        if ($this->hasPermission(array('ROOT'))) {
-            return true;
-        }
-        if ($this->hasPermission(array('ALL_FOLDERS'))) {
-            return true;
-        }
-        $DBH = Alien::getDatabaseHandler();
-        $STH = $DBH->prepare('SELECT modify FROM ' . Alien::getDBPrefix() . '_folder_user_permissions WHERE id_f=:f && id_u=:u');
-        $STH->bindValue(':f', $folder, PDO ::PARAM_INT);
-        $STH->bindValue(':u', $this->id);
-        $STH->execute();
-        if ($STH->rowCount()) {
-            $result = $STH->fetch();
-            if ($result['modify'] == 1) {
-                return true;
-            }
-        }
-        foreach ($this->getGroups() as $group) {
-            if ($group->hasFolderModifyAccess($folder)) {
-                return true;
-            }
-        }
-        return false;
     }
 
     /**
@@ -410,12 +249,10 @@ class User implements ActiveRecord {
     }
 
     public function getFirstname() {
-
         return $this->firstname;
     }
 
     public function getSurname() {
-
         return $this->surname;
     }
 
@@ -446,18 +283,17 @@ class User implements ActiveRecord {
 
     public function getSinceIsMemberOfGroup($group) {
         $DBH = Alien::getDatabaseHandler();
-        $STH = $DBH->prepare('SELECT since FROM ' . Alien::getDBPrefix() . '_group_members WHERE id_u=:idu AND id_g=:idg');
+        $STH = $DBH->prepare('SELECT since FROM ' . DBConfig::table(DBConfig::GROUP_MEMBERS) . ' WHERE id_u=:idu AND id_g=:idg;');
         $STH->bindValue(':idu', $this->id);
         $STH->bindValue(':idg', $group->getId());
         $STH->execute();
         $result = $STH->fetch();
-
         return $result['since'];
     }
 
     public function removeGroup(Group $group) {
         $DBH = Alien::getDatabaseHandler();
-        $Q = $DBH->prepare('DELETE FROM ' . DBConfig::table(DBConfig::GROUP_MEMBERS) . ' WHERE id_u=:idu && id_g=:idg LIMIT 1');
+        $Q = $DBH->prepare('DELETE FROM ' . DBConfig::table(DBConfig::GROUP_MEMBERS) . ' WHERE id_u=:idu && id_g=:idg LIMIT 1;');
         $Q->bindValue(':idu', $this->id, PDO::PARAM_INT);
         $Q->bindValue(':idg', $group->getId(), PDO::PARAM_INT);
         $Q->execute();
@@ -465,7 +301,7 @@ class User implements ActiveRecord {
 
     public function addGroup(Group $group) {
         $DBH = Alien::getDatabaseHandler();
-        $STH = $DBH->prepare('INSERT INTO ' . DBConfig::table(DBConfig::GROUP_MEMBERS) . ' (id_g,id_u,since) VALUES (:idg,:idu,:s)');
+        $STH = $DBH->prepare('INSERT INTO ' . DBConfig::table(DBConfig::GROUP_MEMBERS) . ' (id_g,id_u,since) VALUES (:idg,:idu,:s);');
         $STH->bindValue(':idg', $group->getId(), PDO::PARAM_INT);
         $STH->bindValue(':idu', $this->id, PDO::PARAM_INT);
         $STH->bindValue(':s', time(), PDO::PARAM_INT);
@@ -474,7 +310,7 @@ class User implements ActiveRecord {
 
     public function removePermission(Permission $permission) {
         $DBH = Alien::getDatabaseHandler();
-        $STH = $DBH->prepare('DELETE FROM ' . DBConfig::table(DBConfig::USER_PERMISSIONS) . ' WHERE id_u=:idu && id_p=:idp LIMIT 1');
+        $STH = $DBH->prepare('DELETE FROM ' . DBConfig::table(DBConfig::USER_PERMISSIONS) . ' WHERE id_u=:idu && id_p=:idp LIMIT 1;');
         $STH->bindValue(':idp', $permission->getId(), PDO::PARAM_INT);
         $STH->bindValue(':idu', $this->id, PDO::PARAM_INT);
         $STH->execute();
@@ -482,7 +318,7 @@ class User implements ActiveRecord {
 
     public function addPermission(Permission $permission) {
         $DBH = Alien::getDatabaseHandler();
-        $STH = $DBH->prepare('INSERT INTO ' . DBConfig::table(DBConfig::USER_PERMISSIONS) . ' (id_p,id_u,since) VALUES (:idp,:idu,:s)');
+        $STH = $DBH->prepare('INSERT INTO ' . DBConfig::table(DBConfig::USER_PERMISSIONS) . ' (id_p,id_u,since) VALUES (:idp,:idu,:s);');
         $STH->bindValue(':idp', $permission->getId(), PDO::PARAM_INT);
         $STH->bindValue(':idu', $this->id, PDO::PARAM_INT);
         $STH->bindValue(':s', time(), PDO::PARAM_INT);
@@ -491,12 +327,11 @@ class User implements ActiveRecord {
 
     public function isMemberOfGroup($group) {
         $DBH = Alien::getDatabaseHandler();
-        $STH = $DBH->prepare('SELECT 1 FROM ' . Alien::getDBPrefix() . '_group_members WHERE id_u=:idu && id_g=:idg LIMIT 1');
+        $STH = $DBH->prepare('SELECT 1 FROM ' . DBConfig::table(DBConfig::GROUP_MEMBERS) . ' WHERE id_u=:idu && id_g=:idg LIMIT 1;');
         $STH->bindValue(':idu', $this->id);
         $STH->bindValue(':idg', $group->getId());
         $STH->execute();
         $res = $STH->fetch();
-
         if ($res) {
             return true;
         } else {
@@ -514,50 +349,40 @@ class User implements ActiveRecord {
     }
 
     public function getLastActive() {
-
         return $this->lastActive;
     }
 
     public function getDateRegistered() {
-
         return $this->dateRegistered;
     }
 
     public function getBanDate() {
         $DBH = Alien::getDatabaseHandler();
-        $STH = $DBH->prepare("SELECT UNIX_TIMESTAMP(ban) AS banstamp FROM " . Alien::getDBPrefix() . "_users WHERE id_u=:id LIMIT 1");
+        $STH = $DBH->prepare("SELECT UNIX_TIMESTAMP(ban) AS banstamp FROM " . DBConfig::table(DBConfig::USERS) . " WHERE id_u=:id LIMIT 1;");
         $STH->setFetchMode(PDO ::FETCH_OBJ);
         $STH->bindValue(":id", $this->id);
         $STH->execute();
         $result = $STH->fetch()->banstamp;
-
-        if ($result == NULL)
-            return NULL; else {
-            return
-
-                    date("Y-m-d", $result);
+        if ($result == NULL) {
+            return NULL;
+        } else {
+            return date("Y-m-d", $result);
         }
     }
 
     public function setLogin($login) {
-        $DBH = Alien::getDatabaseHandler();
-        $STH = $DBH->prepare("UPDATE " . Alien::getDBPrefix() . "_users SET login=:login WHERE id_u=:id LIMIT 1");
-        $STH->bindValue(':login', $login);
-        $STH->bindValue(':id', $this
-                ->id);
-        $STH->execute();
+        $this->login = $login;
     }
 
     public function setPassword($pass) {
         $DBH = Alien::getDatabaseHandler();
-        $STH = $DBH->prepare("UPDATE " . DBConfig::table(DBConfig::USERS) . " SET password=:pass WHERE id_u=:id LIMIT 1");
+        $STH = $DBH->prepare("UPDATE " . DBConfig::table(DBConfig::USERS) . " SET password=:pass WHERE id_u=:id LIMIT 1;");
         $STH->bindValue(':pass', Authorization::getPasswordHash($pass), PDO::PARAM_STR);
         $STH->bindValue(':id', $this->id, PDO::PARAM_INT);
         $STH->execute();
     }
 
     public function setEmail($email) {
-
         $this->email = $email;
     }
 
@@ -566,7 +391,6 @@ class User implements ActiveRecord {
     }
 
     public function setStatus($status) {
-
         $this->activated = (bool) $status;
     }
 
@@ -576,34 +400,23 @@ class User implements ActiveRecord {
         $STH = $DBH->prepare("SELECT UNIX_TIMESTAMP(timeout) AS time FROM " . Alien::getDBPrefix() . "_authorization WHERE id_u=:id ORDER BY id_auth DESC LIMIT 1");
         $STH->bindValue(':id', $this->id);
         $STH->execute();
-// nenasiel sa taky riadok
         if (!$STH->rowCount()) {
             return false;
         }
         $x = $STH->fetch();
-// vyprsal cas
         if ($x['time'] < time()) {
             return false;
-        }
-// je online
-        else {
-
+        } else {
             return true;
         }
     }
 
     public function touch() {
         $DBH = Alien::getDatabaseHandler();
-        $DBH->query('UPDATE ' . DBConfig::table(DBConfig::USERS) . ' SET last_active = ' . time() . ' WHERE id_u =
-
-
-
-        '
-                . (int) $this->id)->execute();
+        $DBH->query('UPDATE ' . DBConfig::table(DBConfig::USERS) . ' SET last_active = ' . time() . ' WHERE id_u = ' . (int) $this->id . ';');
     }
 
     public function setFirstname($firstname) {
-
         $this->firstname = $firstname;
     }
 
