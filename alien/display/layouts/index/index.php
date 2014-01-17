@@ -13,11 +13,13 @@
         <script type="text/javascript" src="/alien/js/alien.js"></script>
         <script type="text/javascript" src="/alien/js/alien2.js"></script>
         <script type="text/javascript" src="/alien/js/tabs.js"></script>
+        <script type="text/javascript" src="/alien/js/modals.js"></script>
         <link href="/alien/display/layouts/index/alien.css" type="text/css" rel="stylesheet">
         <link href="/alien/display/layouts/index/alien2.css" type="text/css" rel="stylesheet">
         <link href="/alien/display/icons.css" type="text/css" rel="stylesheet">
         <link href="/alien/display/badges.css" type="text/css" rel="stylesheet">
         <link href="/alien/display/forms.css" type="text/css" rel="stylesheet">
+        <link href="/alien/display/modals.css" type="text/css" rel="stylesheet">
         <link href="/alien/display/alerts.css" type="text/css" rel="stylesheet">
         <link href="/alien/display/navbar.css" type="text/css" rel="stylesheet">
         <link href="/alien/display/sidebar.css" type="text/css" rel="stylesheet">
@@ -29,6 +31,8 @@
     <body>
 
         <div id="alienBackground"></div>
+
+        <div class="modal modal-overlay"></div>
 
         <section id="notifications">
             <?= $this->notifications; ?>

@@ -10,7 +10,7 @@
             timeout: 5000,
             success: function(data) {
                 json = jQuery.parseJSON(data);
-                createDialog(json.header, json.content);
+                createModal(json);
             }
         });
     }
@@ -18,8 +18,8 @@
     function chooseFile(file, type) {
         if (!file || !type)
             return;
-        $("input[name=template" + type + "]").attr('value', file);
-        $("#dialog-modal").dialog('close');
+        $("input[name=templateSrc]").attr('value', file);
+        modal.destroy();
     }
 
     function templateShowFilePreview(file) {
