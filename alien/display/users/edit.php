@@ -11,7 +11,8 @@
             timeout: 5000,
             success: function(data) {
                 json = jQuery.parseJSON(data);
-                createDialog(json.header, json.content);
+//                createDialog(json.header, json.content);
+                createModal(json);
             }
         });
     }
@@ -27,7 +28,8 @@
             timeout: 5000,
             success: function(data) {
                 json = jQuery.parseJSON(data);
-                createDialog(json.header, json.content);
+//                createDialog(json.header, json.content);
+                createModal(json);
             }
         });
     }

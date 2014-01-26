@@ -1,10 +1,10 @@
-function setSession(key, value) {
+function setCookie(key, value) {
     if (!key) {
         return;
     }
     $.ajax({
         async: true,
-        url: '/setSession.php',
+        url: '/setCookie.php',
         type: 'GET',
         data: 'key=' + key + '&value=' + value
     });
@@ -125,8 +125,8 @@ $(document).ready(function($) {
 
     /* minimalizovanie main menu */
     $("#mainmenuMinimizer").click(function() {
-        $("#container").toggleClass('layout-fullsize')
-        setSession('layoutFullsize', $("#container").hasClass('layout-fullsize') ? false : true);
+        $("#container").toggleClass('layout-fullsize');
+        setCookie('layoutFullsize', $("#container").hasClass('layout-fullsize') ? false : true);
     });
 
 });

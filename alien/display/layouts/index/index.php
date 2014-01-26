@@ -45,7 +45,7 @@
             <?= $this->mainMenu; ?>
         </nav>
 
-        <div id="container"<?= $_SESSION['temp_layoutFullsize'] == 'true' ? '' : ' class="layout-fullsize"'; ?>>
+        <div id="container"<?= $_COOKIE['layoutFullsize'] == 'true' ? '' : ' class="layout-fullsize"'; ?>>
 
             <section id="mainPanel" class="column">
                 <div id="rightpanelHeader">
