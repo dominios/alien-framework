@@ -1,5 +1,4 @@
 @charset "utf-8";
-@import url(http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,400,300,700,600);
 
 html {
     width: 100%;
@@ -120,6 +119,10 @@ hr, .hr {
     opacity: 1;
 }
 
+#leftPanel nav a span.icon {
+    margin-right: 13px;
+}
+
 #leftPanel header h1 {
     font-size: 16px;
     line-height: 22px;
@@ -140,10 +143,6 @@ hr, .hr {
     transform:rotate(180deg);
     -ms-transform:rotate(180deg);
     -webkit-transform:rotate(180deg);
-}
-
-#container.layout-fullsize #leftPanel nav a {
-    color: transparent;
 }
 
 #container.layout-fullsize #leftPanel nav a .badge {

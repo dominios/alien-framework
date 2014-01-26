@@ -1,6 +1,16 @@
 $(function() {
 
     // init
+
+    // ma mieru alien
+    active = getCookie('activeTab');
+    if (active) {
+        $("section.tabs section article").removeClass('active').addClass('tab-hidden');
+        $("section.tabs section article#" + active).addClass('active').removeClass('tab-hidden');
+        $("section.tabs li").has('a[href!=#' + active + ']').removeClass('active');
+        $("section.tabs li").has('a[href=#' + active + ']').addClass('active');
+    }
+
     $("section.tabs section article").each(function(index) {
         $(this).addClass('notransition');
         $(this).attr('data-height', $(this).height());
@@ -26,10 +36,12 @@ $(function() {
         $(section).find('li').has('a[href!=' + href + ']').removeClass('active');
         $(section).find('article:not(.tab-hidden)').addClass('tab-hidden').css('height', '0px');
         activeHref = $(section).find('li.active').find('a').attr('href');
-        activeArticle = $(section).find('article' + activeHref)
+        activeArticle = $(section).find('article' + activeHref);
         newHeight = $(activeArticle).attr('data-height');
         activeArticle.css('height', newHeight).removeClass('tab-hidden');
         $(section).find('section').css('height', !newHeight ? 0 + 'px' : newHeight);
         ev.preventDefault();
+        // na mieru pre alien
+        setCookie('activeTab', $(section).find('article' + activeHref).attr('id'));
     });
 });

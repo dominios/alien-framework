@@ -10,6 +10,23 @@ function setCookie(key, value) {
     });
 }
 
+function getCookie(key) {
+    if (!key) {
+        return;
+    }
+    ret = '';
+    $.ajax({
+        async: false,
+        url: '/getCookie.php',
+        type: 'GET',
+        data: 'key=' + key,
+        success: function(data) {
+            ret += data;
+        }
+    });
+    return ret;
+}
+
 function createDialog(header, content) {
     $("#dialog-modal").remove();
     newhtml = "<div id='dialog-modal' title='" + header + "'>";
