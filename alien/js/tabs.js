@@ -4,7 +4,7 @@ $(function() {
 
     // ma mieru alien
     active = getCookie('activeTab');
-    if (active) {
+    if (active && $("section.tabs section article#" + active).length) {
         $("section.tabs section article").removeClass('active').addClass('tab-hidden');
         $("section.tabs section article#" + active).addClass('active').removeClass('tab-hidden');
         $("section.tabs li").has('a[href!=#' + active + ']').removeClass('active');
