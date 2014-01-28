@@ -65,6 +65,11 @@ class Form {
         return $this;
     }
 
+    /**
+     *
+     * @param string $name
+     * @return Input
+     */
     public function getElement($name) {
         foreach ($this->elements as $elem) {
             if ($elem->getName() === $name) {

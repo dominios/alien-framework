@@ -235,6 +235,11 @@ class Input {
         return $this->value;
     }
 
+    public function setValue($value) {
+        $this->value = $value;
+        return $this;
+    }
+
     public function addValidator(Validator $validator) {
         $this->validators[] = $validator;
         return $this;

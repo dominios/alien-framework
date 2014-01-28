@@ -30,6 +30,7 @@ class EditForm extends Form {
                 ->addValidator(Validator::regexp(Validator::PATTERN_EMAIL, 'neplatná adresa'))
                 ->addValidator(Validator::custom('userUniqueEmail', array('ignoredUserId' => $user->getId()), 'tento email sa už používa'))
                 ->addToForm($form);
+        Input::password('userCurrentPass', '')->addToForm($form);
         Input::password('userPass2', '')->addToForm($form);
         Input::password('userPass3', '')->addToForm($form);
 

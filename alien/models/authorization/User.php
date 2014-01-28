@@ -21,6 +21,7 @@ class User implements ActiveRecord {
     private $deleted;
     private $permissions;
     private $groups;
+    private $passwordHash;
 
     public function __construct($id = null, $row = null) {
 
@@ -40,13 +41,14 @@ class User implements ActiveRecord {
         $this->id = (int) $row['id_u'];
         $this->login = $row['login'];
         $this->email = $row['email'];
-        $this->dateRegistered = (int) $row['date_registered'];
+        $this->dateRegistered = (int) $row['dateRegistered'];
         $this->activated = (bool) $row['activated'];
-        $this->lastActive = (int) $row['last_active'];
+        $this->lastActive = (int) $row['lastActive'];
         $this->ban = $row['ban'] === null ? false : (int) $row['ban'];
         $this->deleted = (bool) $row['deleted'];
         $this->firstname = $row['firstname'];
         $this->surname = $row['surname'];
+        $this->passwordHash = $row['password'];
 
         if (empty($DBH)) {
             $DBH = Alien::getDatabaseHandler();
@@ -84,7 +86,7 @@ class User implements ActiveRecord {
         $Q->bindValue(':id', $this->id, PDO::PARAM_INT);
         $Q->bindValue(':login', $this->login, PDO::PARAM_STR);
         $Q->bindValue(':email', $this->email, PDO::PARAM_STR);
-        $Q->bindValue(':status', $this->activated, PDO::PARAM_INT);
+        $Q->bindValue(':status', $this->getStatus(), PDO::PARAM_INT);
         $Q->bindValue(':ban', $this->ban, PDO::PARAM_INT);
         $Q->bindValue(':fn', $this->firstname, PDO::PARAM_STR);
         $Q->bindValue(':sn', $this->surname, PDO::PARAM_STR);
@@ -110,7 +112,7 @@ class User implements ActiveRecord {
 
     public static function create($initialValues) {
         $DBH = Alien::getDatabaseHandler();
-        $Q = $DBH->prepare('INSERT INTO ' . DBConfig::table(DBConfig::USERS) . ' (email, date_registered) VALUES (:e, :dr);');
+        $Q = $DBH->prepare('INSERT INTO ' . DBConfig::table(DBConfig::USERS) . ' (email, dateRegistered) VALUES (:e, :dr);');
         $Q->bindValue(':e', $initialValues['email'], PDO:: PARAM_STR);
         $Q->bindValue(':dr', time(), PDO::PARAM_INT);
         return $Q->execute() ? new User($DBH->lastInsertId()) : false;
@@ -374,10 +376,10 @@ class User implements ActiveRecord {
         $this->login = $login;
     }
 
-    public function setPassword($pass) {
+    public function setPassword($password) {
         $DBH = Alien::getDatabaseHandler();
         $STH = $DBH->prepare("UPDATE " . DBConfig::table(DBConfig::USERS) . " SET password=:pass WHERE id_u=:id LIMIT 1;");
-        $STH->bindValue(':pass', Authorization::getPasswordHash($pass), PDO::PARAM_STR);
+        $STH->bindValue(':pass', Authorization::generateHash($password), PDO::PARAM_STR);
         $STH->bindValue(':id', $this->id, PDO::PARAM_INT);
         $STH->execute();
     }
@@ -413,7 +415,7 @@ class User implements ActiveRecord {
 
     public function touch() {
         $DBH = Alien::getDatabaseHandler();
-        $DBH->query('UPDATE ' . DBConfig::table(DBConfig::USERS) . ' SET last_active = ' . time() . ' WHERE id_u = ' . (int) $this->id . ';');
+        $DBH->query('UPDATE ' . DBConfig::table(DBConfig::USERS) . ' SET lastActive = ' . time() . ' WHERE id_u = ' . (int) $this->id . ';');
     }
 
     public function setFirstname($firstname) {
@@ -422,6 +424,10 @@ class User implements ActiveRecord {
 
     public function setSurname($surname) {
         $this->surname = $surname;
+    }
+
+    public function getPasswordHash() {
+        return $this->passwordHash;
     }
 
 }

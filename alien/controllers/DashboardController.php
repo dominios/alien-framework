@@ -8,6 +8,7 @@ use Alien\Message;
 use Alien\Models\Authorization\User;
 use Alien\Models\Authorization\Authorization;
 use Alien\Notification;
+use Alien\Forms\Users\EditForm as ProfilForm;
 
 class DashboardController extends BaseController {
 
@@ -104,6 +105,58 @@ class DashboardController extends BaseController {
             Notification::success('Správa bola odstránená.');
         }
         $this->redirect(BaseController::actionURL('dashboard', 'messages'));
+    }
+
+    protected function profil() {
+        $user = Authorization::getCurrentUser();
+        $form = ProfilForm::create($user);
+        $form->getElement('action')->setValue('dashboard/profil');
+
+        if ($form->isPostSubmit()) {
+
+            if ($form->validate()) {
+
+                if ($_POST['userId'] == Authorization::getCurrentUser()->getId() && User::exists($_POST['userId'])) {
+                    $user = Authorization::getCurrentUser();
+                } else {
+                    Notification::error('Prístup odmiednutý.');
+                    $this->redirect(BaseController::actionURL('dashboard', 'profil'));
+                    return;
+                }
+                $user->setLogin($_POST['userLogin']);
+                $user->setFirstname($_POST['userFirstname']);
+                $user->setSurname($_POST['userSurname']);
+                $user->setEmail($_POST['userEmail']);
+                $user->update();
+                $user->touch();
+
+                if (strlen(trim($_POST['userCurrentPass']))) {
+                    if (Authorization::validatePassword($_POST['userCurrentPass'], $user->getPasswordHash())) {
+                        if ($_POST['userPass2'] === $_POST['userPass3'] && strlen(trim($_POST['userPass2']))) {
+                            $user->setPassword($_POST['userPass2']);
+                            Notification::information('Heslo bolo zmenené.');
+                        } else {
+                            Notification::warning('Niektoré heslo bolo zadané nesprávne, heslo zmenené nebolo.');
+                        }
+                    } else {
+                        Notification::warning('Niektoré heslo bolo zadané nesprávne, heslo zmenené nebolo.');
+                    }
+                }
+                Notification::success('Zmeny boli uložené.');
+                $this->redirect(BaseController::actionURL('dashboard', 'profil'));
+            } else {
+                Notification::error('Zmeny sa nepodarilo uložiť.');
+            }
+        }
+
+
+        $view = new View('display/dashboard/profil.php');
+        $view->form = $form;
+        $view->userGroups = $user->getGroups(true);
+        $view->userPermissions = $user->getPermissions(true);
+
+        $result = array('LeftTitle' => 'Môj profil', 'Title' => 'Môj profil', 'ContentMain' => $view->renderToString());
+        return new Response(Response::OK, $result, __CLASS__ . '::' . __FUNCTION__);
     }
 
 }

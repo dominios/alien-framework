@@ -54,7 +54,7 @@ input[type="text"]{
 }
 
 input:hover, button:hover, textarea:hover, select:hover {
-    background-color: #EAF8FC;
+    background-color: #FFFFE5;
     color: black;
 }
 
@@ -142,7 +142,7 @@ legend {
 textarea:focus, input:focus {
     box-shadow: 0 0 5px #ccc;
     border-color: #aaa;
-    background-color: #EAF8FC;
+    background-color: #FFFFE5;
 }
 
 button span.icon, .button span.icon {
