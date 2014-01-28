@@ -135,6 +135,11 @@ class DashboardController extends BaseController {
                         if ($_POST['userPass2'] === $_POST['userPass3'] && strlen(trim($_POST['userPass2']))) {
                             $user->setPassword($_POST['userPass2']);
                             Notification::information('Heslo bolo zmenené.');
+                            Message::create(array(
+                                'author' => 0,
+                                'recipient' => $user->getId(),
+                                'message' => 'Tvoje heslo bolo s okamžitou platnosťou zmenené.'
+                            ));
                         } else {
                             Notification::warning('Niektoré heslo bolo zadané nesprávne, heslo zmenené nebolo.');
                         }

@@ -10,7 +10,7 @@
 
             <? if ($this->message != null): ?>
                 <section id="messageDetail">
-                    <p>Odosielateľ: <b><?= $this->message->getAuthor()->getName(); ?></b> (<?= $this->message->getDateSent('d.m.Y H:i:s'); ?>)</p>
+                    <p>Odosielateľ: <b><?= ( $this->message->getAuthor()->getId() > 0 ? $this->message->getAuthor()->getName() : '<i>SYSTEM</i>') ?></b> (<?= $this->message->getDateSent('d.m.Y H:i:s'); ?>)</p>
                     <p><?= $this->message->getMessage(); ?></p>
                     <a href="<?= str_replace('%ID%', $this->message->getAuthor()->getId(), $this->replyMessagePattern); ?>" class="button"><span class="icon icon-reply"></span>Odpovedať</a>
                     <a href="<?= str_replace('%ID%', $this->message->getId(), $this->deleteMessagePattern); ?>" class="button"><span class="icon icon-trash"></span>Vymazať</a>
@@ -43,7 +43,7 @@
                             }
                             ?>
                         </td>
-                        <td class="itemDesc"><?= $message->getAuthor()->getName(); ?></td>
+                        <td class="itemDesc"><?= ( $message->getAuthor()->getId() > 0 ? $message->getAuthor()->getName() : '<i>SYSTEM</i>') ?></td>
                         <td class="itemDesc"><?= $message->getDateSent('d.m.Y H:i:s'); ?></td>
                         <td class="itemDesc"><?= substr($message->getMessage(), 0, 40) . '...'; ?></td>
                         <!--<td class="itemDesc"></td>-->

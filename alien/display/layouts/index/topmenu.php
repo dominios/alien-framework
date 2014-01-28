@@ -77,7 +77,7 @@ foreach ($this->items['right'] as $item) {
 }
 $menu .= '</ul>';
 
-$menu .= '<ul class="navbar-search navbar-right">';
+$menu .= '<ul class="navbar-search navbar-right" id="searchbar">';
 $menu .= '<li class="navbar-no-hover">';
 $menu .= '<form method="POST" action="???" id="searchForm">';
 $menu .= '<input type="text" name="searchString" placeholder="Search ...">';
