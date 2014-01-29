@@ -62,9 +62,11 @@ class Notification {
     private $type;
 
     const INFO = 'note';
+    const NEW_MESSAGES = 'new_messages';
     const SUCCESS = 'success';
     const WARNING = 'warning';
     const ERROR = 'error';
+    const ACCESS_DENIED = 'access_denied';
 
     /**
      * New notification constructor
@@ -83,6 +85,13 @@ class Notification {
         return new self($msg, Notification::INFO);
     }
 
+    public static function newMessages($msg) {
+        if (!trim(strlen($msg))) {
+            $msg = 'Máš neprečítané správy.';
+        }
+        return new self($msg, Notification::NEW_MESSAGES);
+    }
+
     public static function success($msg) {
         return new self($msg, Notification::SUCCESS);
     }
@@ -93,6 +102,13 @@ class Notification {
 
     public static function error($msg) {
         return new self($msg, Notification::ERROR);
+    }
+
+    public static function accessDenied($msg) {
+        if (!trim(strlen($msg))) {
+            $msg = 'Nedostatočné oprávnenia.';
+        }
+        return new self($msg, Notification::ACCESS_DENIED);
     }
 
     public function getMessage() {

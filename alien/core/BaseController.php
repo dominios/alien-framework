@@ -129,9 +129,6 @@ class BaseController {
     protected function redirect($action, $statusCode = 301) {
         ob_clean();
         \Alien\NotificationContainer::getInstance()->updateSession();
-//        if ($this->layout instanceof Layout) {
-//            $this->getLayout()->saveSessionNotifications();
-//        }
         header('Location: ' . $action, false, $statusCode);
         ob_end_flush();
         exit;
@@ -187,7 +184,7 @@ class BaseController {
                 $user = Authorization::getCurrentUser();
                 if ($user instanceof User) {
                     if (Message::getUnreadCount($user)) {
-                        Notification::information('Máš neprečítané správy.');
+                        Notification::newMessages();
                     }
                 }
             }

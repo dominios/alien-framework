@@ -9,24 +9,34 @@ if (!function_exists('\Alien\renderNotification')) {
     function renderNotification(Notification $notification) {
         switch ($notification->getType()) {
             case Notification::INFO:
-                $icon = 'icon-info';
+                $icon = 'icon-notify-info';
+                $class = 'not-info';
+                $title = 'Informácia';
+                break;
+            case Notification::NEW_MESSAGES:
+                $icon = 'icon-notify-messages';
                 $class = 'not-info';
                 $title = 'Informácia';
                 break;
             case Notification::SUCCESS:
-                $icon = 'icon-ok';
+                $icon = 'icon-notify-ok';
                 $class = 'not-success';
                 $title = 'Úspech';
                 break;
             case Notification::WARNING:
-                $icon = 'icon-warning';
+                $icon = 'icon-notify-warning';
                 $class = 'not-warning';
                 $title = 'Varovanie';
                 break;
             case Notification::ERROR:
-                $icon = 'icon-cancel';
+                $icon = 'icon-notify-error';
                 $class = 'not-error';
                 $title = 'Chyba';
+                break;
+            case Notification::ACCESS_DENIED:
+                $icon = 'icon-notify-private';
+                $class = 'not-error';
+                $title = 'Nepovolený prístup';
                 break;
         }
         return ('<div class="notify ' . $class . '"><span class="icon ' . $icon . '"></span>' . '<b>' . $title . ':</b> ' . $notification->getMessage() . '</div>');
@@ -41,7 +51,7 @@ if (!$this instanceof \Alien\View) {
 }
 ?>
 
-<div style="position: absolute; top: 0px; width: 100%;">
+<div style="position: absolute; top: 6px; right: 6px;">
     <div id="notifyArea">
         <?
         foreach ($this->list as $note):

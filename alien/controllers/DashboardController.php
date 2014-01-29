@@ -41,6 +41,13 @@ class DashboardController extends BaseController {
     }
 
     protected function home() {
+//
+        Notification::information('test');
+        Notification::warning('test');
+        Notification::success('test');
+        Notification::error('test');
+        Notification::accessDenied('test');
+
         $content = '';
         $view = new View('display/dashboard/home.php');
         $content .= $view->renderToString();

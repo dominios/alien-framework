@@ -378,6 +378,24 @@ span.icon.icon-note-light {
     background-image: url('img/white/note.png');
 }
 
+span.icon.icon-notify-error, span.icon.icon-notify-error-dark {
+    background-image: url('img/notify_error.png');
+}
+span.icon.icon-notify-info, span.icon.icon-notify-info-dark {
+    background-image: url('img/notify_info.png');
+}
+span.icon.icon-notify-messages, span.icon.icon-notify-messages-dark {
+    background-image: url('img/notify_messages.png');
+}
+span.icon.icon-notify-ok, span.icon.icon-notify-ok-dark {
+    background-image: url('img/notify_ok.png');
+}
+span.icon.icon-notify-private, span.icon.icon-notify-private-dark {
+    background-image: url('img/notify_private.png');
+}
+span.icon.icon-notify-warning, span.icon.icon-notify-warning-dark {
+    background-image: url('img/notify_warning.png');
+}
 span.icon.icon-ok, span.icon.icon-ok-dark {
     background-image: url('img/ok.png');
 }
