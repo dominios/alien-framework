@@ -27,7 +27,9 @@
     }
 
     $(function() {
-        $("aside#rightFloatPanel").removeClass('disabled');
+
+//        $("aside#rightFloatPanel").removeClass('disabled');
+
         $("section.tabs").find('li a').live('click', function() {
             if ($(this).attr('href') === '#content') {
                 $("aside#rightFloatPanel").removeClass('disabled');
@@ -58,6 +60,13 @@
                     success: function(data) {
                         json = jQuery.parseJSON(data);
                         ui.item.replaceWith(json.item);
+                        $ac = $("article#content");
+                        $ac.css('height', 'auto');
+                        $height = $ac.height();
+                        $ac.css('height', $height);
+                        $ac.attr('data-height', $height + 'px');
+                        console.log($height);
+                        $(".tabs section").height($height + 'px');
                     }
                 });
             }

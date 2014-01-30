@@ -27,14 +27,13 @@
     display: block;
     border-style: solid;
     border-width: 1px;
-    border-radius: 3px;
+    border-radius: 2px;
     padding: 5px;
     padding-left: 10px;
     padding-right: 18px;
-    margin: 5px;
     margin-bottom: 8px;
     line-height: 44px;
-    box-shadow: 1px 1px 5px #888;
+    box-shadow: 1px 1px 5px rgba(150, 150, 150, 0.4);
 }
 
 .not-error {

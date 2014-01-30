@@ -59,11 +59,7 @@ class Template extends Layout implements ActiveRecord, FileInterface {
         $DBH = Alien::getDatabaseHandler();
         $Q = $DBH->query('SELECT 1 FROM ' . DBConfig::table(DBConfig::TEMPLATES) . '
             WHERE id_t="' . (int) $id . '"')->execute();
-        if ($Q->rowCount()) {
-            return true;
-        } else {
-            return false;
-        }
+        return (bool) $Q->rowCount();
     }
 
     public function save() {
@@ -108,7 +104,7 @@ class Template extends Layout implements ActiveRecord, FileInterface {
     }
 
     public function actionEdit() {
-        return BaseController::actionUrl('content', 'editTemplate', array('id' => $this->id));
+        return BaseController::actionUrl('template', 'edit', array('id' => $this->id));
     }
 
     public function actionGoTo() {
@@ -116,7 +112,7 @@ class Template extends Layout implements ActiveRecord, FileInterface {
     }
 
     public function actionDrop() {
-        return BaseController::actionUrl('content', 'dropTemplate', array('id' => $this->id));
+        return BaseController::actionUrl('template', 'drop', array('id' => $this->id));
     }
 
     public function getId() {
@@ -136,15 +132,11 @@ class Template extends Layout implements ActiveRecord, FileInterface {
     }
 
     public function isUsed() {
-        global $DBH;
+        $DBH = Alien::getDatabaseHandler();
         $STH = $DBH->prepare('SELECT 1 FROM ' . DBConfig::table(DBConfig::PAGES) . ' WHERE id_t=:id');
         $STH->bindValue(':id', $this->id, PDO::PARAM_INT);
         $STH->execute();
-        if ($STH->rowCount()) {
-            return true;
-        } else {
-            return false;
-        }
+        return (bool) $STH->rowCount();
     }
 
 //    public function renderControlPanel() {

@@ -8,12 +8,12 @@ use Alien\Models\Content\TemplateBlock;
 <script type="text/javascript">
     $(function() {
         $(".toggled-content").hide();
-        $("#<?= $_SESSION['temp_toolbox']; ?>").show();
+        $("#<?= $_COOKIE['toolbox']; ?>").show();
         $(".toggler").click(function(ev) {
             id = $(this).attr('data-toggle');
             $("#" + id).slideToggle(300, 'easeInOutBack');
             $(".toggled-content:not(#" + id + ")").slideUp(300, 'easeInOutBack');
-            setSession('toolbox', id);
+            setCookie('toolbox', id);
             ev.preventDefault();
         });
     });
