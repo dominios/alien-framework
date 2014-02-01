@@ -58,7 +58,8 @@ class Template extends Layout implements ActiveRecord, FileInterface {
     public static function exists($id) {
         $DBH = Alien::getDatabaseHandler();
         $Q = $DBH->query('SELECT 1 FROM ' . DBConfig::table(DBConfig::TEMPLATES) . '
-            WHERE id_t="' . (int) $id . '"')->execute();
+            WHERE id_t="' . (int) $id . '";');
+        $Q->execute();
         return (bool) $Q->rowCount();
     }
 
@@ -258,9 +259,24 @@ class Template extends Layout implements ActiveRecord, FileInterface {
     }
 
     public function update() {
+        $DBH = Alien::getDatabaseHandler();
+        $Q = $DBH->prepare('UPDATE ' . DBConfig::table(DBConfig::TEMPLATES) . '
+            SET name=:name, src=:src, description=:desc
+            WHERE id_t=:i'
+        );
 
+        $Q->bindValue(':i', $this->id, PDO::PARAM_INT);
+//        $Q->bindValue(':idf', $this->folder->getId(), PDO::PARAM_INT);
+        $Q->bindValue(':name', $this->name, PDO::PARAM_STR);
+        $Q->bindValue(':src', $this->src, PDO::PARAM_STR);
+        $Q->bindValue(':desc', $this->description, PDO::PARAM_STR);
+        return (bool) $Q->execute();
     }
 
+    /**
+     * @param array $initialValues
+     * @return Template template
+     */
     public static function create($initialValues) {
 
     }
@@ -275,5 +291,19 @@ class Template extends Layout implements ActiveRecord, FileInterface {
         }
         return $arr;
     }
+
+    public function setName($name) {
+        $this->name = $name;
+    }
+
+    public function setSrc($src) {
+        $this->src = $src;
+    }
+
+    public function setDescription($description) {
+        $this->description = $description;
+    }
+
+
 
 }

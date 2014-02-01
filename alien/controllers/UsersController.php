@@ -196,7 +196,7 @@ class UsersController extends BaseController {
         }
 
         if (!preg_match('/^[0-9]*$/', $_GET['id'])) {
-            new Notification('Neplatný identifikátor používateľa.', Notification::ERROR);
+            Notification::error('Neplatný identifikátor používateľa');
             return;
         }
 

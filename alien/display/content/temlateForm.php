@@ -106,15 +106,15 @@
                     <td><span class="icon icon-code"></span> Zdrojový súbor:</td>
                     <td><?= $this->form->getElement('templateSrc'); ?></td>
                     <td>
-                        <?= $this->buttonSrcChoose; ?>
-                        <?= $this->buttonSrcMagnify; ?>
+                        <?= $this->form->getElement('buttonSrcChoose'); ?>
+                        <?= $this->form->getElement('buttonSrcMagnify'); ?>
                     </td>
                 </tr><tr>
                     <td colspan="3"><div class="hr"></div></td>
                 </tr><tr>
                     <td colspan="3">
-                        <?= $this->buttonCancel; ?>
-                        <?= $this->buttonSubmit; ?>
+                        <?= $this->form->getElement('buttonCancel'); ?>
+                        <?= $this->form->getElement('buttonSubmit'); ?>
                     </td>
                 </tr>
             </table>
