@@ -63,36 +63,11 @@ class Template extends Layout implements ActiveRecord, FileInterface {
         return (bool) $Q->rowCount();
     }
 
-    public function save() {
-        $DBH = Alien::getDatabaseHandler();
-        $new = $this->id === null ? true : false;
-        if ($new) {
-            $Q = $DBH->prepare('INSERT INTO ' . DBConfig::table(DBConfig::TEMPLATES) . '
-             (id_f, name, src, description)
-             VALUES (:idf, :name, :src, :desc);');
-        } else {
-            $Q = $DBH->prepare('UPDATE ' . DBConfig::table(DBConfig::TEMPLATES) . '
-            SET id_f=:idf, name=:name, src=:src, description=:desc
-            WHERE id_t=:i'
-            );
-            $Q->bindValue(':i', $this->id, PDO::PARAM_INT);
-        }
-        $Q->bindValue(':idf', $this->folder->getId(), PDO::PARAM_INT);
-        $Q->bindValue(':name', $this->name, PDO::PARAM_STR);
-        $Q->bindValue(':src', $this->src, PDO::PARAM_STR);
-        $Q->bindValue(':desc', $this->description, PDO::PARAM_STR);
-        $ret = $Q->execute();
-        if ($new && $ret) {
-            $this->id = $DBH->lastInsertId();
-        }
-        return $ret;
-    }
-
     public function delete() {
         if ($this->id === null) {
             return false;
         }
-        if ($this->isUsed()) {
+        if (!$this->isDeletable()) {
             return false;
         }
         $DBH = Alien::getDatabaseHandler();
@@ -255,7 +230,7 @@ class Template extends Layout implements ActiveRecord, FileInterface {
     }
 
     public function isDeletable() {
-
+        return $this->isUsed() ? false : true;
     }
 
     public function update() {
@@ -278,7 +253,14 @@ class Template extends Layout implements ActiveRecord, FileInterface {
      * @return Template template
      */
     public static function create($initialValues) {
-
+        $DBH = Alien::getDatabaseHandler();
+        $Q = $DBH->prepare('INSERT INTO ' . DBConfig::table(DBConfig::TEMPLATES) . '
+             (id_f, name, src)
+             VALUES (:folder, :name, :src);');
+        $Q->bindValue(':folder', $initialValues['folderId'], PDO::PARAM_INT);
+        $Q->bindValue(':name', $initialValues['templateName'], PDO::PARAM_STR);
+        $Q->bindValue(':src', $initialValues['templateSrc'], PDO::PARAM_STR);
+        return $Q->execute() ? new Template($DBH->lastInsertId()) : false;
     }
 
     public static function getList($fetch = false) {

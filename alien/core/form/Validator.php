@@ -80,12 +80,8 @@ class Validator {
     }
 
     protected function templateUniqueName(Input $input) {
-        $DBH = Alien::getDatabaseHandler();
-        $Q = $DBH->prepare('SELECT 1 FROM '.DBConfig::table(DBConfig::TEMPLATES).' WHERE name=:n && id_t!=:i LIMIT 1;');
-        $Q->bindValue(':n', $input->getValue(), PDO::PARAM_STR);
-        $Q->bindValue(':i', (int) $this->params['ignore'], PDO::PARAM_INT);
-        $Q->execute();
-        if($Q->rowCount()){
+        $result = Template::isTemplateNameInUse($input->getValue(), $this->params['ignore']);
+        if($result){
             $this->printErrorMessage($input);
             return false;
         } else {

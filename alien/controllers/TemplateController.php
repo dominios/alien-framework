@@ -39,7 +39,11 @@ class TemplateController extends ContentController {
                     $template = new Template($_POST['templateId']);
                     $new = false;
                 } else {
-                    $initialValus = array();
+                    $initialValus = array(
+                        'folderId' => 1,
+                        'templateName' => 'Nová šablóna',
+                        'templateSrc' => ''
+                    );
                     $template = Template::create($initialValus);
                     $new = true;
                 }
