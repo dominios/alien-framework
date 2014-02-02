@@ -176,7 +176,7 @@ class Template extends Layout implements ActiveRecord, FileInterface {
     public function fetchBlocks() {
         $blocks = Array();
         $DBH = Alien::getDatabaseHandler();
-        $query = 'SELECT * FROM ' . DBConfig::table(DBConfig::BLOCKS) . ' b'
+        $query = 'SELECT b.* FROM ' . DBConfig::table(DBConfig::BLOCKS) . ' b'
                 . ' JOIN ' . DBConfig::table(DBConfig::WIDGETS) . ' w ON b.id_b = w.container'
                 . ' WHERE w.template = "' . (int) $this->id . '"'
                 . ' GROUP BY w.container;';

@@ -1,3 +1,1 @@
-<?=
-
-$this->text;
+<?=$this->text;

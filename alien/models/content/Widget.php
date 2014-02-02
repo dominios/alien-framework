@@ -2,17 +2,20 @@
 
 namespace Alien\Models\Content;
 
+use Alien\ActiveRecord;
 use Alien\Alien;
 use Alien\DBConfig;
 use Alien\Controllers\BaseController;
+use Alien\View;
 use \PDO;
 
-abstract class Widget {
+abstract class Widget implements FileInterface, ActiveRecord {
 
-    const Icon = 'file.png';
-    const Name = 'Zobrazovač';
-    const Type = 'ItemView';
+    const ICON = 'file.png';
+    const NAME = 'Zobrazovač';
+    const TYPE = 'ItemView';
     const WIDGET_FOLDER = 'widgets';
+    const DEFAULT_SCRIPT = '';
 
     protected $id;
     protected $container;
@@ -24,7 +27,8 @@ abstract class Widget {
     protected $page;
     protected $template;
     protected $class = '';
-    protected $script = '';
+    private $script = '';
+    private $view = null;
 
     public function __construct($id, $row = null) {
 
@@ -65,8 +69,8 @@ abstract class Widget {
 
             $DBH = Alien::getDatabaseHandler();
             $row = $DBH->query('SELECT * FROM ' . DBConfig::table(DBConfig::WIDGETS)
-                            . ' WHERE ' . $cond
-                            . ' LIMIT 1;')->fetch();
+                . ' WHERE ' . $cond
+                . ' LIMIT 1;')->fetch();
         }
 
         if (sizeof($row) && $row !== null) {
@@ -79,12 +83,27 @@ abstract class Widget {
         return null;
     }
 
-    public final function renderToString() {
-        $item = $this->getItem(true);
-        $file = './' . Widget::WIDGET_FOLDER . '/' . $this->script;
+//    public final function renderToString() {
+//        if ($this->view instanceof View) {
+//            return $this->view->renderToString();
+//        } else {
+//            return '';
+//        }
+//    }
 
-        $view = new \Alien\View($file);
-        return $view->renderToString();
+    public abstract function renderToString(ContentItem $item = null);
+
+    public final function getView() {
+        if (!($this->view instanceof View)) {
+            $file = './' . Widget::WIDGET_FOLDER . '/' . $this->getScript();
+            $view = new \Alien\View($file);
+            $this->view = $view;
+        }
+        return $this->view;
+    }
+
+    public function __toString() {
+        return $this->renderToString();
     }
 
     public abstract function getIcon();
@@ -103,6 +122,10 @@ abstract class Widget {
 
     public function getParams() {
         return $this->params;
+    }
+
+    public function getParam($key){
+        return $this->params[$key];
     }
 
     public function getPosition() {
@@ -134,6 +157,10 @@ abstract class Widget {
             $this->item = ContentItem::getSpecificItem($this->item);
         }
         return $this->item;
+    }
+
+    public function setItem(ContentItem $item) {
+        $this->item = $item;
     }
 
     public function getPage($fetch = false) {
@@ -175,7 +202,12 @@ abstract class Widget {
     }
 
     public function getScript() {
-        return $this->script;
+        if(!strlen($this->script)){
+            $class = get_class($this);
+            return $class::DEFAULT_SCRIPT;
+        } else {
+            return $this->script;
+        }
     }
 
     public function isVisible() {
@@ -188,6 +220,38 @@ abstract class Widget {
 
     public function actionDrop() {
         return BaseController::actionURL('content', 'dropView', array('id' => $this->id));
+    }
+
+    public function update() {
+        // TODO: Implement update() method.
+    }
+
+    public function delete() {
+        // TODO: Implement delete() method.
+    }
+
+    public function isDeletable() {
+        // TODO: Implement isDeletable() method.
+    }
+
+    public static function create($initialValues) {
+        // TODO: Implement create() method.
+    }
+
+    public static function exists($id) {
+        // TODO: Implement exists() method.
+    }
+
+    public static function getList($fetch = false) {
+        // TODO: Implement getList() method.
+    }
+
+    public function isBrowseable() {
+        // TODO: Implement isBrowseable() method.
+    }
+
+    public function actionGoTo() {
+        // TODO: Implement actionGoTo() method.
     }
 
 }

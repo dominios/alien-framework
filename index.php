@@ -10,11 +10,24 @@ if (!strlen($seolink)) {
 }
 
 $template = new Alien\Models\Content\Template(1);
-echo '<pre>';
+
+$blocks = $template->fetchBlocks();
+foreach ($blocks as $b) {
+    $widgets = $b->getWidgets($template);
+    foreach ($widgets as $w) {
+        echo $w->getType() . ' | ';
+        echo $w . '<br>';
+    }
+
+}
+
+
+
+//echo '<pre>';
 //$content = $template->renderToString();
 //echo htmlspecialchars($content);
-print_r($template->getPartials());
-echo '</pre>';
+//print_r($template->getPartials());
+//echo '</pre>';
 
 //foreach ($tmpl->getBlocks() as $b) {
 //    foreach ($b['items'] as $i) {

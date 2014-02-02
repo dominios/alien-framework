@@ -44,14 +44,13 @@ final class DBConfig implements BaseDBConfig, ContentDBExtension {
     }
 
     public static function table($name) {
-
         $name = strtoupper($name);
         $ret = self::$prefix . '_';
         $reflection = new \ReflectionClass(__CLASS__);
         if ($reflection->hasConstant($name)) {
-            return $ret . $reflection->getConstant($name);
+            return strtolower($ret . $reflection->getConstant($name));
         } else {
-            return $ret . $name;
+            return strtolower($ret . $name);
         }
     }
 

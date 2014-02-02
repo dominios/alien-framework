@@ -7,9 +7,9 @@ use PDO;
 
 class VariableItemWidget extends Widget {
 
-    const Icon = 'variable.png';
-    const Name = 'Variabilná oblasť';
-    const Type = 'VariableItem';
+    const ICON = 'variable.png';
+    const NAME = 'Variabilná oblasť';
+    const TYPE = 'VariableItem';
 
     private $limit;
     private $name;
@@ -20,11 +20,11 @@ class VariableItemWidget extends Widget {
     }
 
     public function getType() {
-        return self::Type;
+        return self::TYPE;
     }
 
     public function getIcon() {
-        return self::Icon;
+        return self::ICON;
     }
 
     public function getLimit() {
@@ -32,7 +32,7 @@ class VariableItemWidget extends Widget {
     }
 
     public function getName() {
-        return self::Name;
+        return self::NAME;
     }
 
     public function fetchViews(ContentPage $page) {

@@ -45,7 +45,6 @@ class TemplateBlock implements FileInterface, ActiveRecord {
                     . ' WHERE container = "' . (int) $this->id . '";';
             foreach ($DBH->query($query) as $row) {
                 $ret[] = Widget::getSpecificWidget($row['id_v'], $row['id_type'], $row);
-//                $ret[] = $row;
             }
         }
         return $ret;
