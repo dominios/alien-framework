@@ -19,8 +19,8 @@ class TemplateBlock implements FileInterface, ActiveRecord {
         if ($row === null) {
             $DBH = Alien::getDatabaseHandler();
             $Q = $DBH->prepare('SELECT * FROM ' . DBConfig::table(DBConfig::BLOCKS)
-                    . ' WHERE id_b=:i'
-                    . ' LIMIT 1;');
+                . ' WHERE id_b=:i'
+                . ' LIMIT 1;');
             $Q->bindValue(':i', $id, PDO::PARAM_INT);
             $Q->execute();
             $row = $Q->fetch();
@@ -42,7 +42,7 @@ class TemplateBlock implements FileInterface, ActiveRecord {
         if ($template instanceof Template) {
             $DBH = Alien::getDatabaseHandler();
             $query = 'SELECT * FROM ' . DBConfig::table(DBConfig::WIDGETS)
-                    . ' WHERE container = "' . (int) $this->id . '";';
+                . ' WHERE container = "' . (int) $this->id . '";';
             foreach ($DBH->query($query) as $row) {
                 $ret[] = Widget::getSpecificWidget($row['id_v'], $row['id_type'], $row);
             }
@@ -98,7 +98,7 @@ class TemplateBlock implements FileInterface, ActiveRecord {
     }
 
     public function getId() {
-
+        return $this->id;
     }
 
     public function getName() {

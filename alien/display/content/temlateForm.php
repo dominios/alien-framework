@@ -28,7 +28,7 @@
 
     $(function() {
 
-//        $("aside#rightFloatPanel").removeClass('disabled');
+        $("aside#rightFloatPanel").removeClass('disabled');
 
         $("section.tabs").find('li a').live('click', function() {
             if ($(this).attr('href') === '#content') {
@@ -51,14 +51,22 @@
                 if (!type) {
                     return;
                 }
+                req = {
+                    type: type,
+                    container: $(this).attr('data-widgetContainer'),
+                    parentType: $(this).attr('data-widgetParentType'),
+                    parentId: $(this).attr('data-widgetParentId')
+                }
                 $.ajax({
                     async: true,
-                    url: "/alien/ajax.php",
-                    type: "GET",
-                    data: "action=widgetGenerateItem&type=" + type,
+                    url: "/alien/ajax.php?action=widgetGenerateItem",
+                    type: "POST",
+                    contentType: "application/json; charset=utf-8",
+                    data: JSON.stringify(req),
                     timeout: 5000,
                     success: function(data) {
                         json = jQuery.parseJSON(data);
+                        console.log(json);
                         ui.item.replaceWith(json.item);
                         $ac = $("article#content");
                         $ac.css('height', 'auto');
@@ -75,7 +83,7 @@
         $(".item-creatable").draggable({
             connectToSortable: '.template-block',
             revert: 'invalid',
-            helper: 'clone',
+            helper: 'clone'
         });
 
     });
@@ -125,7 +133,7 @@
             foreach ($blocks as $block):
                 $block->setTemplate($this->template);
                 ?>
-                <div class="template-block">
+                <div class="template-block" data-widgetParentType="template" data-widgetParentId="<?=$this->template->getId();?>" data-widgetContainer="<?=$block->getId();?>">
                     <h2><?= $block->getName(); ?></h2>
                     <?
                     $params = array(

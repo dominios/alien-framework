@@ -3,6 +3,9 @@
 namespace Alien\Controllers;
 
 use Alien\Alien;
+use Alien\Models\Content\Page;
+use Alien\Models\Content\Template;
+use Alien\Models\Content\Widget;
 use Alien\Terminal;
 use Alien\Response;
 use Alien\Models\Authorization\User;
@@ -26,7 +29,7 @@ class AjaxController extends BaseController {
 
         return new Response(Response::OK, Array(
             'result' => $view->renderToString()
-                ), __CLASS__ . '::' . __FUNCTION__);
+        ), __CLASS__ . '::' . __FUNCTION__);
     }
 
     /**
@@ -59,7 +62,7 @@ class AjaxController extends BaseController {
 
         return new Response(Response::OK, Array(
             'result' => $ret
-                ), __CLASS__ . '::' . __FUNCTION__);
+        ), __CLASS__ . '::' . __FUNCTION__);
     }
 
     /**
@@ -75,16 +78,20 @@ class AjaxController extends BaseController {
         $dir = 'templates';
 
         switch ($REQ['type']) {
-            case 'php': $pattern = '.*\.php$';
+            case 'php':
+                $pattern = '.*\.php$';
                 $img = 'php.png';
                 break;
-            case 'ini': $pattern = '.*\.ini$';
+            case 'ini':
+                $pattern = '.*\.ini$';
                 $img = 'service.png';
                 break;
-            case 'css': $pattern = '.*\.css$';
+            case 'css':
+                $pattern = '.*\.css$';
                 $img = 'css.png';
                 break;
-            default: return json_encode(Array('header' => $header, 'content' => 'Invalid request'));
+            default:
+                return json_encode(Array('header' => $header, 'content' => 'Invalid request'));
         }
 
         $ret = '<div class="gridLayout">';
@@ -112,7 +119,7 @@ class AjaxController extends BaseController {
 
         return new Response(Response::OK, Array(
             'result' => json_encode(Array('header' => $header, 'content' => $ret))
-                ), __CLASS__ . '::' . __FUNCTION__);
+        ), __CLASS__ . '::' . __FUNCTION__);
     }
 
     /**
@@ -132,7 +139,7 @@ class AjaxController extends BaseController {
         }
         return new Response(Response::OK, Array(
             'result' => json_encode(Array('header' => $REQ['file'], 'content' => $content))
-                ), __CLASS__ . '::' . __FUNCTION__);
+        ), __CLASS__ . '::' . __FUNCTION__);
     }
 
     /**
@@ -157,7 +164,7 @@ class AjaxController extends BaseController {
 
         return new Response(Response::OK, Array(
             'result' => json_encode(Array('header' => 'Vybrať šablónu', 'content' => $content))
-                ), __CLASS__ . '::' . __FUNCTION__);
+        ), __CLASS__ . '::' . __FUNCTION__);
     }
 
     /**
@@ -190,7 +197,7 @@ class AjaxController extends BaseController {
             }
             return new Response(Response::OK, Array(
                 'result' => json_encode(Array('header' => 'Vybrať skupinu', 'content' => $ret))
-                    ), __CLASS__ . '::' . __FUNCTION__);
+            ), __CLASS__ . '::' . __FUNCTION__);
         }
     }
 
@@ -224,7 +231,7 @@ class AjaxController extends BaseController {
             }
             return new Response(Response::OK, Array(
                 'result' => json_encode(Array('header' => 'Vybrať oprávnenie', 'content' => $ret))
-                    ), __CLASS__ . '::' . __FUNCTION__);
+            ), __CLASS__ . '::' . __FUNCTION__);
         }
     }
 
@@ -258,7 +265,7 @@ class AjaxController extends BaseController {
             }
             return new Response(Response::OK, Array(
                 'result' => json_encode(Array('header' => 'Vybrať používateľa', 'content' => $ret))
-                    ), __CLASS__ . '::' . __FUNCTION__);
+            ), __CLASS__ . '::' . __FUNCTION__);
         }
     }
 
@@ -292,20 +299,47 @@ class AjaxController extends BaseController {
             }
             return new Response(Response::OK, Array(
                 'result' => json_encode(Array('header' => 'Vybrať oprávnenie', 'content' => $ret))
-                    ), __CLASS__ . '::' . __FUNCTION__);
+            ), __CLASS__ . '::' . __FUNCTION__);
         }
     }
 
     function widgetGenerateItem($REQ) {
-        $item = \Alien\Models\Content\Widget::getSpecificWidget(4);
-        $view = new View('display/common/item.php');
-        $view->class = array('ui-state-default');
-        $view->item = $item;
-        $view->icon = $item->getIcon();
-        $view->dropLink = '';
-        return new Response(Response::OK, Array(
-            'result' => json_encode(Array('item' => $view->renderToString()))
-                ), __CLASS__ . '::' . __FUNCTION__);
+
+        $json = json_decode(file_get_contents("php://input"));
+
+        $initialValues = array(
+            'type' => $json->type,
+            'position' => 0,
+            'visible' => false,
+            'container' => $json->container
+        );
+
+        $widget = Widget::create($initialValues);
+
+        if($widget instanceof Widget){
+
+            if($json->parentType=='template' && Template::exists($json->parentId)){
+                $template = new Template($json->parentId);
+                $widget->setTemplate($template);
+                $widget->update();
+            } else if($json->parentType=='page' && Page::exists($json->parentId)){
+                $page = new Page($json->parentId);
+                $widget->setPage($page);
+                $widget->update();
+            }
+
+            $view = new View('display/common/item.php');
+            $view->class = array('ui-state-default');
+            $view->item = $widget;
+            $view->icon = $widget->getIcon();
+            $view->dropLink = '';
+
+            return new Response(Response::OK, Array(
+                'result' => json_encode(Array('item' => $view->renderToString()))
+            ), __CLASS__ . '::' . __FUNCTION__);
+
+        }
+
     }
 
 }

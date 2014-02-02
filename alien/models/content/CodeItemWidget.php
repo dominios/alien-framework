@@ -3,6 +3,7 @@
 namespace Alien\Models\Content;
 
 use Alien\Alien;
+use Alien\DBConfig;
 use \PDO;
 
 class CodeItemWidget extends Widget {

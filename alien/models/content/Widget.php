@@ -83,14 +83,6 @@ abstract class Widget implements FileInterface, ActiveRecord {
         return null;
     }
 
-//    public final function renderToString() {
-//        if ($this->view instanceof View) {
-//            return $this->view->renderToString();
-//        } else {
-//            return '';
-//        }
-//    }
-
     public abstract function renderToString(ContentItem $item = null);
 
     public final function getView() {
@@ -124,7 +116,7 @@ abstract class Widget implements FileInterface, ActiveRecord {
         return $this->params;
     }
 
-    public function getParam($key){
+    public function getParam($key) {
         return $this->params[$key];
     }
 
@@ -165,14 +157,14 @@ abstract class Widget implements FileInterface, ActiveRecord {
 
     public function getPage($fetch = false) {
         if ($fetch) {
-            if ($this->item instanceof ContentPage) {
+            if ($this->item instanceof Page) {
                 return $this->page;
             } else {
-                $this->item = ContentTemplate($this->page);
+                $this->item = new Page($this->page);
                 return $this->page;
             }
         } else {
-            if ($this->item instanceof ContentPage) {
+            if ($this->item instanceof Page) {
                 return $this->page->getId();
             } else {
                 return $this->page;
@@ -185,7 +177,7 @@ abstract class Widget implements FileInterface, ActiveRecord {
             if ($this->item instanceof Template) {
                 return $this->template;
             } else {
-                $this->item = ContentTemplate($this->template);
+                $this->item = new Template($this->template);
                 return $this->template;
             }
         } else {
@@ -202,7 +194,7 @@ abstract class Widget implements FileInterface, ActiveRecord {
     }
 
     public function getScript() {
-        if(!strlen($this->script)){
+        if (!strlen($this->script)) {
             $class = get_class($this);
             return $class::DEFAULT_SCRIPT;
         } else {
@@ -223,7 +215,25 @@ abstract class Widget implements FileInterface, ActiveRecord {
     }
 
     public function update() {
-        // TODO: Implement update() method.
+        $DBH = Alien::getDatabaseHandler();
+        $Q = $DBH->prepare('UPDATE ' . DBConfig::table(DBConfig::WIDGETS)
+            . ' SET visible=:v, position=:pos, class=:c, script=:s, params=:parm, page=:pg, template=:tmpl WHERE id=:id LIMIT 1;');
+
+        $page = $this->getPage(true);
+        $pg = $page instanceof Page ? $page->getId() : null;
+//        $template = $this->getTemplate(true);
+//        $tmpl = $template instanceof Template ? $template->getId() : null;
+        $tmpl = 1;
+
+        $Q->bindValue(':id', $this->id, PDO::PARAM_INT);
+        $Q->bindValue(':pg', $pg);
+        $Q->bindValue(':tmpl', $tmpl);
+        $Q->bindValue(':c', $this->class, PDO::PARAM_STR);
+        $Q->bindValue(':s', $this->script, PDO::PARAM_STR);
+        $Q->bindValue(':v', $this->visible, PDO::PARAM_BOOL);
+        $Q->bindValue(':pos', $this->position, PDO::PARAM_STR);
+        $Q->bindValue(':parm', serialize($this->params), PDO::PARAM_STR);
+        return (bool) $Q->execute();
     }
 
     public function delete() {
@@ -235,7 +245,14 @@ abstract class Widget implements FileInterface, ActiveRecord {
     }
 
     public static function create($initialValues) {
-        // TODO: Implement create() method.
+        $DBH = Alien::getDatabaseHandler();
+        $Q = $DBH->prepare('INSERT INTO ' . DBConfig::table(DBConfig::WIDGETS) . '
+            (type, visible, position, container) VALUES (:t, :v, :p, :c);');
+        $Q->bindValue(':t', $initialValues['type'], PDO::PARAM_STR);
+        $Q->bindValue(':v', $initialValues['visible'], PDO::PARAM_BOOL);
+        $Q->bindValue(':p', $initialValues['position'], PDO::PARAM_STR);
+        $Q->bindValue(':c', $initialValues['container'], PDO::PARAM_INT);
+        return $Q->execute() ? Widget::getSpecificWidget($DBH->lastInsertId()) : null;
     }
 
     public static function exists($id) {
@@ -252,6 +269,18 @@ abstract class Widget implements FileInterface, ActiveRecord {
 
     public function actionGoTo() {
         // TODO: Implement actionGoTo() method.
+    }
+
+    public function setPage(Page $page) {
+        $this->page = $page;
+    }
+
+    public function setTemplate(Template $template) {
+        $this->template = $template;
+    }
+
+    public function setPosition($position) {
+        $this->position = $position;
     }
 
 }
