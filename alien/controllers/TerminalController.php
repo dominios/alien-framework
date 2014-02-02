@@ -64,11 +64,6 @@ class TerminalController extends BaseController {
         return 'N/A (WIP)';
     }
 
-    public function icons() {
-        include 'display/iconsCssGen.php';
-        return 'CSS icons regenerated.';
-    }
-
 }
 
 ?>

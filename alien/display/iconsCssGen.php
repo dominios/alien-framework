@@ -1,6 +1,13 @@
 <?php
+header('Content-Type: text/plain; charset=utf-8');
 
 $dir = "img";
+
+if (getcwd() != 'alien') {
+    chdir('alien');
+}
+
+
 if (getcwd() != 'display') {
     chdir('display');
 }
@@ -39,4 +46,4 @@ if (is_dir($dir)) {
 
 file_put_contents('icons-data.css', str_replace('<br>', '', $ret));
 
-//echo $ret;
+echo 'Icons regenerated.';
