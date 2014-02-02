@@ -6,6 +6,7 @@ use Alien\Forms\Form;
 use Alien\Forms\Input;
 use Alien\Forms\Validator;
 use Alien\Controllers\BaseController;
+use Alien\Models\Authorization\User;
 
 class EditForm extends Form {
 
@@ -15,7 +16,7 @@ class EditForm extends Form {
         parent::__construct('post', '', 'editUserForm');
     }
 
-    public static function create($user) {
+    public static function create(User $user) {
 
         $form = new self();
         $form->user = $user;

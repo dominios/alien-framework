@@ -81,7 +81,7 @@ CREATE TABLE `test_authorization` (
   `ip` varchar(20) NOT NULL,
   `url` varchar(250) NOT NULL,
   PRIMARY KEY (`id_auth`)
-) ENGINE=MyISAM AUTO_INCREMENT=351 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=461 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -218,7 +218,9 @@ CREATE TABLE `test_content_widgets` (
   `class` varchar(50) DEFAULT NULL,
   `script` varchar(50) DEFAULT NULL,
   `params` text,
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
+  KEY `PAGE` (`page`,`container`),
+  KEY `TEMPLATE` (`template`,`container`)
 ) ENGINE=MyISAM AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -372,8 +374,10 @@ CREATE TABLE `test_messages` (
   `recipientTags` varchar(20) DEFAULT NULL,
   `deletedByAuthor` int(1) DEFAULT '0',
   `deletedByRecipient` int(1) DEFAULT '0',
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8;
+  PRIMARY KEY (`id`),
+  KEY `AUTHOR` (`author`),
+  KEY `RECIPIENT` (`recipient`)
+) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -426,11 +430,11 @@ DROP TABLE IF EXISTS `test_users`;
 CREATE TABLE `test_users` (
   `id_u` int(8) NOT NULL AUTO_INCREMENT,
   `login` varchar(20) NOT NULL,
-  `password` varchar(40) NOT NULL,
+  `password` varchar(128) NOT NULL,
   `email` varchar(50) NOT NULL,
-  `date_registered` int(10) NOT NULL,
+  `dateRegistered` int(10) NOT NULL,
   `activated` tinyint(1) NOT NULL DEFAULT '0',
-  `last_active` int(10) DEFAULT NULL,
+  `lastActive` int(10) DEFAULT NULL,
   `ban` int(10) DEFAULT NULL,
   `deleted` tinyint(1) NOT NULL DEFAULT '0',
   `firstname` varchar(20) DEFAULT NULL,
@@ -450,4 +454,4 @@ CREATE TABLE `test_users` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2013-12-30 21:04:21
+-- Dump completed on 2014-02-02 15:13:07

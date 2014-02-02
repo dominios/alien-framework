@@ -1,5 +1,6 @@
 <?php
-
+ignore_user_abort(true);
+set_time_limit(0);
 error_reporting(E_ALL);
 
 $host = 'localhost';
@@ -21,7 +22,6 @@ $CMD2 = $DIR . $DUMP_DATA . $TARGET2;
 $ret1 = '';
 $ret2 = '';
 
-echo '<pre>';
 echo "WORKING...\n";
 system($CMD1, $ret1);
 echo "STRCTURE DONE\n";
