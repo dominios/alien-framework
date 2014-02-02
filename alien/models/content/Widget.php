@@ -157,14 +157,14 @@ abstract class Widget implements FileInterface, ActiveRecord {
 
     public function getPage($fetch = false) {
         if ($fetch) {
-            if ($this->item instanceof Page) {
+            if ($this->page instanceof Page) {
                 return $this->page;
             } else {
-                $this->item = new Page($this->page);
+                $this->page = new Page($this->page);
                 return $this->page;
             }
         } else {
-            if ($this->item instanceof Page) {
+            if ($this->page instanceof Page) {
                 return $this->page->getId();
             } else {
                 return $this->page;
@@ -174,14 +174,14 @@ abstract class Widget implements FileInterface, ActiveRecord {
 
     public function getTemplate($fetch = false) {
         if ($fetch) {
-            if ($this->item instanceof Template) {
+            if ($this->template instanceof Template) {
                 return $this->template;
             } else {
-                $this->item = new Template($this->template);
+                $this->template = new Template($this->template);
                 return $this->template;
             }
         } else {
-            if ($this->item instanceof Template) {
+            if ($this->template instanceof Template) {
                 return $this->template->getId();
             } else {
                 return $this->template;
@@ -221,9 +221,8 @@ abstract class Widget implements FileInterface, ActiveRecord {
 
         $page = $this->getPage(true);
         $pg = $page instanceof Page ? $page->getId() : null;
-//        $template = $this->getTemplate(true);
-//        $tmpl = $template instanceof Template ? $template->getId() : null;
-        $tmpl = 1;
+        $template = $this->getTemplate(true);
+        $tmpl = $template instanceof Template ? $template->getId() : null;
 
         $Q->bindValue(':id', $this->id, PDO::PARAM_INT);
         $Q->bindValue(':pg', $pg);

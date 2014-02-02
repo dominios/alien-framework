@@ -8,7 +8,7 @@
             type: "GET",
             data: "action=templateShowFileBrowser&type=" + type,
             timeout: 5000,
-            success: function(data) {
+            success: function (data) {
                 json = jQuery.parseJSON(data);
                 createModal(json);
             }
@@ -26,11 +26,11 @@
         showFilePreview(file);
     }
 
-    $(function() {
+    $(function () {
 
         $("aside#rightFloatPanel").removeClass('disabled');
 
-        $("section.tabs").find('li a').live('click', function() {
+        $("section.tabs").find('li a').live('click', function () {
             if ($(this).attr('href') === '#content') {
                 $("aside#rightFloatPanel").removeClass('disabled');
             } else {
@@ -46,7 +46,7 @@
             opacity: 0.65,
             revert: 200,
             scroll: true,
-            stop: function(ev, ui) {
+            stop: function (ev, ui) {
                 type = ui.item.attr('data-type');
                 if (!type) {
                     return;
@@ -64,16 +64,14 @@
                     contentType: "application/json; charset=utf-8",
                     data: JSON.stringify(req),
                     timeout: 5000,
-                    success: function(data) {
+                    success: function (data) {
                         json = jQuery.parseJSON(data);
-                        console.log(json);
                         ui.item.replaceWith(json.item);
                         $ac = $("article#content");
                         $ac.css('height', 'auto');
                         $height = $ac.height();
                         $ac.css('height', $height);
                         $ac.attr('data-height', $height + 'px');
-                        console.log($height);
                         $(".tabs section").height($height + 'px');
                     }
                 });
@@ -107,19 +105,25 @@
                 <tr>
                     <td><span class="icon icon-template"></span> Názov šablóny:</td>
                     <td colspan="2"><?= $this->form->getElement('templateName'); ?></td>
-                </tr><tr>
+                </tr>
+                <tr>
                     <td><span class="icon icon-note"></span> Krátky popis:</td>
                     <td colspan="2"><?= $this->form->getElement('templateDescription'); ?></td>
-                </tr><tr>
+                </tr>
+                <tr>
                     <td><span class="icon icon-code"></span> Zdrojový súbor:</td>
                     <td><?= $this->form->getElement('templateSrc'); ?></td>
                     <td>
                         <?= $this->form->getElement('buttonSrcChoose'); ?>
                         <?= $this->form->getElement('buttonSrcMagnify'); ?>
                     </td>
-                </tr><tr>
-                    <td colspan="3"><div class="hr"></div></td>
-                </tr><tr>
+                </tr>
+                <tr>
+                    <td colspan="3">
+                        <div class="hr"></div>
+                    </td>
+                </tr>
+                <tr>
                     <td colspan="3">
                         <?= $this->form->getElement('buttonCancel'); ?>
                         <?= $this->form->getElement('buttonSubmit'); ?>
@@ -133,7 +137,9 @@
             foreach ($blocks as $block):
                 $block->setTemplate($this->template);
                 ?>
-                <div class="template-block" data-widgetParentType="template" data-widgetParentId="<?=$this->template->getId();?>" data-widgetContainer="<?=$block->getId();?>">
+                <div class="template-block" data-widgetParentType="template"
+                     data-widgetParentId="<?= $this->template->getId(); ?>"
+                     data-widgetContainer="<?= $block->getId(); ?>">
                     <h2><?= $block->getName(); ?></h2>
                     <?
                     $params = array(
@@ -142,13 +148,13 @@
                         'items' => $block->getWidgets()
                     );
                     echo $this->partial('display/content/viewList.php', $params);
-//                    foreach ($block->getWidgets() as $widget):
-//
-//                        echo '<div class="template-widget">' . $widget['id_v'] . '</div>';
-//                    endforeach;
+                    //                    foreach ($block->getWidgets() as $widget):
+                    //
+                    //                        echo '<div class="template-widget">' . $widget['id_v'] . '</div>';
+                    //                    endforeach;
                     ?>
                 </div>
-                <?
+            <?
             endforeach;
             ?>
         </article>
