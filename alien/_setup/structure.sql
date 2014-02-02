@@ -81,7 +81,7 @@ CREATE TABLE `test_authorization` (
   `ip` varchar(20) NOT NULL,
   `url` varchar(250) NOT NULL,
   PRIMARY KEY (`id_auth`)
-) ENGINE=MyISAM AUTO_INCREMENT=461 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=463 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -143,7 +143,7 @@ CREATE TABLE `test_content_items` (
   `name` varchar(70) DEFAULT NULL,
   `content` text,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -154,7 +154,7 @@ DROP TABLE IF EXISTS `test_content_pages`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `test_content_pages` (
-  `id_p` int(8) NOT NULL AUTO_INCREMENT,
+  `id_p` int(8) unsigned NOT NULL AUTO_INCREMENT,
   `id_t` int(8) NOT NULL,
   `id_f` int(8) DEFAULT NULL,
   `name` varchar(50) NOT NULL,
@@ -164,7 +164,7 @@ CREATE TABLE `test_content_pages` (
   `groups` varchar(50) DEFAULT NULL,
   PRIMARY KEY (`id_p`),
   UNIQUE KEY `UNIQUE` (`seolink`)
-) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -179,7 +179,7 @@ CREATE TABLE `test_content_template_blocks` (
   `label` varchar(30) NOT NULL,
   PRIMARY KEY (`id_b`),
   UNIQUE KEY `UNIQUE` (`label`)
-) ENGINE=MyISAM AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -190,13 +190,13 @@ DROP TABLE IF EXISTS `test_content_templates`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `test_content_templates` (
-  `id_t` int(8) NOT NULL AUTO_INCREMENT,
+  `id_t` int(8) unsigned NOT NULL AUTO_INCREMENT,
   `id_f` int(8) NOT NULL DEFAULT '0',
   `name` varchar(25) NOT NULL,
   `description` varchar(100) DEFAULT NULL,
   `src` varchar(50) NOT NULL,
   PRIMARY KEY (`id_t`)
-) ENGINE=MyISAM AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -208,11 +208,11 @@ DROP TABLE IF EXISTS `test_content_widgets`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `test_content_widgets` (
   `id` int(8) unsigned NOT NULL AUTO_INCREMENT,
-  `item` int(8) NOT NULL,
+  `item` int(8) unsigned DEFAULT NULL,
+  `page` int(8) unsigned DEFAULT NULL,
+  `template` int(8) unsigned DEFAULT NULL,
+  `container` int(2) unsigned DEFAULT NULL,
   `type` varchar(30) NOT NULL,
-  `page` int(8) DEFAULT NULL,
-  `template` int(8) DEFAULT NULL,
-  `container` int(2) DEFAULT NULL,
   `position` int(5) DEFAULT NULL,
   `visible` tinyint(4) NOT NULL DEFAULT '0',
   `class` varchar(50) DEFAULT NULL,
@@ -220,8 +220,12 @@ CREATE TABLE `test_content_widgets` (
   `params` text,
   PRIMARY KEY (`id`),
   KEY `PAGE` (`page`,`container`),
-  KEY `TEMPLATE` (`template`,`container`)
-) ENGINE=MyISAM AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
+  KEY `TEMPLATE` (`template`,`container`),
+  KEY `FK_WIDGET_ITEM` (`item`),
+  CONSTRAINT `FK_WIDGET_ITEM` FOREIGN KEY (`item`) REFERENCES `test_content_items` (`id`) ON DELETE SET NULL,
+  CONSTRAINT `FK_WIDGET_PAGE` FOREIGN KEY (`page`) REFERENCES `test_content_pages` (`id_p`) ON DELETE SET NULL,
+  CONSTRAINT `FK_WIDGET_TEMPLATE` FOREIGN KEY (`template`) REFERENCES `test_content_templates` (`id_t`) ON DELETE SET NULL
+) ENGINE=InnoDB AUTO_INCREMENT=27 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -454,4 +458,4 @@ CREATE TABLE `test_users` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2014-02-02 15:13:07
+-- Dump completed on 2014-02-03  0:49:33
