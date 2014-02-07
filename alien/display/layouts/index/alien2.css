@@ -80,25 +80,26 @@ section#messageDetail {
 table.itemList {
     border-spacing: 0;
     width: 100%;
-    border: 1px solid #aaa;
-    border-top-color: #c2c2c2;
-    border-left-color: #c2c2c2;
+    border: 1px solid #bbb;
+    border-top-color: #ddd;
+    border-left-color: #ddd;
     border-radius: 2px;
     box-shadow: 2px 2px 10px rgba(187, 187, 187, 0.8);
 }
 
 table.itemList tr:first-child {
-    background: rgba(255, 255, 17, 0.2);
+    background: rgba(255, 255, 17, 0.175);
 }
 
 table.itemList th {
-    border-bottom: 1px solid #aaa;
+    border-bottom: 1px solid #ccc;
     box-shadow: 0px 1px 0px rgba(130, 130, 130, 0.1);
-    padding: 8px;
+    padding: 14px;
     font-weight: bold;
     text-shadow: 1px 1px rgba(190, 190, 190, 0.2);
     color: #222;
     font-weight: normal;
+    font-size: 1.2em;
 }
 
 table.itemList td {

@@ -22,7 +22,7 @@ $(function() {
             tabs.height(); // vynuti okamzite preratanie, musi byt, inak sa animuje a to teraz nechceme
             tabs.removeClass('notransition');
         } else {
-            $(this).height(0);
+//            $(this).height(0);
         }
         $(this).height(); // vynuti okamzite preratanie, musi byt, inak sa animuje a to teraz nechceme
         $(this).removeClass('notransition');
@@ -34,11 +34,11 @@ $(function() {
         href = $(this).attr('href');
         $(section).find('li').has('a[href=' + href + ']').toggleClass('active');
         $(section).find('li').has('a[href!=' + href + ']').removeClass('active');
-        $(section).find('article:not(.tab-hidden)').addClass('tab-hidden').css('height', '0px');
+        $(section).find('article:not(.tab-hidden)').addClass('tab-hidden').removeClass('tab-active');
         activeHref = $(section).find('li.active').find('a').attr('href');
         activeArticle = $(section).find('article' + activeHref);
         newHeight = $(activeArticle).attr('data-height');
-        activeArticle.css('height', newHeight).removeClass('tab-hidden');
+        activeArticle.removeClass('tab-hidden').addClass('tab-active');
         $(section).find('section').css('height', !newHeight ? 0 + 'px' : newHeight);
         ev.preventDefault();
         // na mieru pre alien

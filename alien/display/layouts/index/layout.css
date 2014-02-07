@@ -159,9 +159,13 @@ hr, .hr {
     opacity: 0;
 }
 
-#container.layout-fullsize #leftPanel header h1 {
-    color: transparent;
-    text-shadow: none;
+/*#container.layout-fullsize #leftPanel header h1 {*/
+    /*color: transparent;*/
+    /*text-shadow: none;*/
+/*}*/
+
+#leftPanel h1 span.icon {
+    margin-right: 11px;
 }
 
 #container.layout-fullsize #leftPanel header span.icon:not(#mainmenuMinimizer) {
