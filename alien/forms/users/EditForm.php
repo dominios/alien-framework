@@ -17,25 +17,33 @@ class EditForm extends Form {
     }
 
     public static function create(User $user) {
-
         $form = new self();
         $form->user = $user;
         $form->setId('userForm');
         Input::hidden('action', 'users/edit')->addToForm($form);
         Input::hidden('userId', $user->getId())->addToForm($form);
-        Input::text('userLogin', '', $user->getLogin())->setAutocomplete(false)->addToForm($form);
-        Input::text('userFirstname', '', $user->getFirstname())->setAutocomplete(false)->addToForm($form);
-        Input::text('userSurname', '', $user->getSurname())->setAutocomplete(false)->addToForm($form);
+        Input::text('userLogin', '', $user->getLogin())
+             ->setAutocomplete(false)
+             ->addValidator(Validator::custom('notEmpty', array(), 'login nemôže byť prázdny'))
+             ->addToForm($form);
+        Input::text('userFirstname', '', $user->getFirstname())
+             ->setAutocomplete(false)
+             ->addValidator(Validator::custom('notEmpty', array(), 'krstné meno nemôže ostať prázdne'))
+             ->addToForm($form);
+        Input::text('userSurname', '', $user->getSurname())
+             ->setAutocomplete(false)
+             ->addValidator(Validator::custom('notEmpty', array(), 'priezvisko nemôže ostať prázdne'))
+             ->addToForm($form);
         Input::text('userEmail', '', $user->getEmail())
-                ->setAutocomplete(false)
-                ->addValidator(Validator::regexp(Validator::PATTERN_EMAIL, 'neplatná adresa'))
-                ->addValidator(Validator::custom('userUniqueEmail', array('ignoredUserId' => $user->getId()), 'tento email sa už používa'))
-                ->addToForm($form);
+             ->setAutocomplete(false)
+             ->addValidator(Validator::regexp(Validator::PATTERN_EMAIL, 'neplatná emailová adresa'))
+             ->addValidator(Validator::custom('userUniqueEmail', array('ignoredUserId' => $user->getId()), 'tento email sa už používa'))
+             ->addToForm($form);
         Input::password('userCurrentPass', '')->addToForm($form);
         Input::password('userPass2', '')
-            ->setAutocomplete(false)
-            ->addValidator(Validator::custom('stringLength', array('min'=>4), 'nové heslo musí mať aspoň 4 znaky'))
-            ->addToForm($form);
+             ->setAutocomplete(false)
+             ->addValidator(Validator::custom('stringLength', array('min' => 4), 'nové heslo musí mať aspoň 4 znaky'))
+             ->addToForm($form);
         Input::password('userPass3', '')->addToForm($form);
 
         Input::button(BaseController::actionURL('users', 'viewList'), 'Zrušiť', 'icon-back')->addCssClass('negative')->setName('buttonCancel')->addToForm($form);
