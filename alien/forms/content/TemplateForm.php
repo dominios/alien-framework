@@ -34,7 +34,7 @@ class TemplateForm extends Form {
         Input::text('templateDescription', '', $template->getDescription())->addToForm($form);
         Input::text('templateSrc', '', $template->getSrcURL())->addToForm($form);
         Input::button('javascript: templateShowFileBrowser(\'php\');', '', 'icon-external-link')->setName('buttonSrcChoose')->addToForm($form);
-        Input::button('javascript: templateShowFilePreview($(\'input[name=templatePhp]\').attr(\'value\'));', '', 'icon-magnifier')->setName('buttonSrcMagnify')->addToForm($form);
+        Input::button('javascript: templateShowFilePreview($(\'input[name=templateSrc]\').attr(\'value\'));', '', 'icon-magnifier')->setName('buttonSrcMagnify')->addToForm($form);
         Input::button(BaseController::actionURL('content', 'viewTemplates'), 'Zrušiť', 'icon-cancel')->addCssClass('negative')->setName('buttonCancel')->addToForm($form);
         Input::button('javascript: $(\'#templateForm\').submit();', 'Uložiť', 'icon-tick')->addCssClass('positive')->setName('buttonSubmit')->addToForm($form);
         return $form;

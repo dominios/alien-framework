@@ -61,13 +61,8 @@ function showFilePreview(file) {
         timeout: 5000,
         success: function(data) {
             json = jQuery.parseJSON(data);
-            createDialog(json.header, json.content);
-            if ($("#dialog-modal").width() > 1000) {
-                $("#dialog-modal").width(1000);
-            }
-            if ($("#dialog-modal").height() > 550) {
-                $("#dialog-modal").height(550);
-            }
+//            createDialog(json.header, json.content);
+            createModal(json);
         }
     });
 }

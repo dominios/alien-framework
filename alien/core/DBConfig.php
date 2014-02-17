@@ -55,5 +55,3 @@ final class DBConfig implements BaseDBConfig, ContentDBExtension {
     }
 
 }
-
-?>

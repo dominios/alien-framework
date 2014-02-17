@@ -37,7 +37,7 @@ class Validator {
         if ($ret == false) {
             $this->printErrorMessage($input);
         }
-        return $ret; // nemalo by nikdy nastat, ale istota
+        return $ret;
     }
 
     public static function regexp($pattern, $errorMessage = null) {
@@ -81,11 +81,63 @@ class Validator {
 
     protected function templateUniqueName(Input $input) {
         $result = Template::isTemplateNameInUse($input->getValue(), $this->params['ignore']);
-        if($result){
+        if ($result) {
             $this->printErrorMessage($input);
             return false;
         } else {
             return true;
+        }
+    }
+
+    protected function between(Input $input) {
+        $result = true;
+        $min = (int) $this->params['min'];
+        $max = (int) $this->params['max'];
+        $value = (int) $input->getValue();
+        if ($max <= $min) {
+//            throw new \Exception('Maximum number cannot by lower then minimum.');
+        }
+        if ($value < $min) {
+            $result &= false;
+        }
+        if ($value > $max && $max > 0) {
+            $result &= false;
+        }
+        if (!$result) {
+            $this->printErrorMessage($input);
+            return false;
+        }
+        return true;
+    }
+
+    protected function stringLength(Input $input) {
+        $result = true;
+        $min = (int) $this->params['min'];
+        $max = (int) $this->params['max'];
+        $length = strlen($input->getValue());
+        if ($max < $min && $max > 0) {
+            throw new \Exception('Maximum number cannot by lower then minimum.');
+        }
+        if ($length < $min) {
+            $result &= false;
+        }
+        if ($length > $max && $max > 0) {
+            $result &= false;
+        }
+        if (!$result) {
+            $this->printErrorMessage($input);
+            return false;
+        }
+        return true;
+    }
+
+    protected function notEmpty(Input $input){
+        $value = $input->getValue();
+        if(mb_strlen($value)){
+            return true;
+        } else {
+            $this->printErrorMessage($input);
+            return false;
         }
     }
 }

@@ -32,7 +32,11 @@ class EditForm extends Form {
                 ->addValidator(Validator::custom('userUniqueEmail', array('ignoredUserId' => $user->getId()), 'tento email sa už používa'))
                 ->addToForm($form);
         Input::password('userCurrentPass', '')->addToForm($form);
-        Input::password('userPass2', '')->addToForm($form);
+        Input::password('userPass2', '')
+            ->setAutocomplete(false)
+            ->addValidator(Validator::custom('stringLength', array('min'=>4), 'nové heslo musí mať aspoň 4 znaky'))
+            ->addValidator(Validator::custom('stringLength', array('max'=>8), 'nové heslo môže mať maximálne 8 znakov'))
+            ->addToForm($form);
         Input::password('userPass3', '')->addToForm($form);
 
         Input::button(BaseController::actionURL('users', 'viewList'), 'Zrušiť', 'icon-back')->addCssClass('negative')->setName('buttonCancel')->addToForm($form);

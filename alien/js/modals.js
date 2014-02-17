@@ -46,6 +46,11 @@
             element.data('modal', modal);
         });
     };
+
+    $(".modal-overlay").live('click', function(){
+       modal.destroy();
+    });
+
 })(jQuery);
 function createModal(json) {
 

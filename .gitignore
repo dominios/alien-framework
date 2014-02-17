@@ -1,9 +1,6 @@
-.gitignore
-.phpstorm_dbconnector/
 nbproject/
 .idea/
 redesign/
-cache/*
 psd/
-makesetup.bat
-icons.bat
+cache/*
+bin/
