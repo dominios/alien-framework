@@ -131,9 +131,9 @@ class Validator {
         return true;
     }
 
-    protected function notEmpty(Input $input){
+    protected function notEmpty(Input $input) {
         $value = $input->getValue();
-        if(mb_strlen($value)){
+        if (mb_strlen($value)) {
             return true;
         } else {
             $this->printErrorMessage($input);

@@ -35,7 +35,6 @@ class EditForm extends Form {
         Input::password('userPass2', '')
             ->setAutocomplete(false)
             ->addValidator(Validator::custom('stringLength', array('min'=>4), 'nové heslo musí mať aspoň 4 znaky'))
-            ->addValidator(Validator::custom('stringLength', array('max'=>8), 'nové heslo môže mať maximálne 8 znakov'))
             ->addToForm($form);
         Input::password('userPass3', '')->addToForm($form);
 
