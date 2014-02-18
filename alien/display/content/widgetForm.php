@@ -1,8 +1,3 @@
-<?
-
-namespace Alien;
-?>
-
 
 <script type="text/javascript">
     $(document).ready(function() {
@@ -10,7 +5,53 @@ namespace Alien;
     });
 </script>
 
-<form name="editWidgetForm" method="POST" action="" id="widgetForm">
+<?=$this->form->startTag();?>
+
+<section class="tabs" id="userTabs">
+    <header>
+        <ul>
+            <li class="active"><a href="#config"><span class="icon icon-service"></span>Konfigurácia</a></li>
+        </ul>
+    </header>
+    <section>
+        <article id="config" class="">
+            <table class="full">
+                <tr>
+                    <td><span class="icon icon-file"></span>Názov widgetu:</td>
+                    <td><?=$this->form->getElement('widgetName');?></td>
+                </tr>
+                <tr>
+                    <td><span class="icon icon-screen"></span>Radio:</td>
+                    <td><?=$this->form->getElement('widgetRadio');?></td>
+                </tr>
+                <tr>
+                    <td><span class="icon icon-screen"></span>Checkbox:</td>
+                    <td><?=$this->form->getElement('widgetCheckbox');?></td>
+                </tr>
+                <tr>
+                    <td><span class="icon icon-screen"></span>Select:</td>
+                    <td><?=$this->form->getElement('widgetVisible');?></td>
+                </tr>
+            </table>
+        </article>
+    </section>
+</section>
+<?=$this->form->endTag();?>
+
+<? return; ?>
+
+
+
+
+
+
+
+
+
+
+
+
+
     <input type="hidden" name="action" value="widgetFormSubmit">
     <input type="hidden" name="widgetId" value="<?= $this->widget->getId(); ?>">
 
@@ -48,4 +89,3 @@ namespace Alien;
     </div>
 
 
-</form>

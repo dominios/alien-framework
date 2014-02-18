@@ -2,23 +2,28 @@
 
 namespace Alien\Forms;
 
-class Input {
+use Alien\Forms\Input\Button;
+use Alien\Forms\Input\Hidden;
+use Alien\Forms\Input\Password;
+use Alien\Forms\Input\Text;
 
-    private static $autoHydrate = true;
-    private static $hydratorArray = null;
-    private $name;
-    private $type;
-    private $defaultValue;
-    private $value;
-    private $size;
-    private $disabled = false;
-    private $placeholder;
-    private $autocomplete = true;
-    private $cssClass = array();
-    private $cssStyle;
-    private $validators = array();
-    private $icon;
-    private $errorMessage;
+abstract class Input {
+
+    protected static $autoHydrate = true;
+    protected static $hydratorArray = null;
+    protected $name;
+    protected $type;
+    protected $defaultValue;
+    protected $value;
+    protected $size;
+    protected $disabled = false;
+    protected $placeholder;
+    protected $autocomplete = true;
+    protected $cssClass = array();
+    protected $cssStyle;
+    protected $validators = array();
+    protected $icon;
+    protected $errorMessage;
 
     /**
      *
@@ -28,7 +33,7 @@ class Input {
      * @param string $value
      * @param int $size
      */
-    private function __construct($name, $type, $defaultValue, $value = null, $size = null) {
+    protected function __construct($name, $type, $defaultValue, $value = null, $size = null) {
         if (!is_array(self::$hydratorArray) && sizeof($_POST)) {
             self::$hydratorArray = $_POST;
         }
@@ -66,7 +71,7 @@ class Input {
      * @return \Alien\Forms\Input
      */
     public static function hidden($name, $value = null) {
-        $input = new self($name, 'hidden', null, $value);
+        $input = new Hidden($name, $value);
         return $input;
     }
 
@@ -79,8 +84,7 @@ class Input {
      * @return \Alien\Forms\Input
      */
     public static function password($name, $defaultValue, $value = null, $size = null) {
-        $input = self::text($name, $defaultValue, $value, $size);
-        $input->type = 'password';
+        $input = new Password($name, $defaultValue, $value, $size);
         return $input;
     }
 
@@ -93,7 +97,7 @@ class Input {
      * @return \Alien\Forms\Input
      */
     public static function text($name, $defaultValue, $value = null, $size = null) {
-        $input = new self($name, 'text', $defaultValue, $value, $size);
+        $input = new Text($name, $defaultValue, $value, $size);
         return $input;
     }
 
@@ -121,10 +125,7 @@ class Input {
      * @return \self
      */
     public static function button($action, $text, $icon = null) {
-        $input = new self('', 'button', null, $action, null);
-        $input->icon = $icon;
-        $input->placeholder = $text;
-        $input->addCssClass('button');
+        $input = new Button($action, $text, $icon);
         return $input;
     }
 
@@ -132,62 +133,29 @@ class Input {
 
     }
 
-    public function __toString() {
-        $ret = '';
-
+    protected function commonRenderAttributes($validate = false) {
         $attr = array();
-
-        if ($this->type == 'button' && $this->disabled) {
-            $this->addCssClass('disabled');
-        }
-
         if (!$this->validate() && sizeof($_POST)) {
             $this->addCssClass('invalid');
             if (strlen($this->errorMessage)) {
                 $attr[] = 'data-errorMsg="' . $this->errorMessage . '"';
             }
         }
-
+        if ($this->disabled) {
+            $this->addCssClass('disabled');
+        }
         if (sizeof($this->cssClass)) {
             $class = 'class="' . implode(' ', array_unique($this->cssClass, SORT_STRING)) . '"';
             $attr[] = $class;
         }
-
         if ($this->cssStyle != '') {
             $style = 'style="' . $this->cssStyle . '"';
             $attr[] = $style;
         }
-
-        if ($this->autocomplete === false) {
-            $attr[] = 'autocomplete="off"';
-        }
-
         if ($this->disabled === true) {
             $attr[] = 'disabled';
         }
-
-        switch ($this->type) {
-            case 'hidden':
-                $ret .= '<input type="hidden" name="' . $this->name . '" value="' . $this->value . '">';
-                break;
-            case 'text':
-                $ret .= '<input type="text" name="' . $this->name . '" value="' . $this->value . '" ' . implode(' ', $attr) . '>';
-                break;
-            case 'password':
-                $ret .= '<input type="password" name="' . $this->name . '" value="' . $this->value . '" ' . implode(' ', $attr) . '>';
-                break;
-            case 'button':
-                $icon = strlen($this->icon) ? '<span class="icon ' . $this->icon . ($this->disabled ? '' : '-light') . '"></span>' : '';
-                if (preg_match('/javascript/', $this->value)) {
-                    $attr[] = 'onClick="' . ( $this->disabled ? 'javascript: return false;' : $this->value ) . '"';
-                    $attr[] = 'href="#"';
-                } else {
-                    $attr[] = 'href="' . ( $this->disabled ? '#' : $this->value ) . '"';
-                }
-                $ret .= '<a ' . implode(' ', $attr) . '>' . $icon . $this->placeholder . '</a>';
-                break;
-        }
-        return $ret;
+        return $attr;
     }
 
     public function setSize($size) {

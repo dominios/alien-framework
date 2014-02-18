@@ -3,6 +3,7 @@
 namespace Alien\Controllers;
 
 use Alien\Alien;
+use Alien\Forms\Content\WidgetForm;
 use Alien\View;
 use Alien\Response;
 use Alien\Notification;
@@ -118,9 +119,11 @@ class ContentController extends BaseController {
             return;
         }
 
+        $widget = Widget::getSpecificWidget($_GET['id']);
+
         $view = new View('display/content/widgetForm.php', $this);
-        $view->returnAction = BaseController::actionURL('content', 'browser');
-        $view->widget = Widget::getSpecificWidget($_GET['id']);
+        $view->form = WidgetForm::create($widget);
+        $view->widget = $widget;
 
         return new Response(Response::OK, Array(
             'Title' => 'Úprava widgetu: ',

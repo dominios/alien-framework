@@ -75,7 +75,7 @@ section.tabs section article {
     position: absolute;
     display: block;
     width: 100%;
-    overflow: hidden;
+    /*overflow: hidden;*/
     transition: all .4s ease-in-out;
     -webkit-transition: all .4s ease-in-out;
 }

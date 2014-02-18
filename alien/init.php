@@ -40,6 +40,7 @@ function class_autoloader($class) {
     $autoloadDirectories[] = './core';
 //    $autoloadDirectories[] = './core/authorization';
     $autoloadDirectories[] = './core/form';
+    $autoloadDirectories[] = './core/form/input';
 
     foreach ($autoloadDirectories as $dir) {
         $dh = \opendir($dir);

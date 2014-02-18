@@ -14,6 +14,7 @@ if (!count($this->items)) {
                 'item' => $item,
                 'icon' => $item->getIcon(),
                 'onClick' => strlen($item->actionGoTo()) ? 'window: location=\'' . $item->actionGoTo() . '\'' : '',
+                'editLink' => $item->actionEdit(),
                 'dropLink' => $item->actionDrop()
             );
             echo($this->partial('display/common/item.php', $params));
@@ -31,6 +32,7 @@ if (!count($this->items)) {
                 'item' => $item,
                 'icon' => $item->getIcon(),
 //                'onClick' => strlen($item->actionGoTo()) ? 'window: location=\'' . $item->actionGoTo() . '\'' : '',
+                'editLink' => $item->actionEdit(),
                 'dropLink' => $item->actionDrop()
             );
             echo($this->partial('display/common/item.php', $params));
