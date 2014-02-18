@@ -43,7 +43,7 @@ class ContentController extends BaseController {
             'ContentLeft' => $menuItems,
             'LeftTitle' => 'Obsah webu',
             'MainMenu' => $data['MainMenu']
-                ), __CLASS__ . '::' . __FUNCTION__);
+        ), __CLASS__ . '::' . __FUNCTION__);
     }
 
     protected function viewList($type) {
@@ -61,7 +61,8 @@ class ContentController extends BaseController {
                 $items = TemplateBlock::getList(true);
                 $name = 'blokov šablón';
                 break;
-            default: $items = array();
+            default:
+                $items = array();
                 break;
         }
 
@@ -75,7 +76,7 @@ class ContentController extends BaseController {
         return new Response(Response::OK, Array(
             'Title' => 'Zoznam ' . $name,
             'ContentMain' => $view->renderToString()
-                ), __CLASS__ . '::' . __FUNCTION__);
+        ), __CLASS__ . '::' . __FUNCTION__);
     }
 
     protected function browser() {
@@ -108,13 +109,13 @@ class ContentController extends BaseController {
         return new Response(Response::OK, Array(
             'Title' => 'Prieskumník',
             'ContentMain' => $view->renderToString()
-                ), __CLASS__ . '::' . __FUNCTION__);
+        ), __CLASS__ . '::' . __FUNCTION__);
     }
 
     protected function editWidget() {
         if (!preg_match('/^[0-9]*$/', $_GET['id'])) {
-            $this->getLayout()->putNotificaion(new Notification('Neplatný identifikátor widgetu.', Notification::ERROR));
-            return '';
+            Notification::error('Neplatný identifikátor widgetu');
+            return;
         }
 
         $view = new View('display/content/widgetForm.php', $this);
@@ -124,7 +125,19 @@ class ContentController extends BaseController {
         return new Response(Response::OK, Array(
             'Title' => 'Úprava widgetu: ',
             'ContentMain' => $view->renderToString()
-                ), __CLASS__ . '::' . __FUNCTION__);
+        ), __CLASS__ . '::' . __FUNCTION__);
     }
 
+    protected function dropWidget() {
+        if (!preg_match('/^[0-9]*$/', $_GET['id']) || !Widget::exists($_GET['id'])) {
+            Notification::ERROR('Neplatný identifikátor widgetu.');
+            return;
+        } else {
+            $widget = Widget::getSpecificWidget($_GET['id']);
+            $widget->delete();
+            $redirectAction = BaseController::actionURL(BaseController::getControllerFromURL($_SERVER['HTTP_REFERER']), BaseController::getActionFromURL($_SERVER['HTTP_REFERER'], true));
+            $this->redirect($redirectAction);
+
+        }
+    }
 }

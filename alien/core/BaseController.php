@@ -74,7 +74,7 @@ class BaseController {
             'Title' => 'HOME',
             'LeftTitle' => Authorization::getCurrentUser()->getLogin(),
             'ContentLeft' => Array(Array('url' => BaseController::actionURL('', 'logout'), 'img' => 'logout.png', 'text' => 'Odhlásiť'))
-                ), __CLASS__ . '::' . __FUNCTION__);
+        ), __CLASS__ . '::' . __FUNCTION__);
     }
 
     private final function doActions() {
@@ -142,20 +142,35 @@ class BaseController {
         $url .= $controller . '/' . $action;
         if (isset($params) && count($params) == 1 && array_key_exists('id', $params)) {
             $url .= '/' . $params['id'];
-        } else if (is_array($params)) {
-            foreach ($params as $k => $v) {
-                $url .= '/' . $k . '/' . $v;
+        } else {
+            if (is_array($params)) {
+                foreach ($params as $k => $v) {
+                    $url .= '/' . $k . '/' . $v;
+                }
             }
         }
         return $url;
     }
 
-    public static function getActionFromURL($actionURL) {
+    public static function getActionFromURL($actionURL, $includeQuery = false) {
+        $actionURL = str_replace('http://' . $_SERVER['HTTP_HOST'], '', $actionURL);
         if (preg_match('/^\/alien/', $actionURL)) {
             $actionURL = str_replace('/alien/', '', $actionURL);
         }
         $words = explode('/', $actionURL);
+        if ($includeQuery) {
+            return implode('/', array_diff($words, array($words[0])));
+        }
         return $words[1];
+    }
+
+    public static function getControllerFromURL($actionURL) {
+        $actionURL = str_replace('http://' . $_SERVER['HTTP_HOST'], '', $actionURL);
+        if (preg_match('/^\/alien/', $actionURL)) {
+            $actionURL = str_replace('/alien/', '', $actionURL);
+            $words = explode('/', $actionURL);
+            return $words[0];
+        }
     }
 
     // TODO: konzola zatial natvrdo

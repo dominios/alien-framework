@@ -181,6 +181,7 @@ hr, .hr {
     top: 40px;
     left: 1050px;
     z-index: 999;
+    background-color: #F5F5F5;
 }
 
 #rightFloatPanel .inner {

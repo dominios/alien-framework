@@ -57,6 +57,12 @@ abstract class Widget implements FileInterface, ActiveRecord {
         $this->script = $row['script'];
     }
 
+    /**
+     * @param $idView
+     * @param null $idType
+     * @param null $row
+     * @return Widget|null
+     */
     public static final function getSpecificWidget($idView, $idType = null, $row = null) {
 
         if ($row === null) {
@@ -211,7 +217,7 @@ abstract class Widget implements FileInterface, ActiveRecord {
     }
 
     public function actionDrop() {
-        return BaseController::actionURL('content', 'dropView', array('id' => $this->id));
+        return BaseController::actionURL('content', 'dropWidget', array('id' => $this->id));
     }
 
     public function update() {
@@ -236,7 +242,11 @@ abstract class Widget implements FileInterface, ActiveRecord {
     }
 
     public function delete() {
-        // TODO: Implement delete() method.
+        $dbh = Alien::getDatabaseHandler();
+        $q = $dbh->prepare('DELETE FROM ' . DBConfig::table(DBConfig::WIDGETS) . ' WHERE id=:i');
+        $q->bindValue(':i', (int) $this->getId(), PDO::PARAM_INT);
+        $q->execute();
+        return $q->rowCount() ? true : false;
     }
 
     public function isDeletable() {
@@ -255,7 +265,11 @@ abstract class Widget implements FileInterface, ActiveRecord {
     }
 
     public static function exists($id) {
-        // TODO: Implement exists() method.
+        $dbh = Alien::getDatabaseHandler();
+        $q = $dbh->prepare('SELECT 1 FROM ' . DBConfig::table(DBConfig::WIDGETS) . ' WHERE id=:i');
+        $q->bindValue(':i', (int) $id, PDO::PARAM_INT);
+        $q->execute();
+        return $q->rowCount() ? true : false;
     }
 
     public static function getList($fetch = false) {
