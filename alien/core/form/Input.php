@@ -3,6 +3,7 @@
 namespace Alien\Forms;
 
 use Alien\Forms\Input\Button;
+use Alien\Forms\Input\Checkbox;
 use Alien\Forms\Input\Hidden;
 use Alien\Forms\Input\Password;
 use Alien\Forms\Input\Text;
@@ -22,6 +23,7 @@ abstract class Input {
     protected $cssClass = array();
     protected $cssStyle;
     protected $validators = array();
+    private $validationResult = null;
     protected $icon;
     protected $errorMessage;
 
@@ -109,8 +111,9 @@ abstract class Input {
 
     }
 
-    public static function checkbox() {
-
+    public static function checkbox($name, $value, $checked) {
+        $input = new Checkbox($name, $value, $checked);
+        return $input;
     }
 
     public static function radio() {
@@ -214,11 +217,16 @@ abstract class Input {
     }
 
     public function validate() {
-        $ret = true;
-        foreach ($this->validators as $validator) {
-            $ret = $ret && $validator->validate($this);
+        if ($this->getValidationResult() !== null) {
+            return $this->getValidationResult();
+        } else {
+            $ret = true;
+            foreach ($this->validators as $validator) {
+                $ret = $ret && $validator->validate($this);
+            }
+            $this->setValidationResult($ret);
+            return $ret;
         }
-        return $ret;
     }
 
     public function setErrorMessage($errorMessage) {
@@ -250,5 +258,14 @@ abstract class Input {
     public function getPlaceholder() {
         return $this->placeholder;
     }
+
+    public function setValidationResult($validationResult) {
+        $this->validationResult = (bool) $validationResult;
+    }
+
+    public function getValidationResult() {
+        return (bool) $this->validationResult;
+    }
+
 
 }

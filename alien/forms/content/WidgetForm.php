@@ -24,6 +24,7 @@ class WidgetForm extends Form {
         Input::hidden('action', 'template/edit')->addToForm($form);
         Input::hidden('widgetId', $widget->getId())->addToForm($form);
         Input::text('widgetName', 'wtf', '')->addToForm($form);
+        Input::checkbox('widgetCheckbox', 'hodnota', true)->addToForm($form);
         return $form;
     }
 
