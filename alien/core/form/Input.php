@@ -6,6 +6,7 @@ use Alien\Forms\Input\Button;
 use Alien\Forms\Input\Checkbox;
 use Alien\Forms\Input\Hidden;
 use Alien\Forms\Input\Password;
+use Alien\Forms\Input\Radio;
 use Alien\Forms\Input\Text;
 
 abstract class Input {
@@ -116,8 +117,9 @@ abstract class Input {
         return $input;
     }
 
-    public static function radio() {
-
+    public static function radio($name, $value) {
+        $input = new Radio($name, $value);
+        return $input;
     }
 
     /**

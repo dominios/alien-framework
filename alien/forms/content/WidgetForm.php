@@ -17,7 +17,7 @@ class WidgetForm extends Form {
         parent::__construct('post', '', 'editWidgetForm');
     }
 
-    public static function create(Widget $widget){
+    public static function create(Widget $widget) {
         $form = new self();
         $form->widget = $widget;
         $form->setId('widgetForm');
@@ -25,6 +25,15 @@ class WidgetForm extends Form {
         Input::hidden('widgetId', $widget->getId())->addToForm($form);
         Input::text('widgetName', 'wtf', '')->addToForm($form);
         Input::checkbox('widgetCheckbox', 'hodnota', true)->addToForm($form);
+
+        $r1 = new Input\Option('test', Input\Option::TYPE_RADIO, 'xxx');
+        $r2 = new Input\Option('test', Input\Option::TYPE_RADIO, 'yyy');
+        Input::radio('widgetRadio', '')
+             ->addOption($r1)
+             ->addOption($r2)
+             ->checkOption($r2)
+             ->addToForm($form);
+
         return $form;
     }
 
