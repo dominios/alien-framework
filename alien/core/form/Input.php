@@ -219,7 +219,7 @@ abstract class Input {
     }
 
     public function validate() {
-        if ($this->getValidationResult() !== null) {
+        if (is_bool($this->getValidationResult())) {
             return $this->getValidationResult();
         } else {
             $ret = true;
@@ -266,7 +266,7 @@ abstract class Input {
     }
 
     public function getValidationResult() {
-        return (bool) $this->validationResult;
+        return $this->validationResult;
     }
 
 
