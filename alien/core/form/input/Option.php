@@ -26,10 +26,10 @@ class Option {
         $ret = '';
         switch ($this->type) {
             case Option::TYPE_SELECT:
-                $ret .= '<option value="">' . $this->text . '</option>';
+                $ret .= '<option value="'.$this->getValue().'">' . $this->getName() . '</option>';
                 break;
             case Option::TYPE_RADIO:
-                $ret .= '<input type="radio" name="' . $this->name . '" value="' . $this->value . '" ' . ($this->isSelected() ? 'checked' : '') . '>';
+                $ret .= '<input type="radio" name="' . $this->getName() . '" value="' . $this->getValue() . '" ' . ($this->isSelected() ? 'checked' : '') . '>';
                 break;
         }
         return $ret;

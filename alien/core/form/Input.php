@@ -7,6 +7,7 @@ use Alien\Forms\Input\Checkbox;
 use Alien\Forms\Input\Hidden;
 use Alien\Forms\Input\Password;
 use Alien\Forms\Input\Radio;
+use Alien\Forms\Input\Select;
 use Alien\Forms\Input\Text;
 
 abstract class Input {
@@ -104,19 +105,36 @@ abstract class Input {
         return $input;
     }
 
-    public static function select() {
-
+    /**
+     * @param string $name
+     * @return Select
+     */
+    public static function select($name) {
+        $input = new Select($name);
+        return $input;
     }
+
 
     public static function textarea() {
 
     }
 
+    /**
+     * @param string $name
+     * @param string $value
+     * @param bool $checked
+     * @return Checkbox
+     */
     public static function checkbox($name, $value, $checked) {
         $input = new Checkbox($name, $value, $checked);
         return $input;
     }
 
+    /**
+     * @param string $name
+     * @param string $value
+     * @return Radio
+     */
     public static function radio($name, $value) {
         $input = new Radio($name, $value);
         return $input;
@@ -127,7 +145,7 @@ abstract class Input {
      * @param string $action
      * @param string $text
      * @param string $icon
-     * @return \self
+     * @return Button
      */
     public static function button($action, $text, $icon = null) {
         $input = new Button($action, $text, $icon);

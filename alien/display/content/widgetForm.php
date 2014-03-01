@@ -30,7 +30,7 @@
                 </tr>
                 <tr>
                     <td><span class="icon icon-screen"></span>Select:</td>
-                    <td><?=$this->form->getElement('widgetVisible');?></td>
+                    <td><?=$this->form->getElement('aaa');?></td>
                 </tr>
             </table>
         </article>

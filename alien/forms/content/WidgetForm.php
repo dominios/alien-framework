@@ -4,6 +4,7 @@ namespace Alien\Forms\Content;
 
 use Alien\Forms\Form;
 use Alien\Forms\Input;
+use Alien\Forms\Input\Option;
 use Alien\Forms\Validator;
 use Alien\Controllers\BaseController;
 use Alien\Models\Content\Template;
