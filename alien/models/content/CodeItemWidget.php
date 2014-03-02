@@ -4,6 +4,8 @@ namespace Alien\Models\Content;
 
 use Alien\Alien;
 use Alien\DBConfig;
+use Alien\Forms\Form;
+use Alien\Forms\Input;
 use \PDO;
 
 class CodeItemWidget extends Widget {
@@ -37,4 +39,18 @@ class CodeItemWidget extends Widget {
         return self::TYPE;
     }
 
+    public function getCustomFormElements() {
+        if (is_null($this->formElements)) {
+            $this->formElements = array(
+                Input::text('codeWidgetText', '', $this->getParam('text'))
+                     ->setLabel('Text')
+                     ->setIcon('icon-comments'),
+            );
+        }
+        return $this->formElements;
+    }
+
+    public function handleCustomFormElements(Form $form) {
+
+    }
 }

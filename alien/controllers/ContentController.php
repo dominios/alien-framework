@@ -121,9 +121,13 @@ class ContentController extends BaseController {
 
         $widget = Widget::getSpecificWidget($_GET['id']);
 
-        $view = new View('display/content/widgetForm.php', $this);
+        $view = new View('display/content/widgetForm.php');
         $view->form = WidgetForm::create($widget);
         $view->widget = $widget;
+
+        $customFormPart = new View('display/content/partial/widgetCustomForm.php');
+        $customFormPart->formElements = $widget->getCustomFormElements();
+        $view->customPart = $customFormPart->renderToString();
 
         return new Response(Response::OK, Array(
             'Title' => 'Úprava widgetu: ',

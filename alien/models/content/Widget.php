@@ -6,6 +6,7 @@ use Alien\ActiveRecord;
 use Alien\Alien;
 use Alien\DBConfig;
 use Alien\Controllers\BaseController;
+use Alien\Forms\Form;
 use Alien\View;
 use \PDO;
 
@@ -29,6 +30,7 @@ abstract class Widget implements FileInterface, ActiveRecord {
     protected $class = '';
     private $script = '';
     private $view = null;
+    protected $formElements = null;
 
     public function __construct($id, $row = null) {
 
@@ -90,6 +92,17 @@ abstract class Widget implements FileInterface, ActiveRecord {
     }
 
     public abstract function renderToString(ContentItem $item = null);
+
+    public abstract function getCustomFormElements();
+
+    public function injectCustomFormElements(Form $form) {
+        foreach ($this->getCustomFormElements() as $input) {
+            $input->addToForm($form);
+        }
+        return $form;
+    }
+
+    public abstract function handleCustomFormElements(Form $form);
 
     public final function getView() {
         if (!($this->view instanceof View)) {

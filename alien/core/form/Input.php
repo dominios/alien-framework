@@ -15,6 +15,7 @@ abstract class Input {
     protected static $autoHydrate = true;
     protected static $hydratorArray = null;
     protected $name;
+    protected $label;
     protected $type;
     protected $defaultValue;
     protected $value;
@@ -287,5 +288,21 @@ abstract class Input {
         return $this->validationResult;
     }
 
+    public function setIcon($icon) {
+        $this->icon = $icon;
+        return $this;
+    }
 
+    public function getIcon() {
+        return $this->icon;
+    }
+
+    public function setLabel($label) {
+        $this->label = $label;
+        return $this;
+    }
+
+    public function getLabel() {
+        return $this->label;
+    }
 }
