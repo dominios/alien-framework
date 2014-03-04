@@ -8,7 +8,9 @@ use Alien\Forms\Input\Hidden;
 use Alien\Forms\Input\Password;
 use Alien\Forms\Input\Radio;
 use Alien\Forms\Input\Select;
+use Alien\Forms\Input\Submit;
 use Alien\Forms\Input\Text;
+use Alien\Forms\Input\Textarea;
 
 abstract class Input {
 
@@ -115,9 +117,15 @@ abstract class Input {
         return $input;
     }
 
-
-    public static function textarea() {
-
+    /**
+     * @param string $name
+     * @param string|null $defaultValue
+     * @param string|null $value
+     * @return Textarea
+     */
+    public static function textarea($name, $defaultValue = null, $value = null) {
+        $input = new Textarea($name, $defaultValue, $value);
+        return $input;
     }
 
     /**
@@ -153,8 +161,14 @@ abstract class Input {
         return $input;
     }
 
-    public static function submit() {
-
+    /**
+     * @param string $name
+     * @param string|null $value
+     * @return Submit
+     */
+    public static function submit($name = '', $value = null) {
+        $input = new Submit($name, $value);
+        return $input;
     }
 
     protected function commonRenderAttributes($validate = false) {
