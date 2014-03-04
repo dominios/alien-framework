@@ -114,15 +114,30 @@ class ContentController extends BaseController {
     }
 
     protected function editWidget() {
+
         if (!preg_match('/^[0-9]*$/', $_GET['id'])) {
-            Notification::error('Neplatný identifikátor widgetu');
-            return;
+            Notification::error('Neplatný identifikátor widgetu.');
+            $this->redirect(BaseController::actionURL('content', 'browser'));
         }
 
         $widget = Widget::getSpecificWidget($_GET['id']);
+        $form = WidgetForm::create($widget);
+
+        if ($form->isPostSubmit()) {
+            if ($form->validate()) {
+                $widget->setScript((string) $form->getElement('widgetTemplate')->getValue());
+                $widget->setVisible((bool) $form->getElement('widgetVisibility')->getValue());
+                $widget->handleCustomFormElements($form);
+                if ($widget->update()) {
+                    Notification::success('Zmeny boli uložené.');
+                    $this->redirect(BaseController::actionURL('content', 'editWidget', array('id' => $widget->getId())));
+                }
+            }
+            Notification::error('Zmeny sa nepodarilo uložiť.');
+        }
 
         $view = new View('display/content/widgetForm.php');
-        $view->form = WidgetForm::create($widget);
+        $view->form = $form;
         $view->widget = $widget;
 
         $customFormPart = new View('display/content/partial/widgetCustomForm.php');

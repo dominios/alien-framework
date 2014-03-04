@@ -5,6 +5,8 @@
 </script>
 
 <?= $this->form->startTag(); ?>
+<?= $this->form->getElement('action'); ?>
+<?= $this->form->getElement('widgetId'); ?>
 
 <section class="tabs" id="userTabs">
     <header>
@@ -27,7 +29,18 @@
                     <td><span class="icon icon-file"></span>Viditeľnosť:</td>
                     <td><?= $this->form->getElement('widgetVisibility'); ?></td>
                 </tr>
-                <?=$this->unescaped('customPart'); ?>
+                <?= $this->unescaped('customPart'); ?>
+                <tr>
+                    <td colspan="3">
+                        <div class="hr"></div>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="3">
+                        <?= $this->form->getElement('buttonCancel'); ?>
+                        <?= $this->form->getElement('buttonSave'); ?>
+                    </td>
+                </tr>
             </table>
         </article>
     </section>

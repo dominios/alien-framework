@@ -62,9 +62,9 @@ abstract class Input {
         }
     }
 
-    private function hydrate() {
+    protected function hydrate() {
         if (self::$autoHydrate) {
-            if (is_array(self::$hydratorArray) && key_exists($this->name, self::$hydratorArray)) {
+            if (is_array(self::$hydratorArray) && array_key_exists($this->name, self::$hydratorArray)) {
                 $this->value = (string) self::$hydratorArray[$this->name];
             }
         }
@@ -109,6 +109,7 @@ abstract class Input {
     }
 
     /**
+     *
      * @param string $name
      * @return Select
      */
@@ -118,6 +119,7 @@ abstract class Input {
     }
 
     /**
+     *
      * @param string $name
      * @param string|null $defaultValue
      * @param string|null $value
@@ -129,6 +131,7 @@ abstract class Input {
     }
 
     /**
+     *
      * @param string $name
      * @param string $value
      * @param bool $checked
@@ -140,6 +143,7 @@ abstract class Input {
     }
 
     /**
+     *
      * @param string $name
      * @param string $value
      * @return Radio
@@ -162,6 +166,7 @@ abstract class Input {
     }
 
     /**
+     *
      * @param string $name
      * @param string|null $value
      * @return Submit

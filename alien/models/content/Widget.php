@@ -139,6 +139,11 @@ abstract class Widget implements FileInterface, ActiveRecord {
         return $this->params[$key];
     }
 
+    public function setParam($key, $value) {
+        $this->params[$key] = $value;
+        return $this;
+    }
+
     public function getPosition() {
         return $this->position;
     }
@@ -308,5 +313,16 @@ abstract class Widget implements FileInterface, ActiveRecord {
     public function setPosition($position) {
         $this->position = $position;
     }
+
+    public function setVisible($visible) {
+        $this->visible = $visible;
+        return $this;
+    }
+
+    public function setScript($script) {
+        $this->script = $script;
+        return $this;
+    }
+
 
 }

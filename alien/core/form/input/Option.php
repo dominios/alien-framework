@@ -26,7 +26,7 @@ class Option {
         $ret = '';
         switch ($this->type) {
             case Option::TYPE_SELECT:
-                $ret .= '<option value="' . htmlspecialchars($this->getValue()) . '">' . htmlspecialchars($this->getName()) . '</option>';
+                $ret .= '<option value="' . htmlspecialchars($this->getValue()) . '" ' . ($this->isSelected() ? 'selected' : '') . '>' . htmlspecialchars($this->getName()) . '</option>';
                 break;
             case Option::TYPE_RADIO:
                 $ret .= '<input type="radio" name="' . htmlspecialchars($this->getName()) . '" value="' . htmlspecialchars($this->getValue()) . '" ' . ($this->isSelected() ? 'checked' : '') . '>';

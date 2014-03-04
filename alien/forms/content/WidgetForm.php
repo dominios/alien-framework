@@ -23,7 +23,7 @@ class WidgetForm extends Form {
         $form = $widget->injectCustomFormElements($form);
         $form->widget = $widget;
         $form->setId('widgetForm');
-        Input::hidden('action', 'template/edit')->addToForm($form);
+        Input::hidden('action', 'content/editWidget')->addToForm($form);
         Input::hidden('widgetId', $widget->getId())->addToForm($form);
 
         $select = Input::select('widgetTemplate');
@@ -32,13 +32,17 @@ class WidgetForm extends Form {
         foreach ($files as $file) {
             $opt = new Option($file, Option::TYPE_SELECT, $file);
             $select->addOption($opt);
-            if ($form->widget->getTemplate(false) === $file) {
+            if ($form->widget->getScript() == $file) {
                 $select->selectOption($opt);
             }
         }
+
         $select->addToForm($form);
 
         Input::checkbox('widgetVisibility', 'visible', $form->widget->isVisible())->addToForm($form);
+
+//        Input::button(BaseController::actionURL('users', 'viewList'), 'Zrušiť', 'icon-back')->addCssClass('negative')->setName('buttonCancel')->addToForm($form);
+        Input::button("javascript: $('#" . $form->getId() . "').submit();", 'Uložiť', 'icon-tick')->addCssClass('positive')->setName('buttonSave')->addToForm($form);
 
         return $form;
     }
