@@ -15,7 +15,6 @@ abstract class Widget implements FileInterface, ActiveRecord {
     const ICON = 'file.png';
     const NAME = 'Zobrazovač';
     const TYPE = 'ItemView';
-    const WIDGET_FOLDER = 'widgets';
     const DEFAULT_SCRIPT = '';
 
     protected $id;
@@ -106,7 +105,7 @@ abstract class Widget implements FileInterface, ActiveRecord {
 
     public final function getView() {
         if (!($this->view instanceof View)) {
-            $file = './' . Widget::WIDGET_FOLDER . '/' . $this->getScript();
+            $file = $this->getScript();
             $view = new \Alien\View($file);
             $this->view = $view;
         }
