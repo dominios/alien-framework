@@ -62,7 +62,7 @@ abstract class Input {
         }
     }
 
-    protected function hydrate() {
+    public function hydrate() {
         if (self::$autoHydrate) {
             if (is_array(self::$hydratorArray) && array_key_exists($this->name, self::$hydratorArray)) {
                 $this->value = (string) self::$hydratorArray[$this->name];

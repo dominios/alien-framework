@@ -19,12 +19,12 @@ class Checkbox extends Input {
         return $ret;
     }
 
-    protected function hydrate(){
-        if(array_key_exists($this->name, $_POST)){
-            $this->value = true;
-        } else {
-            $this->value = false;
+    public function hydrate() {
+        parent::hydrate();
+        if (is_array(self::$hydratorArray)) {
+            array_key_exists($this->name, self::$hydratorArray) ? $this->setChecked(true) : $this->setChecked(false);
         }
+        return $this;
     }
 
     public function setChecked($checked) {

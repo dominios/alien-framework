@@ -126,7 +126,7 @@ class ContentController extends BaseController {
         if ($form->isPostSubmit()) {
             if ($form->validate()) {
                 $widget->setScript((string) $form->getElement('widgetTemplate')->getValue());
-                $widget->setVisible((bool) $form->getElement('widgetVisibility')->getValue());
+                $widget->setVisible((bool) $form->getElement('widgetVisibility')->isChecked());
                 $widget->handleCustomFormElements($form);
                 if ($widget->update()) {
                     Notification::success('Zmeny boli uložené.');

@@ -79,9 +79,15 @@ class Form {
         return false;
     }
 
-    public function validate() {
+    public function validate($hydratorArray = null) {
+        if($hydratorArray === null){
+            Input::setHydratorArray($_POST);
+        } else {
+            Input::setHydratorArray($hydratorArray);
+        }
         $ret = true;
         foreach ($this->elements as $e) {
+            $e->hydrate();
             $ret &= $e->validate();
         }
         return $ret;

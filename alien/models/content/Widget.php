@@ -253,7 +253,7 @@ abstract class Widget implements FileInterface, ActiveRecord {
         $Q->bindValue(':tmpl', $tmpl);
         $Q->bindValue(':c', $this->class, PDO::PARAM_STR);
         $Q->bindValue(':s', $this->script, PDO::PARAM_STR);
-        $Q->bindValue(':v', $this->visible, PDO::PARAM_BOOL);
+        $Q->bindValue(':v', $this->visible, PDO::PARAM_INT);
         $Q->bindValue(':pos', $this->position, PDO::PARAM_STR);
         $Q->bindValue(':parm', serialize($this->params), PDO::PARAM_STR);
         return (bool) $Q->execute();
@@ -315,7 +315,7 @@ abstract class Widget implements FileInterface, ActiveRecord {
     }
 
     public function setVisible($visible) {
-        $this->visible = $visible;
+        $this->visible = (bool) $visible;
         return $this;
     }
 
