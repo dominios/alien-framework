@@ -1,0 +1,2 @@
+<?=$this->slider; ?>
+<?=$this->main; ?>

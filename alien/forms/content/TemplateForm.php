@@ -1,10 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: Domino
- * Date: 1.2.2014
- * Time: 0:06
- */
 
 namespace Alien\Forms\Content;
 
@@ -16,15 +10,15 @@ use Alien\Models\Content\Template;
 
 class TemplateForm extends Form {
 
-    private $template;
+    private $page;
 
     public function __construct() {
-        parent::__construct('post', '', 'editUserForm');
+        parent::__construct('post', '', 'editTemplateForm');
     }
 
     public static function create(Template $template){
         $form = new TemplateForm();
-        $form->template = $template;
+        $form->page = $template;
         $form->setId('templateForm');
         Input::hidden('action', 'template/edit')->addToForm($form);
         Input::hidden('templateId', $template->getId())->addToForm($form);

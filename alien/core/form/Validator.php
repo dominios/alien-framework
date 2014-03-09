@@ -2,6 +2,7 @@
 
 namespace Alien\Forms;
 
+use Alien\Models\Content\Page;
 use Alien\Models\Content\Template;
 use PDO;
 use Alien\Alien;
@@ -81,6 +82,16 @@ class Validator {
 
     protected function templateUniqueName(Input $input) {
         $result = Template::isTemplateNameInUse($input->getValue(), $this->params['ignore']);
+        if ($result) {
+            $this->printErrorMessage($input);
+            return false;
+        } else {
+            return true;
+        }
+    }
+
+    protected function pageSeolink(Input $input) {
+        $result = Page::isSeolinkInUse($input->getValue(), $this->params['ignore']);
         if ($result) {
             $this->printErrorMessage($input);
             return false;

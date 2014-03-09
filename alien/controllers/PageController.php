@@ -3,6 +3,7 @@
 namespace Alien\Controllers;
 
 use Alien\Alien;
+use Alien\Forms\Content\PageForm;
 use Alien\View;
 use Alien\Response;
 use Alien\Notification;
@@ -19,30 +20,65 @@ use PDO;
 class PageController extends ContentController {
 
     protected function homepage() {
-        
+
     }
 
-    protected function viewPages() {
+    protected function viewAll() {
         return $this->viewList('page');
     }
 
-    protected function editPage() {
+    protected function edit() {
+
         if (!preg_match('/^[0-9]*$/', $_GET['id'])) {
-            new Notification('Neplatný identifikátor stránky.', 'error');
+            Notification::error('Neplatný identifikátor stránky!');
             return '';
         }
 
+        $view = new View('display/content/pageForm.php');
         $page = new Page((int) $_GET['id']);
+        $form = PageForm::create($page);
 
-//        $this->meta_title = 'Úprava stránky: ' . $page->getName();
-        $view = new View('display/content/pageForm.php', $this);
-        $view->ReturnAction = '?content=browser&folder=' . $_SESSION['folder'];
-        $view->Page = $page;
+        $view->page = $page;
+        $view->form = $form;
+
+        if ($form->isPostSubmit()) {
+            if ($form->validate()) {
+                if (Page::exists($_POST['pageId'])) {
+                    $page = new Page($_POST['pageId']);
+                    $new = false;
+                } else {
+                    $initialValus = array(
+                        'folderId' => 1,
+                        'pageName' => 'Nová stránka',
+                        'pageTemplate' => $_POST['pageTemplate'],
+                        'pageSeolink' => $_POST['pageSeolink']
+                    );
+                    $page = Page::create($initialValus);
+                    $new = true;
+                }
+                $page->setName($_POST['pageName'])
+                     ->setDescription($_POST['pageDescription'])
+                     ->setSeolink($_POST['pageSeolink'])
+                     ->setTemplate(new Template($_POST['pageTemplate']));
+                if ($page->update()) {
+                    if ($new) {
+                        Notification::success('Strákna bola vytvorená.');
+                    } else {
+                        Notification::success('Zmeny boli uložené.');
+                    }
+                    $this->redirect(BaseController::actionURL('page', 'edit', array('id' => $page->getId())));
+                } else {
+                    Notification::error('Zmeny sa nepodarilo uložiť.');
+                }
+            } else {
+                Notification::error('Zmeny sa nepodarilo uložiť.');
+            }
+        }
 
         return new Response(Response::OK, Array(
             'Title' => 'Úprava stránky: ' . $page->getName(),
             'ContentMain' => $view->renderToString()
-                ), __CLASS__ . '::' . __FUNCTION__);
+        ), __CLASS__ . '::' . __FUNCTION__);
     }
 
     protected function pageFormSubmit() {
@@ -64,9 +100,9 @@ class PageController extends ContentController {
         }
         $result = ContentPage::update();
         if ($result) {
-            $this->getLayout()->putNotificaion(new Notification('Stránka bola uložená.', Notification::SUCCESS));
+//            $this->getLayout()->putNotificaion(new Notification('Stránka bola uložená.', Notification::SUCCESS));
         } else {
-            $this->getLayout()->putNotificaion(new Notification('Stránku sa nepodarilo uložiť.', Notification::ERROR));
+//            $this->getLayout()->putNotificaion(new Notification('Stránku sa nepodarilo uložiť.', Notification::ERROR));
         }
 
         $this->redirect('?content=editPage&id=' . $id);

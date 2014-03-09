@@ -28,7 +28,7 @@ class ContentController extends BaseController {
 
         $menuItems = Array();
         $menuItems[] = Array('permissions' => null, 'url' => BaseController::actionURL('page', 'homepage'), 'img' => 'home', 'text' => 'Domovská stránka');
-        $menuItems[] = Array('permissions' => null, 'url' => BaseController::actionURL('page', 'viewPages'), 'img' => 'page', 'text' => 'Stránky');
+        $menuItems[] = Array('permissions' => null, 'url' => BaseController::actionURL('page', 'viewAll'), 'img' => 'page', 'text' => 'Stránky');
 //        $menuItems[] = Array('permissions' => null, 'url' => BaseController::actionURL('content', 'browser', array('folder' => 0)), 'img' => 'folder', 'text' => 'ROOT');
         $menuItems[] = Array('permissions' => null, 'url' => BaseController::actionURL('template', 'viewAll'), 'img' => 'template', 'text' => 'Šablóny', 'regex' => 'template');
         $menuItems[] = Array('permissions' => null, 'url' => BaseController::actionURL('template', 'viewBlocks'), 'img' => 'puzzle', 'text' => 'Boxy šablón', 'regex' => 'block');
@@ -55,7 +55,7 @@ class ContentController extends BaseController {
                 $name = 'šablón';
                 break;
             case 'page':
-//                $items = Page::getList(true);
+                $items = Page::getList(true);
                 $name = 'stránok';
                 break;
             case 'block':

@@ -91,8 +91,7 @@
 <?= $this->form->getElement('action'); ?>
 <?= $this->form->getElement('templateId'); ?>
 
-
-<section class="tabs" id="userTabs">
+<section class="tabs" id="templateTabs">
     <header>
         <ul>
             <li><a href="#config"><span class="icon icon-service"></span>Konfigurácia</a></li>

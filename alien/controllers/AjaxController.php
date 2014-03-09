@@ -147,11 +147,11 @@ class AjaxController extends BaseController {
      * @return ActionResponse
      * vrati JSON pre vyber sablony
      */
-    public function pageShowTemplatesBrowser($REQ) {
+    public function pageShowTemplateBrowser($REQ) {
 
-        $img = 'template.png';
+        $img = 'template';
 
-        $templates = ContentTemplate::getTempatesList(true);
+        $templates = Template::getList(true);
         $content = '';
         $content .= '<div class="gridLayout">';
         foreach ($templates as $template) {
