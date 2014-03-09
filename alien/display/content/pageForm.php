@@ -22,6 +22,27 @@
         modal.destroy();
     }
 
+    function makeSeolinkFromName(name) {
+        if (!name) return;
+        $.ajax({
+            async: true,
+            url: "/alien/ajax.php",
+            type: "GET",
+            data: "action=pageMakeSeolinkFromName&name=" + name,
+            timeout: 5000,
+            success: function (data) {
+                json = jQuery.parseJSON(data);
+                $("input[name=pageSeolink]").attr('value', json.seolink);
+            }
+        });
+    }
+
+    $(function () {
+        $("input[name=pageName]").on('focusout', function () {
+            makeSeolinkFromName($(this).val());
+        });
+    });
+
 </script>
 
 <?= $this->form->startTag(); ?>

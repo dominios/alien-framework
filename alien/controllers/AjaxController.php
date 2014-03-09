@@ -170,6 +170,23 @@ class AjaxController extends BaseController {
     /**
      * @param $REQ
      * @return ActionResponse
+     * vrati JSON s novym SEOlinkom
+     */
+    public function pageMakeSeolinkFromName($REQ) {
+        $ret = trim( $REQ['name']);
+        $ret = preg_replace('/\s{2,}/', ' ', $ret);
+        $ret = convertAccentsAndSpecialToNormal($ret);
+        $ret = str_replace(' ', '-', $ret);
+        $ret = str_replace('/', '-', $ret);
+        $ret = strtolower($ret);
+        return new Response(Response::OK, Array(
+            'result' => json_encode(Array('seolink' => $ret))
+        ), __CLASS__ . '::' . __FUNCTION__);
+    }
+
+    /**
+     * @param $REQ
+     * @return ActionResponse
      * vrati JSON pre dialog pre priadenie skupiny usera
      */
     public function userShowAddGroupDialog($REQ) {
@@ -316,16 +333,18 @@ class AjaxController extends BaseController {
 
         $widget = Widget::create($initialValues);
 
-        if($widget instanceof Widget){
+        if ($widget instanceof Widget) {
 
-            if($json->parentType=='template' && Template::exists($json->parentId)){
+            if ($json->parentType == 'template' && Template::exists($json->parentId)) {
                 $template = new Template($json->parentId);
                 $widget->setTemplate($template);
                 $widget->update();
-            } else if($json->parentType=='page' && Page::exists($json->parentId)){
-                $page = new Page($json->parentId);
-                $widget->setPage($page);
-                $widget->update();
+            } else {
+                if ($json->parentType == 'page' && Page::exists($json->parentId)) {
+                    $page = new Page($json->parentId);
+                    $widget->setPage($page);
+                    $widget->update();
+                }
             }
 
             $view = new View('display/common/item.php');

@@ -14,6 +14,8 @@ error_reporting(E_ALL ^ E_NOTICE ^ E_STRICT);
 //error_reporting(E_ALL & E_NOTICE & E_STRICT); // toto je aj so strict, zapnut neskor, teraz to otravuje...
 Authorization::getInstance();
 
+include_once 'functions.php';
+
 function class_autoloader($class) {
 
     if (class_exists($class)) {
