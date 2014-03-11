@@ -9,6 +9,7 @@ ob_start();
 session_start();
 mb_internal_encoding("UTF-8");
 spl_autoload_register('\Alien\class_autoloader', true);
+
 error_reporting(E_ALL ^ E_NOTICE ^ E_STRICT);
 //error_reporting(E_ALL & E_NOTICE & E_STRICT); // toto je aj so strict, zapnut neskor, teraz to otravuje...
 
@@ -16,14 +17,6 @@ error_reporting(E_ALL ^ E_NOTICE ^ E_STRICT);
 if (!preg_match('/\/alien$/', getcwd()) && file_exists('alien')) {
     chdir('alien');
 }
-
-// core sa nacita vzdy cele
-$autoloadDirectories = array();
-$autoloadDirectories[] = 'core';
-$autoloadDirectories[] = 'core/form';
-$autoloadDirectories[] = 'core/form/input';
-
-bootLoad($autoloadDirectories);
 
 Authorization::getInstance();
 
@@ -33,6 +26,11 @@ function class_autoloader($class) {
 
     if (class_exists($class)) {
         return;
+    }
+
+    // vzdy pracuje pod alien priecinkom!
+    if (!preg_match('/\/alien$/', getcwd()) && file_exists('alien')) {
+        chdir('alien');
     }
 
     // special pluginy; ma mieru
@@ -45,9 +43,25 @@ function class_autoloader($class) {
 
     $class = str_replace(__NAMESPACE__ . '\\', '', $class);
 
+    // core sa nacita vzdy cele
+    $autoloadDirectories = array();
+    $autoloadDirectories[] = 'core';
+    $autoloadDirectories[] = 'core/form';
+    $autoloadDirectories[] = 'core/form/input';
+	$autoloadDirectories[] = 'layouts';
 
-    // layouty sa tiez nacitaku staticky vsetky podla tej metody
-    Layout::includeSRC();
+    foreach ($autoloadDirectories as $dir) {
+        $dh = \opendir($dir);
+        if ($dh) {
+            while (false !== ($file = readdir($dh))) {
+                if (!is_dir($dir . '/' . $file)) {
+                    include_once $dir . '/' . $file;
+                    ;
+                }
+            }
+            closedir($dh);
+        }
+    }
 
     // vypis do terminalu co sa kedy autoloaduje
 //    Alien::getInstance()->getConsole()->putMessage('Autoloading class <i>' . '\\' . $class . '</i>');
@@ -98,18 +112,4 @@ function class_autoloader($class) {
     }
 
     return;
-}
-
-function bootLoad($directories) {
-    foreach ($directories as $dir) {
-        $dh = \opendir($dir);
-        if ($dh) {
-            while (false !== ($file = readdir($dh))) {
-                if (!is_dir($dir . '/' . $file)) {
-                    include_once $dir . '/' . $file;
-                }
-            }
-            closedir($dh);
-        }
-    }
 }
