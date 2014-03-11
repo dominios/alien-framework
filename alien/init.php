@@ -12,6 +12,11 @@ spl_autoload_register('\Alien\class_autoloader', true);
 error_reporting(E_ALL ^ E_NOTICE ^ E_STRICT);
 //error_reporting(E_ALL & E_NOTICE & E_STRICT); // toto je aj so strict, zapnut neskor, teraz to otravuje...
 
+// vzdy pracuje pod alien priecinkom!
+if (!preg_match('/\/alien$/', getcwd()) && file_exists('alien')) {
+    chdir('alien');
+}
+
 // core sa nacita vzdy cele
 $autoloadDirectories = array();
 $autoloadDirectories[] = 'core';
@@ -28,11 +33,6 @@ function class_autoloader($class) {
 
     if (class_exists($class)) {
         return;
-    }
-
-    // vzdy pracuje pod alien priecinkom!
-    if (!preg_match('/\/alien$/', getcwd()) && file_exists('alien')) {
-        chdir('alien');
     }
 
     // special pluginy; ma mieru
