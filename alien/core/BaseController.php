@@ -173,6 +173,10 @@ class BaseController {
         }
     }
 
+    public static function getRefererActionURL() {
+        return BaseController::actionURL(BaseController::getControllerFromURL($_SERVER['HTTP_REFERER']), BaseController::getActionFromURL($_SERVER['HTTP_REFERER'], true));
+    }
+
     // TODO: konzola zatial natvrdo
     public final function renderToString() {
 
@@ -199,7 +203,7 @@ class BaseController {
                 $user = Authorization::getCurrentUser();
                 if ($user instanceof User) {
                     if (Message::getUnreadCount($user)) {
-                        Notification::newMessages();
+                        Notification::newMessages("");
                     }
                 }
             }

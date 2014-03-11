@@ -35,7 +35,7 @@ class PageForm extends Form {
         Input::button('javascript: pageShowTemplateBrowser();', '', 'icon-external-link')->setName('buttonTemplateChoose')->addToForm($form);
         Input::button('javascript: pageShowTemplatePreview();', '', 'icon-magnifier')->setName('buttonTemplatePreview')->addToForm($form);
         // "?content=editTemplate&id=<?= $this->Page->getTemplate();
-        Input::button(BaseController::actionURL('page', 'viewAll'), 'Zrušiť', 'icon-cancel')->addCssClass('negative')->setName('buttonCancel')->addToForm($form);
+        Input::button(BaseController::getRefererActionURL(), 'Zrušiť', 'icon-cancel')->addCssClass('negative')->setName('buttonCancel')->addToForm($form);
         Input::button('javascript: $(\'#pageForm\').submit();', 'Uložiť', 'icon-tick')->addCssClass('positive')->setName('buttonSubmit')->addToForm($form);
         return $form;
     }
