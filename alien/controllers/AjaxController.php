@@ -2,7 +2,7 @@
 
 namespace Alien\Controllers;
 
-use Alien\Alien;
+use Alien\Application;
 use Alien\Models\Content\Page;
 use Alien\Models\Content\Template;
 use Alien\Models\Content\Widget;
@@ -27,9 +27,10 @@ class AjaxController extends BaseController {
 
         $view->DisplayLayout = $type;
 
-        return new Response(Response::OK, Array(
-            'result' => $view->renderToString()
-        ), __CLASS__ . '::' . __FUNCTION__);
+        return new Response(array(
+                'result' => $view->renderToString()
+            )
+        );
     }
 
     /**
@@ -60,9 +61,10 @@ class AjaxController extends BaseController {
             $ret .= ('<span class="ConsoleTime">[' . date('d.m.Y H:i:s', time()) . ']</span> <span class="' . Terminal::ERROR . '">Command <i><b>' . $action . '</b></i> not recognized.</span><br>');
         }
 
-        return new Response(Response::OK, Array(
-            'result' => $ret
-        ), __CLASS__ . '::' . __FUNCTION__);
+        return new Response(array(
+                'result' => $ret
+            )
+        );
     }
 
     /**
@@ -100,7 +102,7 @@ class AjaxController extends BaseController {
             while (($file = readdir($dh)) !== false) {
                 if (preg_match('/' . $pattern . '/', $file)) {
                     $content .= '<div class="item" onclick="javascript: chooseFile(\'templates/' . $file . '\', \'' . ucfirst($REQ['type']) . '\');">';
-                    $content .= '<img src="' . Alien::$SystemImgUrl . '/' . $img . '" style="width: 48px; height: 48px;">';
+                    $content .= '<img src="' . Application::$SystemImgUrl . '/' . $img . '" style="width: 48px; height: 48px;">';
                     $content .= '<div style="position: absolute; bottom: 5px; width: 100px; text-align: center;">' . $file . '</div>';
                     $content .= '</div>';
                 }
@@ -117,9 +119,10 @@ class AjaxController extends BaseController {
 
         $content .= '<div style="clear: left;"></div>';
 
-        return new Response(Response::OK, Array(
-            'result' => json_encode(Array('header' => $header, 'content' => $ret))
-        ), __CLASS__ . '::' . __FUNCTION__);
+        return new Response(array(
+                'result' => json_encode(Array('header' => $header, 'content' => $ret))
+            )
+        );
     }
 
     /**
@@ -129,7 +132,7 @@ class AjaxController extends BaseController {
      */
     public function showFilePreview($REQ) {
         $content = '';
-        if (Alien::getParameter('useComplexSyntaxHighlighting')) {
+        if (Application::getParameter('useComplexSyntaxHighlighting')) {
             $geshi = new \GeSHi(file_get_contents($REQ['file']), substr($REQ['file'], -3, 3));
             $geshi->enable_line_numbers(GESHI_NORMAL_LINE_NUMBERS);
             $geshi->enable_strict_mode(false);
@@ -137,9 +140,10 @@ class AjaxController extends BaseController {
         } else {
             $content = highlight_file($REQ['file'], true);
         }
-        return new Response(Response::OK, Array(
-            'result' => json_encode(Array('header' => $REQ['file'], 'content' => $content))
-        ), __CLASS__ . '::' . __FUNCTION__);
+        return new Response(array(
+                'result' => json_encode(Array('header' => $REQ['file'], 'content' => $content))
+            )
+        );
     }
 
     /**
@@ -156,15 +160,16 @@ class AjaxController extends BaseController {
         $content .= '<div class="gridLayout">';
         foreach ($templates as $template) {
             $content .= '<div class="item" onclick="javascript: chooseTemplate(\'' . $template->getId() . '\', \'' . $template->getName() . '\');">';
-            $content .= '<img src="' . Alien::$SystemImgUrl . '/' . $img . '" style="width: 48px; height: 48px;">';
+            $content .= '<img src="' . Application::$SystemImgUrl . '/' . $img . '" style="width: 48px; height: 48px;">';
             $content .= '<div style="position: absolute; bottom: 5px; width: 100px; text-align: center;">' . $template->getName() . '</div>';
             $content .= '</div>';
         }
         $content .= '</div>';
 
-        return new Response(Response::OK, Array(
-            'result' => json_encode(Array('header' => 'Vybrať šablónu', 'content' => $content))
-        ), __CLASS__ . '::' . __FUNCTION__);
+        return new Response(array(
+                'result' => json_encode(Array('header' => 'Vybrať šablónu', 'content' => $content))
+            )
+        );
     }
 
     /**
@@ -173,15 +178,16 @@ class AjaxController extends BaseController {
      * vrati JSON s novym SEOlinkom
      */
     public function pageMakeSeolinkFromName($REQ) {
-        $ret = trim( $REQ['name']);
+        $ret = trim($REQ['name']);
         $ret = preg_replace('/\s{2,}/', ' ', $ret);
         $ret = convertAccentsAndSpecialToNormal($ret);
         $ret = str_replace(' ', '-', $ret);
         $ret = str_replace('/', '-', $ret);
         $ret = strtolower($ret);
-        return new Response(Response::OK, Array(
-            'result' => json_encode(Array('seolink' => $ret))
-        ), __CLASS__ . '::' . __FUNCTION__);
+        return new Response(array(
+                'result' => json_encode(Array('seolink' => $ret))
+            )
+        );
     }
 
     /**
@@ -212,9 +218,10 @@ class AjaxController extends BaseController {
                 }
                 $ret .= '</div>';
             }
-            return new Response(Response::OK, Array(
-                'result' => json_encode(Array('header' => 'Vybrať skupinu', 'content' => $ret))
-            ), __CLASS__ . '::' . __FUNCTION__);
+            return new Response(array(
+                    'result' => json_encode(Array('header' => 'Vybrať skupinu', 'content' => $ret))
+                )
+            );
         }
     }
 
@@ -246,9 +253,10 @@ class AjaxController extends BaseController {
                 }
                 $ret .= '</div>';
             }
-            return new Response(Response::OK, Array(
-                'result' => json_encode(Array('header' => 'Vybrať oprávnenie', 'content' => $ret))
-            ), __CLASS__ . '::' . __FUNCTION__);
+            return new Response(array(
+                    'result' => json_encode(Array('header' => 'Vybrať oprávnenie', 'content' => $ret))
+                )
+            );
         }
     }
 
@@ -280,9 +288,10 @@ class AjaxController extends BaseController {
                 }
                 $ret .= '</div>';
             }
-            return new Response(Response::OK, Array(
-                'result' => json_encode(Array('header' => 'Vybrať používateľa', 'content' => $ret))
-            ), __CLASS__ . '::' . __FUNCTION__);
+            return new Response(array(
+                    'result' => json_encode(Array('header' => 'Vybrať používateľa', 'content' => $ret))
+                )
+            );
         }
     }
 
@@ -314,9 +323,10 @@ class AjaxController extends BaseController {
                 }
                 $ret .= '</div>';
             }
-            return new Response(Response::OK, Array(
-                'result' => json_encode(Array('header' => 'Vybrať oprávnenie', 'content' => $ret))
-            ), __CLASS__ . '::' . __FUNCTION__);
+            return new Response(array(
+                    'result' => json_encode(Array('header' => 'Vybrať oprávnenie', 'content' => $ret))
+                )
+            );
         }
     }
 
@@ -353,9 +363,10 @@ class AjaxController extends BaseController {
             $view->icon = $widget->getIcon();
             $view->dropLink = '';
 
-            return new Response(Response::OK, Array(
-                'result' => json_encode(Array('item' => $view->renderToString()))
-            ), __CLASS__ . '::' . __FUNCTION__);
+            return new Response(array(
+                    'result' => json_encode(Array('item' => $view->renderToString()))
+                )
+            );
 
         }
 

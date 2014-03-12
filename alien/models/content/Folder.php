@@ -2,7 +2,7 @@
 
 namespace Alien\Models\Content;
 
-use Alien\Alien;
+use Alien\Application;
 use Alien\Controllers\BaseController;
 use \PDO;
 
@@ -33,8 +33,8 @@ class Folder implements FileInterface {
             $this->parent = 0;
             return;
         } else {
-            $DBH = Alien::getDatabaseHandler();
-            $STH = $DBH->prepare('SELECT * FROM ' . Alien::getParameter('db_prefix') . '_content_folders WHERE id_f=:id LIMIT 1');
+            $DBH = Application::getDatabaseHandler();
+            $STH = $DBH->prepare('SELECT * FROM ' . Application::getParameter('db_prefix') . '_content_folders WHERE id_f=:id LIMIT 1');
             $STH->bindValue(':id', $id, PDO::PARAM_INT);
             $STH->execute();
             $result = $STH->fetch();
@@ -63,8 +63,8 @@ class Folder implements FileInterface {
     }
 
     public static function exists($id) {
-        $DBH = Alien::getDatabaseHandler();
-        $STH = $DBH->prepare('SELECT 1 FROM ' . Alien::getDBPrefix() . '_content_folders WHERE id_f=:i LIMIT 1;');
+        $DBH = Application::getDatabaseHandler();
+        $STH = $DBH->prepare('SELECT 1 FROM ' . Application::getDBPrefix() . '_content_folders WHERE id_f=:i LIMIT 1;');
         $STH->bindValue(':i', (int) $id, PDO::PARAM_INT);
         $STH->execute();
         if ($STH->rowCount()) {
@@ -90,8 +90,8 @@ class Folder implements FileInterface {
 
     public function delete() {
         if ($this->isEmpty()) {
-            $DBH = Alien::getDatabaseHandler();
-            $STH = $DBH->prepare('DELETE FROM ' . Alien::getParameter('db_prefix') . '_content_folders WHERE id_f=:i');
+            $DBH = Application::getDatabaseHandler();
+            $STH = $DBH->prepare('DELETE FROM ' . Application::getParameter('db_prefix') . '_content_folders WHERE id_f=:i');
             $STH->bindValue(':i', $this->id, PDO::PARAM_INT);
             if ($STH->execute()) {
                 new Notification('Zložka bola odstránená.', 'success');
@@ -102,7 +102,7 @@ class Folder implements FileInterface {
             new Notification('Obsah zložky musí byť prázdny, aby sa mohla odstrániť.', 'warning');
             new Notification('Zložku sa nepodarilo odstrániť.', 'error');
         }
-        if (Alien::getParameter('allowRedirects')) {
+        if (Application::getParameter('allowRedirects')) {
             ob_clean();
             $url = '?page=content&action=browser&folder=' . $this->parent;
             header('Location: ' . $url, true, 301);
@@ -115,13 +115,13 @@ class Folder implements FileInterface {
 
     public function update($new = false) {
 
-        $DBH = Alien::getDatabaseHandler();
+        $DBH = Application::getDatabaseHandler();
 
         if ($new) {
-            $STH = $DBH->prepare('INSERT INTO ' . Alien::getParameter('db_prefix') . '_content_folders (name,parent) VALUES (:n,:p)');
+            $STH = $DBH->prepare('INSERT INTO ' . Application::getParameter('db_prefix') . '_content_folders (name,parent) VALUES (:n,:p)');
             $STH->bindValue(':p', (int) $_POST['parentFolder'], PDO::PARAM_INT);
         } else {
-            $STH = $DBH->prepare('UPDATE ' . Alien::getParameter('db_prefix') . '_content_folders SET name=:n WHERE id_f=:id');
+            $STH = $DBH->prepare('UPDATE ' . Application::getParameter('db_prefix') . '_content_folders SET name=:n WHERE id_f=:id');
             $STH->bindValue(':id', (int) $_POST['folderId'], PDO::PARAM_INT);
         }
         $STH->bindValue(':n', $_POST['folderName'], PDO::PARAM_STR);
@@ -133,7 +133,7 @@ class Folder implements FileInterface {
             $new ? new Notification("Zložku sa nepodarilo vytvoriť.", "error") : new Notification("Zložku sa nepodarilo upraviť.", "error");
             $f = $_POST['folderId'];
         }
-        if (Alien::getParameter('allowRedirects')) {
+        if (Application::getParameter('allowRedirects')) {
             ob_clean();
             header('Location: ?page=content&action=browser&folder=' . $f, true, 301);
             ob_end_flush();
@@ -146,23 +146,23 @@ class Folder implements FileInterface {
     public function fetchFiles() {
 
         if (!sizeof($this->items)) {
-            $DBH = Alien::getDatabaseHandler();
+            $DBH = Application::getDatabaseHandler();
 
-            $STH = $DBH->prepare('SELECT * FROM ' . Alien::getDBPrefix() . '_content_templates WHERE id_f=:idf');
+            $STH = $DBH->prepare('SELECT * FROM ' . Application::getDBPrefix() . '_content_templates WHERE id_f=:idf');
             $STH->bindValue(':idf', (int) $this->id, PDO::PARAM_INT);
             $STH->execute();
             while ($row = $STH->fetch()) {
                 $this->items[] = new Template(null, $row);
             }
 
-            $STH = $DBH->prepare('SELECT * FROM ' . Alien::getDBPrefix() . '_content_pages WHERE id_f=:idf');
+            $STH = $DBH->prepare('SELECT * FROM ' . Application::getDBPrefix() . '_content_pages WHERE id_f=:idf');
             $STH->bindValue(':idf', (int) $this->id, PDO::PARAM_INT);
             $STH->execute();
             while ($row = $STH->fetch()) {
                 $this->items[] = new Page(null, $row);
             }
 
-            $STH = $DBH->prepare('SELECT * FROM ' . Alien::getDBPrefix() . '_content_items WHERE id_f=:idf');
+            $STH = $DBH->prepare('SELECT * FROM ' . Application::getDBPrefix() . '_content_items WHERE id_f=:idf');
             $STH->bindValue(':idf', (int) $this->id, PDO::PARAM_INT);
             $STH->execute();
             while ($row = $STH->fetch()) {
@@ -180,8 +180,8 @@ class Folder implements FileInterface {
     public function getChilds($fetched = false) {
         if (!sizeof($this->childs)) {
             $folders = Array();
-            $DBH = Alien::getDatabaseHandler();
-            $STH = $DBH->prepare('SELECT * FROM ' . Alien::getDBPrefix() . '_content_folders WHERE parent=:p');
+            $DBH = Application::getDatabaseHandler();
+            $STH = $DBH->prepare('SELECT * FROM ' . Application::getDBPrefix() . '_content_folders WHERE parent=:p');
             $STH->bindValue(':p', $this->id);
             $STH->execute();
             while ($row = $STH->fetch()) {
@@ -230,8 +230,8 @@ class Folder implements FileInterface {
         if ($this->parent == 0) {
             return $fetch ? new Folder(0) : 0;
         }
-        $DBH = Alien::getDatabaseHandler();
-        $STH = $DBH->prepare('SELECT * FROM ' . Alien::getParameter('db_prefix') . '_content_folders WHERE id_f=:p && id_f>=1');
+        $DBH = Application::getDatabaseHandler();
+        $STH = $DBH->prepare('SELECT * FROM ' . Application::getParameter('db_prefix') . '_content_folders WHERE id_f=:p && id_f>=1');
         $STH->bindValue(':p', $this->parent, PDO::PARAM_INT);
         $STH->execute();
         $result = $STH->fetch();
@@ -289,8 +289,8 @@ class Folder implements FileInterface {
     public static function getFolderList() {
         $folders = Array();
         $folders[] = new self(0);
-        $DBH = Alien::getDatabaseHandler();
-        foreach ($DBH->query('SELECT * FROM ' . Alien::getDBPrefix() . '_content_folders') as $row) {
+        $DBH = Application::getDatabaseHandler();
+        foreach ($DBH->query('SELECT * FROM ' . Application::getDBPrefix() . '_content_folders') as $row) {
             $f = new self(null, $row);
             $f->getChilds();
             $folders[] = $f;
@@ -307,23 +307,23 @@ class Folder implements FileInterface {
      * @return boolean
      */
     public function isEmpty() {
-        $DBH = Alien::getDatabaseHandler();
-        $STH = $DBH->prepare('SELECT 1 FROM ' . Alien::getParameter('db_prefix') . '_content_folders WHERE parent=:id LIMIT 1');
+        $DBH = Application::getDatabaseHandler();
+        $STH = $DBH->prepare('SELECT 1 FROM ' . Application::getParameter('db_prefix') . '_content_folders WHERE parent=:id LIMIT 1');
         $STH->bindValue(':id', $this->id);
         $STH->execute();
         if ($STH->rowCount())
             return false;
-        $STH = $DBH->prepare('SELECT 1 FROM ' . Alien::getParameter('db_prefix') . '_content_items WHERE id_f=:id LIMIT 1');
+        $STH = $DBH->prepare('SELECT 1 FROM ' . Application::getParameter('db_prefix') . '_content_items WHERE id_f=:id LIMIT 1');
         $STH->bindValue(':id', $this->id);
         $STH->execute();
         if ($STH->rowCount())
             return false;
-        $STH = $DBH->prepare('SELECT 1 FROM ' . Alien::getParameter('db_prefix') . '_content_pages WHERE id_f=:id LIMIT 1');
+        $STH = $DBH->prepare('SELECT 1 FROM ' . Application::getParameter('db_prefix') . '_content_pages WHERE id_f=:id LIMIT 1');
         $STH->bindValue(':id', $this->id);
         $STH->execute();
         if ($STH->rowCount())
             return false;
-        $STH = $DBH->prepare('SELECT 1 FROM ' . Alien::getParameter('db_prefix') . '_content_templates WHERE id_f=:id LIMIT 1');
+        $STH = $DBH->prepare('SELECT 1 FROM ' . Application::getParameter('db_prefix') . '_content_templates WHERE id_f=:id LIMIT 1');
         $STH->bindValue(':id', $this->id);
         $STH->execute();
         if ($STH->rowCount())

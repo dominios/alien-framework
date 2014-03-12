@@ -21,11 +21,12 @@ class GroupsController extends BaseController {
             $data = $parentResponse->getData();
         }
 
-        return new Response(Response::OK, Array(
-            'LeftTitle' => 'Skupiny',
-            'ContentLeft' => $this->leftMenuItems(),
-            'MainMenu' => $data['MainMenu']
-                ), __CLASS__ . '::' . __FUNCTION__);
+        return new Response(array(
+                'LeftTitle' => 'Skupiny',
+                'ContentLeft' => $this->leftMenuItems(),
+                'MainMenu' => $data['MainMenu']
+            )
+        );
     }
 
     private function leftMenuItems() {
@@ -41,12 +42,12 @@ class GroupsController extends BaseController {
         $view->groups = Group::getList(true);
 
         $response = array('Title' => 'Zoznam skupín', 'ContentMain' => $view->renderToString());
-        return new Response(Response::OK, $response, __CLASS__ . '::' . __FUNCTION__);
+        return new Response($response);
     }
 
     protected function edit() {
         if (!preg_match('/^[0-9]*$/', $_GET['id'])) {
-            new Notification('Neplatný identifikátor skupiny.', Notification::ERROR);
+            Notification::error('Neplatný identifikátor skupiny!', Notification::ERROR);
             return;
         }
         $view = new View('display/groups/edit.php', $this);
@@ -59,14 +60,15 @@ class GroupsController extends BaseController {
             'Title' => (int) $_GET['id'] ? $group->getName() : 'Nová skupina',
             'ContentMain' => $view->renderToString()
         );
-        return new Response(Response::OK, $response, __CLASS__ . '::' . __FUNCTION__);
+        return new Response($response);
     }
 
     protected function groupFormSubmit() {
         if (Group::exists($_POST['groupId'])) {
             $group = new Group($_POST['groupId']);
         } else {
-            $group = Group::create();
+            $initialValues = array();
+            $group = Group::create($initialValues);
         }
         $group->setName($_POST['groupName']);
         $group->setDescription($_POST['groupDescription']);

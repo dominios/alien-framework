@@ -2,7 +2,7 @@
 
 namespace Alien\Models\Authorization;
 
-use Alien\Alien;
+use Alien\Application;
 use Alien\DBConfig;
 use PDO;
 
@@ -17,8 +17,8 @@ class Authorization {
     private function __construct() {
 
         self::loadPermissions();
-        self::$loginTimeOut = Alien::getParameter('loginTimeOut');
-        $DBH = Alien::getDatabaseHandler();
+        self::$loginTimeOut = Application::getParameter('loginTimeOut');
+        $DBH = Application::getDatabaseHandler();
 
         if (@isset($_SESSION['id_auth'])) {
             self::$auth_id = $_SESSION['id_auth'];
@@ -63,7 +63,7 @@ class Authorization {
      */
     public static function getCurrentUser() {
         if (self::$user == null) {
-            $DBH = Alien::getDatabaseHandler();
+            $DBH = Application::getDatabaseHandler();
             $STH = $DBH->prepare("SELECT id_u FROM " . DBConfig::table(DBConfig::AUTHORIZATION) . " WHERE id_auth=:id ORDER BY id_auth DESC LIMIT 1;");
             $STH->bindValue(':id', self::$auth_id);
             $STH->execute();
@@ -110,7 +110,7 @@ class Authorization {
 
     private function validateSession() {
 
-        $DBH = Alien::getDatabaseHandler();
+        $DBH = Application::getDatabaseHandler();
 
         $STH = $DBH->prepare("SELECT timeout FROM " . DBConfig::table(DBConfig::AUTHORIZATION) . " WHERE id_auth=:id ORDER BY id_auth DESC LIMIT 1;");
         $STH->bindValue(':id', self::$auth_id, PDO::PARAM_INT);
@@ -139,7 +139,7 @@ class Authorization {
 
     public function login($login, $password) {
 
-        $DBH = Alien::getDatabaseHandler();
+        $DBH = Application::getDatabaseHandler();
 
         $STH = $DBH->prepare('SELECT * FROM ' . DBConfig::table(DBConfig::USERS) . ' WHERE login=:login && deleted!=1 LIMIT 1;');
         $STH->bindValue(':login', $login, PDO::PARAM_STR);

@@ -2,7 +2,7 @@
 
 namespace Alien\Controllers;
 
-use Alien\Alien;
+use Alien\Application;
 use Alien\Terminal;
 use Alien\Response;
 use Alien\Models\Authorization\Authorization;
@@ -20,7 +20,7 @@ class BaseController {
     private static $instance = null;
 
     public final function __construct($args = null) {
-        Alien::getInstance()->getConsole()->putMessage('Using <i>' . get_called_class() . '</i>');
+        Application::getInstance()->getConsole()->putMessage('Using <i>' . get_called_class() . '</i>');
         // inicializuje pole, prednost ma POST, potom sa prida akcia z konstruktora (GET)
 //        $actions = array();
 //       if(@isset($_POST['action'])){
@@ -88,7 +88,7 @@ class BaseController {
             if ($response instanceof Response) {
                 array_push($responses, $response);
             }
-            Alien::getInstance()->getConsole()->putMessage('Called <i>' . get_called_class() . '::init_action()</i>.');
+            Application::getInstance()->getConsole()->putMessage('Called <i>' . get_called_class() . '::init_action()</i>.');
         }
 
         if (!sizeof($this->actions)) {
@@ -96,20 +96,20 @@ class BaseController {
         }
 
         foreach ($this->actions as $action) {
-            Alien::getInstance()->getConsole()->putMessage('Calling action: <i>' . get_called_class() . '::' . $action . '</i>()');
+            Application::getInstance()->getConsole()->putMessage('Calling action: <i>' . get_called_class() . '::' . $action . '</i>()');
             if (!method_exists($this, $action)) {
-                Alien::getInstance()->getConsole()->putMessage('Action <i>' . $action . '</i> doesn\'t exist!', Terminal::ERROR);
+                Application::getInstance()->getConsole()->putMessage('Action <i>' . $action . '</i> doesn\'t exist!', Terminal::ERROR);
             }
             if (!method_exists($this, $action) && $action != $this->defaultAction) {
                 $action = $this->defaultAction;
                 $this->redirect($action);
-                Alien::getInstance()->getConsole()->putMessage('Calling action <i>' . get_called_class() . '::' . $action . '</i>() instead.');
+                Application::getInstance()->getConsole()->putMessage('Calling action <i>' . get_called_class() . '::' . $action . '</i>() instead.');
             }
             $response = $this->$action();
             if ($response instanceof Response) {
                 array_push($responses, $response);
             }
-            Alien::getInstance()->getConsole()->putMessage('Action <i>' . $action . '</i>() done.');
+            Application::getInstance()->getConsole()->putMessage('Action <i>' . $action . '</i>() done.');
         }
 
         return $responses;
@@ -177,23 +177,14 @@ class BaseController {
         return BaseController::actionURL(BaseController::getControllerFromURL($_SERVER['HTTP_REFERER']), BaseController::getActionFromURL($_SERVER['HTTP_REFERER'], true));
     }
 
-    // TODO: konzola zatial natvrdo
     public final function renderToString() {
-
         $responses = $this->doActions();
-
         foreach ($responses as $response) {
             $this->getLayout()->handleResponse($response);
 //            AlienConsole::getInstance()->putMessage('Response from <i>'.$response->getAction().'</i> handled.');
         }
-
         $content = $this->layout->renderToString();
-
         return $content;
-    }
-
-    protected function NOP() {
-        return;
     }
 
     private function login() {
@@ -228,4 +219,15 @@ class BaseController {
         }
     }
 
+    protected final function NOP() {
+        return;
+    }
+
+    protected function error404() {
+
+    }
+
+    protected function error500() {
+
+    }
 }

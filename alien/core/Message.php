@@ -23,7 +23,7 @@ class Message implements ActiveRecord {
             $this->id = null;
             return;
         } elseif ($row === null) {
-            $DBH = Alien::getDatabaseHandler();
+            $DBH = Application::getDatabaseHandler();
             $Q = $DBH->prepare('SELECT * FROM ' . DBConfig::table(DBConfig::MESSAGES) . ' WHERE id=:id');
             $Q->bindValue(':id', $id, PDO::PARAM_INT);
             $Q->execute();
@@ -49,7 +49,7 @@ class Message implements ActiveRecord {
 
     public function delete() {
         if ($this->isDeletable()) {
-            $DBH = Alien::getDatabaseHandler();
+            $DBH = Application::getDatabaseHandler();
             $Q = $DBH->exec('DELETE FROM ' . DBConfig::table(DBConfig::MESSAGES) . ' WHERE id=' . (int) $this->id . ' LIMIT 1');
             return true;
         } else {
@@ -62,7 +62,7 @@ class Message implements ActiveRecord {
     }
 
     public function update() {
-        $DBH = Alien::getDatabaseHandler();
+        $DBH = Application::getDatabaseHandler();
         $Q = $DBH->prepare('UPDATE ' . DBConfig::table(DBConfig::MESSAGES) . ' SET authorTags=:at, recipientTags=:rt, dateSeen=:ds, deletedByAuthor=:dba, deletedByRecipient=:dbr WHERE id=:id');
         $Q->bindValue(':id', $this->id, PDO::PARAM_INT);
         $Q->bindValue(':at', implode(';', $this->authorTags), PDO::PARAM_STR);
@@ -74,7 +74,7 @@ class Message implements ActiveRecord {
     }
 
     public static function create($initialValues) {
-        $DBH = Alien::getDatabaseHandler();
+        $DBH = Application::getDatabaseHandler();
         $Q = $DBH->prepare('INSERT INTO ' . DBConfig::table(DBConfig::MESSAGES) . ' (author, recipient, message, dateSent) VALUES (:a, :r, :m, :ds)');
         $Q->bindValue(':a', $initialValues['author'], PDO::PARAM_INT);
         $Q->bindValue(':r', $initialValues['recipient'], PDO::PARAM_INT);
@@ -84,7 +84,7 @@ class Message implements ActiveRecord {
     }
 
     public static function exists($id) {
-        $DBH = Alien::getDatabaseHandler();
+        $DBH = Application::getDatabaseHandler();
         $STH = $DBH->prepare('SELECT 1 FROM ' . DBConfig::table(DBConfig::MESSAGES) . ' WHERE id=:i LIMIT 1');
         $STH->bindValue(':i', (int) $id, PDO::PARAM_INT);
         $STH->execute();
@@ -93,7 +93,7 @@ class Message implements ActiveRecord {
 
     public static function getList($fetch = false) {
         $arr = array();
-        $DBH = Alien::getDatabaseHandler();
+        $DBH = Application::getDatabaseHandler();
         foreach ($DBH->query('SELECT * FROM ' . DBConfig::table(DBConfig::MESSAGES)) as $R) {
             $arr[] = $fetch ? new Message($R['id'], $R) : $R['id'];
         }
@@ -102,7 +102,7 @@ class Message implements ActiveRecord {
 
     public static function getListByRecipient(User $user, $fetch = false) {
         $arr = array();
-        $DBH = Alien::getDatabaseHandler();
+        $DBH = Application::getDatabaseHandler();
         foreach ($DBH->query('SELECT * FROM ' . DBConfig::table(DBConfig::MESSAGES) . ' WHERE recipient=' . (int) $user->getId() . ' && deletedByRecipient!=1 ORDER BY id DESC') as $R) {
             $arr[] = $fetch ? new Message($R['id'], $R) : $R['id'];
         }
@@ -110,14 +110,14 @@ class Message implements ActiveRecord {
     }
 
     public static function getUnreadCount(User $user) {
-        $DBH = Alien::getDatabaseHandler();
+        $DBH = Application::getDatabaseHandler();
         $R = $DBH->query('SELECT COUNT(*) FROM ' . DBConfig::table(DBConfig::MESSAGES) . ' WHERE recipient=' . (int) $user->getId() . ' && dateSeen IS NULL')->fetch();
         return $R['COUNT(*)'];
     }
 
     public static function getListByAuthor(User $user, $fetch = false) {
         $arr = array();
-        $DBH = Alien::getDatabaseHandler();
+        $DBH = Application::getDatabaseHandler();
         foreach ($DBH->query('SELECT * FROM ' . DBConfig::table(DBConfig::MESSAGES) . ' WHERE author=' . (int) $user->getId() . ' && deletedByAuthor!=1 ORDER BY id DESC') as $R) {
             $arr[] = $fetch ? new Message($R['id'], $R) : $R['id'];
         }

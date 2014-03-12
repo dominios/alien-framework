@@ -2,7 +2,7 @@
 
 namespace Alien\Models\Content;
 
-use Alien\Alien;
+use Alien\Application;
 use Alien\DBConfig;
 use \PDO;
 
@@ -20,7 +20,7 @@ abstract class ContentItem implements FileInterface {
     public function __construct($id, $row = null) {
 
         if ($row === null) {
-            $DBH = Alien::getDatabaseHandler();
+            $DBH = Application::getDatabaseHandler();
             $Q = $DBH->prepare('SELECT * FROM ' . DBConfig::table(DBConfig::ITEMS) . ' WHERE id=:i LIMIT 1;');
             $Q->bindValue(':i', $id, PDO::PARAM_INT);
             $Q->execute();
@@ -52,7 +52,7 @@ abstract class ContentItem implements FileInterface {
 
         if ($row === null) {
 
-            $DBH = Alien::getDatabaseHandler();
+            $DBH = Application::getDatabaseHandler();
             $row = $DBH->query('SELECT * FROM ' . DBConfig::table(DBConfig::ITEMS)
                             . ' WHERE id = "' . (int) $idItem . '"'
                             . ' LIMIT 1;')->fetch();

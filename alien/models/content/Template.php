@@ -3,7 +3,7 @@
 namespace Alien\Models\Content;
 
 use Alien\ActiveRecord;
-use Alien\Alien;
+use Alien\Application;
 use Alien\Layout\Layout;
 use Alien\Controllers\BaseController;
 use Alien\DBConfig;
@@ -24,7 +24,7 @@ class Template extends Layout implements ActiveRecord, FileInterface {
     public function __construct($id = null, $row = null) {
         $new = false;
         if ($row === null) {
-            $DBH = Alien::getDatabaseHandler();
+            $DBH = Application::getDatabaseHandler();
             $STH = $DBH->prepare("SELECT * FROM " . DBConfig::table(DBConfig::TEMPLATES) . " WHERE id=:id LIMIT 1");
             $STH->bindValue(':id', $id);
             $STH->execute();
@@ -56,7 +56,7 @@ class Template extends Layout implements ActiveRecord, FileInterface {
     }
 
     public static function exists($id) {
-        $DBH = Alien::getDatabaseHandler();
+        $DBH = Application::getDatabaseHandler();
         $Q = $DBH->query('SELECT 1 FROM ' . DBConfig::table(DBConfig::TEMPLATES) . '
             WHERE id="' . (int) $id . '";');
         $Q->execute();
@@ -70,7 +70,7 @@ class Template extends Layout implements ActiveRecord, FileInterface {
         if (!$this->isDeletable()) {
             return false;
         }
-        $DBH = Alien::getDatabaseHandler();
+        $DBH = Application::getDatabaseHandler();
         return $DBH->query('DELETE FROM ' . DBConfig::table(DBConfig::TEMPLATES) . '
             WHERE id=' . $this->id . ' LIMIT 1;')->execute();
     }
@@ -108,7 +108,7 @@ class Template extends Layout implements ActiveRecord, FileInterface {
     }
 
     public function isUsed() {
-        $DBH = Alien::getDatabaseHandler();
+        $DBH = Application::getDatabaseHandler();
         $STH = $DBH->prepare('SELECT 1 FROM ' . DBConfig::table(DBConfig::PAGES) . ' WHERE id_t=:id');
         $STH->bindValue(':id', $this->id, PDO::PARAM_INT);
         $STH->execute();
@@ -120,7 +120,7 @@ class Template extends Layout implements ActiveRecord, FileInterface {
     }
 
     public static function isTemplateNameInUse($name, $ignoreId = null) {
-        $DBH = Alien::getDatabaseHandler();
+        $DBH = Application::getDatabaseHandler();
         $Q = $DBH->prepare('SELECT id FROM ' . DBConfig::table(DBConfig::TEMPLATES) . ' WHERE name=:n');
         $Q->bindValue(':n', $name, PDO::PARAM_STR);
         $Q->execute();
@@ -137,7 +137,7 @@ class Template extends Layout implements ActiveRecord, FileInterface {
 
     public function fetchBlocks() {
         $blocks = Array();
-        $DBH = Alien::getDatabaseHandler();
+        $DBH = Application::getDatabaseHandler();
         $query = 'SELECT b.* FROM ' . DBConfig::table(DBConfig::BLOCKS) . ' b'
                 . ' JOIN ' . DBConfig::table(DBConfig::WIDGETS) . ' w ON b.id_b = w.container'
                 . ' WHERE w.template = "' . (int) $this->id . '"'
@@ -196,7 +196,7 @@ class Template extends Layout implements ActiveRecord, FileInterface {
     }
 
     public function update() {
-        $DBH = Alien::getDatabaseHandler();
+        $DBH = Application::getDatabaseHandler();
         $Q = $DBH->prepare('UPDATE ' . DBConfig::table(DBConfig::TEMPLATES) . '
             SET name=:name, src=:src, description=:desc
             WHERE id=:i'
@@ -215,7 +215,7 @@ class Template extends Layout implements ActiveRecord, FileInterface {
      * @return Template template
      */
     public static function create($initialValues) {
-        $DBH = Alien::getDatabaseHandler();
+        $DBH = Application::getDatabaseHandler();
         $Q = $DBH->prepare('INSERT INTO ' . DBConfig::table(DBConfig::TEMPLATES) . '
              (folder, name, src)
              VALUES (:folder, :name, :src);');
@@ -226,7 +226,7 @@ class Template extends Layout implements ActiveRecord, FileInterface {
     }
 
     public static function getList($fetch = false) {
-        $DBH = Alien::getDatabaseHandler();
+        $DBH = Application::getDatabaseHandler();
         $arr = array();
         $STH = $DBH->prepare("SELECT * FROM " . DBConfig::table(DBConfig::TEMPLATES));
         $STH->execute();

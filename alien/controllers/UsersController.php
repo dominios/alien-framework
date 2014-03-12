@@ -26,11 +26,12 @@ class UsersController extends BaseController {
             $data = $parentResponse->getData();
         }
 
-        return new Response(Response::OK, Array(
-            'LeftTitle' => 'Používatelia',
-            'ContentLeft' => $this->leftMenuItems(),
-            'MainMenu' => $data['MainMenu']
-                ), __CLASS__ . '::' . __FUNCTION__);
+        return new Response(array(
+                'LeftTitle' => 'Používatelia',
+                'ContentLeft' => $this->leftMenuItems(),
+                'MainMenu' => $data['MainMenu']
+            )
+        );
     }
 
     private function leftMenuItems() {
@@ -53,10 +54,11 @@ class UsersController extends BaseController {
         $view->users = User::getList(true);
         $view->editActionPattern = BaseController::actionURL('users', 'edit', array('id' => '%ID%'));
         $view->sendMessagePattern = BaseController::actionURL('dashboard', 'composeMessage', array('id' => '%ID%'));
-        return new Response(Response::OK, Array(
-            'Title' => 'Zoznam používateľov',
-            'ContentMain' => $view->renderToString()
-                ), __CLASS__ . '::' . __FUNCTION__);
+        return new Response(array(
+                'Title' => 'Zoznam používateľov',
+                'ContentMain' => $view->renderToString()
+            )
+        );
     }
 
     protected function edit() {
@@ -108,10 +110,11 @@ class UsersController extends BaseController {
         $view->userGroups = $user->getGroups(true);
         $view->userPermissions = $user->getPermissions(true);
 
-        return new Response(Response::OK, Array(
-            'Title' => (int) $_GET['id'] ? $view->user->getLogin() : 'Nový používateľ',
-            'ContentMain' => $view->renderToString()
-                ), __CLASS__ . '::' . __FUNCTION__);
+        return new Response(array(
+                'Title' => (int) $_GET['id'] ? $view->user->getLogin() : 'Nový používateľ',
+                'ContentMain' => $view->renderToString()
+            )
+        );
     }
 
     protected function removeUser() {
@@ -209,10 +212,10 @@ class UsersController extends BaseController {
     protected function viewLogs() {
         $view = new View('display/users/logs.php');
         $ret = $view->renderToString();
-        return new Response(Response::OK, Array(
-            'Title' => 'Posledná aktivita',
-            'ContentMain' => $ret
-                ), __CLASS__ . '::' . __FUNCTION__
+        return new Response(array(
+                'Title' => 'Posledná aktivita',
+                'ContentMain' => $ret
+            )
         );
     }
 

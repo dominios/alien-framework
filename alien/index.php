@@ -10,7 +10,7 @@ use Alien\Controllers\BaseController;
 ob_start();
 $content = '';
 require_once 'init.php';
-Alien::getInstance();
+Application::boot();
 
 //
 // work
@@ -47,34 +47,18 @@ if (count($params) >= 2) {
     $_GET['id'] = $params[0];
 }
 
+
 $controller = __NAMESPACE__ . '\Controllers\\' . ucfirst($controller) . 'Controller';
 
 if (class_exists($controller)) {
     $controller = new $controller($actionsArray);
 } else {
-    Alien::getInstance()->getConsole()->putMessage('Called controller <i>' . $controller . '</i> doesn\'t exist!', Terminal::ERROR);
+//    Application::getInstance()->getConsole()->putMessage('Called controller <i>' . $controller . '</i> doesn\'t exist!', Terminal::ERROR);
     $controller = new BaseController($actionsArray);
 }
 
-//if(sizeof($_GET)){
-//    $ctrl = ucfirst(strtolower(key($_GET))).'Controller';
-//    try {
-//        $controller = new $ctrl;
-//    } catch(Exception $ex){
-//        Alien::getInstance()->getConsole()->putMessage('Called controller <i>'.$ctrl.'</i> doesn\'t exist!', AlienConsole::CONSOLE_ERROR);
-//        $controller = new AlienController;
-//    }
-//} else {
-//    $controller = new AlienController();
-//}
-
 $content .= $controller->renderToString();
 
-//$content = str_replace('</body></html>', '', $content);
-//$content .= '<div style="position: absolute; top: 0px; width: 100%;"><div id="notifyArea" style="display: block;"></div></div>';
-//$content .= Notification::renderNotifications();
-//$content .= '<script type="text/javascript"> $(document).ready(function(){ showNotifications(); }); </script>';
-//$content .= '</body></html>';
 //
 // output
 //

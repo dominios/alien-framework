@@ -2,7 +2,7 @@
 
 namespace Alien\Controllers;
 
-use Alien\Alien;
+use Alien\Application;
 use Alien\Terminal;
 use Alien\Response;
 

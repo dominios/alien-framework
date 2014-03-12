@@ -2,7 +2,7 @@
 
 namespace Alien\Controllers;
 
-use Alien\Alien;
+use Alien\Application;
 use Alien\View;
 use Alien\Response;
 use Alien\Notification;
@@ -20,11 +20,12 @@ class SystemController extends BaseController {
             $data = $parentResponse->getData();
         }
 
-        return new Response(Response::OK, Array(
-            'LeftTitle' => 'Systém',
-            'ContentLeft' => $this->leftMenuItems(),
-            'MainMenu' => $data['MainMenu']
-                ), __CLASS__ . '::' . __FUNCTION__);
+        return new Response(array(
+                'LeftTitle' => 'Systém',
+                'ContentLeft' => $this->leftMenuItems(),
+                'MainMenu' => $data['MainMenu']
+            )
+        );
     }
 
     private function leftMenuItems() {

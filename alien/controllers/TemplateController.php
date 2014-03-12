@@ -2,7 +2,7 @@
 
 namespace Alien\Controllers;
 
-use Alien\Alien;
+use Alien\Application;
 use Alien\View;
 use Alien\Response;
 use Alien\Notification;
@@ -33,9 +33,9 @@ class TemplateController extends ContentController {
         $view->template = $template;
         $view->form = $form;
 
-        if($form->isPostSubmit()){
-            if($form->validate()){
-                if(Template::exists($_POST['templateId'])){
+        if ($form->isPostSubmit()) {
+            if ($form->validate()) {
+                if (Template::exists($_POST['templateId'])) {
                     $template = new Template($_POST['templateId']);
                     $new = false;
                 } else {
@@ -50,8 +50,8 @@ class TemplateController extends ContentController {
                 $template->setName($_POST['templateName']);
                 $template->setDescription($_POST['templateDescription']);
                 $template->setSrc($_POST['templateSrc']);
-                if($template->update()){
-                    if($new) {
+                if ($template->update()) {
+                    if ($new) {
                         Notification::success('Šablóna bola vytvorená.');
                     } else {
                         Notification::success('Zmeny boli uložené.');
@@ -67,11 +67,12 @@ class TemplateController extends ContentController {
 
         $viewFloatPanel = new View('display/content/partial/templateToolBox.php');
 
-        return new Response(Response::OK, Array(
-            'Title' => 'Úprava šablóny: ' . $template->getName(),
-            'ContentMain' => $view->renderToString(),
-            'FloatPanel' => $viewFloatPanel->renderToString()
-                ), __CLASS__ . '::' . __FUNCTION__);
+        return new Response(array(
+                'Title' => 'Úprava šablóny: ' . $template->getName(),
+                'ContentMain' => $view->renderToString(),
+                'FloatPanel' => $viewFloatPanel->renderToString()
+            )
+        );
     }
 
     protected function viewBlocks() {

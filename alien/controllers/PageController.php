@@ -2,7 +2,7 @@
 
 namespace Alien\Controllers;
 
-use Alien\Alien;
+use Alien\Application;
 use Alien\Forms\Content\PageForm;
 use Alien\View;
 use Alien\Response;
@@ -75,10 +75,11 @@ class PageController extends ContentController {
             }
         }
 
-        return new Response(Response::OK, Array(
-            'Title' => 'Úprava stránky: ' . $page->getName(),
-            'ContentMain' => $view->renderToString()
-        ), __CLASS__ . '::' . __FUNCTION__);
+        return new Response(array(
+                'Title' => 'Úprava stránky: ' . $page->getName(),
+                'ContentMain' => $view->renderToString()
+            )
+        );
     }
 
     protected function pageFormSubmit() {

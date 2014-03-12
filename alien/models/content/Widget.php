@@ -3,7 +3,7 @@
 namespace Alien\Models\Content;
 
 use Alien\ActiveRecord;
-use Alien\Alien;
+use Alien\Application;
 use Alien\DBConfig;
 use Alien\Controllers\BaseController;
 use Alien\Forms\Form;
@@ -34,7 +34,7 @@ abstract class Widget implements FileInterface, ActiveRecord {
     public function __construct($id, $row = null) {
 
         if ($row === null) {
-            $DBH = Alien::getDatabaseHandler();
+            $DBH = Application::getDatabaseHandler();
             $Q = $DBH->prepare('SELECT * FROM ' . DBConfig::table(DBConfig::WIDGETS) . ' WHERE id = :i');
             $Q->bindValue(':i', $id, PDO::PARAM_INT);
             $Q->execute();
@@ -74,7 +74,7 @@ abstract class Widget implements FileInterface, ActiveRecord {
                 $cond = 'id = ' . (int) $idView;
             }
 
-            $DBH = Alien::getDatabaseHandler();
+            $DBH = Application::getDatabaseHandler();
             $row = $DBH->query('SELECT * FROM ' . DBConfig::table(DBConfig::WIDGETS)
                 . ' WHERE ' . $cond
                 . ' LIMIT 1;')->fetch();
@@ -238,7 +238,7 @@ abstract class Widget implements FileInterface, ActiveRecord {
     }
 
     public function update() {
-        $DBH = Alien::getDatabaseHandler();
+        $DBH = Application::getDatabaseHandler();
         $Q = $DBH->prepare('UPDATE ' . DBConfig::table(DBConfig::WIDGETS)
             . ' SET visible=:v, position=:pos, class=:c, script=:s, params=:parm, page=:pg, template=:tmpl WHERE id=:id LIMIT 1;');
 
@@ -259,7 +259,7 @@ abstract class Widget implements FileInterface, ActiveRecord {
     }
 
     public function delete() {
-        $dbh = Alien::getDatabaseHandler();
+        $dbh = Application::getDatabaseHandler();
         $q = $dbh->prepare('DELETE FROM ' . DBConfig::table(DBConfig::WIDGETS) . ' WHERE id=:i');
         $q->bindValue(':i', (int) $this->getId(), PDO::PARAM_INT);
         $q->execute();
@@ -271,7 +271,7 @@ abstract class Widget implements FileInterface, ActiveRecord {
     }
 
     public static function create($initialValues) {
-        $DBH = Alien::getDatabaseHandler();
+        $DBH = Application::getDatabaseHandler();
         $Q = $DBH->prepare('INSERT INTO ' . DBConfig::table(DBConfig::WIDGETS) . '
             (type, visible, position, container) VALUES (:t, :v, :p, :c);');
         $Q->bindValue(':t', $initialValues['type'], PDO::PARAM_STR);
@@ -282,7 +282,7 @@ abstract class Widget implements FileInterface, ActiveRecord {
     }
 
     public static function exists($id) {
-        $dbh = Alien::getDatabaseHandler();
+        $dbh = Application::getDatabaseHandler();
         $q = $dbh->prepare('SELECT 1 FROM ' . DBConfig::table(DBConfig::WIDGETS) . ' WHERE id=:i');
         $q->bindValue(':i', (int) $id, PDO::PARAM_INT);
         $q->execute();

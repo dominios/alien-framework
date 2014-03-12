@@ -5,7 +5,7 @@ namespace Alien\Forms;
 use Alien\Models\Content\Page;
 use Alien\Models\Content\Template;
 use PDO;
-use Alien\Alien;
+use Alien\Application;
 use Alien\DBConfig;
 
 class Validator {
@@ -68,7 +68,7 @@ class Validator {
     }
 
     protected function userUniqueEmail(Input $input) {
-        $DBH = Alien::getDatabaseHandler();
+        $DBH = Application::getDatabaseHandler();
         $Q = $DBH->prepare('SELECT 1 FROM ' . DBConfig::table(DBConfig::USERS) . ' WHERE email=:e && id_u!=:u LIMIT 1');
         $Q->bindValue(':e', $input->getValue(), PDO::PARAM_STR);
         $Q->bindValue(':u', (int) $this->params['ignoredUserId'], PDO::PARAM_INT);

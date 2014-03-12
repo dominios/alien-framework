@@ -2,7 +2,7 @@
 
 namespace Alien\Models\Content;
 
-use Alien\Alien;
+use Alien\Application;
 use \PDO;
 
 class VariableItem extends ContentItem {

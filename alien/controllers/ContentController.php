@@ -2,7 +2,7 @@
 
 namespace Alien\Controllers;
 
-use Alien\Alien;
+use Alien\Application;
 use Alien\Forms\Content\WidgetForm;
 use Alien\View;
 use Alien\Response;
@@ -40,11 +40,12 @@ class ContentController extends BaseController {
         $menuItems[] = Array('permissions' => null, 'url' => BaseController::actionURL('content', 'viewMenus'), 'img' => 'list', 'text' => 'Menu');
         $menuItems[] = Array('permissions' => null, 'url' => BaseController::actionURL('content', 'sitemap'), 'img' => 'sitemap', 'text' => 'Mapa webu');
 
-        return new Response(Response::OK, Array(
-            'ContentLeft' => $menuItems,
-            'LeftTitle' => 'Obsah webu',
-            'MainMenu' => $data['MainMenu']
-        ), __CLASS__ . '::' . __FUNCTION__);
+        return new Response(array(
+                'ContentLeft' => $menuItems,
+                'LeftTitle' => 'Obsah webu',
+                'MainMenu' => $data['MainMenu']
+            )
+        );
     }
 
     protected function viewList($type) {
@@ -74,10 +75,11 @@ class ContentController extends BaseController {
         $view->buttonNew = $newButton;
 
 
-        return new Response(Response::OK, Array(
-            'Title' => 'Zoznam ' . $name,
-            'ContentMain' => $view->renderToString()
-        ), __CLASS__ . '::' . __FUNCTION__);
+        return new Response(array(
+                'Title' => 'Zoznam ' . $name,
+                'ContentMain' => $view->renderToString()
+            )
+        );
     }
 
     protected function browser() {
@@ -91,8 +93,8 @@ class ContentController extends BaseController {
             $_SESSION['folder'] = $f;
         }
 
-        $DBH = Alien::getDatabaseHandler();
-        $STH = $DBH->prepare('SELECT * FROM ' . Alien::getDBPrefix() . '_content_folders WHERE id_f=:i');
+        $DBH = Application::getDatabaseHandler();
+        $STH = $DBH->prepare('SELECT * FROM ' . Application::getDBPrefix() . '_content_folders WHERE id_f=:i');
         $STH->bindValue(':i', $f, PDO::PARAM_INT);
         $STH->execute();
         if ($STH->rowCount() && $folder !== null) {
@@ -107,10 +109,11 @@ class ContentController extends BaseController {
 
         //$_SESSION['SDATA'] = serialize($view);
 
-        return new Response(Response::OK, Array(
-            'Title' => 'Prieskumník',
-            'ContentMain' => $view->renderToString()
-        ), __CLASS__ . '::' . __FUNCTION__);
+        return new Response(array(
+                'Title' => 'Prieskumník',
+                'ContentMain' => $view->renderToString()
+            )
+        );
     }
 
     protected function editWidget() {
@@ -144,10 +147,11 @@ class ContentController extends BaseController {
         $customFormPart->formElements = $widget->getCustomFormElements();
         $view->customPart = $customFormPart->renderToString();
 
-        return new Response(Response::OK, Array(
-            'Title' => 'Úprava widgetu: ',
-            'ContentMain' => $view->renderToString()
-        ), __CLASS__ . '::' . __FUNCTION__);
+        return new Response(array(
+                'Title' => 'Úprava widgetu: ',
+                'ContentMain' => $view->renderToString()
+            )
+        );
     }
 
     protected function dropWidget() {

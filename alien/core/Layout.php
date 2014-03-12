@@ -2,7 +2,7 @@
 
 namespace Alien\Layout;
 
-use Alien\Alien;
+use Alien\Application;
 use Alien\View;
 use Alien\Response;
 use Alien\NotificationContainer;
@@ -22,7 +22,7 @@ abstract class Layout {
         $Class = get_called_class();
 
         if (file_exists($Class::SRC)) {
-            Alien::getInstance()->getConsole()->putMessage('Using <i>' . get_called_class() . '</i>.');
+            Application::getInstance()->getConsole()->putMessage('Using <i>' . get_called_class() . '</i>.');
         } else {
             header("HTTP/1.1 500 Internal Server Error");
             die(__CLASS__ . '::' . __FUNCTION__ . ' - Bad SRC ' . $Class::SRC);
@@ -69,9 +69,9 @@ abstract class Layout {
         }
 
         if ($Class::useConsole) {
-            if ((true || Alien::getParameter('debugMode')) && Authorization::getCurrentUser()->getId()) {
+            if ((true || Application::getParameter('debugMode')) && Authorization::getCurrentUser()->getId()) {
                 $console = new View('display/system/console.php', null);
-                $console->messages = Alien::getInstance()->getConsole()->getMessageList();
+                $console->messages = Application::getInstance()->getConsole()->getMessageList();
                 $view->terminal = $console->renderToString();
             }
         }

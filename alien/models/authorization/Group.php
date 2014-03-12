@@ -3,7 +3,7 @@
 namespace Alien\Models\Authorization;
 
 use PDO;
-use Alien\Alien;
+use Alien\Application;
 use Alien\DBConfig;
 
 class Group implements \Alien\ActiveRecord {
@@ -20,7 +20,7 @@ class Group implements \Alien\ActiveRecord {
             $this->id = null;
             return;
         } elseif ($row === null) {
-            $DBH = Alien::getDatabaseHandler();
+            $DBH = Application::getDatabaseHandler();
             $Q = $DBH->prepare('SELECT * FROM ' . DBConfig::table(DBConfig::GROUPS) . ' WHERE id_g=:id');
             $Q->bindValue(':id', (int) $id, PDO::PARAM_INT);
             $Q->execute();
@@ -38,7 +38,7 @@ class Group implements \Alien\ActiveRecord {
         $this->dateCreated = (int) $row['dateCreated'];
 
         if (empty($DBH)) {
-            $DBH = Alien::getDatabaseHandler();
+            $DBH = Application::getDatabaseHandler();
         }
 
         $this->members = array();
@@ -53,7 +53,7 @@ class Group implements \Alien\ActiveRecord {
     }
 
     public function update() {
-        $DBH = Alien::getDatabaseHandler();
+        $DBH = Application::getDatabaseHandler();
         $Q = $DBH->prepare('UPDATE ' . DBConfig::table(DBConfig::GROUPS) . ' SET name=:n, description=:d WHERE id_g=:id');
         $Q->bindValue(':id', $this->id, PDO::PARAM_INT);
         $Q->bindValue(':n', $this->name, PDO::PARAM_STR);
@@ -62,7 +62,7 @@ class Group implements \Alien\ActiveRecord {
     }
 
     public static function exists($id) {
-        $DBH = Alien::getDatabaseHandler();
+        $DBH = Application::getDatabaseHandler();
         $STH = $DBH->prepare('SELECT 1 FROM ' . DBConfig::table(DBConfig::GROUPS) . ' WHERE id_g=:i LIMIT 1');
         $STH->bindValue(':i', (int) $id, PDO::PARAM_INT);
         $STH->execute();
@@ -70,7 +70,7 @@ class Group implements \Alien\ActiveRecord {
     }
 
     public static function create($initialValues) {
-        $DBH = Alien::getDatabaseHandler();
+        $DBH = Application::getDatabaseHandler();
         $Q = $DBH->prepare('INSERT INTO ' . DBConfig::table(DBConfig::GROUPS) . ' (dateCreated) VALUES (:dc)');
         $Q->bindValue(':dc', time(), PDO::PARAM_INT);
         return $Q->execute() ? new Group($DBH->lastInsertId()) : false;
@@ -79,7 +79,7 @@ class Group implements \Alien\ActiveRecord {
     public function delete() {
 
         if ($this->isDeletable()) {
-            $DBH = Alien::getDatabaseHandler();
+            $DBH = Application::getDatabaseHandler();
             $Q = $DBH->exec('DELETE FROM ' . DBConfig::table(DBConfig::GROUPS) . ' WHERE id_g=' . (int) $this->id . ' LIMIT 1');
             return true;
         } else {
@@ -93,7 +93,7 @@ class Group implements \Alien\ActiveRecord {
 
     public static function getList($fetch = false) {
         $arr = array();
-        $DBH = Alien::getDatabaseHandler();
+        $DBH = Application::getDatabaseHandler();
         foreach ($DBH->query('SELECT * FROM ' . DBConfig::table(DBConfig::GROUPS)) as $R) {
             $arr[] = $fetch ? new Group($R['id_g'], $R) : $R['id_g'];
         }
@@ -176,7 +176,7 @@ class Group implements \Alien\ActiveRecord {
     }
 
     public function addPermission(Permission $permission) {
-        $DBH = Alien::getDatabaseHandler();
+        $DBH = Application::getDatabaseHandler();
         $STH = $DBH->prepare('INSERT INTO ' . DBConfig::table(DBConfig::GROUP_PERMISSIONS) . ' (id_p,id_g,since) VALUES (:idp,:idg,:s)');
         $STH->bindValue(':idp', $permission->getId(), PDO::PARAM_INT);
         $STH->bindValue(':idg', $this->id, PDO::PARAM_INT);
@@ -185,7 +185,7 @@ class Group implements \Alien\ActiveRecord {
     }
 
     public function removePermission(Permission $permission) {
-        $DBH = Alien::getDatabaseHandler();
+        $DBH = Application::getDatabaseHandler();
         $STH = $DBH->prepare('DELETE FROM ' . DBConfig::table(DBConfig::GROUP_PERMISSIONS) . ' WHERE id_g=:idg && id_p=:idp LIMIT 1');
         $STH->bindValue(':idp', $permission->getId(), PDO::PARAM_INT);
         $STH->bindValue(':idg', $this->id, PDO::PARAM_INT);

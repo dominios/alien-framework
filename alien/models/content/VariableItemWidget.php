@@ -2,7 +2,7 @@
 
 namespace Alien\Models\Content;
 
-use Alien\Alien;
+use Alien\Application;
 use PDO;
 
 class VariableItemWidget extends Widget {
@@ -42,8 +42,8 @@ class VariableItemWidget extends Widget {
         } else {
             if ($this->items === null) {
                 $arr = Array();
-                $DBH = Alien::getDatabaseHandler();
-                foreach ($DBH->query('SELECT * FROM ' . Alien::getDBPrefix() . '_content_views WHERE id_c=' . (int) $this->getItem(true)->getContainer() . ' && id_p = ' . $page->getId()) as $row) {
+                $DBH = Application::getDatabaseHandler();
+                foreach ($DBH->query('SELECT * FROM ' . Application::getDBPrefix() . '_content_views WHERE id_c=' . (int) $this->getItem(true)->getContainer() . ' && id_p = ' . $page->getId()) as $row) {
                     $item = Widget::getSpecificWidget($row['id_v'], $row['id_type'], $row);
                     if ($item instanceof Widget) {
                         $arr[] = $item;

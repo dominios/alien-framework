@@ -20,17 +20,18 @@ class DashboardController extends BaseController {
             $data = $parentResponse->getData();
         }
 
-        return new Response(Response::OK, Array(
-            'LeftTitle' => 'Dashboard',
-            'ContentLeft' => $this->leftMenuItems(),
-            'MainMenu' => $data['MainMenu']
-                ), __CLASS__ . '::' . __FUNCTION__);
+        return new Response(array(
+                'LeftTitle' => 'Dashboard',
+                'ContentLeft' => $this->leftMenuItems(),
+                'MainMenu' => $data['MainMenu']
+            )
+        );
     }
 
     private function leftMenuItems() {
         $msgText = 'Správy';
         if (Message::getUnreadCount(Authorization::getCurrentUser())) {
-            $msgText.= '<span class="badge badge-info badge-right">' . Message::getUnreadCount(Authorization::getCurrentUser()) . ' UNREAD</span>';
+            $msgText .= '<span class="badge badge-info badge-right">' . Message::getUnreadCount(Authorization::getCurrentUser()) . ' UNREAD</span>';
         }
         $items = Array();
         $items[] = Array('permissions' => null, 'url' => BaseController::actionURL('dashboard', 'home'), 'img' => 'dashboard', 'text' => 'Prehľad');
@@ -52,7 +53,7 @@ class DashboardController extends BaseController {
         $view = new View('display/dashboard/home.php');
         $content .= $view->renderToString();
         $result = array('Title' => 'Dashboard', 'ContentMain' => $content);
-        return new Response(Response::OK, $result, __CLASS__ . '::' . __FUNCTION__);
+        return new Response($result);
     }
 
     protected function messages() {
@@ -72,7 +73,7 @@ class DashboardController extends BaseController {
         }
         $view->message = $message;
         $result = array('LeftTitle' => 'Správy', 'Title' => 'Zoznam správ', 'ContentMain' => $view->renderToString());
-        return new Response(Response::OK, $result, __CLASS__ . '::' . __FUNCTION__);
+        return new Response($result);
     }
 
     protected function composeMessage() {
@@ -88,7 +89,7 @@ class DashboardController extends BaseController {
         }
 
         $result = array('LeftTitle' => 'Správy', 'Title' => $title, 'ContentMain' => $view->renderToString());
-        return new Response(Response::OK, $result, __CLASS__ . '::' . __FUNCTION__);
+        return new Response($result);
     }
 
     protected function sendMessage() {
@@ -168,7 +169,7 @@ class DashboardController extends BaseController {
         $view->userPermissions = $user->getPermissions(true);
 
         $result = array('LeftTitle' => 'Môj profil', 'Title' => 'Môj profil', 'ContentMain' => $view->renderToString());
-        return new Response(Response::OK, $result, __CLASS__ . '::' . __FUNCTION__);
+        return new Response($result);
     }
 
 }

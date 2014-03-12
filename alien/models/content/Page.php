@@ -3,7 +3,7 @@
 namespace Alien\Models\Content;
 
 use Alien\ActiveRecord;
-use Alien\Alien;
+use Alien\Application;
 use Alien\Controllers\BaseController;
 use Alien\DBConfig;
 use Alien\Models\Content\Template;
@@ -25,7 +25,7 @@ class Page implements ActiveRecord, FileInterface {
     public function __construct($identifier, $row = null) {
 
         if ($row === null) {
-            $DBH = Alien::getDatabaseHandler();
+            $DBH = Application::getDatabaseHandler();
             if (is_numeric($identifier)) {
                 $Q = $DBH->prepare('SELECT * FROM ' . DBConfig::table(DBConfig::PAGES) . ' WHERE id=:i');
                 $Q->bindValue(':i', $identifier, PDO::PARAM_INT);
@@ -53,7 +53,7 @@ class Page implements ActiveRecord, FileInterface {
     }
 
     public static function getList($fetch = false) {
-        $DBH = Alien::getDatabaseHandler();
+        $DBH = Application::getDatabaseHandler();
         $arr = array();
         $STH = $DBH->prepare("SELECT * FROM " . DBConfig::table(DBConfig::PAGES));
         $STH->execute();
@@ -68,7 +68,7 @@ class Page implements ActiveRecord, FileInterface {
      * @return Page page
      */
     public static function create($initialValues) {
-        $DBH = Alien::getDatabaseHandler();
+        $DBH = Application::getDatabaseHandler();
         $Q = $DBH->prepare('INSERT INTO ' . DBConfig::table(DBConfig::PAGES) . '
              (folder, name, seolink, template)
              VALUES (:folder, :name, :seo, :template);');
@@ -84,7 +84,7 @@ class Page implements ActiveRecord, FileInterface {
     }
 
     public function delete() {
-        $DBH = Alien::getDatabaseHandler();
+        $DBH = Application::getDatabaseHandler();
         $STH = $DBH->prepare('DELETE FROM ' . DBConfig::table(DBConfig::PAGES) . ' WHERE id=:i LIMIT 1');
         $STH->bindValue(':i', $this->getId(), PDO::PARAM_INT);
         $STH->execute();
@@ -92,7 +92,7 @@ class Page implements ActiveRecord, FileInterface {
     }
 
     public function update() {
-        $DBH = Alien::getDatabaseHandler();
+        $DBH = Application::getDatabaseHandler();
         $Q = $DBH->prepare('UPDATE ' . DBConfig::table(DBConfig::PAGES) . ' SET template=:t, folder=:f, name=:n, description=:desc, seolink=:seo, keywords=:kw WHERE id=:i LIMIT 1;');
         $Q->bindValue(':i', $this->getId(), PDO::PARAM_INT);
         $Q->bindValue(':n', $this->getName(), PDO::PARAM_STR);
@@ -105,7 +105,7 @@ class Page implements ActiveRecord, FileInterface {
     }
 
     public static function exists($identifier) {
-        $DBH = Alien::getDatabaseHandler();
+        $DBH = Application::getDatabaseHandler();
         if (is_numeric($identifier)) {
             $Q = $DBH->prepare('SELECT 1 FROM ' . DBConfig::table(DBConfig::PAGES) . ' WHERE id=:i');
             $Q->bindValue(':i', $identifier, PDO::PARAM_INT);
@@ -134,7 +134,7 @@ class Page implements ActiveRecord, FileInterface {
     }
 
     public static function isSeolinkInUse($seolink, $ignoreId = null) {
-        $DBH = Alien::getDatabaseHandler();
+        $DBH = Application::getDatabaseHandler();
         $Q = $DBH->prepare('SELECT id FROM ' . DBConfig::table(DBConfig::PAGES) . ' WHERE seolink=:s LIMIT 1;');
         $Q->bindValue(':s', $seolink, PDO::PARAM_STR);
         $Q->execute();

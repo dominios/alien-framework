@@ -3,7 +3,7 @@
 namespace Alien\Models\Content;
 
 use PDO;
-use Alien\Alien;
+use Alien\Application;
 use Alien\ActiveRecord;
 use Alien\DBConfig;
 
@@ -17,7 +17,7 @@ class TemplateBlock implements FileInterface, ActiveRecord {
 
     public function __construct($id, $row = null) {
         if ($row === null) {
-            $DBH = Alien::getDatabaseHandler();
+            $DBH = Application::getDatabaseHandler();
             $Q = $DBH->prepare('SELECT * FROM ' . DBConfig::table(DBConfig::BLOCKS)
                 . ' WHERE id_b=:i'
                 . ' LIMIT 1;');
@@ -40,7 +40,7 @@ class TemplateBlock implements FileInterface, ActiveRecord {
         }
         $ret = array();
         if ($template instanceof Template) {
-            $DBH = Alien::getDatabaseHandler();
+            $DBH = Application::getDatabaseHandler();
             $query = 'SELECT * FROM ' . DBConfig::table(DBConfig::WIDGETS)
                 . ' WHERE container = "' . (int) $this->id . '";';
             foreach ($DBH->query($query) as $row) {
@@ -71,7 +71,7 @@ class TemplateBlock implements FileInterface, ActiveRecord {
     }
 
     public static function getList($fetch = false) {
-        $DBH = Alien::getDatabaseHandler();
+        $DBH = Application::getDatabaseHandler();
         $arr = array();
         $STH = $DBH->prepare("SELECT * FROM " . DBConfig::table(DBConfig::BLOCKS));
         $STH->execute();

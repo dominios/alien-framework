@@ -5,7 +5,7 @@ namespace Alien;
 use \PDO;
 use \DateTime;
 
-final class Alien {
+final class Application {
 
     public static $SystemImgUrl = '/alien/display/img/';
     private static $instance;
@@ -23,9 +23,13 @@ final class Alien {
 
     public static final function getInstance() {
         if (!self::$instance) {
-            self::$instance = new Alien;
+            self::$instance = new Application;
         }
         return self::$instance;
+    }
+
+    public static function boot(){
+        $app = self::getInstance();
     }
 
     /**
@@ -83,11 +87,11 @@ final class Alien {
     public static final function getDatabaseHandler() {
         if (self::getInstance()->DBH === null) {
             $config = parse_ini_file('config.ini', TRUE);
-            Alien::getInstance()->connectToDatabase($config['MYSQL']['db_host'], $config['MYSQL']['db_database'], $config['MYSQL']['db_username'], $config['MYSQL']['db_password']);
+            Application::getInstance()->connectToDatabase($config['MYSQL']['db_host'], $config['MYSQL']['db_database'], $config['MYSQL']['db_username'], $config['MYSQL']['db_password']);
         }
 
         require_once 'DBConfig.php';
-        DBConfig::setDBPrefix(Alien::getParameter('db_prefix'));
+        DBConfig::setDBPrefix(Application::getParameter('db_prefix'));
 
         return self::getInstance()->DBH;
     }

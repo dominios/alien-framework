@@ -2,7 +2,7 @@
 
 namespace Alien\Models\Content;
 
-use Alien\Alien;
+use Alien\Application;
 use Alien\DBConfig;
 use Alien\Forms\Form;
 use Alien\Forms\Input;

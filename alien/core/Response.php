@@ -11,7 +11,7 @@ class Response {
     private $data;
     private $action;
 
-    public function __construct($status = self::OK, $data = null, $action = '') {
+    public function __construct($data = null, $status = self::OK, $action = '') {
         $this->status = $status;
         $this->data = $data;
         $this->action = $action;
