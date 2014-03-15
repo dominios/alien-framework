@@ -20,25 +20,7 @@ class BaseController {
     private static $instance = null;
 
     public final function __construct($args = null) {
-        Application::getInstance()->getConsole()->putMessage('Using <i>' . get_called_class() . '</i>');
-        // inicializuje pole, prednost ma POST, potom sa prida akcia z konstruktora (GET)
-//        $actions = array();
-//       if(@isset($_POST['action'])){
-//           $actions[] = $_POST['action'];
-//       }
-//        $actions[] = $action;
-//var_dump($actions); die;
-//       if(sizeof($_GET)){
-//           $actions[] = $_GET[key($_GET)];
-//       }
-//       if(@isset($_GET['action'])){
-//           $actions[] = $_GET['action'];
-//       }
-//       if(!sizeof($actions)){
-//           $actions[] = $this->defaultAction;
-//       }
-//       $this->actions = $actions;
-
+//        Application::getInstance()->getConsole()->putMessage('Using <i>' . get_called_class() . '</i>');
         if (is_array($args)) {
             $this->actions = $args;
         } else {
@@ -70,11 +52,12 @@ class BaseController {
         }
         $this->setLayout($layout);
 
-        return new Response(Response::OK, Array(
-            'Title' => 'HOME',
-            'LeftTitle' => Authorization::getCurrentUser()->getLogin(),
-            'ContentLeft' => Array(Array('url' => BaseController::actionURL('', 'logout'), 'img' => 'logout.png', 'text' => 'Odhlásiť'))
-        ), __CLASS__ . '::' . __FUNCTION__);
+        return new Response(array(
+                'Title' => 'HOME',
+                'LeftTitle' => Authorization::getCurrentUser()->getLogin(),
+                'ContentLeft' => Array(Array('url' => BaseController::actionURL('', 'logout'), 'img' => 'logout.png', 'text' => 'Odhlásiť'))
+            )
+        );
     }
 
     private final function doActions() {
@@ -132,6 +115,48 @@ class BaseController {
         header('Location: ' . $action, false, $statusCode);
         ob_end_flush();
         exit;
+    }
+
+    public static function parseRequest() {
+        $actionsArray = array();
+        # najprv POST
+        if (@sizeof($_POST)) {
+            $arr = explode('/', $_POST['action'], 2);
+            $controller = $arr[0];
+            $actionsArray[] = $arr[1];
+        }
+
+        $request = str_replace('/alien', '', $_SERVER['REQUEST_URI']);
+        $keys = explode('/', $request, 4);
+        // zacina sa / takze na indexe 0 je prazdny string
+        // 1 - controller
+        // 2 - akcia
+        // 3 - zatial zvysok parametre (GET)
+        if (empty($controller)) {
+            $controller = $keys[1];
+        }
+        if ($keys[2] !== null) {
+            $actionsArray[] = $keys[2];
+        }
+        $params = explode('/', preg_replace('/\?.*/', '', $keys[3])); // vyhodi vsetko ?... cize "stary get"
+
+        if (count($params) >= 2) {
+            unset($_GET);
+            for ($i = 0; $i < count($params); $i++) {
+                $_GET[$params[$i++]] = $params[$i];
+            }
+        } else {
+            unset($_GET);
+            $_GET['id'] = $params[0];
+        }
+
+
+        $controller = __NAMESPACE__ . '\\' . ucfirst($controller) . 'Controller';
+
+        return array(
+            'controller' => $controller,
+            'actions' => $actionsArray
+        );
     }
 
     public static function actionURL($controller, $action, $params = null) {
