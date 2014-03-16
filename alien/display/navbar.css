@@ -80,7 +80,7 @@
 }
 
 .navbar ul li:not(.navbar-search):hover a {
-    color: #fff;
+    color: #e6e6e6;
 }
 
 .navbar li.highlight {
@@ -88,7 +88,7 @@
 }
 
 .navbar li.highlight a {
-    color: #fff;
+    color: #e6e6e6;
 }
 
 .navbar li.highlight, .navbar li:hover:not(.navbar-no-hover) {
@@ -97,7 +97,7 @@
 
 .navbar li.highlight a .icon,
 .navbar ul li:not(.navbar-search):hover a .icon {
-    opacity: 1;
+    opacity: 0.9;
 }
 
 .navbar .submenu {
