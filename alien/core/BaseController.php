@@ -15,7 +15,7 @@ use Alien\View;
 
 class BaseController {
 
-    protected $defaultAction = 'NOP';
+    protected $defaultAction = 'loginScreen';
     protected $actions;
     private $layout;
     private static $currentController;
@@ -230,6 +230,10 @@ class BaseController {
 
     protected final function NOP() {
         throw new \BadFunctionCallException();
+    }
+
+    protected function loginScreen(){
+
     }
 
     protected function error404($arg) {

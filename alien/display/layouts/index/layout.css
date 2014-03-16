@@ -55,6 +55,33 @@ hr, .hr {
     box-shadow: 0 0 5px 2px #444;
 }
 
+#toppanel.navbar, #toppanel.navbar ul:not(.submenu), #toppanel .navbar-header {
+    height: 60px;
+}
+
+#toppanel.navbar ul li {
+    line-height: 58px;
+    height: 57px;
+}
+
+#toppanel.navbar ul li a {
+    line-height: 2em;
+    padding: 0 16px;
+}
+
+#toppanel.navbar ul li a .icon:not(.icon-xs) {
+    display: block;
+    margin: 3px auto 5px;
+    background-size: 1.5em;
+}
+
+#toppanel.navbar ul li ul.submenu li a .icon {
+    display: inline-block;
+    margin: inherit;
+    margin-right: 7px;
+    background-size: 1.4em;
+}
+
 #container {
     padding-left: 235px;  /* LC fullwidth */
     padding-right: 100px; /* RC fullwidth + CC padding */
