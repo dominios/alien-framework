@@ -5,7 +5,7 @@ namespace Alien\Models\Content;
 use Alien\Application;
 use \PDO;
 
-class CodeItem extends ContentItem {
+class CodeItem extends Item {
 
     const BROWSEABLE = true;
 
@@ -41,5 +41,8 @@ class CodeItem extends ContentItem {
         // TODO: Implement actionDrop() method.
     }
 
+    public static function getList() {
+        return array();
+    }
 }
 

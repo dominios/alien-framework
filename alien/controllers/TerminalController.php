@@ -8,8 +8,8 @@ use Alien\Response;
 
 class TerminalController extends BaseController {
 
-    protected function init_action() {
-        parent::init_action();
+    protected function initialize() {
+        parent::initialize();
     }
 
     public function help() {

@@ -139,11 +139,11 @@ class Template extends Layout implements ActiveRecord, FileInterface {
         $blocks = Array();
         $DBH = Application::getDatabaseHandler();
         $query = 'SELECT b.* FROM ' . DBConfig::table(DBConfig::BLOCKS) . ' b'
-                . ' JOIN ' . DBConfig::table(DBConfig::WIDGETS) . ' w ON b.id_b = w.container'
+                . ' JOIN ' . DBConfig::table(DBConfig::WIDGETS) . ' w ON b.id = w.container'
                 . ' WHERE w.template = "' . (int) $this->id . '"'
                 . ' GROUP BY w.container;';
         foreach ($DBH->query($query) as $row) {
-            $blocks[] = new TemplateBlock($row['id_b'], $row);
+            $blocks[] = new TemplateBlock($row['id'], $row);
         }
         $this->blocks = $blocks;
         return $blocks;

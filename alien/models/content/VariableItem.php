@@ -5,7 +5,7 @@ namespace Alien\Models\Content;
 use Alien\Application;
 use \PDO;
 
-class VariableItem extends ContentItem {
+class VariableItem extends Item {
 
     const BROWSEABLE = false;
 

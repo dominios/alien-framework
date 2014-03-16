@@ -166,7 +166,7 @@ class Folder implements FileInterface {
             $STH->bindValue(':idf', (int) $this->id, PDO::PARAM_INT);
             $STH->execute();
             while ($row = $STH->fetch()) {
-                $this->items[] = ContentItem::getSpecificItem($row['id_i'], $row['id_type'], $row);
+                $this->items[] = Item::factory($row['id_i'], $row['id_type'], $row);
 //                if(($row['id_type']) == 1 || $row['id_type'] == 11) continue;
 ////                $item=ContentItem::getSpecificItem($row['id_i']);
 //                $item=ContentItem::getSpecificItem(null, $row);

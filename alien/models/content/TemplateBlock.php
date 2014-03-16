@@ -19,13 +19,13 @@ class TemplateBlock implements FileInterface, ActiveRecord {
         if ($row === null) {
             $DBH = Application::getDatabaseHandler();
             $Q = $DBH->prepare('SELECT * FROM ' . DBConfig::table(DBConfig::BLOCKS)
-                . ' WHERE id_b=:i'
+                . ' WHERE id=:i'
                 . ' LIMIT 1;');
             $Q->bindValue(':i', $id, PDO::PARAM_INT);
             $Q->execute();
             $row = $Q->fetch();
         }
-        $this->id = $row['id_b'];
+        $this->id = $row['id'];
         $this->label = $row['label'];
     }
 
@@ -44,8 +44,10 @@ class TemplateBlock implements FileInterface, ActiveRecord {
             $query = 'SELECT * FROM ' . DBConfig::table(DBConfig::WIDGETS)
                 . ' WHERE container = "' . (int) $this->id . '";';
             foreach ($DBH->query($query) as $row) {
-                $ret[] = Widget::getSpecificWidget($row['id_v'], $row['id_type'], $row);
+                $ret[] = Widget::factory($row['id'], $row['type'], $row);
             }
+        } else {
+            throw new \UnexpectedValueException("Template cannot be null!");
         }
         return $ret;
     }

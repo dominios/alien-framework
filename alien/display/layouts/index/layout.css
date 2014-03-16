@@ -41,10 +41,9 @@ hr, .hr {
     width: 100%;
     height: 1px;
     line-height: 1px;
-    margin-left: 5px;
     background-color: #fff;
     box-shadow: 1px 1px 3px #888;
-    margin: 10px 0px;
+    margin: 10px 0;
 }
 
 #toppanel {

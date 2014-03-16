@@ -2,23 +2,23 @@
 
 namespace Alien;
 
+use Alien\Controllers\BaseController;
+use Alien\Layout\ErrorLayout;
 use \PDO;
 use \DateTime;
 
 final class Application {
 
-    public static $SystemImgUrl = '/alien/display/img/';
     private static $instance;
     private $DBH = null;
-    private $system_settings;
-    private $queryCounter = null;
+    private $systemSettings;
     private $console;
 
     private function __construct() {
         $this->loadConfig();
         $this->console = Terminal::getInstance();
-        date_default_timezone_set($this->system_settings['timezone']);
-        $this->connectToDatabase($this->system_settings['db_host'], $this->system_settings['db_database'], $this->system_settings['db_username'], $this->system_settings['db_password']);
+        date_default_timezone_set($this->systemSettings['timezone']);
+        $this->connectToDatabase($this->systemSettings['db_host'], $this->systemSettings['db_database'], $this->systemSettings['db_username'], $this->systemSettings['db_password']);
     }
 
     public static final function getInstance() {
@@ -28,12 +28,38 @@ final class Application {
         return self::$instance;
     }
 
-    public static function boot(){
+    public static function boot() {
         $app = self::getInstance();
     }
 
+    public function run() {
+    ob_clean();
+        header('Content-Type: text/html; charset=utf-8');
+
+        try {
+            $request = BaseController::parseRequest();
+            if (class_exists($request['controller'])) {
+                $controller = new $request['controller']($request['actions']);
+            } else {
+                $controller = new BaseController($request['actions']);
+            }
+
+            $responses = $controller->doActions();
+            foreach ($responses as $response) {
+                $controller->getLayout()->handleResponse($response);
+            }
+            $content = $controller->getLayout()->__toString();
+            return $content;
+
+        } catch(\BadFunctionCallException $e){
+            $controller->forceAction('error404', $e);
+        } catch(\Exception $e){
+            $controller->forceAction('error500', $e);
+        }
+    }
+
+
     /**
-     *
      * @return Terminal
      * @deprecated
      */
@@ -52,19 +78,14 @@ final class Application {
      * @return PDO database handler
      */
     private final function connectToDatabase($host, $database, $username, $password) {
-//        include 'class.alien.pdo.php';
         try {
             # MySQL with PDO_MYSQL
             $DBH = new PDO("mysql:host=$host;dbname=$database;charset=utf8", $username, $password);
             $DBH->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_WARNING); // ZMENIT POTOM LEN NA EXCEPTION
             $DBH->query('SET NAMES utf8');
-            $sql = $DBH->query('SHOW SESSION STATUS LIKE "Queries";')->fetch();
-            $this->queryCounter = $sql['Value'];
         } catch (PDOException $e) {
             header("HTTP/1.1 503 Service Unavailable");
             die('error 503 connect na databazu, prerobit na error hlasku!');
-//            include 'alien/error/Error500.html';
-            exit;
         }
         /* nastavenie timezone */
         $now = new DateTime();
@@ -109,7 +130,7 @@ final class Application {
      * nacita konfigiracny subor
      */
     private final function loadConfig() {
-        $this->system_settings = parse_ini_file('config.ini');
+        $this->systemSettings = parse_ini_file('config.ini');
     }
 
     /**
@@ -118,7 +139,7 @@ final class Application {
      * @return mixed hodnota
      */
     public static final function getParameter($param) {
-        return self::getInstance()->system_settings[$param];
+        return self::getInstance()->systemSettings[$param];
     }
 
 }

@@ -12,10 +12,10 @@ use Alien\Forms\Users\EditForm as ProfilForm;
 
 class DashboardController extends BaseController {
 
-    protected function init_action() {
+    protected function initialize() {
         $this->defaultAction = 'NOP';
 
-        $parentResponse = parent::init_action();
+        $parentResponse = parent::initialize();
         if ($parentResponse instanceof Response) {
             $data = $parentResponse->getData();
         }

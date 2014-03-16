@@ -13,13 +13,13 @@ class CodeItemWidget extends Widget {
     const ICON = 'code';
     const NAME = 'HTML kód';
     const TYPE = 'CodeItem';
-    const DEFAULT_SCRIPT = 'CodeItem.php';
+    const DEFAULT_SCRIPT = 'default.php';
 
     public function __construct($id, $row = null) {
         parent::__construct($id, $row);
     }
 
-    public function renderToString(ContentItem $item = null) {
+    public function renderToString(Item $item = null) {
 //        $item = $item instanceof ContentItem ? $item : $this->getItem(true);
         $params = $this->getParams();
         $view = $this->getView();

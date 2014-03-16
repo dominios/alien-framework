@@ -21,12 +21,12 @@ use Alien\Models\Authorization\Authorization;
 </script>
 <?
 
-if (!function_exists('topmenuItemToString')) {
+if (!function_exists('\Alien\Layout\topmenuItemToString')) {
 
     function topmenuItemToString($item) {
 
         if (!in_array($item['permission'], array('', NULL)) && !Authorization::getCurrentUser()->hasPermission((string) $item['permission'])) {
-            return;
+            return "";
         }
 
         $link = '';
@@ -87,8 +87,3 @@ $menu .= '</li>';
 $menu .= '</ul>';
 
 echo $menu;
-
-
-
-
-//$menu .= '<li class="" style="float: right;"><a href="/alien//logout"><span class="icon icon-logout-light"></span>Odhlásiť</a></li>';

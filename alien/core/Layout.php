@@ -15,8 +15,13 @@ abstract class Layout {
     const useConsole = false;
 
     protected $notificationContainer = null;
-    protected $console;
+    protected $terminal;
+    protected $metaScripts = array();
+    protected $metaStylesheets = array();
 
+    /**
+     * TODO error vyriesit cez exception, tato logika tu nepatri
+     */
     public function __construct() {
 
         $Class = get_called_class();
@@ -29,19 +34,13 @@ abstract class Layout {
         }
     }
 
-    public static final function includeSRC() {
-        include_once 'layouts/IndexLayout.php';
-        include_once 'layouts/LoginLayout.php';
-    }
-
     public abstract function getPartials();
 
     public abstract function handleResponse(Response $response);
 
-    public final function renderToString() {
+    public final function __toString() {
 
         $Class = get_called_class();
-//        $view = new View($Class::SRC, null);
 
         $view = new View($this->getSRC());
 
@@ -68,6 +67,17 @@ abstract class Layout {
             }
         }
 
+        $scripts = '';
+        foreach ($this->metaScripts as $script) {
+            $scripts .= "<script type=\"$script[type]\" src=\"$script[src]\"></script>\n";
+        }
+        $view->metaScripts = $scripts;
+        $styles = '';
+        foreach ($this->metaStylesheets as $style) {
+            $styles .= "<link type=\"$style[type]\"  href=\"$style[href]\" rel=\"$style[rel]\">\n";
+        }
+        $view->metaStylesheets = $styles;
+
         if ($Class::useConsole) {
             if ((true || Application::getParameter('debugMode')) && Authorization::getCurrentUser()->getId()) {
                 $console = new View('display/system/console.php', null);
@@ -90,4 +100,37 @@ abstract class Layout {
         return $class::SRC;
     }
 
+    protected function appendStylesheet($href, $type = null, $rel = null) {
+        $style = array(
+            'href' => $href,
+            'type' => is_null($type) ? 'text/css' : $type,
+            'rel' => is_null($rel) ? 'stylesheet' : $rel
+        );
+        array_push($this->metaStylesheets, $style);
+    }
+
+    protected function prependStylesheet($href, $type = null, $rel = null) {
+        $style = array(
+            'href' => $href,
+            'type' => is_null($type) ? 'text/css' : $type,
+            'rel' => is_null($rel) ? 'stylesheet' : $rel
+        );
+        array_unshift($this->metaStylesheets, $style);
+    }
+
+    protected function appendScript($src, $type = null) {
+        $script = array(
+            'src' => $src,
+            'type' => is_null($type) ? 'text/javascript' : $type
+        );
+        array_push($this->metaScripts, $script);
+    }
+
+    protected function prependScript($src, $type = null) {
+        $script = array(
+            'src' => $src,
+            'type' => is_null($type) ? 'text/javascript' : $type
+        );
+        array_unshift($this->metaScripts, $script);
+    }
 }

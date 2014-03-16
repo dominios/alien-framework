@@ -6,9 +6,9 @@ use Alien\Application;
 use Alien\DBConfig;
 use \PDO;
 
-abstract class ContentItem implements FileInterface {
+abstract class Item implements FileInterface {
 
-    const Icon = 'file_unknown.png';
+    const Icon = 'file-unknown';
 
     protected $id;
     protected $name;
@@ -25,7 +25,7 @@ abstract class ContentItem implements FileInterface {
             $Q->bindValue(':i', $id, PDO::PARAM_INT);
             $Q->execute();
             if (!$Q->rowCount()) {
-                return null;
+                return;
             }
             $row = $Q->fetch();
         }
@@ -48,21 +48,19 @@ abstract class ContentItem implements FileInterface {
 
     public abstract function getType();
 
-    public static final function getSpecificItem($idItem, $row = null) {
+    public static abstract function getList();
 
-        if ($row === null) {
-
+    public static final function factory($itemId, $row = null) {
+        if ($row === null && is_numeric($itemId)) {
             $DBH = Application::getDatabaseHandler();
             $row = $DBH->query('SELECT * FROM ' . DBConfig::table(DBConfig::ITEMS)
-                            . ' WHERE id = "' . (int) $idItem . '"'
-                            . ' LIMIT 1;')->fetch();
+                . ' WHERE id = "' . (int) $itemId . '"'
+                . ' LIMIT 1;')->fetch();
         }
-
         if (sizeof($row) && $row !== null) {
-
             $classname = __NAMESPACE__ . '\\' . $row['type'];
             if (class_exists($classname)) {
-                $item = new $classname($idItem, $row);
+                $item = new $classname($itemId, $row);
                 return $item;
             }
         }
@@ -73,8 +71,17 @@ abstract class ContentItem implements FileInterface {
         return (int) $this->container;
     }
 
+    /**
+     * @return string
+     * @deprecated
+     */
     public function renderToString() {
-        return $this->content;
+        return $this->__toString();
+    }
+
+    public function __toString() {
+//        return $this->content;
+        throw new Exception('Cannot convert item to string!');
     }
 
     public function getFolder() {

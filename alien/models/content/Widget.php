@@ -59,19 +59,19 @@ abstract class Widget implements FileInterface, ActiveRecord {
     }
 
     /**
-     * @param $idView
-     * @param null $idType
-     * @param null $row
+     * @param $widgetId
+     * @param null|string $type
+     * @param null|array $row
      * @return Widget|null
      */
-    public static final function getSpecificWidget($idView, $idType = null, $row = null) {
+    public static final function factory($widgetId, $type = null, $row = null) {
 
         if ($row === null) {
 
-            if ($idType !== null) {
-                $cond = 'type = ' . $idType;
+            if ($type !== null) {
+                $cond = 'type = ' . $type;
             } else {
-                $cond = 'id = ' . (int) $idView;
+                $cond = 'id = ' . (int) $widgetId;
             }
 
             $DBH = Application::getDatabaseHandler();
@@ -83,14 +83,16 @@ abstract class Widget implements FileInterface, ActiveRecord {
         if (sizeof($row) && $row !== null) {
             $classname = __NAMESPACE__ . '\\' . $row['type'];
             if (class_exists($classname)) {
-                $widget = new $classname($idView, $row);
+                $widget = new $classname($widgetId, $row);
                 return $widget;
+            } else {
+                throw new \RuntimeException("Undefined widget class '$classname'");
             }
         }
         return null;
     }
 
-    public abstract function renderToString(ContentItem $item = null);
+    public abstract function renderToString(Item $item = null);
 
     public abstract function getCustomFormElements();
 
@@ -152,14 +154,14 @@ abstract class Widget implements FileInterface, ActiveRecord {
             return null;
         }
         if ($fetch) {
-            if ($this->item instanceof ContentItem) {
+            if ($this->item instanceof Item) {
                 return $this->item;
             } else {
-                $this->item = ContentItem::getSpecificItem($this->item);
+                $this->item = Item::factory($this->item);
                 return $this->item;
             }
         } else {
-            if ($this->item instanceof ContentItem) {
+            if ($this->item instanceof Item) {
                 return $this->item->getId();
             } else {
                 return $this->item;
@@ -168,13 +170,13 @@ abstract class Widget implements FileInterface, ActiveRecord {
     }
 
     public function fetchItem() {
-        if (!($this->item instanceof ContentItem)) {
-            $this->item = ContentItem::getSpecificItem($this->item);
+        if (!($this->item instanceof Item)) {
+            $this->item = Item::factory($this->item);
         }
         return $this->item;
     }
 
-    public function setItem(ContentItem $item) {
+    public function setItem(Item $item) {
         $this->item = $item;
     }
 
@@ -278,7 +280,7 @@ abstract class Widget implements FileInterface, ActiveRecord {
         $Q->bindValue(':v', $initialValues['visible'], PDO::PARAM_BOOL);
         $Q->bindValue(':p', $initialValues['position'], PDO::PARAM_STR);
         $Q->bindValue(':c', $initialValues['container'], PDO::PARAM_INT);
-        return $Q->execute() ? Widget::getSpecificWidget($DBH->lastInsertId()) : null;
+        return $Q->execute() ? Widget::factory($DBH->lastInsertId()) : null;
     }
 
     public static function exists($id) {
@@ -322,6 +324,5 @@ abstract class Widget implements FileInterface, ActiveRecord {
         $this->script = $script;
         return $this;
     }
-
 
 }

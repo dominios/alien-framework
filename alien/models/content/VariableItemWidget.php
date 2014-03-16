@@ -37,14 +37,14 @@ class VariableItemWidget extends Widget {
 
     public function fetchViews(ContentPage $page) {
 
-        if (!$this->getItem(true) instanceof ContentItem) {
+        if (!$this->getItem(true) instanceof Item) {
             return Array();
         } else {
             if ($this->items === null) {
                 $arr = Array();
                 $DBH = Application::getDatabaseHandler();
                 foreach ($DBH->query('SELECT * FROM ' . Application::getDBPrefix() . '_content_views WHERE id_c=' . (int) $this->getItem(true)->getContainer() . ' && id_p = ' . $page->getId()) as $row) {
-                    $item = Widget::getSpecificWidget($row['id_v'], $row['id_type'], $row);
+                    $item = Widget::factory($row['id_v'], $row['id_type'], $row);
                     if ($item instanceof Widget) {
                         $arr[] = $item;
                     }

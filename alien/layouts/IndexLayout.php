@@ -23,6 +23,26 @@ class IndexLayout extends Layout {
 
     public function __construct() {
         $this->mainMenu = $this->generateTopMenu($this->topmenuItems());
+        $this->prependScript('/alien/js/jquery-ui.js');
+        $this->prependScript('/alien/js/jquery-1.8.0.min.js');
+        $this->appendScript('/alien/js/alien.js');
+        $this->appendScript('/alien/js/alien2.js');
+        $this->appendScript('/alien/js/tabs.js');
+        $this->appendScript('/alien/js/modals.js');
+        $this->appendScript('/alien/plugins/ckeditor/ckeditor.js');
+        $this->prependStylesheet('/alien/display/layouts/index/alien2.css');
+        $this->prependStylesheet('/alien/display/layouts/index/alien.css');
+        $this->prependStylesheet('/alien/display/alien-theme/jquery-ui-1.10.3.custom.css');
+        $this->appendStylesheet('/alien/display/icons.css');
+        $this->appendStylesheet('/alien/display/badges.css');
+        $this->appendStylesheet('/alien/display/forms.css');
+        $this->appendStylesheet('/alien/display/modals.css');
+        $this->appendStylesheet('/alien/display/alerts.css');
+        $this->appendStylesheet('/alien/display/navbar.css');
+        $this->appendStylesheet('/alien/display/sidebar.css');
+        $this->appendStylesheet('/alien/display/tabs.css');
+        $this->appendStylesheet('/alien/display/icons-data.css');
+        $this->appendStylesheet('/alien/display/layouts/index/layout.css');
     }
 
     public function getPartials() {

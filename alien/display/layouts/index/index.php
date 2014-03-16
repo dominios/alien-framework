@@ -7,26 +7,8 @@
         <meta name="author" content="Dominik Geršák">
         <meta name="robots" content="noindex, nofollow">
         <link rel="shortcut icon" href="/alien/display/img/favicon.ico">
-        <script type="text/javascript" src="/alien/js/jquery-1.8.0.min.js"></script>
-        <script type="text/javascript" src="/alien/js/jquery-ui.js"></script>
-        <link type="text/css" href="/alien/display/alien-theme/jquery-ui-1.10.3.custom.css" rel="stylesheet">
-        <script type="text/javascript" src="/alien/js/alien.js"></script>
-        <script type="text/javascript" src="/alien/js/alien2.js"></script>
-        <script type="text/javascript" src="/alien/js/tabs.js"></script>
-        <script type="text/javascript" src="/alien/js/modals.js"></script>
-        <link href="/alien/display/layouts/index/alien.css" type="text/css" rel="stylesheet">
-        <link href="/alien/display/layouts/index/alien2.css" type="text/css" rel="stylesheet">
-        <link href="/alien/display/icons.css" type="text/css" rel="stylesheet">
-        <link href="/alien/display/badges.css" type="text/css" rel="stylesheet">
-        <link href="/alien/display/forms.css" type="text/css" rel="stylesheet">
-        <link href="/alien/display/modals.css" type="text/css" rel="stylesheet">
-        <link href="/alien/display/alerts.css" type="text/css" rel="stylesheet">
-        <link href="/alien/display/navbar.css" type="text/css" rel="stylesheet">
-        <link href="/alien/display/sidebar.css" type="text/css" rel="stylesheet">
-        <link href="/alien/display/tabs.css" type="text/css" rel="stylesheet">
-        <link href="/alien/display/icons-data.css" type="text/css" rel="stylesheet">
-        <!-- posledne, mozu byt overridy -->
-        <link href="/alien/display/layouts/index/layout.css" type="text/css" rel="stylesheet">
+        <?=$this->metaScripts; ?>
+        <?=$this->metaStylesheets; ?>
     </head>
     <body>
 
@@ -51,7 +33,6 @@
                 <div id="rightpanelHeader">
                     <h1><?= $this->title; ?></h1>
                     <div class="hr"></div>
-                    <!--<div id="headerActionPanel"><?= $this->actionMenu; ?></div>-->
                 </div>
                 <div style="margin-top: 35px;"><?= $this->mainContent; ?></div>
             </section>

@@ -3,6 +3,7 @@
 namespace Alien\Controllers;
 
 use Alien\Application;
+use Alien\Layout\ErrorLayout;
 use Alien\Terminal;
 use Alien\Response;
 use Alien\Models\Authorization\Authorization;
@@ -10,6 +11,7 @@ use Alien\Models\Authorization\User;
 use Alien\Notification;
 use Alien\Layout\Layout;
 use Alien\Message;
+use Alien\View;
 
 class BaseController {
 
@@ -20,7 +22,6 @@ class BaseController {
     private static $instance = null;
 
     public final function __construct($args = null) {
-//        Application::getInstance()->getConsole()->putMessage('Using <i>' . get_called_class() . '</i>');
         if (is_array($args)) {
             $this->actions = $args;
         } else {
@@ -33,9 +34,7 @@ class BaseController {
         self::$instance = $this;
     }
 
-    protected function init_action() {
-
-//        Alien::getInstance()->getConsole()->putMessage('Called <i>AlienController::init_action()</i>.');
+    protected function initialize() {
 
         self::$currentController = get_called_class();
 
@@ -50,28 +49,22 @@ class BaseController {
         if ($layout::useNotifications) {
             $layout->setNotificationContainer(\Alien\NotificationContainer::getInstance());
         }
+
         $this->setLayout($layout);
 
-        return new Response(array(
-                'Title' => 'HOME',
-                'LeftTitle' => Authorization::getCurrentUser()->getLogin(),
-                'ContentLeft' => Array(Array('url' => BaseController::actionURL('', 'logout'), 'img' => 'logout.png', 'text' => 'Odhlásiť'))
-            )
-        );
     }
 
-    private final function doActions() {
+    public final function doActions() {
 
         $this->actions = array_unique($this->actions);
 
         $responses = Array();
 
-        if (method_exists(get_called_class(), 'init_action')) {
-            $response = $this->init_action();
+        if (method_exists(get_called_class(), 'initialize')) {
+            $response = $this->initialize();
             if ($response instanceof Response) {
                 array_push($responses, $response);
             }
-            Application::getInstance()->getConsole()->putMessage('Called <i>' . get_called_class() . '::init_action()</i>.');
         }
 
         if (!sizeof($this->actions)) {
@@ -79,20 +72,16 @@ class BaseController {
         }
 
         foreach ($this->actions as $action) {
-            Application::getInstance()->getConsole()->putMessage('Calling action: <i>' . get_called_class() . '::' . $action . '</i>()');
             if (!method_exists($this, $action)) {
-                Application::getInstance()->getConsole()->putMessage('Action <i>' . $action . '</i> doesn\'t exist!', Terminal::ERROR);
             }
             if (!method_exists($this, $action) && $action != $this->defaultAction) {
                 $action = $this->defaultAction;
                 $this->redirect($action);
-                Application::getInstance()->getConsole()->putMessage('Calling action <i>' . get_called_class() . '::' . $action . '</i>() instead.');
             }
             $response = $this->$action();
             if ($response instanceof Response) {
                 array_push($responses, $response);
             }
-            Application::getInstance()->getConsole()->putMessage('Action <i>' . $action . '</i>() done.');
         }
 
         return $responses;
@@ -202,16 +191,6 @@ class BaseController {
         return BaseController::actionURL(BaseController::getControllerFromURL($_SERVER['HTTP_REFERER']), BaseController::getActionFromURL($_SERVER['HTTP_REFERER'], true));
     }
 
-    public final function renderToString() {
-        $responses = $this->doActions();
-        foreach ($responses as $response) {
-            $this->getLayout()->handleResponse($response);
-//            AlienConsole::getInstance()->putMessage('Response from <i>'.$response->getAction().'</i> handled.');
-        }
-        $content = $this->layout->renderToString();
-        return $content;
-    }
-
     private function login() {
         if (isset($_POST['loginFormSubmit'])) {
             if (!Authorization::getInstance()->isLoggedIn()) {
@@ -244,15 +223,43 @@ class BaseController {
         }
     }
 
+    public function forceAction($action, $arg = null){
+        unset($this->actions);
+        return $this->$action($arg);
+    }
+
     protected final function NOP() {
-        return;
+        throw new \BadFunctionCallException();
     }
 
-    protected function error404() {
-
+    protected function error404($arg) {
+        ob_clean();
+        $this->setLayout(new ErrorLayout());
+        header($_SERVER['SERVER_PROTOCOL'] . ' 404 Page Not Found', true, 404);
+        header('Content-Type: text/html; charset=utf-8');
+        $response = new Response(array(
+                'Title' => '404 Page Not Found',
+            )
+        );
+        $this->getLayout()->handleResponse($response);
+        echo $this->getLayout()->__toString();
+        exit;
     }
 
-    protected function error500() {
-
+    protected function error500($arg) {
+        ob_clean();
+        $this->setLayout(new ErrorLayout());
+        header($_SERVER['SERVER_PROTOCOL'] . ' 500 Internal Server Error', true, 500);
+        header('Content-Type: text/html; charset=utf-8');
+        $partialView = new View('display/layouts/error/partial/500.php');
+        $partialView->exception = $arg;
+        $response = new Response(array(
+                'Title' => '500 Internal Server Error',
+                'ContentMain' => $partialView->renderToString()
+            )
+        );
+        $this->getLayout()->handleResponse($response);
+        echo $this->getLayout()->__toString();
+        exit;
     }
 }

@@ -17,11 +17,11 @@ use Alien\Forms\Users\EditForm;
 
 class UsersController extends BaseController {
 
-    protected function init_action() {
+    protected function initialize() {
 
         $this->defaultAction = 'viewList';
 
-        $parentResponse = parent::init_action();
+        $parentResponse = parent::initialize();
         if ($parentResponse instanceof Response) {
             $data = $parentResponse->getData();
         }

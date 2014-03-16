@@ -137,20 +137,13 @@ table .itemRow img {
 /* *** ITEMS - GRID *********************************************************** */
 
 .item {
-
     padding: 3px;
     padding-left: 4px;
     margin-left: 5px;
     margin-top: 5px;
     margin-right: 7px;
-
     color: #555;
     position: relative;
-
-    background-color: rgba(250, 250, 255, 0.4);
-    border: 1px solid #bbb;
-    border-radius: 2px;
-    box-shadow: 1px 1px 6px #c5c5c5;
     border-radius: 2px;
     -webkit-transition: box-shadow 0.2s, border 0.2s, border-color 0.2s, background-color 0.2s, color 0.2s;
     -moz-transition: box-shadow 0.2s, border 0.2s, border-color 0.2s, background-color 0.2s, color 0.2s;
@@ -184,19 +177,18 @@ table .itemRow img {
 .gridLayout .itemText {
     text-align: center;
     margin-top: 3px;
-    color: #333;
+    color: #666;
+    text-shadow: 1px 1px #E7E7E7;
     font-size: 14px;
     line-height: 18px;
     height: 36px;
     width: 100px;
     display: table-cell;
     vertical-align: middle;
-    text-align: center;
 }
 
 .gridLayout .item:hover{
-    border-color: #aaa;
-    background-color: #f7f7f7;
+    background-color: rgba(123, 170, 255, 0.5);
     cursor: pointer;
 }
 

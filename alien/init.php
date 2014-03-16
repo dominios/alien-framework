@@ -63,18 +63,12 @@ function class_autoloader($class) {
         }
     }
 
-    // vypis do terminalu co sa kedy autoloaduje
-//    Alien::getInstance()->getConsole()->putMessage('Autoloading class <i>' . '\\' . $class . '</i>');
-
-
     // controllery
     if (preg_match('/(.*)Controller$/', $class)) {
         $class = str_replace('Controllers\\', '', $class);
         $file = 'controllers/' . $class . '.php';
         if (file_exists($file)) {
             include_once $file;
-        } else {
-//            Alien::getInstance()->getConsole()->putMessage('Autoloading class failed <i>' . $file . '</i>', Terminal::ERROR);
         }
         return;
     }
@@ -89,7 +83,6 @@ function class_autoloader($class) {
         if (file_exists($file)) {
             include_once $file;
         } else {
-//            Alien::getInstance()->getConsole()->putMessage('Autoloading class failed <i>' . $file . '</i>', Terminal::ERROR);
             $file = 'models/' . $dir . '/' . $class . 'Interface' . '.php';
             if (file_exists($file)) {
                 include_once $file;

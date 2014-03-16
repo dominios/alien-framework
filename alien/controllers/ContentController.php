@@ -4,6 +4,7 @@ namespace Alien\Controllers;
 
 use Alien\Application;
 use Alien\Forms\Content\WidgetForm;
+use Alien\Models\Content\TextItem;
 use Alien\View;
 use Alien\Response;
 use Alien\Notification;
@@ -19,9 +20,9 @@ use PDO;
 
 class ContentController extends BaseController {
 
-    protected function init_action() {
+    protected function initialize() {
 
-        $parentResponse = parent::init_action();
+        $parentResponse = parent::initialize();
         if ($parentResponse instanceof Response) {
             $data = $parentResponse->getData();
         }
@@ -33,7 +34,7 @@ class ContentController extends BaseController {
         $menuItems[] = Array('permissions' => null, 'url' => BaseController::actionURL('template', 'viewAll'), 'img' => 'template', 'text' => 'Šablóny', 'regex' => 'template');
         $menuItems[] = Array('permissions' => null, 'url' => BaseController::actionURL('template', 'viewBlocks'), 'img' => 'puzzle', 'text' => 'Boxy šablón', 'regex' => 'block');
         $menuItems[] = Array('permissions' => null, 'url' => BaseController::actionURL('content', 'viewBoxes'), 'img' => 'box', 'text' => 'Skupiny objektov');
-        $menuItems[] = Array('permissions' => null, 'url' => BaseController::actionURL('content', 'viewTexts'), 'img' => 'document', 'text' => 'Texty');
+        $menuItems[] = Array('permissions' => null, 'url' => BaseController::actionURL('textItem', 'viewAll'), 'img' => 'document', 'text' => 'Texty');
         $menuItems[] = Array('permissions' => null, 'url' => BaseController::actionURL('content', 'viewGalleries'), 'img' => 'gallery', 'text' => 'Galérie');
         $menuItems[] = Array('permissions' => null, 'url' => BaseController::actionURL('content', 'viewNews'), 'img' => 'magazine', 'text' => 'Novinky');
         $menuItems[] = Array('permissions' => null, 'url' => BaseController::actionURL('content', 'viewDocuments'), 'img' => 'book-stack', 'text' => 'Dokumenty');
@@ -63,6 +64,10 @@ class ContentController extends BaseController {
                 $items = TemplateBlock::getList(true);
                 $name = 'blokov šablón';
                 break;
+            case 'text':
+                $items = TextItem::getList();
+                $name = 'textových objektov';
+                break;
             default:
                 $items = array();
                 break;
@@ -73,7 +78,6 @@ class ContentController extends BaseController {
         $view = new View('display/content/viewList.php');
         $view->items = $items;
         $view->buttonNew = $newButton;
-
 
         return new Response(array(
                 'Title' => 'Zoznam ' . $name,
@@ -123,7 +127,7 @@ class ContentController extends BaseController {
             $this->redirect(BaseController::actionURL('content', 'browser'));
         }
 
-        $widget = Widget::getSpecificWidget($_GET['id']);
+        $widget = Widget::factory($_GET['id']);
         $form = WidgetForm::create($widget);
 
         if ($form->isPostSubmit()) {
@@ -159,7 +163,7 @@ class ContentController extends BaseController {
             Notification::ERROR('Neplatný identifikátor widgetu.');
             return;
         } else {
-            $widget = Widget::getSpecificWidget($_GET['id']);
+            $widget = Widget::factory($_GET['id']);
             $widget->delete();
             $redirectAction = BaseController::actionURL(BaseController::getControllerFromURL($_SERVER['HTTP_REFERER']), BaseController::getActionFromURL($_SERVER['HTTP_REFERER'], true));
             $this->redirect($redirectAction);

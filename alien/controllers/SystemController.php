@@ -13,9 +13,9 @@ use Alien\Controllers\BaseController;
 
 class SystemController extends BaseController {
 
-    protected function init_action() {
+    protected function initialize() {
 
-        $parentResponse = parent::init_action();
+        $parentResponse = parent::initialize();
         if ($parentResponse instanceof Response) {
             $data = $parentResponse->getData();
         }

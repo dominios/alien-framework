@@ -78,3 +78,8 @@ function convertAccentsAndSpecialToNormal($string) {
 
     return $string;
 }
+
+function stripNamespace($className){
+    $nsw = explode('\\', $className);
+    return end($nsw);
+}
