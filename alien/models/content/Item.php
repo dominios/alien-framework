@@ -2,11 +2,12 @@
 
 namespace Alien\Models\Content;
 
+use Alien\ActiveRecord;
 use Alien\Application;
 use Alien\DBConfig;
 use \PDO;
 
-abstract class Item implements FileInterface {
+abstract class Item implements ActiveRecord, FileInterface {
 
     const Icon = 'file-unknown';
 
@@ -38,6 +39,14 @@ abstract class Item implements FileInterface {
         $this->content = $row['content'];
     }
 
+    public static function exists($id) {
+        $dbh = Application::getDatabaseHandler();
+        $q = $dbh->prepare('SELECT 1 FROM ' . DBConfig::table(DBConfig::ITEMS) . ' WHERE id=:id LIMIT 1;');
+        $q->bindValue(':id', $id, PDO::PARAM_INT);
+        $q->execute();
+        return (bool) $q->rowCount();
+    }
+
     public function getId() {
         return $this->id;
     }
@@ -48,8 +57,13 @@ abstract class Item implements FileInterface {
 
     public abstract function getType();
 
-    public static abstract function getList();
+    public static abstract function getList($fetch = false);
 
+    /**
+     * @param $itemId
+     * @param null|array $row
+     * @return Item|null
+     */
     public static final function factory($itemId, $row = null) {
         if ($row === null && is_numeric($itemId)) {
             $DBH = Application::getDatabaseHandler();
@@ -66,6 +80,24 @@ abstract class Item implements FileInterface {
         }
         return null;
     }
+
+    public abstract function update();
+
+    public function delete() {
+        // TODO: Implement delete() method.
+    }
+
+    public abstract function isDeletable();
+
+    public abstract static function create($initialValues);
+
+    public abstract function isBrowseable();
+
+    public abstract function actionGoTo();
+
+    public abstract function actionEdit();
+
+    public abstract function actionDrop();
 
     public function getContainer() {
         return (int) $this->container;
@@ -90,6 +122,30 @@ abstract class Item implements FileInterface {
 
     public function getIcon() {
         return self::Icon;
+    }
+
+    public function getContent() {
+        return $this->content;
+    }
+
+    public function setName($name) {
+        $this->name = $name;
+        return $this;
+    }
+
+    public function setContent($content) {
+        $this->content = $content;
+        return $this;
+    }
+
+    public function setContainer($container) {
+        $this->container = $container;
+        return $this;
+    }
+
+    public function setFolder($folder) {
+        $this->folder = $folder;
+        return $this;
     }
 
 }

@@ -20,6 +20,10 @@ input, button, .button, select, option, textarea {
     -webkit-transition-timing-function: ease;
 }
 
+textarea.ckeditor {
+    height: 500px;
+    width: 100%;
+}
 
 select {
     padding: 2px;

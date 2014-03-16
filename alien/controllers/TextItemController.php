@@ -4,6 +4,8 @@ namespace Alien\Controllers;
 
 use Alien\Application;
 use Alien\Forms\Content\PageForm;
+use Alien\Forms\Content\TextItemForm;
+use Alien\Models\Content\Item;
 use Alien\Models\Content\TextItem;
 use Alien\View;
 use Alien\Response;
@@ -23,4 +25,41 @@ class TextItemController extends ContentController {
     protected function viewAll() {
         return $this->viewList('text');
     }
+
+    protected function edit() {
+
+        if (!preg_match('/^[0-9]*$/', $_GET['id'])) {
+            Notification::error('Neplatný identifikátor objektu!');
+            return '';
+        }
+
+        $item = Item::factory($_GET['id']);
+        $form = TextItemForm::create($item);
+
+        $view = new View('display/content/TextItemForm.php');
+        $view->form = $form;
+
+        if ($form->isPostSubmit()) {
+            if ($form->validate()) {
+                if(Item::exists($_POST['itemId'])){
+                    $item = Item::factory($_POST['itemId']);
+                    $item->setName($_POST['itemName']);
+                    $item->setContent($_POST['itemContent']);
+                    if($item->update()){
+                        Notification::success('Objekt bol uložený.');
+                    } else {
+                        Notification::error('Objekt sa nepodarilo uložiť.');
+                    }
+                    $this->refresh();
+                }
+            }
+        }
+
+        return new Response(array(
+                'Title' => 'Úprava objektu: ' . $item->getName(),
+                'ContentMain' => $view->renderToString()
+            )
+        );
+    }
+
 }

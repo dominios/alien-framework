@@ -65,7 +65,7 @@ class ContentController extends BaseController {
                 $name = 'blokov šablón';
                 break;
             case 'text':
-                $items = TextItem::getList();
+                $items = TextItem::getList(true);
                 $name = 'textových objektov';
                 break;
             default:

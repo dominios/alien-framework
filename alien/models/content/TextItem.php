@@ -3,6 +3,7 @@
 namespace Alien\Models\Content;
 
 use Alien\Application;
+use Alien\Controllers\BaseController;
 use Alien\Controllers\TextItemController;
 use Alien\DBConfig;
 use \PDO;
@@ -15,11 +16,11 @@ class TextItem extends Item {
         parent::__construct($id, $row);
     }
 
-    public static function getList() {
+    public static function getList($fetch = false) {
         $ret = array();
         $dbh = Application::getDatabaseHandler();
         foreach ($dbh->query('SELECT * FROM ' . DBConfig::table(DBConfig::ITEMS) . ' WHERE type="' . stripNamespace(__CLASS__) . '";') as $row) {
-            $ret[] = new TextItem($row['id'], $row);
+            $ret[] = $fetch ? new TextItem($row['id'], $row) : $row['id'];
         }
         return $ret;
     }
@@ -28,16 +29,12 @@ class TextItem extends Item {
         return true;
     }
 
-    public static function exists($id) {
-        // TODO: Implement exists() method.
-    }
-
     public function actionGoTo() {
         // TODO: Implement actionGoTo() method.
     }
 
     public function actionEdit() {
-        // TODO: Implement actionEdit() method.
+        return BaseController::actionURL('textItem', 'edit', array('id' => $this->getId()));
     }
 
     public function actionDrop() {
@@ -53,4 +50,20 @@ class TextItem extends Item {
     }
 
 
+    public function update() {
+        $dbh = Application::getDatabaseHandler();
+        $q = $dbh->prepare('UPDATE ' . DBConfig::table(DBConfig::ITEMS) . ' SET name=:nm, content=:cont WHERE id=:id LIMIT 1;');
+        $q->bindValue(':id', $this->getId());
+        $q->bindValue('nm', $this->getName());
+        $q->bindValue(':cont', $this->getContent());
+        return $q->execute();
+    }
+
+    public function isDeletable() {
+        return true;
+    }
+
+    public static function create($initialValues) {
+        // TODO: Implement create() method.
+    }
 }

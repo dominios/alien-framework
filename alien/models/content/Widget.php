@@ -176,7 +176,7 @@ abstract class Widget implements FileInterface, ActiveRecord {
         return $this->item;
     }
 
-    public function setItem(Item $item) {
+    public function setItem(Item $item = null) {
         $this->item = $item;
     }
 
@@ -242,7 +242,7 @@ abstract class Widget implements FileInterface, ActiveRecord {
     public function update() {
         $DBH = Application::getDatabaseHandler();
         $Q = $DBH->prepare('UPDATE ' . DBConfig::table(DBConfig::WIDGETS)
-            . ' SET visible=:v, position=:pos, class=:c, script=:s, params=:parm, page=:pg, template=:tmpl WHERE id=:id LIMIT 1;');
+            . ' SET visible=:v, position=:pos, class=:c, script=:s, params=:parm, page=:pg, template=:tmpl, item=:item WHERE id=:id LIMIT 1;');
 
         $page = $this->getPage(true);
         $pg = $page instanceof Page ? $page->getId() : null;
@@ -252,6 +252,7 @@ abstract class Widget implements FileInterface, ActiveRecord {
         $Q->bindValue(':id', $this->id, PDO::PARAM_INT);
         $Q->bindValue(':pg', $pg);
         $Q->bindValue(':tmpl', $tmpl);
+        $Q->bindValue(':item', $this->getItem());
         $Q->bindValue(':c', $this->class, PDO::PARAM_STR);
         $Q->bindValue(':s', $this->script, PDO::PARAM_STR);
         $Q->bindValue(':v', $this->visible, PDO::PARAM_INT);

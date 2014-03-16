@@ -11,7 +11,7 @@ use \PDO;
 class TextItemWidget extends Widget {
 
     const ICON = 'document';
-    const NAME = 'Text';
+    const NAME = 'Textový objekt';
     const TYPE = 'TextItem';
     const DEFAULT_SCRIPT = 'CodeItem.php';
 
@@ -32,7 +32,7 @@ class TextItemWidget extends Widget {
     }
 
     public function getName() {
-        return self::NAME . ': ' . $this->getParam('text');
+        return self::NAME . ': ' . ($this->getItem(true) === null ? '[prázdny]' : $this->getItem(true)->getName());
     }
 
     public function getType() {
@@ -41,16 +41,21 @@ class TextItemWidget extends Widget {
 
     public function getCustomFormElements() {
         if (is_null($this->formElements)) {
-
+            $selected = null;
             $widetModel = Input::select('widetModel')
                                ->setLabel('Objekt')
                                ->setIcon('icon-document');
-            $widetModel->addOption(new Input\Option('...', 'bbb', '\N'));
-            foreach (TextItem::getList() as $item) {
-                $opt = new Input\Option($item->getName(), $item->getId(), $item->getId());
+            $widetModel->addOption(new Input\Option('...', Input\Option::TYPE_SELECT, '\N'));
+            foreach (TextItem::getList(true) as $item) {
+                $opt = new Input\Option($item->getName(), Input\Option::TYPE_SELECT, $item->getId());
+                if ($this->getItem() == $item->getId()) {
+                    $selected = $opt;
+                }
                 $widetModel->addOption($opt);
             }
-
+            if ($selected !== null) {
+                $widetModel->selectOption($selected);
+            }
 
             $this->formElements = array(
                 $widetModel
@@ -60,7 +65,7 @@ class TextItemWidget extends Widget {
     }
 
     public function handleCustomFormElements(Form $form) {
-        $text = $form->getElement('textWidgetText')->getValue();
-        $this->setParam('text', $text);
+        $idemId = $form->getElement('widetModel')->getValue();
+        $this->setItem(Item::factory($idemId));
     }
 }

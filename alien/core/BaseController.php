@@ -106,6 +106,10 @@ class BaseController {
         exit;
     }
 
+    protected function refresh(){
+        $this->redirect($_SERVER['REQUEST_URI']);
+    }
+
     public static function parseRequest() {
         $actionsArray = array();
         # najprv POST
