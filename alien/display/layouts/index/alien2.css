@@ -100,6 +100,7 @@ table.itemList th {
     color: #222;
     font-weight: normal;
     font-size: 1.2em;
+    font-family: segoe ui light, segoe ui, arial narrow, arial;
 }
 
 table.itemList td {

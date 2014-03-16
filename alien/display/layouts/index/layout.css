@@ -67,6 +67,7 @@ hr, .hr {
 #toppanel.navbar ul li a {
     line-height: 2em;
     padding: 0 16px;
+    font-family: segoe ui light, segoe ui, arial narrow, arial;
 }
 
 #toppanel.navbar ul li a .icon:not(.icon-xs) {

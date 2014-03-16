@@ -34,7 +34,7 @@ select {
 button, .button {
     background-color: rgb(111, 179, 224);
     color: #fff;
-    /*text-shadow: 1px 1px #ddd;*/
+    font-family: segoe ui light, segoe ui, arial narrow, arial;
     border: none;
     margin-right: 4px;
     cursor: pointer;
