@@ -2,6 +2,8 @@
 
 require_once 'alien/init.php';
 
+echo '<pre>';
+
 $request = preg_replace('/^\/{1}/', '', $_SERVER['REQUEST_URI']);
 $requestWords = explode('?', $request, 2);
 $seolink = $requestWords[0];
@@ -9,17 +11,24 @@ if (!strlen($seolink)) {
     $seolink = 1;
 }
 
-$template = new Alien\Models\Content\Template(1);
+echo $page = new \Alien\Models\Content\Page($seolink);
 
-$blocks = $template->fetchBlocks();
-foreach ($blocks as $b) {
-    $widgets = $b->getWidgets($template);
-    foreach ($widgets as $w) {
-        echo $w->getType() . ' | ';
-        echo $w . '<br>';
-    }
 
-}
+
+//print_r($template);
+echo '</pre>';
+
+//$template = new Alien\Models\Content\Template(1);
+//
+//$blocks = $template->fetchBlocks();
+//foreach ($blocks as $b) {
+//    $widgets = $b->getWidgets($template);
+//    foreach ($widgets as $w) {
+//        echo $w->getType() . ' | ';
+//        echo $w . '<br>';
+//    }
+//
+//}
 
 
 

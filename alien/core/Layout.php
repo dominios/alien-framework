@@ -3,6 +3,7 @@
 namespace Alien\Layout;
 
 use Alien\Application;
+use Alien\Models\Content\Widget;
 use Alien\View;
 use Alien\Response;
 use Alien\NotificationContainer;

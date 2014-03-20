@@ -82,15 +82,15 @@ class AjaxController extends BaseController {
         switch ($REQ['type']) {
             case 'php':
                 $pattern = '.*\.php$';
-                $img = 'php.png';
+                $img = 'php';
                 break;
             case 'ini':
                 $pattern = '.*\.ini$';
-                $img = 'service.png';
+                $img = 'service';
                 break;
             case 'css':
                 $pattern = '.*\.css$';
-                $img = 'css.png';
+                $img = 'css';
                 break;
             default:
                 return json_encode(Array('header' => $header, 'content' => 'Invalid request'));
@@ -102,7 +102,7 @@ class AjaxController extends BaseController {
             while (($file = readdir($dh)) !== false) {
                 if (preg_match('/' . $pattern . '/', $file)) {
                     $content .= '<div class="item" onclick="javascript: chooseFile(\'templates/' . $file . '\', \'' . ucfirst($REQ['type']) . '\');">';
-                    $content .= '<img src="' . Application::$SystemImgUrl . '/' . $img . '" style="width: 48px; height: 48px;">';
+                    $content .= '<span class="icon icon-'.$img.'"></span>';
                     $content .= '<div style="position: absolute; bottom: 5px; width: 100px; text-align: center;">' . $file . '</div>';
                     $content .= '</div>';
                 }
@@ -160,7 +160,7 @@ class AjaxController extends BaseController {
         $content .= '<div class="gridLayout">';
         foreach ($templates as $template) {
             $content .= '<div class="item" onclick="javascript: chooseTemplate(\'' . $template->getId() . '\', \'' . $template->getName() . '\');">';
-            $content .= '<img src="' . Application::$SystemImgUrl . '/' . $img . '" style="width: 48px; height: 48px;">';
+            $content .= '<span class="icon icon-'.$img.'"></span>';
             $content .= '<div style="position: absolute; bottom: 5px; width: 100px; text-align: center;">' . $template->getName() . '</div>';
             $content .= '</div>';
         }

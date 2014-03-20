@@ -135,6 +135,9 @@ class Template extends Layout implements ActiveRecord, FileInterface {
         }
     }
 
+    /**
+     * @return TemplateBlock[]
+     */
     public function fetchBlocks() {
         $blocks = Array();
         $DBH = Application::getDatabaseHandler();
@@ -180,7 +183,12 @@ class Template extends Layout implements ActiveRecord, FileInterface {
         $vars = array();
         $blocks = $this->fetchBlocks();
         foreach ($blocks as $block) {
-            $vars[$block->getName()] = $block->getWidgets($this);
+            $widgets = $block->getWidgets($this);
+            $widgetString = '';
+            foreach ($widgets as $widget) {
+                $widgetString .= $widget->__toString();
+            }
+            $vars[$block->getName()] = $widgetString;
         }
 
         $partials = array_merge($meta, $vars);

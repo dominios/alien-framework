@@ -232,4 +232,7 @@ class Page implements ActiveRecord, FileInterface {
         return $this;
     }
 
+    public function __toString() {
+        return $this->getTemplate(true)->__toString();
+    }
 }
