@@ -29,7 +29,7 @@ class View {
             $content .= ob_get_contents();
             ob_end_clean();
         } else {
-//            Terminal::getInstance()->putMessage('Cannot open view <i>' . $this->script . '</i>', Terminal::CONSOLE_WARNING);
+            throw new \RuntimeException('View\'s template script "'.$this->script.'" does not exists!');
         }
         return $content;
     }

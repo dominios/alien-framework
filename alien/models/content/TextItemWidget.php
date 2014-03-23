@@ -13,17 +13,16 @@ class TextItemWidget extends Widget {
     const ICON = 'document';
     const NAME = 'Textový objekt';
     const TYPE = 'TextItem';
-    const DEFAULT_SCRIPT = 'CodeItem.php';
+    const DEFAULT_SCRIPT = 'default.php';
 
     public function __construct($id, $row = null) {
         parent::__construct($id, $row);
     }
 
     public function renderToString(Item $item = null) {
-//        $item = $item instanceof ContentItem ? $item : $this->getItem(true);
-        $params = $this->getParams();
+        $item = $item === null ? $this->getItem(true) : $item;
         $view = $this->getView();
-        $view->text = $params['text'];
+        $view->text = $item instanceof Item ? $item->getContent() : '';
         return $view->renderToString();
     }
 
