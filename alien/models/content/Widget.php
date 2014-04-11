@@ -8,6 +8,7 @@ use Alien\DBConfig;
 use Alien\Controllers\BaseController;
 use Alien\Forms\Form;
 use Alien\View;
+use DomainException;
 use \PDO;
 
 abstract class Widget implements FileInterface, ActiveRecord {
@@ -30,8 +31,9 @@ abstract class Widget implements FileInterface, ActiveRecord {
     private $script = '';
     private $view = null;
     protected $formElements = null;
+    private $pageToRender = null;
 
-    public function __construct($id, $row = null) {
+    protected  function __construct($id, $row = null) {
 
         if ($row === null) {
             $DBH = Application::getDatabaseHandler();
@@ -39,9 +41,13 @@ abstract class Widget implements FileInterface, ActiveRecord {
             $Q->bindValue(':i', $id, PDO::PARAM_INT);
             $Q->execute();
             if (!$Q->rowCount()) {
-                return;
+                throw new DomainException("Requested Item does not exists!");
             }
             $row = $Q->fetch();
+        }
+
+        if(!Widget::exists($row['id'])) {
+            throw new DomainException("Requested Widget does not exists!");
         }
 
         $this->id = $row['id'];
@@ -69,7 +75,7 @@ abstract class Widget implements FileInterface, ActiveRecord {
         if ($row === null) {
 
             if ($type !== null) {
-                $cond = 'type = ' . $type;
+                $cond = 'type = ' . (string) $type;
             } else {
                 $cond = 'id = ' . (int) $widgetId;
             }
@@ -294,14 +300,17 @@ abstract class Widget implements FileInterface, ActiveRecord {
 
     public static function getList($fetch = false) {
         // TODO: Implement getList() method.
+        throw new \RuntimeException("Unsupported operation.");
     }
 
     public function isBrowseable() {
         // TODO: Implement isBrowseable() method.
+        throw new \RuntimeException("Unsupported operation.");
     }
 
     public function actionGoTo() {
         // TODO: Implement actionGoTo() method.
+        throw new \RuntimeException("Unsupported operation.");
     }
 
     public function setPage(Page $page) {
@@ -325,5 +334,18 @@ abstract class Widget implements FileInterface, ActiveRecord {
         $this->script = $script;
         return $this;
     }
+
+    public function setPageToRender(Page $page) {
+        $this->pageToRender = $page;
+        return $this;
+    }
+
+    /**
+     * @return Page
+     */
+    public function getPageToRender() {
+        return $this->pageToRender;
+    }
+
 
 }

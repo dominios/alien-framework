@@ -2,7 +2,7 @@
 
 require_once 'alien/init.php';
 
-echo '<pre>';
+//echo '<pre>';
 
 $request = preg_replace('/^\/{1}/', '', $_SERVER['REQUEST_URI']);
 $requestWords = explode('?', $request, 2);
@@ -16,7 +16,7 @@ echo $page = new \Alien\Models\Content\Page($seolink);
 
 
 //print_r($template);
-echo '</pre>';
+//echo '</pre>';
 
 //$template = new Alien\Models\Content\Template(1);
 //

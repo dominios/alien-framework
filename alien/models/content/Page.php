@@ -6,6 +6,7 @@ use Alien\ActiveRecord;
 use Alien\Application;
 use Alien\Controllers\BaseController;
 use Alien\DBConfig;
+use Alien\Models\Content\Widget;
 use Alien\Models\Content\Template;
 use \PDO;
 
@@ -233,6 +234,27 @@ class Page implements ActiveRecord, FileInterface {
     }
 
     public function __toString() {
-        return $this->getTemplate(true)->__toString();
+        $this->getTemplate(true)->setPageToRender($this);
+        $ret = '';
+        try {
+            $ret .= $this->getTemplate(true)->__toString();
+        } catch (\Exception $e) {
+            $ret .= 'Exception: <b>' . $e->getMessage() . '</b> at ' . $e->getFile() . ':' . $e->getLine();
+        }
+        return $ret;
+    }
+
+    public function getUsedVariables($fetch = false) {
+        $dbh = Application::getDatabaseHandler();
+        $q = $dbh->prepare('SELECT * FROM ' . DBConfig::table(DBConfig::WIDGETS) . ' WHERE template=:temp && type=:type;');
+        $q->bindValue(':temp', $this->getTemplate(), PDO::PARAM_INT);
+        $q->bindValue(':type', 'VariableItemWidget', PDO::PARAM_STR);
+        $q->execute();
+        $rows = $q->fetchAll();
+        $vars = array();
+        foreach ($rows as $row) {
+            $vars[] = Widget::factory($row['id'], 'Alien\Models\Content\VariableItemWidget', $row);
+        }
+        return $vars;
     }
 }

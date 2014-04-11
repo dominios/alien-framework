@@ -36,7 +36,7 @@ echo '</div>';
 
 echo '<h2>Pridať widget<span class="toggler icon icon-xs icon-menu" style="float: right;" data-toggle="widgetmenu"></span></h2>';
 echo '<div class="toggled-content" id="widgetmenu">';
-echo '<a href="#"><span class="icon icon-variable"></span>variabilná oblasť</a>';
+echo '<a href="#" class="item-creatable" data-type="VariableItemWidget"><span class="icon icon-variable"></span>variabilná oblasť</a>';
 echo '<a href="#"><span class="icon icon-box"></span>balíček</a>';
 echo '<a href="#"><span class="icon icon-php2"></span>php</a>';
 echo '<a href="#" class="item-creatable" data-type="CodeItemWidget"><span class="icon icon-code"></span>html</a>';

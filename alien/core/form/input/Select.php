@@ -32,9 +32,11 @@ class Select extends Input {
             $attrs[] = 'multiple';
         }
         $ret = '';
-        $ret .= '<select name="' . $this->getName() . '" ' . implode(' ', $attrs) . '>';
-        foreach ($this->options as $opt) {
-            $ret .= $opt;
+        $ret .= '<select name="' . $this->getName() . '" ' . (is_array($attrs) ? implode(' ', $attrs) : '') . '>';
+        if (is_array($this->options)) {
+            foreach ($this->options as $opt) {
+                $ret .= $opt;
+            }
         }
         $ret .= '</select>';
         return $ret;

@@ -98,7 +98,17 @@
             </table>
         </article>
         <article id="content">
-            todo
+
+            <?
+
+            $page = $this->page;
+            echo '<pre>';
+            print_r($page->getUsedVariables());
+            echo '</pre>';
+
+            ?>
+
+
         </article>
     </section>
 </section>

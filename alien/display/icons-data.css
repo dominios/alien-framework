@@ -236,6 +236,13 @@ span.icon.icon-group-light {
     background-image: url('img/white/group.png');
 }
 
+span.icon.icon-hashtag, span.icon.icon-hashtag-dark {
+    background-image: url('img/hashtag.png');
+}
+span.icon.icon-hashtag-light {
+    background-image: url('img/white/hashtag.png');
+}
+
 span.icon.icon-home, span.icon.icon-home-dark {
     background-image: url('img/home.png');
 }

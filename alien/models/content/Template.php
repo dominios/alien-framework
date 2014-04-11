@@ -7,6 +7,7 @@ use Alien\Application;
 use Alien\Layout\Layout;
 use Alien\Controllers\BaseController;
 use Alien\DBConfig;
+use InvalidArgumentException;
 use \PDO;
 
 class Template extends Layout implements ActiveRecord, FileInterface {
@@ -20,6 +21,7 @@ class Template extends Layout implements ActiveRecord, FileInterface {
     private $description;
     private $src;
     private $blocks;
+    private $pageToRender = null;
 
     public function __construct($id = null, $row = null) {
         $new = false;
@@ -152,32 +154,16 @@ class Template extends Layout implements ActiveRecord, FileInterface {
         return $blocks;
     }
 
-//    public function fetchViews() {
-//        $DBH = Alien::getDatabaseHandler();
-//
-//        $blocks = $this->blocks;
-//        $newBlocks = Array();
-//
-//        foreach ($blocks as $block) {
-//            $items = Array();
-//            foreach ($DBH->query('SELECT * FROM ' . Alien::getDBPrefix() . '_content_views WHERE id_c = ' . (int) $block['id'] . ' && id_t=' . $this->getId() . ' ORDER BY position') as $R) {
-//                $item = Widget::getSpecificWidget($R['id_v'], $R['id_type'], $R);
-//                if ($item !== null) {
-//                    $item->fetchItem();
-//                    $items[] = $item;
-//                }
-//            }
-//            $newBlocks[] = Array('id' => $block['id'], 'name' => $block['name'], 'items' => $items);
-//        }
-//
-//        $this->blocks = $newBlocks;
-//    }
-
     public function getPartials() {
+
+        if(!($this->pageToRender instanceof Page)) {
+            throw new InvalidArgumentException("Rendered page must be set!");
+        }
+
         $meta = array(
-            'title' => '',
-            'description' => '',
-            'keywords' => array()
+            'title' => $this->pageToRender->getName(),
+            'description' => $this->pageToRender->getDescription(),
+            'keywords' => implode(', ', $this->pageToRender->getKeywords()),
         );
 
         $vars = array();
@@ -186,6 +172,7 @@ class Template extends Layout implements ActiveRecord, FileInterface {
             $widgets = $block->getWidgets($this);
             $widgetString = '';
             foreach ($widgets as $widget) {
+                $widget->setPageToRender($this->pageToRender);
                 $widgetString .= $widget->__toString();
             }
             $vars[$block->getName()] = $widgetString;
@@ -256,4 +243,7 @@ class Template extends Layout implements ActiveRecord, FileInterface {
         $this->description = $description;
     }
 
+    public function setPageToRender(Page $page) {
+        $this->pageToRender = $page;
+    }
 }

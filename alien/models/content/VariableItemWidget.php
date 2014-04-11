@@ -3,56 +3,60 @@
 namespace Alien\Models\Content;
 
 use Alien\Application;
+use Alien\DBConfig;
+use Alien\Forms\Form;
+use Alien\Forms\Input;
 use PDO;
 
 class VariableItemWidget extends Widget {
 
-    const ICON = 'variable.png';
-    const NAME = 'Variabilná oblasť';
+    const ICON = 'variable';
+    const NAME = 'Variabilný objekt';
     const TYPE = 'VariableItem';
+    const DEFAULT_SCRIPT = 'default.php';
 
-    private $limit;
-    private $name;
-    private $items = null;
-
-    public function __construct($id, $row = null) {
-        parent::__construct($id, $row);
+    public function renderToString(Item $item = null) {
+        $item = new VariableItem($this->getPageToRender(), $this->getId());
+        $ret = '';
+        foreach($item->getWidgetContainer() as $widget) {
+            $widget->setPageToRender($this->getPageToRender());
+            $ret .= $widget->__toString();
+        }
+        return $ret;
     }
 
-    public function getType() {
-        return self::TYPE;
+    public function getCustomFormElements() {
+        if (is_null($this->formElements)) {
+            $widgetSize = Input::text('variableSize', 0, $this->getParam('size'))
+                               ->setLabel('Max. počet objektov')
+                               ->setIcon('icon-hashtag');
+            $widgetName = Input::text('variableName', '', $this->getParam('name'))
+                               ->setLabel('Názov oblasti')
+                               ->setIcon('icon-variable');
+            $this->formElements = array(
+                $widgetName, $widgetSize
+            );
+        }
+        return $this->formElements;
+    }
+
+    public function handleCustomFormElements(Form $form) {
+        $size = $form->getElement('variableSize')->getValue();
+        $name = $form->getElement('variableName')->getValue();
+        $this->setParam('name', $name);
+        $this->setParam('size', $size);
     }
 
     public function getIcon() {
         return self::ICON;
     }
 
-    public function getLimit() {
-        return (int) $this->limit;
-    }
-
     public function getName() {
         return self::NAME;
     }
 
-    public function fetchViews(ContentPage $page) {
-
-        if (!$this->getItem(true) instanceof Item) {
-            return Array();
-        } else {
-            if ($this->items === null) {
-                $arr = Array();
-                $DBH = Application::getDatabaseHandler();
-                foreach ($DBH->query('SELECT * FROM ' . Application::getDBPrefix() . '_content_views WHERE id_c=' . (int) $this->getItem(true)->getContainer() . ' && id_p = ' . $page->getId()) as $row) {
-                    $item = Widget::factory($row['id_v'], $row['id_type'], $row);
-                    if ($item instanceof Widget) {
-                        $arr[] = $item;
-                    }
-                }
-                $this->items = $arr;
-            }
-            return $this->items;
-        }
+    public function getType() {
+        return self::TYPE;
     }
 
 }

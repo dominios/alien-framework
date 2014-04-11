@@ -5,6 +5,7 @@ namespace Alien\Models\Content;
 use Alien\ActiveRecord;
 use Alien\Application;
 use Alien\DBConfig;
+use DomainException;
 use \PDO;
 
 abstract class Item implements ActiveRecord, FileInterface {
@@ -18,7 +19,7 @@ abstract class Item implements ActiveRecord, FileInterface {
     protected $content;
     protected $container;
 
-    public function __construct($id, $row = null) {
+    protected function __construct($id, $row = null) {
 
         if ($row === null) {
             $DBH = Application::getDatabaseHandler();
@@ -26,9 +27,13 @@ abstract class Item implements ActiveRecord, FileInterface {
             $Q->bindValue(':i', $id, PDO::PARAM_INT);
             $Q->execute();
             if (!$Q->rowCount()) {
-                return;
+                throw new DomainException("Requested Item does not exists!");
             }
             $row = $Q->fetch();
+        }
+
+        if (!Item::exists($row['id'])) {
+            throw new DomainException("Requested Item does not exists!");
         }
 
         $this->id = $row['id'];
@@ -85,6 +90,7 @@ abstract class Item implements ActiveRecord, FileInterface {
 
     public function delete() {
         // TODO: Implement delete() method.
+        throw new \RuntimeException("Unsupported operation.");
     }
 
     public abstract function isDeletable();
