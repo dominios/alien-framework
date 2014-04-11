@@ -3,22 +3,23 @@
 namespace Alien\Layout;
 
 use Alien\Controllers\BaseController;
+use Alien\Forms\Input;
 use Alien\Models\Authorization\Authorization;
 
 // perm testy dorobit !
 ?>
-<script type="text/javascript">
-    $(document).ready(function($) {
-        $('#toppanel li').has('.submenu').click(function(ev) {
-            ev.stopPropagation();
-            $(this).find('.submenu').slideToggle(400, 'easeInOutElastic');
-        });
+    <script type="text/javascript">
+        $(document).ready(function ($) {
+            $('#toppanel li').has('.submenu').click(function (ev) {
+                ev.stopPropagation();
+                $(this).find('.submenu').slideToggle(400, 'easeInOutElastic');
+            });
 
-        $(".button.searchSubmit").click(function() {
-            $("#searchForm").submit();
+            $(".button.searchSubmit").click(function () {
+                $("#searchForm").submit();
+            });
         });
-    });
-</script>
+    </script>
 <?
 
 if (!function_exists('\Alien\Layout\topmenuItemToString')) {
@@ -79,8 +80,10 @@ $menu .= '</ul>';
 
 $menu .= '<ul class="navbar-search navbar-right" id="searchbar">';
 $menu .= '<li class="navbar-no-hover">';
-$menu .= '<form method="POST" action="???" id="searchForm">';
-$menu .= '<input type="text" name="searchString" placeholder="Search ...">';
+$menu .= '<form method="POST" action="/alien/search/search" id="searchForm">';
+$menu .= '<input type="hidden" name="action" value="search/search">';
+$menu .= '<input type="hidden" name="entity" value="user">';
+$menu .= '<input type="text" name="value" placeholder="Search ...">';
 $menu .= '<div class="button searchSubmit"><span class="icon icon-magnifier-light"></span></div>';
 $menu .= '</form>';
 $menu .= '</li>';
