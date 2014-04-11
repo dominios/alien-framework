@@ -23,6 +23,7 @@ class TextItemWidget extends Widget {
         $item = $item === null ? $this->getItem(true) : $item;
         $view = $this->getView();
         $view->text = $item instanceof Item ? $item->getContent() : '';
+        $view->setAutoEscape(false);
         return $view->renderToString();
     }
 
