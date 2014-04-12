@@ -6,8 +6,6 @@ use Alien\Application;
 use Alien\DBConfig;
 use Alien\Forms\Form;
 use Alien\Forms\Input;
-use DomainException;
-use PDO;
 
 class VariableItemWidget extends Widget implements HasContainerInterface {
 
@@ -16,11 +14,17 @@ class VariableItemWidget extends Widget implements HasContainerInterface {
     const TYPE = 'VariableItem';
 
     private $widgetContainer;
+    private $hasFetchedWidgets = false;
 
     public function renderToString(Item $item = null) {
         $ret = '';
+        if(!$this->isContainerContentFetched()) {
+            $this->fetchContainerContent();
+        }
         foreach ($this->getWidgetContainer() as $widget) {
-            $ret .= $widget->__toString();
+            if ($widget instanceof Widget) {
+                $ret .= $widget->__toString();
+            }
         }
         return $ret;
     }
@@ -59,23 +63,34 @@ class VariableItemWidget extends Widget implements HasContainerInterface {
         return self::TYPE;
     }
 
-    private function fetchWidgets() {
+    public function fetchContainerContent() {
+        if ($this->isContainerContentFetched()) {
+            return;
+        }
         if (!($this->getPageToRender() instanceof Page)) {
             return;
         }
         $dbh = Application::getDatabaseHandler();
         foreach ($dbh->query('SELECT * FROM ' . DBConfig::table(DBConfig::WIDGETS) . ' WHERE page="' . $this->getPageToRender()->getId() . '" && container="' . $this->getId() . '"') as $row) {
-            $this->widgetContainer->push(Widget::factory($row['id'], null, $row));
+            $this->getWidgetContainer()->push(Widget::factory($row['id'], null, $row));
         }
+        $this->hasFetchedWidgets = true;
     }
 
     public function getWidgetContainer() {
-        $this->fetchWidgets();
         if (!($this->widgetContainer instanceof WidgetContainer)) {
             $this->widgetContainer = new WidgetContainer();
         }
         return $this->widgetContainer;
     }
 
+    public function flushContainerContent() {
+        $this->getWidgetContainer()->truncate();
+        $this->hasFetchedWidgets = false;
+    }
+
+    public function isContainerContentFetched() {
+        return $this->hasFetchedWidgets;
+    }
 }
 

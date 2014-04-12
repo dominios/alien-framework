@@ -144,9 +144,9 @@ class Template extends Layout implements ActiveRecord, FileInterface {
         $blocks = Array();
         $DBH = Application::getDatabaseHandler();
         $query = 'SELECT b.* FROM ' . DBConfig::table(DBConfig::BLOCKS) . ' b'
-                . ' JOIN ' . DBConfig::table(DBConfig::WIDGETS) . ' w ON b.id = w.container'
-                . ' WHERE w.template = "' . (int) $this->id . '"'
-                . ' GROUP BY w.container;';
+            . ' JOIN ' . DBConfig::table(DBConfig::WIDGETS) . ' w ON b.id = w.container'
+            . ' WHERE w.template = "' . (int) $this->id . '"'
+            . ' GROUP BY w.container;';
         foreach ($DBH->query($query) as $row) {
             $blocks[] = new TemplateBlock($row['id'], $row);
         }
@@ -156,7 +156,7 @@ class Template extends Layout implements ActiveRecord, FileInterface {
 
     public function getPartials() {
 
-        if(!($this->pageToRender instanceof Page)) {
+        if (!($this->pageToRender instanceof Page)) {
             throw new InvalidArgumentException("Rendered page must be set!");
         }
 
@@ -172,8 +172,13 @@ class Template extends Layout implements ActiveRecord, FileInterface {
             $widgets = $block->getWidgets($this);
             $widgetString = '';
             foreach ($widgets as $widget) {
-                $widget->setPageToRender($this->pageToRender);
-                $widgetString .= $widget->__toString();
+                if ($widget instanceof Widget) {
+                    $widget->setPageToRender($this->pageToRender);
+                    if($widget instanceof HasContainerInterface){
+                        $widget->fetchContainerContent();
+                    }
+                    $widgetString .= $widget->__toString();
+                }
             }
             $vars[$block->getName()] = $widgetString;
         }

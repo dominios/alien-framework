@@ -9,4 +9,18 @@ interface HasContainerInterface {
      */
     public function getWidgetContainer();
 
+    /**
+     * @return void
+     */
+    public function fetchContainerContent();
+
+    /**
+     * @return void
+     */
+    public function flushContainerContent();
+
+    /**
+     * @return bool
+     */
+    public function isContainerContentFetched();
 }

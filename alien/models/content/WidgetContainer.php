@@ -13,7 +13,7 @@ class WidgetContainer implements Iterator, Countable, SeekableIterator {
     private $position = 0;
 
     public function __construct(array $widgets = null) {
-        if(is_array($widgets)) {
+        if (is_array($widgets)) {
             $this->widgets = $widgets;
         }
         $this->rewind();
@@ -105,5 +105,10 @@ class WidgetContainer implements Iterator, Countable, SeekableIterator {
 
     public function pop() {
         return array_pop($this->widgets);
+    }
+
+    public function truncate() {
+        unset($this->widgets);
+        $this->widgets = array();
     }
 }
