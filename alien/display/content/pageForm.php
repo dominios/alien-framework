@@ -103,7 +103,7 @@
 
             $page = $this->page;
             echo '<pre>';
-            print_r($page->getUsedVariables());
+            print_r($page->getUsedVariables(true));
             echo '</pre>';
 
             ?>

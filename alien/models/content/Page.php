@@ -6,7 +6,6 @@ use Alien\ActiveRecord;
 use Alien\Application;
 use Alien\Controllers\BaseController;
 use Alien\DBConfig;
-use Alien\Models\Content\Widget;
 use Alien\Models\Content\Template;
 use \PDO;
 
@@ -142,10 +141,9 @@ class Page implements ActiveRecord, FileInterface {
         if (!$Q->rowCount()) {
             return false;
         }
-        if ($ignoreId === null && $Q->rowCount()) {
+        if ($ignoreId === null) {
             return true;
-        }
-        if ($ignoreId !== null) {
+        } else {
             $R = $Q->fetch();
             return $R['id'] == $ignoreId ? false : true;
         }
@@ -195,10 +193,6 @@ class Page implements ActiveRecord, FileInterface {
 
     public function getDescription() {
         return $this->description;
-    }
-
-    public function isVisible() {
-        return (bool) $this->visible;
     }
 
     public function getFolder() {
@@ -253,8 +247,12 @@ class Page implements ActiveRecord, FileInterface {
         $rows = $q->fetchAll();
         $vars = array();
         foreach ($rows as $row) {
-            $widget = Widget::factory($row['id'], 'Alien\Models\Content\VariableItemWidget', $row);
-            $vars[] = $widget;
+            if ($fetch) {
+                $widget = Widget::factory($row['id'], 'Alien\Models\Content\VariableItemWidget', $row);
+                $vars[] = $widget;
+            } else {
+                $vars[] = $rows['id'];
+            }
         }
         return $vars;
     }

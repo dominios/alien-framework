@@ -82,31 +82,4 @@ class PageController extends ContentController {
         );
     }
 
-    protected function pageFormSubmit() {
-        $id = $_POST['pageId'];
-        $nazov = $_POST['pageName'];
-        $seolink = $_POST['pageSeolink'];
-        if (!preg_match('/^[0-9]*$/', $id)) {
-            return;
-        }
-        if (!strlen($nazov)) {
-            FormValidator::getInstance()->putError('pageName', 'Názov stránky nemôže ostať prázdny.');
-        }
-        if (ContentPage::isSeolinkInUse($seolink, $id)) {
-            FormValidator::getInstance()->putError('pageSeolink', 'Zadaný seolink sa už používa.');
-        }
-        if (FormValidator::getInstance()->errorsCount()) {
-            Terminal::getInstance()->putMessage('Form validation error!', Terminal::CONSOLE_WARNING);
-            return;
-        }
-        $result = ContentPage::update();
-        if ($result) {
-//            $this->getLayout()->putNotificaion(new Notification('Stránka bola uložená.', Notification::SUCCESS));
-        } else {
-//            $this->getLayout()->putNotificaion(new Notification('Stránku sa nepodarilo uložiť.', Notification::ERROR));
-        }
-
-        $this->redirect('?content=editPage&id=' . $id);
-    }
-
 }
