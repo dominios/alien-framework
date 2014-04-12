@@ -8,16 +8,6 @@ use \PDO;
 
 class VariableItem extends Item {
 
-    private $widgetContainer;
-    private $pageToRender;
-    private $containerId;
-
-    public function __construct(Page $page, $containerId) {
-        $this->pageToRender = $page;
-        $this->containerId = $containerId;
-        $this->fetchWidgets();
-    }
-
     public function getType() {
         // TODO: Implement getType() method.
         throw new \RuntimeException("Unsupported operation.");
@@ -62,24 +52,6 @@ class VariableItem extends Item {
         // TODO: Implement actionDrop() method.
         throw new \RuntimeException("Unsupported operation.");
     }
-
-    private function fetchWidgets() {
-        if (!($this->widgetContainer instanceof WidgetContainer)) {
-            $this->widgetContainer = new WidgetContainer();
-        }
-        $dbh = Application::getDatabaseHandler();
-        foreach ($dbh->query('SELECT * FROM ' . DBConfig::table(DBConfig::WIDGETS) . ' WHERE page="' . $this->pageToRender->getId() . '" && container="' . $this->containerId . '"') as $row) {
-            $this->widgetContainer->push(Widget::factory($row['id'], null, $row));
-        }
-    }
-
-    /**
-     * @return WidgetContainer
-     */
-    public function getWidgetContainer() {
-        return $this->widgetContainer;
-    }
-
 
 }
 

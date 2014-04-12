@@ -253,7 +253,8 @@ class Page implements ActiveRecord, FileInterface {
         $rows = $q->fetchAll();
         $vars = array();
         foreach ($rows as $row) {
-            $vars[] = Widget::factory($row['id'], 'Alien\Models\Content\VariableItemWidget', $row);
+            $widget = Widget::factory($row['id'], 'Alien\Models\Content\VariableItemWidget', $row);
+            $vars[] = $widget;
         }
         return $vars;
     }

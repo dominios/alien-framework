@@ -6,20 +6,20 @@ use Alien\Application;
 use Alien\DBConfig;
 use Alien\Forms\Form;
 use Alien\Forms\Input;
+use DomainException;
 use PDO;
 
-class VariableItemWidget extends Widget {
+class VariableItemWidget extends Widget implements HasContainerInterface {
 
     const ICON = 'variable';
     const NAME = 'Variabilný objekt';
     const TYPE = 'VariableItem';
-    const DEFAULT_SCRIPT = 'default.php';
+
+    private $widgetContainer;
 
     public function renderToString(Item $item = null) {
-        $item = new VariableItem($this->getPageToRender(), $this->getId());
         $ret = '';
-        foreach($item->getWidgetContainer() as $widget) {
-            $widget->setPageToRender($this->getPageToRender());
+        foreach ($this->getWidgetContainer() as $widget) {
             $ret .= $widget->__toString();
         }
         return $ret;
@@ -57,6 +57,24 @@ class VariableItemWidget extends Widget {
 
     public function getType() {
         return self::TYPE;
+    }
+
+    private function fetchWidgets() {
+        if (!($this->getPageToRender() instanceof Page)) {
+            return;
+        }
+        $dbh = Application::getDatabaseHandler();
+        foreach ($dbh->query('SELECT * FROM ' . DBConfig::table(DBConfig::WIDGETS) . ' WHERE page="' . $this->getPageToRender()->getId() . '" && container="' . $this->getId() . '"') as $row) {
+            $this->widgetContainer->push(Widget::factory($row['id'], null, $row));
+        }
+    }
+
+    public function getWidgetContainer() {
+        $this->fetchWidgets();
+        if (!($this->widgetContainer instanceof WidgetContainer)) {
+            $this->widgetContainer = new WidgetContainer();
+        }
+        return $this->widgetContainer;
     }
 
 }

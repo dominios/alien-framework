@@ -16,7 +16,7 @@ abstract class Widget implements FileInterface, ActiveRecord {
     const ICON = 'file.png';
     const NAME = 'Zobrazovač';
     const TYPE = 'ItemView';
-    const DEFAULT_SCRIPT = '';
+    const DEFAULT_SCRIPT = 'default.php';
 
     protected $id;
     protected $container;
@@ -33,7 +33,7 @@ abstract class Widget implements FileInterface, ActiveRecord {
     protected $formElements = null;
     private $pageToRender = null;
 
-    protected  function __construct($id, $row = null) {
+    protected function __construct($id, $row = null) {
 
         if ($row === null) {
             $DBH = Application::getDatabaseHandler();
@@ -46,7 +46,7 @@ abstract class Widget implements FileInterface, ActiveRecord {
             $row = $Q->fetch();
         }
 
-        if(!Widget::exists($row['id'])) {
+        if (!Widget::exists($row['id'])) {
             throw new DomainException("Requested Widget does not exists!");
         }
 
@@ -90,12 +90,16 @@ abstract class Widget implements FileInterface, ActiveRecord {
             $classname = __NAMESPACE__ . '\\' . $row['type'];
             if (class_exists($classname)) {
                 $widget = new $classname($widgetId, $row);
+                if ($widget instanceof HasContainerInterface) {
+                    $widget->getWidgetContainer();
+                }
                 return $widget;
             } else {
                 throw new \RuntimeException("Undefined widget class '$classname'");
             }
+        } else {
+            throw new DomainException("Widget not found.");
         }
-        return null;
     }
 
     public abstract function renderToString(Item $item = null);
