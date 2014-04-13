@@ -68,7 +68,7 @@ abstract class Widget implements FileInterface, ActiveRecord {
      * @param $widgetId
      * @param null|string $type
      * @param null|array $row
-     * @return Widget|null
+     * @return Widget
      */
     public static final function factory($widgetId, $type = null, $row = null) {
 

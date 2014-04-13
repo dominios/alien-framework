@@ -174,7 +174,7 @@ class Template extends Layout implements ActiveRecord, FileInterface {
             foreach ($widgets as $widget) {
                 if ($widget instanceof Widget) {
                     $widget->setPageToRender($this->pageToRender);
-                    if($widget instanceof HasContainerInterface){
+                    if ($widget instanceof HasContainerInterface) {
                         $widget->fetchContainerContent();
                     }
                     $widgetString .= $widget->__toString();

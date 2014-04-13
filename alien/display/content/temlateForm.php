@@ -1,7 +1,8 @@
 <script type="text/javascript">
     function templateShowFileBrowser(type) {
-        if (!type)
+        if (!type) {
             return;
+        }
         $.ajax({
             async: true,
             url: "/alien/ajax.php",
@@ -9,7 +10,7 @@
             data: "action=templateShowFileBrowser&type=" + type,
             timeout: 5000,
             success: function (data) {
-                json = jQuery.parseJSON(data);
+                var json = jQuery.parseJSON(data);
                 createModal(json);
             }
         });
@@ -147,10 +148,6 @@
                         'items' => $block->getWidgets()
                     );
                     echo $this->partial('display/content/viewList.php', $params);
-                    //                    foreach ($block->getWidgets() as $widget):
-                    //
-                    //                        echo '<div class="template-widget">' . $widget['id_v'] . '</div>';
-                    //                    endforeach;
                     ?>
                 </div>
             <?

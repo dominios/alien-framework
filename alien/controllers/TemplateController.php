@@ -65,7 +65,8 @@ class TemplateController extends ContentController {
             }
         }
 
-        $viewFloatPanel = new View('display/content/partial/templateToolBox.php');
+        $viewFloatPanel = new View('display/content/partial/toolBox.php');
+        $viewFloatPanel->type = 'template';
 
         return new Response(array(
                 'Title' => 'Úprava šablóny: ' . $template->getName(),

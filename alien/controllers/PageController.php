@@ -75,9 +75,13 @@ class PageController extends ContentController {
             }
         }
 
+        $viewFloatPanel = new View('display/content/partial/toolBox.php');
+        $viewFloatPanel->type = 'page';
+
         return new Response(array(
                 'Title' => 'Úprava stránky: ' . $page->getName(),
-                'ContentMain' => $view->renderToString()
+                'ContentMain' => $view->renderToString(),
+                'FloatPanel' => $viewFloatPanel->renderToString()
             )
         );
     }
