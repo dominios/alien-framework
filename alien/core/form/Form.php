@@ -2,7 +2,19 @@
 
 namespace Alien\Forms;
 
+use InvalidArgumentException;
+
 class Form {
+
+    /**
+     * Automatically add CSRF Input after form start tag
+     */
+    const AUTO_PREPEND_CSRF_IF_EXISTS = true;
+
+    /**
+     * Automatically create and add CSRF Input to form
+     */
+    const AUTO_PREPEND_CSRF = true;
 
     protected $method;
     protected $action;
@@ -19,6 +31,10 @@ class Form {
         $this->method = strtoupper($method);
         $this->name = $name;
         $this->action = $action;
+
+        if (Form::AUTO_PREPEND_CSRF && !$this->hasElement('csrfToken')) {
+            Input::csrf()->addToForm($this);
+        }
     }
 
     public function startTag() {
@@ -28,7 +44,14 @@ class Form {
         if ($this->id !== '') {
             $attr[] = 'id="' . $this->id . '"';
         }
-        return '<form ' . implode(' ', $attr) . '>';
+        $ret = '';
+        $ret .= '<form ' . implode(' ', $attr) . '>';
+
+        if (Form::AUTO_PREPEND_CSRF_IF_EXISTS && $this->hasElement('csrfToken')) {
+            $ret .= $this->getElement('csrfToken')->__toString();
+        }
+
+        return $ret;
     }
 
     public function endTag() {
@@ -61,6 +84,9 @@ class Form {
     }
 
     public function addElement(Input $element) {
+        if ($this->hasElement($element->getName())) {
+            throw new InvalidArgumentException('Cannot add element <b>' . $element->getName() . '</b> to form. Element already exists!');
+        }
         $this->elements[] = $element;
         return $this;
     }
@@ -80,7 +106,7 @@ class Form {
     }
 
     public function validate($hydratorArray = null) {
-        if($hydratorArray === null){
+        if ($hydratorArray === null) {
             Input::setHydratorArray($_POST);
         } else {
             Input::setHydratorArray($hydratorArray);
@@ -112,4 +138,11 @@ class Form {
         return $this;
     }
 
+    public function hasElement($name) {
+        $has = false;
+        foreach ($this->elements as $input) {
+            $has |= $input->getName() == $name;
+        }
+        return $has;
+    }
 }

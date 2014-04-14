@@ -4,6 +4,7 @@ namespace Alien\Forms;
 
 use Alien\Forms\Input\Button;
 use Alien\Forms\Input\Checkbox;
+use Alien\Forms\Input\Csrf;
 use Alien\Forms\Input\Hidden;
 use Alien\Forms\Input\Password;
 use Alien\Forms\Input\Radio;
@@ -69,6 +70,13 @@ abstract class Input {
             }
         }
         return $this;
+    }
+
+    /**
+     * @return Csrf
+     */
+    public static function csrf() {
+        return new Csrf();
     }
 
     /**

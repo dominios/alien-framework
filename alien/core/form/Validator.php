@@ -4,6 +4,7 @@ namespace Alien\Forms;
 
 use Alien\Models\Content\Page;
 use Alien\Models\Content\Template;
+use Alien\Notification;
 use PDO;
 use Alien\Application;
 use Alien\DBConfig;
@@ -41,6 +42,12 @@ class Validator {
         return $ret;
     }
 
+    public static function csrf() {
+        $validator = new Validator();
+        $validator->methodName = 'csrfCheck';
+        return $validator;
+    }
+
     public static function regexp($pattern, $errorMessage = null) {
         $validator = new self;
         $validator->pattern = $pattern;
@@ -65,6 +72,26 @@ class Validator {
 
     private function printErrorMessage(Input $input) {
         $input->setErrorMessage($this->errorMessage);
+    }
+
+    protected function csrfCheck(Input $input) {
+        $result = false;
+        for ($i = 0; $i <= count($_SESSION['tokens']); $i++) {
+            if ($_SESSION['tokens'][$i]['timeout'] < time()) {
+                if ($_SESSION['tokens'][$i]['token'] == $input->getValue()) {
+                    Notification::warning('CSRF token timeout.');
+                }
+                unset($_SESSION['tokens'][$i]);
+                continue;
+            }
+            if ($_SESSION['tokens'][$i]['token'] == $input->getValue()) {
+                $result = true;
+            }
+        }
+        if (!$result) {
+            Notification::warning('Invalid CSRF token!');
+        }
+        return $result;
     }
 
     protected function userUniqueEmail(Input $input) {
