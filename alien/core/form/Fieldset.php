@@ -3,6 +3,7 @@
 namespace Alien\Forms;
 
 use Alien\View;
+use Exception;
 use InvalidArgumentException;
 use Iterator;
 use Countable;
@@ -156,5 +157,13 @@ class Fieldset implements Iterator, Countable, SeekableIterator {
         return $this->viewSrc;
     }
 
+    public function getField($name) {
+        foreach ($this->fields as $field) {
+            if ($field->getName() === $name) {
+                return $field;
+            }
+        }
+        throw new Exception("Input '$name' not found.");
+    }
 
 }

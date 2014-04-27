@@ -65,7 +65,7 @@ class TextItemWidget extends Widget {
     }
 
     public function handleCustomFormElements(Form $form) {
-        $idemId = $form->getElement('widetModel')->getValue();
+        $idemId = $form->getField('widetModel')->getValue();
         $this->setItem(Item::factory($idemId));
     }
 }

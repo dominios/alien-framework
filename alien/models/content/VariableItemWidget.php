@@ -45,8 +45,8 @@ class VariableItemWidget extends Widget implements HasContainerInterface {
     }
 
     public function handleCustomFormElements(Form $form) {
-        $size = $form->getElement('variableSize')->getValue();
-        $name = $form->getElement('variableName')->getValue();
+        $size = $form->getField('variableSize')->getValue();
+        $name = $form->getField('variableName')->getValue();
         $this->setParam('name', $name);
         $this->setParam('size', $size);
     }

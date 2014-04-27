@@ -51,7 +51,7 @@ class CodeItemWidget extends Widget {
     }
 
     public function handleCustomFormElements(Form $form) {
-        $text = $form->getElement('codeWidgetText')->getValue();
+        $text = $form->getField('codeWidgetText')->getValue();
         $this->setParam('text', $text);
     }
 }
