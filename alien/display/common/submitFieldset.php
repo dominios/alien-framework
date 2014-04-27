@@ -2,7 +2,7 @@
     <tbody>
     <tr>
         <td>
-            <hr>
+            <div class="hr"></div>
         </td>
     </tr>
     <tr>

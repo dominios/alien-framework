@@ -103,8 +103,8 @@
 </script>
 
 <?= $this->form->startTag(); ?>
-<?= $this->form->getElement('action'); ?>
-<?= $this->form->getElement('pageId'); ?>
+<?= $this->form->getField('action'); ?>
+<?= $this->form->getField('pageId'); ?>
 
 <section class="tabs" id="pageTabs">
     <header>
