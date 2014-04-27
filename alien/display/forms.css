@@ -1,19 +1,21 @@
 @charset "utf-8";
 
 input, select, textarea, option {
-    width: 100%;
+    width: 100%; /* callback with little overflow */
+    width: calc(100% - 14px); /* paddings from left&right + border */
+    width: -moz-calc(100% - 14px);
+    width: -webkit-calc(100% - 14px);
 }
 
 input, button, .button, select, option, textarea {
-    font-weight: normal;
+    height: 32px;
+    line-height: 32px;
     border: 1px solid #ddd;
     border-radius: 1px;
-    padding: 4px;
-    padding-left: 8px;
+    padding: 4px 4px 4px 8px;
     color: #333;
-    line-height: 32px;
-    height: 32px;
     vertical-align: middle;
+    font-weight: normal;
     -webkit-transition: all .2s;
     transition: all .2s;
     transition-timing-function: ease;
@@ -53,7 +55,7 @@ button, .button {
     box-shadow: 0 0 0 #000;
 }
 
-input[type="text"]{
+input[type="text"] {
     font-weight: normal;
 }
 
@@ -69,7 +71,6 @@ input:hover, button:hover, textarea:hover, select:hover {
 
 .button.neutral:hover {
 }
-
 
 .button.negative {
     background: #d9534f;
@@ -91,12 +92,12 @@ a.button:hover {
     text-decoration: none;
 }
 
-input[disabled]{
+input[disabled] {
     background-color: #e7e7e7;
     cursor: url(/alien/display/img/impossible.ico), auto;
 }
 
-input[disabled]:hover{
+input[disabled]:hover {
     border-color: #555;
 }
 
@@ -110,7 +111,7 @@ button.disabled:hover, .button.disabled:hover {
     color: #000;
 }
 
-input[type="submit"]{
+input[type="submit"] {
     cursor: pointer;
 }
 
@@ -141,7 +142,11 @@ legend {
     border-color: #d51111;
 }
 
-:focus { outline: none; } /* odstrani ten debilny ramcek pri chromu */
+:focus {
+    outline: none;
+}
+
+/* odstrani ten debilny ramcek pri chromu */
 
 textarea:focus, input:focus {
     box-shadow: 0 0 5px #ccc;
@@ -153,4 +158,17 @@ button span.icon, .button span.icon {
     background-size: 1.15em;
     top: 0.38em;
     margin-right: 0.2em;
+}
+
+.fieldset .buttonField {
+    overflow: hidden;
+    float: right;
+}
+
+.fieldset .inputField {
+    overflow: hidden;
+}
+
+.fieldset .buttonField *, .fieldset .inputField * {
+    margin-right: 0;
 }

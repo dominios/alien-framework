@@ -2,6 +2,7 @@
 
 namespace Alien\Forms;
 
+use Exception;
 use InvalidArgumentException;
 
 class Form {
@@ -20,7 +21,16 @@ class Form {
     protected $action;
     protected $id;
     protected $name;
+
+    /**
+     * @var Input[] inputs
+     */
     private $elements = array();
+
+    /**
+     * @var Fieldset[] fieldsets
+     */
+    private $fieldsets = array();
 
     /**
      * @param string $method
@@ -105,6 +115,15 @@ class Form {
         return false;
     }
 
+    public function getFieldset($name) {
+        foreach ($this->fieldsets as $fieldset) {
+            if ($fieldset->getName() == $name) {
+                return $fieldset;
+            }
+        }
+        throw new Exception("Fieldset '$name' not found.");
+    }
+
     public function validate($hydratorArray = null) {
         if ($hydratorArray === null) {
             Input::setHydratorArray($_POST);
@@ -115,6 +134,12 @@ class Form {
         foreach ($this->elements as $e) {
             $e->hydrate();
             $ret &= $e->validate();
+        }
+        foreach ($this->fieldsets as $fs) {
+            foreach ($fs as $e) {
+                $e->hydrate();
+                $ret &= $e->validate();
+            }
         }
         return $ret;
     }
@@ -144,5 +169,9 @@ class Form {
             $has |= $input->getName() == $name;
         }
         return $has;
+    }
+
+    public function addFieldset(Fieldset $fieldset) {
+        $this->fieldsets[] = $fieldset;
     }
 }

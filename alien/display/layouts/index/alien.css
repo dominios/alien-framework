@@ -44,29 +44,22 @@ a:hover {
 }
 
 table.full {
-    width: 98%;
-    margin: 0px auto;
+    width: 100%;
+    margin: 0 auto;
+    border-spacing: 0;
 }
 
 /* ******** LAYOUT ************************************************************ */
 
-
-
-
-
 #contentPluginsPanel, #contentBrowserPanel {
     display: block;
-    background-color: #555955;
     padding: 0;
+    padding-left: 1px;
     margin-top: -4px;
     margin-right: 5px;
     border-left: 7px solid #555955;
     background-color: #444844;
-    padding-left: 1px;
 }
-
-
-
 
 #headerTitle {
     padding-left: 5px;
@@ -77,14 +70,14 @@ table.full {
 }
 
 #headerActionPanel {
-    padding-right: 0px;
+    padding-right: 0;
     float: right;
 }
 
 .actionButton {
     display: inline-block;
     background-color: #363636;
-    margin-left: 0px;
+    margin-left: 0;
     padding-right: 5px;
     padding-left: 5px;
     border: 0;
@@ -93,93 +86,13 @@ table.full {
     font-size: 16px;
 }
 
-.actionButton:hover{
+.actionButton:hover {
     text-decoration: none;
     background-color: #fbf37b;
     border-color: #fbf37b;
     box-shadow: 0 0 15px #fbf37b;
     color: black;
 }
-
-/* ******************* TABULKY **************************************************/
-
-/*table.noborders {
-    border: 0px;
-}
-
-table.noborders td, th {
-    border: 0px;
-}
-
-img {
-    vertical-align: middle;
-}*/
-
-/*.item {
-    border: 1px solid #bbb;
-    box-shadow: 0 0 6px #ccc;
-    border-radius: 1px;
-    padding: 3px;
-    padding-left: 4px;
-    margin-left: 5px;
-    margin-top: 5px;
-    margin-right: 7px;
-
-    color: #555;
-    position: relative;
-}*/
-
-/*.item img {
-    height: 22px;
-    width: 22px;
-    margin-right: 5px;
-}*/
-
-/*.item.selectable {
-    cursor: pointer;
-    -moz-user-select: none;
-    -webkit-user-select: none;
-    -webkit-transition: box-shadow 0.4s, border 0.4s, border-color 0.4s, background-color 0.4s, color 0.4s;
-    -moz-transition: box-shadow 0.4s, border 0.4s, border-color 0.4s, background-color 0.4s, color 0.4s;
-    transition: box-shadow 0.4s, border 0.4s, border-color 0.4s, background-color 0.4s, color 0.4s;
-}
-
-.item.selectable:hover {
-    background-color: #888;
-}*/
-
-/*.notactivated, .hidden {
-    background-color: #323232;
-    color: #aaa;
-}*/
-
-/*.item .button {
-    margin: 0px;
-    padding: 2px;
-    background-color: #4f4f4f;
-    line-height: inherit;
-}*/
-
-/*.item .button img {
-    height: 16px;
-    width: 16px;
-}
-
-.item .button:hover {
-    background-color: #fff;
-}
-
-*/
-
-/*.controlPanel {
-    float: right;
-    display: inline-block;
-}
-
-.controlPanel img {
-    width: 22px;
-    margin: 0px;
-}*/
 
 .ui-state-default .ui-state-highlight {
     margin: 0;
@@ -191,8 +104,7 @@ div.image.ui-state-default {
     border-radius: 1px;
     border: 0;
     display: inline-block;
-    background: none;
-    background-color: #222;
+    background: #222 none;
     margin: 3px;
     padding: 6px;
     padding-bottom: 2px;
@@ -205,7 +117,6 @@ div.image:hover {
 }
 
 div.image .imageTitleBar {
-    /*margin-top: 2px;*/
     margin-bottom: 3px;
     color: #ccc;
 }
@@ -232,27 +143,26 @@ div.image .imageActionBar {
     z-index: 999;
 }
 
-
-
 #window {
     display: table-column;
     display: none;
     min-height: 25px;
-    background-color: red;
     position: fixed;
-    margin: 20px 0px;
-    padding-top: 0px;
+    margin: 20px 0;
+    padding-top: 0;
     padding-bottom: 5px;
     background-color: #222;
     border-radius: 2px;
     border: 1px solid #555;
     z-index: 99;
 }
+
 #windowCloser {
     position: absolute;
     top: 2px;
     right: 2px;
 }
+
 #windowCloser .button {
     background: none;
     box-shadow: 0 0 0 0;
@@ -263,6 +173,7 @@ div.image .imageActionBar {
 #windowCloser .button:hover {
     background-color: #555;
 }
+
 #overlay {
     position: fixed;
     top: 0;
@@ -270,7 +181,7 @@ div.image .imageActionBar {
     z-index: 98;
     display: block;
     display: none;
-    background-color: rgba(30,30,50,255);
+    background-color: rgba(30, 30, 50, 255);
     opacity: 0.75;
     width: 100%;
     height: 100%;
@@ -292,11 +203,8 @@ div.image .imageActionBar {
     width: 250px;
 }
 
-
 /* SORTABLE JQUERY UI */
 .sortable .ui-state-highlight {
-    border: 0px;
-    background: none;
     background-color: #FBF37B;
     height: 49px;
     border: 1px solid #FBF37B;
@@ -307,8 +215,7 @@ div.image .imageActionBar {
 }
 
 .sortable .ui-state-default {
-    /*    border: 1px solid #FBF37B;*/
-    border: 0px;
+    border: 0;
     background: none;
     font-weight: normal;
 }

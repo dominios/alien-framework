@@ -32,6 +32,8 @@ abstract class Input {
     private $validationResult = null;
     protected $icon;
     protected $errorMessage;
+    protected $linkedTo = false;
+    protected $linkedInputs = array();
 
     /**
      *
@@ -286,6 +288,11 @@ abstract class Input {
         return $this;
     }
 
+    public function addToFieldset(Fieldset $fieldset) {
+        $fieldset->push($this);
+        return $this;
+    }
+
     public function getName() {
         return $this->name;
     }
@@ -331,5 +338,27 @@ abstract class Input {
 
     public function getLabel() {
         return $this->label;
+    }
+
+    public function isLinked() {
+        return $this->linkedTo instanceof Input;
+    }
+
+    public function linkTo(Input $input) {
+        $this->linkedTo = $input;
+        $input->addLinkedInput($this);
+        return $this;
+    }
+
+    private function addLinkedInput(Input $input) {
+        $this->linkedInputs[] = $input;
+    }
+
+    public function hasLinkedInputs() {
+        return count($this->linkedInputs) > 0;
+    }
+
+    public function getLinkedInputs() {
+        return $this->linkedInputs;
     }
 }

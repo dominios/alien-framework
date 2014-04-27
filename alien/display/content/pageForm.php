@@ -115,44 +115,8 @@
     </header>
     <section>
         <article id="config" class="tab-hidden">
-            <table class="full">
-                <tr>
-                    <td><span class="icon icon-template"></span>Názov stránky:</td>
-                    <td colspan="2"><?= $this->form->getElement('pageName'); ?></td>
-                </tr>
-                <tr>
-                    <td><span class="icon icon-link"></span>Seolink:</td>
-                    <td colspan="2"><?= $this->form->getElement('pageSeolink'); ?></td>
-                </tr>
-                <tr>
-                    <td><span class="icon icon-note"></span>Popis stránky:</td>
-                    <td colspan="2"><?= $this->form->getElement('pageDescription'); ?></td>
-                </tr>
-                <tr>
-                    <td><span class="icon icon-template"></span>Šablóna:</td>
-                    <td>
-                        <?= $this->form->getElement('pageTemplateHelper'); ?>
-                        <?= $this->form->getElement('pageTemplate'); ?>
-                        <?= $this->form->getElement('buttonTemplateChoose'); ?>
-                        <?= $this->form->getElement('buttonTemplatePreview'); ?>
-                    </td>
-                </tr>
-                <tr>
-                    <td><span class="icon icon-template"></span>Kľúčové slová:</td>
-                    <td colspan="2"><?= $this->form->getElement('pageKeywords'); ?></td>
-                </tr>
-                <tr>
-                    <td colspan="3">
-                        <hr>
-                    </td>
-                </tr>
-                <tr>
-                    <td colspan="3">
-                        <?= $this->form->getElement('buttonCancel'); ?>
-                        <?= $this->form->getElement('buttonSubmit'); ?>
-                    </td>
-                </tr>
-            </table>
+            <?= $this->form->getFieldset('config'); ?>
+            <?= $this->form->getFieldset('submit'); ?>
         </article>
         <article id="content">
             <?
