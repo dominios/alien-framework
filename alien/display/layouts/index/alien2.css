@@ -39,6 +39,7 @@
     border: 1px solid #ccc;
     color: #333;
     opacity: 0.85;
+    z-index: 99999999999;
 }
 
 #ConsoleHeader img {
@@ -62,9 +63,17 @@
     color: #888;
 }
 
-.console_msg { color: #333; }
-.console_warning { color: #fc8d00; }
-.console_error { color: red; }
+.console_msg {
+    color: #333;
+}
+
+.console_warning {
+    color: #fc8d00;
+}
+
+.console_error {
+    color: red;
+}
 
 section#messageDetail {
     padding: 10px;
@@ -73,9 +82,7 @@ section#messageDetail {
     margin-bottom: 10px;
 }
 
-
 /* *** ITEMS - ROWS *********************************************************** */
-
 
 table.itemList {
     border-spacing: 0;
@@ -114,12 +121,12 @@ table.itemList tr:last-child td {
 }
 
 table .itemRow {
-    -webkit-transition:  background-color 0.2s, color 0.2s;
+    -webkit-transition: background-color 0.2s, color 0.2s;
     -moz-transition: background-color 0.2s, color 0.2s;
     transition: background-color 0.2s, color 0.2s;
 }
 
-table .itemRow:nth-child(odd){
+table .itemRow:nth-child(odd) {
     background-color: rgba(230, 230, 230, 0.3);
 }
 
@@ -133,7 +140,6 @@ table .itemRow img {
     width: 18px;
     height: 18px;
 }
-
 
 /* *** ITEMS - GRID *********************************************************** */
 
@@ -171,7 +177,7 @@ table .itemRow img {
     text-align: center;
 }
 
-.gridLayout .item:nth-child(7){
+.gridLayout .item:nth-child(7) {
     clear: both;
 }
 
@@ -188,7 +194,7 @@ table .itemRow img {
     vertical-align: middle;
 }
 
-.gridLayout .item:hover{
+.gridLayout .item:hover {
     background-color: rgba(123, 170, 255, 0.5);
     cursor: pointer;
 }
@@ -214,7 +220,6 @@ table .itemRow img {
 .rowLayout .itemText {
     display: inline-block;
 }
-
 
 .item.selectable:hover {
     /*background-color: #fbf37b;*/

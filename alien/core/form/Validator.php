@@ -75,23 +75,25 @@ class Validator {
     }
 
     protected function csrfCheck(Input $input) {
-        $result = false;
-        for ($i = 0; $i <= count($_SESSION['tokens']); $i++) {
-            if ($_SESSION['tokens'][$i]['timeout'] < time()) {
-                if ($_SESSION['tokens'][$i]['token'] == $input->getValue()) {
+        $valid = false;
+//        for ($i = 0; $i <= count($_SESSION['tokens']); $i++) {
+        foreach ($_SESSION['tokens'] as $key => $token) {
+            if ($token['timeout'] < time()) {
+                if ($token['token'] == $input->getValue()) {
                     Notification::warning('CSRF token timeout.');
                 }
-                unset($_SESSION['tokens'][$i]);
+                unset($_SESSION['tokens'][$key]);
                 continue;
             }
-            if ($_SESSION['tokens'][$i]['token'] == $input->getValue()) {
-                $result = true;
+            if ($token['token'] == $input->getValue()) {
+                $valid = true;
+                unset($_SESSION['tokens'][$key]);
             }
         }
-        if (!$result) {
+        if (!$valid) {
             Notification::warning('Invalid CSRF token!');
         }
-        return $result;
+        return $valid;
     }
 
     protected function userUniqueEmail(Input $input) {
