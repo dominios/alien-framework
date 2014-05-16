@@ -9,7 +9,7 @@
             type: "GET",
             data: "action=userShowAddGroupDialog&userId=" + userId,
             timeout: 5000,
-            success: function(data) {
+            success: function (data) {
                 json = jQuery.parseJSON(data);
 //                createDialog(json.header, json.content);
                 createModal(json);
@@ -26,7 +26,7 @@
             type: "GET",
             data: "action=userShowAddPermissionDialog&userId=" + userId,
             timeout: 5000,
-            success: function(data) {
+            success: function (data) {
                 json = jQuery.parseJSON(data);
 //                createDialog(json.header, json.content);
                 createModal(json);
@@ -36,8 +36,8 @@
 </script>
 
 <?= $this->form->startTag(); ?>
-<?= $this->form->getElement('action'); ?>
-<?= $this->form->getElement('userId'); ?>
+<?= $this->form->getField('action'); ?>
+<?= $this->form->getField('userId'); ?>
 <section class="tabs" id="userTabs">
     <header>
         <ul>
@@ -51,23 +51,29 @@
             <table class="full">
                 <tr>
                     <td style="width: 180px;"><span class="icon icon-user"></span>Login:</td>
-                    <td colspan="2"><?= $this->form->getElement('userLogin'); ?></td>
-                </tr><tr>
+                    <td colspan="2"><?= $this->form->getField('userLogin'); ?></td>
+                </tr>
+                <tr>
                     <td><span class="icon icon-user"></span>Meno:</td>
-                    <td colspan="2"><?= $this->form->getElement('userFirstname'); ?></td>
-                </tr><tr>
+                    <td colspan="2"><?= $this->form->getField('userFirstname'); ?></td>
+                </tr>
+                <tr>
                     <td><span class="icon icon-user"></span>Priezvisko:</td>
-                    <td colspan="2"><?= $this->form->getElement('userSurname'); ?></td>
-                </tr><tr>
+                    <td colspan="2"><?= $this->form->getField('userSurname'); ?></td>
+                </tr>
+                <tr>
                     <td><span class="icon icon-email"></span>Email:</td>
-                    <td colspan="2"><?= $this->form->getElement('userEmail'); ?></td>
-                </tr><tr>
+                    <td colspan="2"><?= $this->form->getField('userEmail'); ?></td>
+                </tr>
+                <tr>
                     <td><span class="icon icon-key"></span>Nové heslo:</td>
-                    <td colspan="2"><?= $this->form->getElement('userPass2'); ?></td>
-                </tr><tr>
+                    <td colspan="2"><?= $this->form->getField('userPass2'); ?></td>
+                </tr>
+                <tr>
                     <td><span class="icon icon-key"></span>Potvrdiť heslo:</td>
-                    <td colspan="2"><?= $this->form->getElement('userPass3'); ?></td>
-                </tr><tr>
+                    <td colspan="2"><?= $this->form->getField('userPass3'); ?></td>
+                </tr>
+                <tr>
                     <td><span class="icon icon-checked-user"></span>Stav účtu:</td>
                     <td colspan="2">
                         <select name="userStatus">
@@ -75,15 +81,19 @@
                             <option value="1" <?= $this->user->getStatus() ? 'selected' : ''; ?>>Aktívny</option>
                         </select>
                     </td>
-                </tr><tr>
-                    <td colspan="3"><div class="hr"></div></td>
-                </tr><tr>
+                </tr>
+                <tr>
                     <td colspan="3">
-                        <?= $this->form->getElement('buttonCancel'); ?>
-                        <?= $this->form->getElement('buttonSave'); ?>
-                        <?= $this->form->getElement('buttonMessage'); ?>
-                        <?= $this->form->getElement('buttonResetPassword'); ?>
-                        <?= $this->form->getElement('buttonDelete'); ?>
+                        <div class="hr"></div>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="3">
+                        <?= $this->form->getField('buttonCancel'); ?>
+                        <?= $this->form->getField('buttonSave'); ?>
+                        <?= $this->form->getField('buttonMessage'); ?>
+                        <?= $this->form->getField('buttonResetPassword'); ?>
+                        <?= $this->form->getField('buttonDelete'); ?>
                     </td>
                 </tr>
             </table>
@@ -102,7 +112,7 @@
             </div>
             <div class="cleaner"></div>
             <div class="hr"></div>
-            <?= $this->form->getElement('buttonAddGroup'); ?>
+            <?= $this->form->getField('buttonAddGroup'); ?>
         </article>
         <article id="permissions" class="tab-hidden">
             <div class="gridLayout">
@@ -118,7 +128,7 @@
             </div>
             <div class="cleaner"></div>
             <div class="hr"></div>
-            <?= $this->form->getElement('buttonAddPermission'); ?>
+            <?= $this->form->getField('buttonAddPermission'); ?>
         </article>
     </section>
 </section>

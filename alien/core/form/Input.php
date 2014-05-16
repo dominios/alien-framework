@@ -12,6 +12,7 @@ use Alien\Forms\Input\Select;
 use Alien\Forms\Input\Submit;
 use Alien\Forms\Input\Text;
 use Alien\Forms\Input\Textarea;
+use Alien\Forms\Validator\ValidatorException;
 
 abstract class Input {
 
@@ -186,7 +187,7 @@ abstract class Input {
         return $input;
     }
 
-    protected function commonRenderAttributes($validate = false) {
+    protected function commonRenderAttributes() {
         $attr = array();
         if (!$this->validate() && sizeof($_POST)) {
             $this->addCssClass('invalid');
@@ -272,7 +273,16 @@ abstract class Input {
         } else {
             $ret = true;
             foreach ($this->validators as $validator) {
-                $ret = $ret && $validator->validate($this);
+                try {
+                    if ($validator instanceof Validator) {
+                        $ret = $ret && $validator->validate($this);
+                    }
+                } catch (ValidatorException $e) {
+                    $this->setErrorMessage($e->getMessage());
+                    $ret = false;
+                } catch (\Exception $e) {
+                    //e?
+                }
             }
             $this->setValidationResult($ret);
             return $ret;
@@ -361,4 +371,5 @@ abstract class Input {
     public function getLinkedInputs() {
         return $this->linkedInputs;
     }
+
 }

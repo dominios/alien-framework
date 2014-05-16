@@ -48,15 +48,15 @@ function class_autoloader($class) {
     $autoloadDirectories[] = 'core';
     $autoloadDirectories[] = 'core/form';
     $autoloadDirectories[] = 'core/form/input';
-	$autoloadDirectories[] = 'layouts';
+    $autoloadDirectories[] = 'core/form/validator';
+    $autoloadDirectories[] = 'layouts';
 
     foreach ($autoloadDirectories as $dir) {
         $dh = \opendir($dir);
         if ($dh) {
             while (false !== ($file = readdir($dh))) {
                 if (!is_dir($dir . '/' . $file)) {
-                    include_once $dir . '/' . $file;
-                    ;
+                    include_once $dir . '/' . $file;;
                 }
             }
             closedir($dh);

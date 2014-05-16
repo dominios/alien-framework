@@ -52,10 +52,10 @@ class PageForm extends Form {
              ->addToFieldset($configFieldset);
 
         $templateField = Input::text('pageTemplateHelper', '', $page->getTemplate(true)->getName())
-                              ->setIcon('icon-template')
-                              ->setLabel('Šablóna stránky')
-                              ->setDisabled(true)
-                              ->addToFieldset($configFieldset);
+            ->setIcon('icon-template')
+            ->setLabel('Šablóna stránky')
+            ->setDisabled(true)
+            ->addToFieldset($configFieldset);
 
         Input::hidden('pageTemplate', $page->getTemplate())
              ->addToForm($form)

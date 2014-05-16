@@ -1,7 +1,6 @@
-
 <?= $this->form->startTag(); ?>
-<?= $this->form->getElement('action'); ?>
-<?= $this->form->getElement('userId'); ?>
+<?= $this->form->getField('action'); ?>
+<?= $this->form->getField('userId'); ?>
 <section class="tabs" id="userTabs">
     <header>
         <ul>
@@ -15,31 +14,41 @@
             <table class="full">
                 <tr>
                     <td style="width: 180px;"><span class="icon icon-user"></span>Login:</td>
-                    <td colspan="2"><?= $this->form->getElement('userLogin'); ?></td>
-                </tr><tr>
+                    <td colspan="2"><?= $this->form->getField('userLogin'); ?></td>
+                </tr>
+                <tr>
                     <td><span class="icon icon-user"></span>Meno:</td>
-                    <td colspan="2"><?= $this->form->getElement('userFirstname'); ?></td>
-                </tr><tr>
+                    <td colspan="2"><?= $this->form->getField('userFirstname'); ?></td>
+                </tr>
+                <tr>
                     <td><span class="icon icon-user"></span>Priezvisko:</td>
-                    <td colspan="2"><?= $this->form->getElement('userSurname'); ?></td>
-                </tr><tr>
+                    <td colspan="2"><?= $this->form->getField('userSurname'); ?></td>
+                </tr>
+                <tr>
                     <td><span class="icon icon-email"></span>Email:</td>
-                    <td colspan="2"><?= $this->form->getElement('userEmail'); ?></td>
-                </tr><tr>
+                    <td colspan="2"><?= $this->form->getField('userEmail'); ?></td>
+                </tr>
+                <tr>
                     <td><span class="icon icon-key"></span>Súčasné heslo:</td>
-                    <td colspan="2"><?= $this->form->getElement('userCurrentPass'); ?></td>
-                </tr><tr>
+                    <td colspan="2"><?= $this->form->getField('userCurrentPass'); ?></td>
+                </tr>
+                <tr>
                     <td><span class="icon icon-key"></span>Nové heslo:</td>
-                    <td colspan="2"><?= $this->form->getElement('userPass2'); ?></td>
-                </tr><tr>
+                    <td colspan="2"><?= $this->form->getField('userPass2'); ?></td>
+                </tr>
+                <tr>
                     <td><span class="icon icon-key"></span>Potvrdiť heslo:</td>
-                    <td colspan="2"><?= $this->form->getElement('userPass3'); ?></td>
-                </tr><tr>
-                    <td colspan="3"><div class="hr"></div></td>
-                </tr><tr>
+                    <td colspan="2"><?= $this->form->getField('userPass3'); ?></td>
+                </tr>
+                <tr>
                     <td colspan="3">
-                        <?= $this->form->getElement('buttonCancel'); ?>
-                        <?= $this->form->getElement('buttonSave'); ?>
+                        <div class="hr"></div>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="3">
+                        <?= $this->form->getField('buttonCancel'); ?>
+                        <?= $this->form->getField('buttonSave'); ?>
                     </td>
                 </tr>
             </table>
