@@ -33,8 +33,9 @@ class User implements ActiveRecord {
             $STH = $DBH->prepare('SELECT * FROM ' . DBConfig::table(DBConfig::USERS) . ' WHERE id_u=:i;');
             $STH->bindValue(':i', (int) $id, PDO::PARAM_INT);
             $STH->execute();
-            if (!$STH->rowCount())
+            if (!$STH->rowCount()) {
                 return;
+            }
             $row = $STH->fetch();
         }
 
@@ -134,7 +135,7 @@ class User implements ActiveRecord {
         $code = '';
         $i = 0;
         while ($i < $number_of_characters) {
-            $code.=substr($possible_letters, mt_rand(0, strlen($possible_letters) - 1), 1);
+            $code .= substr($possible_letters, mt_rand(0, strlen($possible_letters) - 1), 1);
             $i++;
         }
         $this->setPassword($code);
@@ -194,16 +195,19 @@ class User implements ActiveRecord {
         }
 
         switch (strtoupper($LOGIC)) {
-            case 'OR': $LOGIC = 'OR';
+            case 'OR':
+                $LOGIC = 'OR';
                 break;
-            case 'AND': $LOGIC = 'AND';
+            case 'AND':
+                $LOGIC = 'AND';
                 break;
-            default: $LOGIC = 'AND';
+            default:
+                $LOGIC = 'AND';
                 break;
         }
 
         $args = $permissions;
-        if (!is_array($args) && ( is_string($args) || is_numeric($args))) {
+        if (!is_array($args) && (is_string($args) || is_numeric($args))) {
             $temp = $args;
             unset($args);
             $args = array($temp);
@@ -397,20 +401,7 @@ class User implements ActiveRecord {
     }
 
     public function isOnline() {
-        return false; // TODO proste...
-        $DBH = Application::getDatabaseHandler();
-        $STH = $DBH->prepare("SELECT UNIX_TIMESTAMP(timeout) AS time FROM " . Application::getDBPrefix() . "_authorization WHERE id_u=:id ORDER BY id_auth DESC LIMIT 1");
-        $STH->bindValue(':id', $this->id);
-        $STH->execute();
-        if (!$STH->rowCount()) {
-            return false;
-        }
-        $x = $STH->fetch();
-        if ($x['time'] < time()) {
-            return false;
-        } else {
-            return true;
-        }
+        throw new \RuntimeException("Not implemented yet");
     }
 
     public function touch() {

@@ -2,9 +2,6 @@
 
 namespace Alien;
 
-use \Alien\Models\Authorization\Authorization;
-use \Alien\Layout\Layout;
-
 ob_start();
 session_start();
 mb_internal_encoding("UTF-8");
@@ -17,8 +14,6 @@ error_reporting(E_ALL ^ E_NOTICE ^ E_STRICT);
 if (!preg_match('/\/alien$/', getcwd()) && file_exists('alien')) {
     chdir('alien');
 }
-
-Authorization::getInstance();
 
 include_once 'functions.php';
 
@@ -50,6 +45,7 @@ function class_autoloader($class) {
     $autoloadDirectories[] = 'core/form/input';
     $autoloadDirectories[] = 'core/form/validator';
     $autoloadDirectories[] = 'layouts';
+    $autoloadDirectories[] = 'core/db';
 
     foreach ($autoloadDirectories as $dir) {
         $dh = \opendir($dir);

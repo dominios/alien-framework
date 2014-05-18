@@ -3,39 +3,73 @@
 namespace Alien;
 
 use Alien\Controllers\BaseController;
-use Alien\Layout\ErrorLayout;
-use \PDO;
-use \DateTime;
+use Alien\Db\Connection;
+use Alien\Db\UserDao;
+use BadFunctionCallException;
+use Exception;
+use PDO;
+use RuntimeException;
 
 final class Application {
 
     private static $instance;
-    private $DBH = null;
-    private $systemSettings;
+    private static $boot = false;
+    private $config;
     private $console;
+    private $serviceManager;
 
     private function __construct() {
-        $this->loadConfig();
-        $this->console = Terminal::getInstance();
-        date_default_timezone_set($this->systemSettings['timezone']);
-        $this->connectToDatabase($this->systemSettings['db_host'], $this->systemSettings['db_database'], $this->systemSettings['db_username'], $this->systemSettings['db_password']);
+        $this->config = parse_ini_file('config.ini');
     }
 
     public static final function getInstance() {
-        if (!self::$instance) {
+        if (self::$instance === null) {
             self::$instance = new Application;
         }
         return self::$instance;
     }
 
+    /**
+     * Initialize applicatin. Can be run only once.
+     *
+     * @throws RuntimeException
+     */
     public static function boot() {
-        $app = self::getInstance();
+        if (self::$boot === true) {
+            throw new RuntimeException("Application can boot only once.");
+        }
+        self::$boot = true;
+        $app = Application::getInstance();
+        date_default_timezone_set($app->config['timezone']);
+        $app->console = Terminal::getInstance();
+
+        $sm = ServiceManager::initialize($app->config);
+        $app->serviceManager = $sm;
+
+        $connection = new Connection(array(
+            'host' => $app->config['dbHost'],
+            'database' => $app->config['dbDatabase'],
+            'username' => $app->config['dbUsername'],
+            'password' => $app->config['dbPassword'],
+            'prefix' => $app->config['dbPrefix']
+        ));
+
+        $userDao = new UserDao($connection->getPDO());
+
+        $sm->registerService($connection->getPDO());
+        $sm->registerService($userDao);
+
     }
 
+    /**
+     * Runs application MVC and renders output into string
+     *
+     * @return string HTML output
+     */
     public function run() {
-    ob_clean();
+        ob_clean();
         header('Content-Type: text/html; charset=utf-8');
-
+        $content = '';
         try {
             $request = BaseController::parseRequest();
             if (class_exists($request['controller'])) {
@@ -43,21 +77,19 @@ final class Application {
             } else {
                 $controller = new BaseController($request['actions']);
             }
-
             $responses = $controller->doActions();
             foreach ($responses as $response) {
                 $controller->getLayout()->handleResponse($response);
             }
-            $content = $controller->getLayout()->__toString();
-            return $content;
-
-        } catch(\BadFunctionCallException $e){
+            $content .= $controller->getLayout()->__toString();
+        } catch (BadFunctionCallException $e) {
             $controller->forceAction('error404', $e);
-        } catch(\Exception $e){
+        } catch (Exception $e) {
             $controller->forceAction('error500', $e);
         }
-    }
 
+        return $content;
+    }
 
     /**
      * @return Terminal
@@ -68,78 +100,33 @@ final class Application {
     }
 
     /**
-     * TODO : nejaky AlienPDO ktory bude vsetko logovat ...
-     * @global PDO $DBH db handler
-     * @global int $queryCounter pocet vykonanych dotazov
-     * @param string $host host
-     * @param string $database databaza
-     * @param string $username meno
-     * @param string $password heslo
-     * @return PDO database handler
-     */
-    private final function connectToDatabase($host, $database, $username, $password) {
-        try {
-            # MySQL with PDO_MYSQL
-            $DBH = new PDO("mysql:host=$host;dbname=$database;charset=utf8", $username, $password);
-            $DBH->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_WARNING); // ZMENIT POTOM LEN NA EXCEPTION
-            $DBH->query('SET NAMES utf8');
-        } catch (PDOException $e) {
-            header("HTTP/1.1 503 Service Unavailable");
-            die('error 503 connect na databazu, prerobit na error hlasku!');
-        }
-        /* nastavenie timezone */
-        $now = new DateTime();
-        $mins = $now->getOffset() / 60;
-        $sgn = ($mins < 0 ? -1 : 1);
-        $mins = abs($mins);
-        $hrs = floor($mins / 60);
-        $mins -= $hrs * 60;
-        $offset = sprintf('%+d:%02d', $hrs * $sgn, $mins);
-        $DBH->exec('SET time_zone="' . $offset . '"');
-        $this->console->putMessage('Database handler initialized.');
-        $this->DBH = $DBH;
-    }
-
-    /**
-     * Získa spojenie s databázou
-     * @return PDO database handler
-     * @deprecated
+     * Gets database connection service object from ServiceManager
+     *
+     * @return PDO database connection
+     * @deprecated use ServiceManager directly. This method will be removed in future!
      */
     public static final function getDatabaseHandler() {
-        if (self::getInstance()->DBH === null) {
-            $config = parse_ini_file('config.ini', TRUE);
-            Application::getInstance()->connectToDatabase($config['MYSQL']['db_host'], $config['MYSQL']['db_database'], $config['MYSQL']['db_username'], $config['MYSQL']['db_password']);
-        }
-
-        require_once 'DBConfig.php';
-        DBConfig::setDBPrefix(Application::getParameter('db_prefix'));
-
-        return self::getInstance()->DBH;
+        $app = Application::getInstance();
+        return $app->getServiceManager()->getService('PDO');
     }
 
     /**
-     * Získa prefix tabuliek
-     * @return string prefix
+     * Returns system configuration value by key
+     *
+     * @param string $param key
+     * @return mixed value
      * @deprecated
      */
-    public static final function getDBPrefix() {
-        return self::getParameter('db_prefix');
-    }
-
-    /**
-     * nacita konfigiracny subor
-     */
-    private final function loadConfig() {
-        $this->systemSettings = parse_ini_file('config.ini');
-    }
-
-    /**
-     * vrati hodnotu konfiguracneho parametra
-     * @param string parameter
-     * @return mixed hodnota
-     */
     public static final function getParameter($param) {
-        return self::getInstance()->systemSettings[$param];
+        return self::getInstance()->config[$param];
     }
 
+    /**
+     * Returns initialized ServiceManager object
+     *
+     * @return ServiceManager
+     */
+    public function getServiceManager() {
+        return $this->serviceManager;
+    }
 }

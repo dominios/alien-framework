@@ -4,6 +4,8 @@ require_once 'alien/init.php';
 
 //echo '<pre>';
 
+\Alien\Application::boot();
+
 $request = preg_replace('/^\/{1}/', '', $_SERVER['REQUEST_URI']);
 $requestWords = explode('?', $request, 2);
 $seolink = $requestWords[0];
@@ -29,7 +31,6 @@ echo $page = new \Alien\Models\Content\Page($seolink);
 //    }
 //
 //}
-
 
 
 //echo '<pre>';
