@@ -25,7 +25,6 @@ class TemplateController extends ContentController {
 
         $view = new View('display/content/temlateForm.php');
 
-        $templateDao = $this->getServiceManager()->getDao('Alien\Models\Content\TemplateDao');
         $templateDao = $this->getServiceManager()->getDao('TemplateDao');
         $template = $templateDao->find($_GET['id']);
 
