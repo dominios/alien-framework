@@ -89,8 +89,8 @@
 </script>
 
 <?= $this->form->startTag(); ?>
-<?= $this->form->getElement('action'); ?>
-<?= $this->form->getElement('templateId'); ?>
+<?= $this->form->getField('action'); ?>
+<?= $this->form->getField('templateId'); ?>
 
 <section class="tabs" id="templateTabs">
     <header>
@@ -104,18 +104,18 @@
             <table class="full">
                 <tr>
                     <td><span class="icon icon-template"></span> Názov šablóny:</td>
-                    <td colspan="2"><?= $this->form->getElement('templateName'); ?></td>
+                    <td colspan="2"><?= $this->form->getField('templateName'); ?></td>
                 </tr>
                 <tr>
                     <td><span class="icon icon-note"></span> Krátky popis:</td>
-                    <td colspan="2"><?= $this->form->getElement('templateDescription'); ?></td>
+                    <td colspan="2"><?= $this->form->getField('templateDescription'); ?></td>
                 </tr>
                 <tr>
                     <td><span class="icon icon-code"></span> Zdrojový súbor:</td>
-                    <td><?= $this->form->getElement('templateSrc'); ?></td>
+                    <td><?= $this->form->getField('templateSrc'); ?></td>
                     <td>
-                        <?= $this->form->getElement('buttonSrcChoose'); ?>
-                        <?= $this->form->getElement('buttonSrcMagnify'); ?>
+                        <?= $this->form->getField('buttonSrcChoose'); ?>
+                        <?= $this->form->getField('buttonSrcMagnify'); ?>
                     </td>
                 </tr>
                 <tr>
@@ -125,8 +125,8 @@
                 </tr>
                 <tr>
                     <td colspan="3">
-                        <?= $this->form->getElement('buttonCancel'); ?>
-                        <?= $this->form->getElement('buttonSubmit'); ?>
+                        <?= $this->form->getField('buttonCancel'); ?>
+                        <?= $this->form->getField('buttonSubmit'); ?>
                     </td>
                 </tr>
             </table>

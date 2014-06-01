@@ -21,3 +21,4 @@ $userDao = $sm->getDao('Alien\Models\Authorization\UserDao');
 echo "<pre>";
 var_dump($userDao->find(1));
 echo "</pre>";
+
