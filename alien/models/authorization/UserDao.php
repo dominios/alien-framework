@@ -1,8 +1,9 @@
 <?php
 
-namespace Alien\Db;
+namespace Alien\Models\Authorization;
 
 use Alien\ActiveRecord;
+use Alien\Db\CRUDDaoImpl;
 use Alien\DBConfig;
 use Alien\Models\Authorization\User;
 use InvalidArgumentException;

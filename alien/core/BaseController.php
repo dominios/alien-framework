@@ -4,6 +4,7 @@ namespace Alien\Controllers;
 
 use Alien\Application;
 use Alien\Layout\ErrorLayout;
+use Alien\ServiceManager;
 use Alien\Terminal;
 use Alien\Response;
 use Alien\Models\Authorization\Authorization;
@@ -15,10 +16,34 @@ use Alien\View;
 
 class BaseController {
 
+    /**
+     * @var ServiceManager
+     */
+    protected $serviceManager;
+
+    /**
+     * @var string
+     */
     protected $defaultAction = 'loginScreen';
+
+    /**
+     * @var array
+     */
     protected $actions;
+
+    /**
+     * @var Layout
+     */
     private $layout;
+
+    /**
+     * @var string
+     */
     private static $currentController;
+
+    /**
+     * @var BaseController
+     */
     private static $instance = null;
 
     public final function __construct($args = null) {
@@ -106,7 +131,7 @@ class BaseController {
         exit;
     }
 
-    protected function refresh(){
+    protected function refresh() {
         $this->redirect($_SERVER['REQUEST_URI']);
     }
 
@@ -227,7 +252,7 @@ class BaseController {
         }
     }
 
-    public function forceAction($action, $arg = null){
+    public function forceAction($action, $arg = null) {
         unset($this->actions);
         return $this->$action($arg);
     }
@@ -236,7 +261,7 @@ class BaseController {
         throw new \BadFunctionCallException();
     }
 
-    protected function loginScreen(){
+    protected function loginScreen() {
 
     }
 
@@ -270,4 +295,14 @@ class BaseController {
         echo $this->getLayout()->__toString();
         exit;
     }
+
+    public function setServiceManager(ServiceManager $serviceManager) {
+        $this->serviceManager = $serviceManager;
+        return $this;
+    }
+
+    public function getServiceManager() {
+        return $this->serviceManager;
+    }
+
 }

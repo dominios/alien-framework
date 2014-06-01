@@ -4,7 +4,8 @@ namespace Alien;
 
 use Alien\Controllers\BaseController;
 use Alien\Db\Connection;
-use Alien\Db\UserDao;
+use Alien\Models\Authorization\UserDao;
+use Alien\Models\Content\TemplateDao;
 use BadFunctionCallException;
 use Exception;
 use PDO;
@@ -54,10 +55,12 @@ final class Application {
             'prefix' => $app->config['dbPrefix']
         ));
 
-        $userDao = new UserDao($connection->getPDO());
-
         $sm->registerService($connection->getPDO());
+
+        $userDao = new UserDao($connection->getPDO());
+        $templateDao = new TemplateDao($connection->getPDO());
         $sm->registerService($userDao);
+        $sm->registerService($templateDao);
 
     }
 
@@ -77,6 +80,7 @@ final class Application {
             } else {
                 $controller = new BaseController($request['actions']);
             }
+            $controller->setServiceManager($this->serviceManager);
             $responses = $controller->doActions();
             foreach ($responses as $response) {
                 $controller->getLayout()->handleResponse($response);

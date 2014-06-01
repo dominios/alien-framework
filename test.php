@@ -1,6 +1,7 @@
 <?php
 
 use Alien\Application;
+use Alien\Models\Authorization\UserDao;
 
 require_once 'alien/init.php';
 
@@ -15,7 +16,7 @@ require_once 'alien/init.php';
 Application::boot();
 $app = Application::getInstance();
 $sm = $app->getServiceManager();
-$userDao = $sm->getDao('Alien\Db\UserDao');
+$userDao = $sm->getDao('Alien\Models\Authorization\UserDao');
 
 echo "<pre>";
 var_dump($userDao->find(1));

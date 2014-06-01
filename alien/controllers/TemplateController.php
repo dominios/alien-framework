@@ -25,7 +25,10 @@ class TemplateController extends ContentController {
 
         $view = new View('display/content/temlateForm.php');
 
-        $template = new Template((int) $_GET['id']);
+        $templateDao = $this->getServiceManager()->getDao('Alien\Models\Content\TemplateDao');
+        $template = $templateDao->find($_GET['id']);
+
+        //$template = new Template((int) $_GET['id']);
 //        $template->fetchViews();
 
         $form = TemplateForm::create($template);

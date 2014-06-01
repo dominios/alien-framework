@@ -2,6 +2,8 @@
 
 namespace Alien;
 
+use Alien\ServiceException;
+use Alien\Db\CRUDDao;
 use DomainException;
 use InvalidArgumentException;
 
@@ -32,25 +34,31 @@ final class ServiceManager {
     /**
      * Returns registered service if found, or throws exception on failure.
      *
-     * @param string $name needle
+     * @param string $name service name
+     * @throws ServiceException
      * @return object
-     * @throws DomainException
      */
     public function getService($name) {
         if (!array_key_exists($name, $this->services)) {
-            throw new DomainException("Requested service is not available.");
+            throw new ServiceException("Requested service $name is not available.");
         }
         return $this->services[$name];
     }
 
     /**
-     * Alias of getService(). Changed only PHPDoc return type, so it is more useful for IDE.
+     * Gets DAO service by name. Due to added type-check, it's more IDE-friendly then simple getServce()
      *
-     * @param $name
+     * @param string $name service name
+     * @throws ServiceException
      * @return \Alien\Db\CRUDDaoImpl
      */
     public function getDao($name) {
-        return $this->getService($name);
+        $dao = $this->getService($name);
+        if ($dao instanceof CRUDDao) {
+            return $dao;
+        } else {
+            throw new ServiceException("No DAO service registered with name '$name'.");
+        }
     }
 
     /**
