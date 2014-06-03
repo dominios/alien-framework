@@ -75,7 +75,7 @@ class UsersController extends BaseController {
 
         $user = new User((int) $_GET['id']);
 
-        $form = EditForm::create($user);
+        $form = EditForm::factory($user);
 
         if ($form->isPostSubmit()) {
 

@@ -11,9 +11,7 @@ class Text extends Input {
     }
 
     public function __toString() {
-        $attr = $this->commonRenderAttributes(true);
-        $ret = '';
-        $ret .= '<input type="text" name="' . $this->name . '" value="' . $this->value . '" ' . implode(' ', $attr) . '>';
-        return $ret;
+        return '<input type="text" name="' . $this->name . '" value="' . $this->value . '" ' . $this->commonRenderAttributes(true) . '>';
     }
+
 }

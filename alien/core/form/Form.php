@@ -64,6 +64,13 @@ class Form {
     }
 
     /**
+     * Factory method to create new instance of form. Useful when creating new sub class.
+     */
+    public static function factory() {
+
+    }
+
+    /**
      * Returns HTML representation of start tag and possibly CSRF token input
      * @return string
      */
@@ -203,14 +210,16 @@ class Form {
             Input::setHydratorArray($hydratorArray);
         }
         $ret = true;
-        foreach ($this->fields as $e) {
-            $e->hydrate();
-            $ret &= $e->validate();
+        foreach ($this->fields as $i) {
+            $i->hydrate();
+            $ret &= $i->validate();
         }
         foreach ($this->fieldsets as $fs) {
-            foreach ($fs as $e) {
-                $e->hydrate();
-                $ret &= $e->validate();
+            foreach ($fs as $i) {
+                if ($i instanceof Input) {
+                    $i->hydrate();
+                    $ret &= $i->validate();
+                }
             }
         }
         return $ret;

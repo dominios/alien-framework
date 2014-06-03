@@ -18,10 +18,11 @@ class WidgetForm extends Form {
         parent::__construct('post', '', 'editWidgetForm');
     }
 
-    public static function create(Widget $widget) {
-        $form = new self();
-        $form = $widget->injectCustomFormElements($form);
+    public static function factory(Widget $widget) {
+        parent::factory();
+        $form = new WidgetForm();
         $form->widget = $widget;
+        $form = $widget->injectCustomFormElements($form);
         $form->setId('widgetForm');
         Input::hidden('action', 'content/editWidget')->addToForm($form);
         Input::hidden('widgetId', $widget->getId())->addToForm($form);

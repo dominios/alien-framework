@@ -31,7 +31,7 @@ class TemplateController extends ContentController {
         //$template = new Template((int) $_GET['id']);
 //        $template->fetchViews();
 
-        $form = TemplateForm::create($template);
+        $form = TemplateForm::factory($template);
 
         $view->template = $template;
         $view->form = $form;

@@ -36,7 +36,7 @@ class PageController extends ContentController {
 
         $view = new View('display/content/pageForm.php');
         $page = new Page((int) $_GET['id']);
-        $form = PageForm::create($page);
+        $form = PageForm::factory($page);
 
         $view->page = $page;
         $view->form = $form;

@@ -16,15 +16,16 @@ class TemplateForm extends Form {
         parent::__construct('post', '', 'editTemplateForm');
     }
 
-    public static function create(Template $template){
+    public static function factory(Template $template) {
+        parent::factory();
         $form = new TemplateForm();
         $form->page = $template;
         $form->setId('templateForm');
         Input::hidden('action', 'template/edit')->addToForm($form);
         Input::hidden('templateId', $template->getId())->addToForm($form);
         Input::text('templateName', '', $template->getName())
-            ->addValidator(Validator::custom('templateUniqueName', array('ignore' => $template->getId()), 'Zadaný názov šablóny sa už používa'))
-            ->addToForm($form);
+             ->addValidator(Validator::custom('templateUniqueName', array('ignore' => $template->getId()), 'Zadaný názov šablóny sa už používa'))
+             ->addToForm($form);
         Input::text('templateDescription', '', $template->getDescription())->addToForm($form);
         Input::text('templateSrc', '', $template->getSrcURL())->addToForm($form);
         Input::button('javascript: templateShowFileBrowser(\'php\');', '', 'icon-external-link')->setName('buttonSrcChoose')->addToForm($form);

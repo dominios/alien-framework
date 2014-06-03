@@ -128,7 +128,7 @@ class ContentController extends BaseController {
         }
 
         $widget = Widget::factory($_GET['id']);
-        $form = WidgetForm::create($widget);
+        $form = WidgetForm::factory($widget);
 
         if ($form->isPostSubmit()) {
             if ($form->validate()) {

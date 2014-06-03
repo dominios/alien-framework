@@ -15,7 +15,8 @@ class TextItemForm extends Form {
         parent::__construct('post', '', 'editItemForm');
     }
 
-    public static function create(TextItem $item) {
+    public static function factory(TextItem $item) {
+        parent::factory();
         $form = new TextItemForm();
         $form->item = $item;
         $form->setId('textItemForm');

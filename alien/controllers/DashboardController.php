@@ -110,7 +110,7 @@ class DashboardController extends BaseController {
 
     protected function profil() {
         $user = Authorization::getCurrentUser();
-        $form = ProfilForm::create($user);
+        $form = ProfilForm::factory($user);
         $form->getField('action')->setValue('dashboard/profil');
 
         if ($form->isPostSubmit()) {

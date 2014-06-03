@@ -16,8 +16,9 @@ class EditForm extends Form {
         parent::__construct('post', '', 'editUserForm');
     }
 
-    public static function create(User $user) {
-        $form = new self();
+    public static function factory(User $user) {
+        parent::factory();
+        $form = new EditForm();
         $form->user = $user;
         $form->setId('userForm');
         Input::hidden('action', 'users/edit')->addToForm($form);

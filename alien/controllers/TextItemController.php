@@ -34,7 +34,7 @@ class TextItemController extends ContentController {
         }
 
         $item = Item::factory($_GET['id']);
-        $form = TextItemForm::create($item);
+        $form = TextItemForm::factory($item);
 
         $view = new View('display/content/TextItemForm.php');
         $view->form = $form;
