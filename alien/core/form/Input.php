@@ -636,11 +636,9 @@ abstract class Input {
     }
 
     /**
-     * Converts object to HTML representation. MUST be overriden, empty string on default.
+     * Converts to HTML representation.
      * @return string
      */
-    public function __toString() {
-        return "";
-    }
+    public abstract function __toString();
 
 }
