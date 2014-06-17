@@ -12,9 +12,8 @@ class Password extends Input {
     }
 
     public function __toString() {
-        $attr = $this->commonRenderAttributes(true);
         $ret = '';
-        $ret .= '<input type="password" name="' . $this->name . '" value="' . $this->value . '" ' . implode(' ', $attr) . '>';
+        $ret .= '<input type="password" name="' . $this->name . '" value="' . $this->value . '" ' . $this->commonRenderAttributes(true) . '>';
         return $ret;
     }
 }

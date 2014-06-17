@@ -29,6 +29,7 @@ class IndexLayout extends Layout {
         $this->appendScript('/alien/js/alien2.js');
         $this->appendScript('/alien/js/tabs.js');
         $this->appendScript('/alien/js/modals.js');
+        $this->appendScript('/alien/js/navbar.js');
         $this->appendScript('/alien/plugins/ckeditor/ckeditor.js');
         $this->prependStylesheet('/alien/display/layouts/index/alien2.css');
         $this->prependStylesheet('/alien/display/layouts/index/alien.css');
@@ -81,10 +82,10 @@ class IndexLayout extends Layout {
     private function topmenuItems() {
 
         $messagesText = '';
-        $messagesText.= 'Správy';
+        $messagesText .= 'Správy';
         $unread = Message::getUnreadCount(Authorization::getCurrentUser());
         if ($unread) {
-            $messagesText.='<span class="badge badge-circular">' . $unread . '</span>';
+            $messagesText .= '<span class="badge badge-circular">' . $unread . '</span>';
         }
 
         $userSubmenu = array();

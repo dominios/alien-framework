@@ -11,9 +11,8 @@ class Textarea extends Input {
     }
 
     public function __toString() {
-        $attr = $this->commonRenderAttributes(true);
         $ret = '';
-        $ret .= '<textarea name="' . $this->name . '" ' . implode(' ', $attr) . '>';
+        $ret .= '<textarea name="' . $this->name . '" ' . $this->commonRenderAttributes(true) . '>';
         $ret .= $this->getValue();
         $ret .= '</textarea>';
         return $ret;

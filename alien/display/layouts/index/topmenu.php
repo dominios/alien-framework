@@ -66,6 +66,14 @@ if (!function_exists('\Alien\Layout\topmenuItemToString')) {
 
 $menu = '';
 
+$menu .= '<div class="navbar-toggle" data-target="mainmenu"><span class="icon icon-menu-light"></span></div>';
+
+$menu .= '<nav class="navbar-content navbar-collapsed mainmenu">';
+
+$menu .= '<header class="navbar-header">';
+$menu .= '<img src="/alien/display/img/alien_logo_white.png" alt="ALiEN">';
+$menu .= '</header>';
+
 $menu .= '<ul>';
 foreach ($this->items['left'] as $item) {
     $menu .= topmenuItemToString($item);
@@ -88,5 +96,7 @@ $menu .= '<div class="button searchSubmit"><span class="icon icon-magnifier-ligh
 $menu .= '</form>';
 $menu .= '</li>';
 $menu .= '</ul>';
+
+$menu .= '</nav>';
 
 echo $menu;
