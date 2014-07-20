@@ -2,13 +2,40 @@
 
 namespace Alien;
 
+use ErrorException;
+
 ob_start();
 session_start();
 mb_internal_encoding("UTF-8");
 spl_autoload_register('\Alien\class_autoloader', true);
 
-error_reporting(E_ALL ^ E_NOTICE ^ E_STRICT);
-//error_reporting(E_ALL & E_NOTICE & E_STRICT); // toto je aj so strict, zapnut neskor, teraz to otravuje...
+//error_reporting(E_ALL);
+error_reporting(E_ALL & ~E_NOTICE);
+
+function exception_error_handler($errno, $errstr, $errfile, $errline) {
+    $severity =
+        1 * E_ERROR |
+        1 * E_WARNING |
+        1 * E_PARSE |
+        0 * E_NOTICE |
+        1 * E_CORE_ERROR |
+        1 * E_CORE_WARNING |
+        1 * E_COMPILE_ERROR |
+        1 * E_COMPILE_WARNING |
+        1 * E_USER_ERROR |
+        1 * E_USER_WARNING |
+        0 * E_USER_NOTICE |
+        0 * E_STRICT |
+        1 * E_RECOVERABLE_ERROR |
+        1 * E_DEPRECATED |
+        1 * E_USER_DEPRECATED;
+    $ex = new ErrorException($errstr, 0, $errno, $errfile, $errline);
+    if (($ex->getSeverity() & $severity) != 0) {
+        throw $ex;
+    }
+}
+
+set_error_handler("\\Alien\\exception_error_handler");
 
 // vzdy pracuje pod alien priecinkom!
 if (!preg_match('/\/alien$/', getcwd()) && file_exists('alien')) {
@@ -46,6 +73,7 @@ function class_autoloader($class) {
     $autoloadDirectories[] = 'core/form/validator';
     $autoloadDirectories[] = 'layouts';
     $autoloadDirectories[] = 'core/db';
+    $autoloadDirectories[] = 'core/annotation';
 
     foreach ($autoloadDirectories as $dir) {
         $dh = \opendir($dir);

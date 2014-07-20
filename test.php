@@ -2,23 +2,37 @@
 
 use Alien\Application;
 use Alien\Models\Authorization\UserDao;
+use Alien\Annotaion\Auth;
 
 require_once 'alien/init.php';
-
-//Application::boot();
-//$userDao = new UserDao(Application::getDatabaseHandler());
-//echo '<pre>';
-//$u = $userDao->find(1);
-//print_r($u);
-//$u->setSurname('Geršák');
-//$userDao->update($u);
 
 Application::boot();
 $app = Application::getInstance();
 $sm = $app->getServiceManager();
-$userDao = $sm->getDao('Alien\Models\Authorization\UserDao');
+
+//$testRoute = 'http://alien.localhost/alien/dashboard/home';
+$testRoute = 'http://alien.localhost/alien/users/edit/id/1/admin/0';
+//$testRoute = 'http://alien.localhost/kontakt';
+
+//$ar = new \Alien\Annotaion\AnnotationEngine();
+//
+//class test {
+//
+//    /**
+//     * @Alien\Annotaion\Auth
+//     */
+//    public function echoA() {
+//        echo 'A';
+//    }
+//}
+//
+//$c = new test();
+//
+//$x = $ar->getMethodAnnotaions($c, 'echoA');
+//
 
 echo "<pre>";
-var_dump($userDao->find(1));
+$rt = new \Alien\Router();
+$rt->handle($testRoute);
 echo "</pre>";
 

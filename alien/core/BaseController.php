@@ -42,10 +42,25 @@ class BaseController {
     private static $currentController;
 
     /**
+     * @var array POST array
+     */
+    private $POST;
+
+    /**
+     * @var array GET array
+     */
+    private $GET;
+
+    /**
      * @var BaseController
      */
     private static $instance = null;
 
+    /**
+     * Controller constructor
+     *
+     * @param array|null $args array of actions
+     */
     public final function __construct($args = null) {
         if (is_array($args)) {
             $this->actions = $args;
@@ -59,6 +74,9 @@ class BaseController {
         self::$instance = $this;
     }
 
+    /**
+     * Initialize the Controller
+     */
     protected function initialize() {
 
         self::$currentController = get_called_class();
@@ -79,6 +97,11 @@ class BaseController {
 
     }
 
+    /**
+     * Run all actions
+     *
+     * @return array
+     */
     public final function doActions() {
 
         $this->actions = array_unique($this->actions);
@@ -113,16 +136,29 @@ class BaseController {
     }
 
     /**
+     * Gets layout
+     *
      * @return Layout layout
      */
     public function getLayout() {
         return $this->layout;
     }
 
+    /**
+     * Sets layout
+     *
+     * @param Layout $layout
+     */
     public function setLayout(Layout $layout) {
         $this->layout = $layout;
     }
 
+    /**
+     * Perform redirect
+     *
+     * @param string $action URL to redirect
+     * @param int $statusCode HTTP status code
+     */
     protected function redirect($action, $statusCode = 301) {
         ob_clean();
         \Alien\NotificationContainer::getInstance()->updateSession();
@@ -131,10 +167,18 @@ class BaseController {
         exit;
     }
 
+    /**
+     * Perform refresh
+     */
     protected function refresh() {
         $this->redirect($_SERVER['REQUEST_URI']);
     }
 
+    /**
+     * Parse current URL request
+     *
+     * @return array
+     */
     public static function parseRequest() {
         $actionsArray = array();
         # najprv POST
@@ -162,10 +206,12 @@ class BaseController {
             unset($_GET);
             for ($i = 0; $i < count($params); $i++) {
                 $_GET[$params[$i++]] = $params[$i];
+//                $this->GET[$params[$i++]] = $params[$i];
             }
         } else {
             unset($_GET);
             $_GET['id'] = $params[0];
+//            $this->GET['id'] = $params[0];
         }
 
 
@@ -177,6 +223,14 @@ class BaseController {
         );
     }
 
+    /**
+     * Gets action URL by given parameters
+     *
+     * @param string $controller controller class name
+     * @param callable $action action name
+     * @param null|array $params array of GET parameters
+     * @return string URL
+     */
     public static function actionURL($controller, $action, $params = null) {
         $url = '/';
         if (preg_match('/alien/', getcwd())) {
@@ -195,31 +249,52 @@ class BaseController {
         return $url;
     }
 
-    public static function getActionFromURL($actionURL, $includeQuery = false) {
-        $actionURL = str_replace('http://' . $_SERVER['HTTP_HOST'], '', $actionURL);
-        if (preg_match('/^\/alien/', $actionURL)) {
-            $actionURL = str_replace('/alien/', '', $actionURL);
+    /**
+     * Gets action name from URL
+     * @param string $url
+     * @param bool $includeQuery
+     * @return string
+     */
+    public static function getActionFromURL($url, $includeQuery = false) {
+        $url = str_replace('http://' . $_SERVER['HTTP_HOST'], '', $url);
+        if (preg_match('/^\/alien/', $url)) {
+            $url = str_replace('/alien/', '', $url);
         }
-        $words = explode('/', $actionURL);
+        $words = explode('/', $url);
         if ($includeQuery) {
             return implode('/', array_diff($words, array($words[0])));
         }
         return $words[1];
     }
 
-    public static function getControllerFromURL($actionURL) {
-        $actionURL = str_replace('http://' . $_SERVER['HTTP_HOST'], '', $actionURL);
-        if (preg_match('/^\/alien/', $actionURL)) {
-            $actionURL = str_replace('/alien/', '', $actionURL);
-            $words = explode('/', $actionURL);
+    /**
+     * Gets controller class name from URL
+     * @param $url
+     * @return mixed
+     */
+    public static function getControllerFromURL($url) {
+        $url = str_replace('http://' . $_SERVER['HTTP_HOST'], '', $url);
+        if (preg_match('/^\/alien/', $url)) {
+            $url = str_replace('/alien/', '', $url);
+            $words = explode('/', $url);
             return $words[0];
         }
     }
 
+    /**
+     * Gets refering URL
+     *
+     * @return string
+     */
     public static function getRefererActionURL() {
         return BaseController::actionURL(BaseController::getControllerFromURL($_SERVER['HTTP_REFERER']), BaseController::getActionFromURL($_SERVER['HTTP_REFERER'], true));
     }
 
+    /**
+     * Perform login action
+     *
+     * @deprecated
+     */
     private function login() {
         if (isset($_POST['loginFormSubmit'])) {
             if (!Authorization::getInstance()->isLoggedIn()) {
@@ -235,15 +310,31 @@ class BaseController {
         $this->redirect(BaseController::actionURL('dashboard', 'home'));
     }
 
+    /**
+     * Perform logout action
+     *
+     * @deprecated
+     */
     private function logout() {
         Authorization::getInstance()->logout();
         $this->redirect('/alien');
     }
 
+    /**
+     * Gets current controller class name
+     *
+     * @return string
+     */
     public static function getCurrentControllerClass() {
         return self::$currentController;
     }
 
+    /**
+     * Checks, if given action is in the action list
+     *
+     * @param string $action
+     * @return bool
+     */
     public static function isActionInActionList($action) {
         if (in_array($action, self::$instance->actions)) {
             return true;
@@ -252,20 +343,40 @@ class BaseController {
         }
     }
 
+    /**
+     * Forces to execute given action. All other waiting actions are discared.
+     *
+     * @param callable $action action to execute
+     * @param null|array $arg action arguments
+     * @return mixed
+     */
     public function forceAction($action, $arg = null) {
         unset($this->actions);
         return $this->$action($arg);
     }
 
+    /**
+     * Empty operation
+     *
+     * @throws \BadFunctionCallException
+     * @deprecated
+     */
     protected final function NOP() {
         throw new \BadFunctionCallException();
     }
 
+    /**
+     * Login screen action
+     *
+     * @deprecated
+     */
     protected function loginScreen() {
-
     }
 
-    protected function error404($arg) {
+    /**
+     * HTTP 404: Not Found page
+     */
+    protected function error404() {
         ob_clean();
         $this->setLayout(new ErrorLayout());
         header($_SERVER['SERVER_PROTOCOL'] . ' 404 Page Not Found', true, 404);
@@ -279,6 +390,11 @@ class BaseController {
         exit;
     }
 
+    /**
+     * HTTP 500: Internal server error page
+     *
+     * @param mixed $arg
+     */
     protected function error500($arg) {
         ob_clean();
         $this->setLayout(new ErrorLayout());
@@ -296,11 +412,22 @@ class BaseController {
         exit;
     }
 
+    /**
+     * Sets service manager
+     *
+     * @param ServiceManager $serviceManager
+     * @return $this
+     */
     public function setServiceManager(ServiceManager $serviceManager) {
         $this->serviceManager = $serviceManager;
         return $this;
     }
 
+    /**
+     * Gets service manager
+     *
+     * @return ServiceManager
+     */
     public function getServiceManager() {
         return $this->serviceManager;
     }
