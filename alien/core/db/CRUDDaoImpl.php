@@ -148,9 +148,9 @@ abstract class CRUDDaoImpl implements CRUDDao {
     protected abstract function prepareFindStatement($id);
 
     /**
-     * @param ActiveRecord $building
+     * @param ActiveRecord $room
      * @return PDOStatement
      */
-    protected abstract function prepareUpdateStatement(ActiveRecord $building);
+    protected abstract function prepareUpdateStatement(ActiveRecord $room);
 
 }

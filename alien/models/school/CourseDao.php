@@ -76,25 +76,25 @@ class CourseDao extends CRUDDaoImpl {
     }
 
     /**
-     * @param ActiveRecord $building
+     * @param ActiveRecord $room
      * @throws InvalidArgumentException
      * @return PDOStatement
      */
-    protected function prepareUpdateStatement(ActiveRecord $building) {
-        if (!($building instanceof Course)) {
+    protected function prepareUpdateStatement(ActiveRecord $room) {
+        if (!($room instanceof Course)) {
             throw new InvalidArgumentException("Object must be instance of " . __NAMESPACE__ . " class!");
         }
         $conn = $this->getConnection();
         $stmt = $conn->prepare('UPDATE ' . DBConfig::table(DBConfig::COURSES) . ' SET
             name=:n, teacher=:t, capacity=:c, dateCreated=:dc, dateStart=:ds, dateEnd=:de
             WHERE id=:id;');
-        $stmt->bindValue(':id', $building->getId(), PDO::PARAM_INT);
-        $stmt->bindValue(':n', $building->getName(), PDO::PARAM_STR);
-        $stmt->bindValue(':t', $building->getTeacher()->getId(), PDO::PARAM_STR);
-        $stmt->bindValue(':c', $building->getCapacity(), PDO::PARAM_INT);
-        $stmt->bindValue(':dc', $building->getDateCreated()->format("u"), PDO::PARAM_INT);
-        $stmt->bindValue(':ds', $building->getDateStart()->format("u"), PDO::PARAM_STR);
-        $stmt->bindValue(':de', $building->getDateEnd()->format("u"), PDO::PARAM_STR);
+        $stmt->bindValue(':id', $room->getId(), PDO::PARAM_INT);
+        $stmt->bindValue(':n', $room->getName(), PDO::PARAM_STR);
+        $stmt->bindValue(':t', $room->getTeacher()->getId(), PDO::PARAM_STR);
+        $stmt->bindValue(':c', $room->getCapacity(), PDO::PARAM_INT);
+        $stmt->bindValue(':dc', $room->getDateCreated()->format("u"), PDO::PARAM_INT);
+        $stmt->bindValue(':ds', $room->getDateStart()->format("u"), PDO::PARAM_STR);
+        $stmt->bindValue(':de', $room->getDateEnd()->format("u"), PDO::PARAM_STR);
         return $stmt;
     }
 }

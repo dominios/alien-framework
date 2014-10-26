@@ -1,13 +1,6 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: Domino
- * Date: 26.10.2014
- * Time: 14:00
- */
 
 namespace Alien\Models\School;
-
 
 use Alien\ActiveRecord;
 use Alien\Db\CRUDDaoImpl;
@@ -15,8 +8,10 @@ use Alien\DBConfig;
 use InvalidArgumentException;
 use PDO;
 use PDOStatement;
+use stdClass;
+use TableViewInterface;
 
-class BuildingDao extends CRUDDaoImpl {
+class BuildingDao extends CRUDDaoImpl implements TableViewInterface {
 
     /**
      * @param Teacher $teacher
@@ -34,8 +29,14 @@ class BuildingDao extends CRUDDaoImpl {
      * @return ActiveRecord
      */
     protected function createFromResultSet(array $result) {
-        $course = new Building($result['id'], $result);
-        return $course;
+        $building = new Building();
+        $building->setId($result['id']);
+        $building->setName($result['name']);
+        $building->setCity($result['city']);
+        $building->setStreet($result['street']);
+        $building->setState($result['state']);
+        $building->setZip($result['zip']);
+        return $building;
     }
 
     /**
@@ -72,24 +73,58 @@ class BuildingDao extends CRUDDaoImpl {
     }
 
     /**
-     * @param ActiveRecord $building
+     * @param ActiveRecord $room
      * @throws InvalidArgumentException
      * @return PDOStatement
      */
-    protected function prepareUpdateStatement(ActiveRecord $building) {
-        if (!($building instanceof Building)) {
+    protected function prepareUpdateStatement(ActiveRecord $room) {
+        if (!($room instanceof Building)) {
             throw new InvalidArgumentException("Object must be instance of " . __NAMESPACE__ . " class!");
         }
         $conn = $this->getConnection();
         $stmt = $conn->prepare('UPDATE ' . DBConfig::table(DBConfig::BUILDINGS) . ' SET
             name=:n, street=:s, zip=:z, city=:c, state=:s
             WHERE id=:id;');
-        $stmt->bindValue(':id', $building->getId(), PDO::PARAM_INT);
-        $stmt->bindValue(':n', $building->getName(), PDO::PARAM_STR);
-        $stmt->bindValue(':s', $building->getStreet(), PDO::PARAM_STR);
-        $stmt->bindValue(':c', $building->getCity(), PDO::PARAM_STR);
-        $stmt->bindValue(':z', $building->getZip(), PDO::PARAM_STR);
-        $stmt->bindValue(':s', $building->getState(), PDO::PARAM_STR);
+        $stmt->bindValue(':id', $room->getId(), PDO::PARAM_INT);
+        $stmt->bindValue(':n', $room->getName(), PDO::PARAM_STR);
+        $stmt->bindValue(':s', $room->getStreet(), PDO::PARAM_STR);
+        $stmt->bindValue(':c', $room->getCity(), PDO::PARAM_STR);
+        $stmt->bindValue(':z', $room->getZip(), PDO::PARAM_STR);
+        $stmt->bindValue(':s', $room->getState(), PDO::PARAM_STR);
         return $stmt;
+    }
+
+    public function getTableHeader() {
+        return array(
+            'name' => 'Názov',
+            'street' => 'Ulica',
+            'city' => 'Mesto',
+            'zip' => 'PSČ',
+            'state' => 'Štát'
+        );
+    }
+
+    public function getTableRowData($object = null) {
+        if (!($object instanceof Building)) {
+            return array();
+        }
+        return array(
+            'name' => $object->getName(),
+            'street' => $object->getStreet(),
+            'city' => $object->getCity(),
+            'zip' => $object->getZip(),
+            'state' => $object->getState()
+        );
+    }
+
+    public function getTableData(array $array) {
+        $data = array();
+        foreach ($array as $i) {
+            $data[] = $this->getTableRowData($i);
+        }
+        return array(
+            'header' => $this->getTableHeader(),
+            'data' => $data
+        );
     }
 }

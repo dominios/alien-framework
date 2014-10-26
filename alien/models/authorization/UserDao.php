@@ -66,25 +66,25 @@ class UserDao extends CRUDDaoImpl {
     }
 
     /**
-     * @param ActiveRecord $building
+     * @param ActiveRecord $room
      * @throws InvalidArgumentException
      * @return PDOStatement
      */
-    protected function prepareUpdateStatement(ActiveRecord $building) {
-        if (!($building instanceof User)) {
+    protected function prepareUpdateStatement(ActiveRecord $room) {
+        if (!($room instanceof User)) {
             throw new InvalidArgumentException("Object must be instance of User class!");
         }
         $conn = $this->getConnection();
         $stmt = $conn->prepare('UPDATE ' . DBConfig::table(DBConfig::USERS) . ' SET
             login=:login, email=:email, activated=:status, ban=:ban, firstname=:fn, surname=:sn
             WHERE id_u=:id;');
-        $stmt->bindValue(':id', $building->getId(), PDO::PARAM_INT);
-        $stmt->bindValue(':login', $building->getLogin(), PDO::PARAM_STR);
-        $stmt->bindValue(':email', $building->getEmail(), PDO::PARAM_STR);
-        $stmt->bindValue(':status', $building->getStatus(), PDO::PARAM_INT);
-        $stmt->bindValue(':ban', $building->getBanDate(), PDO::PARAM_INT);
-        $stmt->bindValue(':fn', $building->getFirstname(), PDO::PARAM_STR);
-        $stmt->bindValue(':sn', $building->getSurname(), PDO::PARAM_STR);
+        $stmt->bindValue(':id', $room->getId(), PDO::PARAM_INT);
+        $stmt->bindValue(':login', $room->getLogin(), PDO::PARAM_STR);
+        $stmt->bindValue(':email', $room->getEmail(), PDO::PARAM_STR);
+        $stmt->bindValue(':status', $room->getStatus(), PDO::PARAM_INT);
+        $stmt->bindValue(':ban', $room->getBanDate(), PDO::PARAM_INT);
+        $stmt->bindValue(':fn', $room->getFirstname(), PDO::PARAM_STR);
+        $stmt->bindValue(':sn', $room->getSurname(), PDO::PARAM_STR);
         return $stmt;
     }
 }

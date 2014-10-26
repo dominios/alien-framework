@@ -7,6 +7,7 @@ use Alien\Db\Connection;
 use Alien\Models\Authorization\UserDao;
 use Alien\Models\School\BuildingDao;
 use Alien\Models\School\CourseDao;
+use Alien\Models\School\RoomDao;
 use BadFunctionCallException;
 use Exception;
 use PDO;
@@ -61,9 +62,11 @@ final class Application {
         $userDao = new UserDao($connection->getPDO());
         $buildingDao = new BuildingDao($connection->getPDO());
         $courseDao = new CourseDao($connection->getPDO());
+        $roomDao = new RoomDao($connection->getPDO(), $buildingDao, $userDao);
         $sm->registerService($userDao);
         $sm->registerService($buildingDao);
         $sm->registerService($courseDao);
+        $sm->registerService($roomDao);
 
     }
 

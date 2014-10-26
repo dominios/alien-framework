@@ -35,6 +35,10 @@ class Building {
      */
     protected $state;
 
+    public function __construct() {
+
+    }
+
     public function setCity($city) {
         $this->city = $city;
         return $this;
@@ -107,5 +111,4 @@ class Building {
         return $this->zip;
     }
 
-
-} 
+}

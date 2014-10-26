@@ -3,6 +3,8 @@
 namespace Alien\Controllers;
 
 use Alien\Response;
+use Alien\Table\DataTable;
+use Alien\Table\Table;
 
 class CourseController extends BaseController {
 
@@ -31,8 +33,8 @@ class CourseController extends BaseController {
 //        $view->editActionPattern = BaseController::actionURL('users', 'edit', array('id' => '%ID%'));
 //        $view->sendMessagePattern = BaseController::actionURL('dashboard', 'composeMessage', array('id' => '%ID%'));
         return new Response(array(
-                'Title' => 'Zoznam používateľov',
-                'ContentMain' => "test"
+                'Title' => 'Zoznam kurzov',
+                'ContentMain' => new DataTable()
             )
         );
     }
