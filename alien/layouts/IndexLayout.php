@@ -95,10 +95,16 @@ class IndexLayout extends Layout {
 
         $left = Array();
         $left[] = Array('permission' => null, 'url' => BaseController::actionURL('dashboard', 'home'), 'text' => 'Dashboard', 'img' => 'dashboard', 'controller' => 'dashboard');
-        $left[] = Array('permission' => 'SYSTEM_ACCESS', 'url' => BaseController::actionURL('system', 'NOP'), 'text' => 'Systém', 'img' => 'service', 'controller' => 'system');
-        $left[] = Array('permission' => 'CONTENT_VIEW', 'url' => BaseController::actionURL('content', 'browser'), 'text' => 'Obsah', 'img' => 'puzzle', 'controller' => 'content');
+//        $left[] = Array('permission' => 'SYSTEM_ACCESS', 'url' => BaseController::actionURL('system', 'NOP'), 'text' => 'Systém', 'img' => 'service', 'controller' => 'system');
+//        $left[] = Array('permission' => 'CONTENT_VIEW', 'url' => BaseController::actionURL('content', 'browser'), 'text' =s> 'Obsah', 'img' => 'puzzle', 'controller' => 'content');
         $left[] = Array('permission' => 'USER_VIEW', 'url' => BaseController::actionURL('users', 'viewList'), 'text' => 'Používatelia', 'img' => 'user', 'controller' => 'users');
         $left[] = Array('permission' => 'GROUP_VIEW', 'url' => BaseController::actionURL('groups', 'viewList'), 'text' => 'Skupiny', 'img' => 'group', 'controller' => 'groups');
+        $left[] = Array('permission' => null, 'url' => BaseController::actionURL('building', 'view'), 'text' => 'Budova', 'img' => 'home', 'controller' => 'building');
+        $left[] = Array('permission' => null, 'url' => BaseController::actionURL('course', 'view'), 'text' => 'Kurzy', 'img' => 'book-stack', 'controller' => 'course');
+        $left[] = Array('permission' => null, 'url' => BaseController::actionURL('users', 'viewList'), 'text' => 'Učitelia', 'img' => 'user', 'controller' => 'users');
+        $left[] = Array('permission' => null, 'url' => BaseController::actionURL('users', 'viewList'), 'text' => 'Študenti', 'img' => 'user', 'controller' => 'users');
+        $left[] = Array('permission' => null, 'url' => BaseController::actionURL('test', 'viewList'), 'text' => 'Testy', 'img' => 'note', 'controller' => 'test');
+
 //        $left[] = Array('permission' => null, 'url' => BaseController::actionURL('commerce', 'dashboard'), 'text' => 'E-shop', 'img' => 'cart', 'controller' => 'commerce');
 
         $right = array();
