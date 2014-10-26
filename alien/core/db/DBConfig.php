@@ -27,7 +27,14 @@ interface ContentDBExtension {
 
 }
 
-final class DBConfig implements BaseDBConfig, ContentDBExtension {
+interface SchoolDBExtension {
+
+    const COURSES = 'courses';
+    const BUILDINGS = 'buildings';
+
+}
+
+final class DBConfig implements BaseDBConfig, ContentDBExtension, SchoolDBExtension {
 
     private static $prefix = '';
 

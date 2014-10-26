@@ -5,7 +5,8 @@ namespace Alien;
 use Alien\Controllers\BaseController;
 use Alien\Db\Connection;
 use Alien\Models\Authorization\UserDao;
-use Alien\Models\Content\TemplateDao;
+use Alien\Models\School\BuildingDao;
+use Alien\Models\School\CourseDao;
 use BadFunctionCallException;
 use Exception;
 use PDO;
@@ -58,9 +59,11 @@ final class Application {
         $sm->registerService($connection->getPDO());
 
         $userDao = new UserDao($connection->getPDO());
-        $templateDao = new TemplateDao($connection->getPDO());
+        $buildingDao = new BuildingDao($connection->getPDO());
+        $courseDao = new CourseDao($connection->getPDO());
         $sm->registerService($userDao);
-        $sm->registerService($templateDao);
+        $sm->registerService($buildingDao);
+        $sm->registerService($courseDao);
 
     }
 

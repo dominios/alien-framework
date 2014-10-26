@@ -73,7 +73,7 @@ function class_autoloader($class) {
     $autoloadDirectories[] = 'core/form/validator';
     $autoloadDirectories[] = 'layouts';
     $autoloadDirectories[] = 'core/db';
-    $autoloadDirectories[] = 'core/annotation';
+//    $autoloadDirectories[] = 'core/annotation';
 
     foreach ($autoloadDirectories as $dir) {
         $dh = \opendir($dir);
