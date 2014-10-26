@@ -71,6 +71,7 @@ function class_autoloader($class) {
     $autoloadDirectories[] = 'core/form';
     $autoloadDirectories[] = 'core/form/input';
     $autoloadDirectories[] = 'core/form/validator';
+    $autoloadDirectories[] = 'core/table';
     $autoloadDirectories[] = 'layouts';
     $autoloadDirectories[] = 'core/db';
 //    $autoloadDirectories[] = 'core/annotation';

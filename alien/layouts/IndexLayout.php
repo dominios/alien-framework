@@ -44,6 +44,8 @@ class IndexLayout extends Layout {
         $this->appendStylesheet('/alien/display/tabs.css');
         $this->appendStylesheet('/alien/display/icons-data.css');
         $this->appendStylesheet('/alien/display/layouts/index/layout.css');
+        $this->appendStylesheet('//cdn.datatables.net/1.10.3/css/jquery.dataTables.min.css');
+        $this->appendScript('//cdn.datatables.net/1.10.3/js/jquery.dataTables.min.js');
     }
 
     public function getPartials() {
