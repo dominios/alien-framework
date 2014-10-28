@@ -94,7 +94,7 @@ table.itemList {
     box-shadow: 2px 2px 10px rgba(187, 187, 187, 0.8);
 }
 
-table.itemList tr:first-child {
+table.itemList thead tr {
     background: rgba(255, 255, 17, 0.175);
 }
 

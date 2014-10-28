@@ -32,9 +32,13 @@ class CourseController extends BaseController {
 //        $view->users = User::getList(true);
 //        $view->editActionPattern = BaseController::actionURL('users', 'edit', array('id' => '%ID%'));
 //        $view->sendMessagePattern = BaseController::actionURL('dashboard', 'composeMessage', array('id' => '%ID%'));
+
+        $courseDao = $this->getServiceManager()->getDao('CourseDao');
+        $data = $courseDao->getTableData($courseDao->getList());
+
         return new Response(array(
                 'Title' => 'Zoznam kurzov',
-                'ContentMain' => new DataTable()
+                'ContentMain' => new DataTable($data)
             )
         );
     }

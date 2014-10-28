@@ -61,7 +61,7 @@ final class Application {
 
         $userDao = new UserDao($connection->getPDO());
         $buildingDao = new BuildingDao($connection->getPDO());
-        $courseDao = new CourseDao($connection->getPDO());
+        $courseDao = new CourseDao($connection->getPDO(), $userDao);
         $roomDao = new RoomDao($connection->getPDO(), $buildingDao, $userDao);
         $sm->registerService($userDao);
         $sm->registerService($buildingDao);

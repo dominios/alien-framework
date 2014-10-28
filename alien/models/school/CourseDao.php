@@ -12,11 +12,25 @@ namespace Alien\Models\School;
 use Alien\ActiveRecord;
 use Alien\Db\CRUDDaoImpl;
 use Alien\DBConfig;
+use Alien\Models\Authorization\UserDao;
+use DateTime;
 use InvalidArgumentException;
 use PDO;
 use PDOStatement;
+use TableViewInterface;
 
-class CourseDao extends CRUDDaoImpl {
+class CourseDao extends CRUDDaoImpl implements TableViewInterface {
+
+    /**
+     * @var UserDao
+     */
+    protected $userDao;
+
+    public function __construct(PDO $connection, UserDao $userDao) {
+        parent::__construct($connection);
+        $this->userDao = $userDao;
+    }
+
 
     /**
      * @param Teacher $teacher
@@ -38,7 +52,24 @@ class CourseDao extends CRUDDaoImpl {
      * @return ActiveRecord
      */
     protected function createFromResultSet(array $result) {
-        $course = new Course($result['id'], $result);
+
+        $dc = new DateTime();
+        $dc->setTimestamp($result['dateCreated']);
+
+        $ds = new DateTime();
+        $ds->setTimestamp($result['dateStart']);
+
+        $de = new DateTime();
+        $de->setTimestamp($result['dateEnd']);
+
+        $course = new Course();
+        $course->setId($result['id'])
+               ->setName($result['name'])
+               ->setCapacity($result['capacity'])
+               ->setDateCreated($dc)
+               ->setDateStart($ds)
+               ->setDateEnd($de)
+               ->setTeacher(new Teacher($this->userDao->find($result['teacher'])));
         return $course;
     }
 
@@ -97,4 +128,39 @@ class CourseDao extends CRUDDaoImpl {
         $stmt->bindValue(':de', $room->getDateEnd()->format("u"), PDO::PARAM_STR);
         return $stmt;
     }
+
+    public function getTableHeader() {
+        return array(
+            'name' => 'Názov',
+            'teacher' => 'Učiteľ',
+            'capacity' => 'Kapacita',
+            'dateStart' => 'Začiatok',
+            'dateEnd' => 'Koniec'
+        );
+    }
+
+    public function getTableRowData($object = null) {
+        if (!($object instanceof Course)) {
+            return array();
+        }
+        return array(
+            'name' => $object->getName(),
+            'teacher' => $object->getTeacher()->getName(),
+            'capacity' => $object->getCapacity(),
+            'dateStart' => $object->getDateStart('d.m.Y'),
+            'dateEnd' => $object->getDateEnd('d.m.Y')
+        );
+    }
+
+    public function getTableData(array $array) {
+        $data = array();
+        foreach ($array as $i) {
+            $data[] = $this->getTableRowData($i);
+        }
+        return array(
+            'header' => $this->getTableHeader(),
+            'data' => $data
+        );
+    }
+
 }
