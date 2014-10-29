@@ -46,6 +46,13 @@ class IndexLayout extends Layout {
         $this->appendStylesheet('/alien/display/layouts/index/layout.css');
         $this->appendStylesheet('//cdn.datatables.net/1.10.3/css/jquery.dataTables.min.css');
         $this->appendScript('//cdn.datatables.net/1.10.3/js/jquery.dataTables.min.js');
+        $this->appendScript('/alien/js/moment-with-locales.js');
+//        $this->appendScript('//cdnjs.cloudflare.com/ajax/libs/fullcalendar/2.1.1/fullcalendar.min.js');
+        $this->appendScript('/alien/js/fullcalendar.min.js');
+//        $this->appendStylesheet('//cdnjs.cloudflare.com/ajax/libs/fullcalendar/2.1.1/fullcalendar.min.css');
+        $this->appendStylesheet('/alien/display/fullcalendar.min.css');
+        // TODO: nejako odlisit stylesheety podla typu (stylesheet, print, ...)
+//        $this->appendStylesheet('//cdnjs.cloudflare.com/ajax/libs/fullcalendar/2.1.1/fullcalendar.print.css');
     }
 
     public function getPartials() {
