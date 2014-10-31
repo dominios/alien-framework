@@ -3,6 +3,7 @@
 namespace Alien\Table;
 
 
+use Alien\Forms\Input;
 use Alien\View;
 
 class Table {
@@ -11,16 +12,36 @@ class Table {
     protected $description;
     protected $header;
     protected $rows;
+    protected $options;
+    protected $adminButtons = array();
 
     public function __construct(array $data) {
         $this->header = $data['header'];
         $this->rows = $data['data'];
+        $this->viewSrc = "display/table/table.php";
     }
 
     public function __toString() {
-        $view = new View("display/table/table.php");
-        $view->header = $this->header;
-        $view->rows = $this->rows;
+        $header = $this->header;
+        $rows = $this->rows;
+        if (sizeof($this->adminButtons)) {
+            $header[] = '';
+            foreach ($rows as &$row) {
+                $buttons = '';
+                foreach ($this->adminButtons as $ab) {
+                    switch ($ab['type']) {
+                        case 'a':
+                            $buttons .= '<a href="' . str_replace($ab['key'], $row['id'], $ab['href']) . '">' . $ab['text'] . '</a>';
+                            break;
+                    }
+                }
+                $row[] = $buttons;
+            }
+        }
+        $view = new View($this->viewSrc);
+        $view->header = $header;
+        $view->rows = $rows;
+        $view->options = $this->getOptions();
         return $view->renderToString();
     }
 
@@ -30,5 +51,13 @@ class Table {
 
     public function addRow(array $row) {
         $this->rows[] = $row;
+    }
+
+    public function addButton(array $button) {
+        $this->adminButtons[] = $button;
+    }
+
+    protected function getOptions() {
+        return array();
     }
 }

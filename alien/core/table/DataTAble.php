@@ -13,10 +13,11 @@ class DataTable extends Table {
     protected $paging = false;
     protected $info = false;
     protected $searching = false;
-    protected $ordering = false;
+    protected $ordering = true;
 
     public function __construct($data, array $options = null) {
         parent::__construct($data);
+        $this->viewSrc = "display/table/dataTable.php";
         if (is_array($options)) {
             $rc = new \ReflectionClass($this);
             foreach ($options as $k => $v) {
@@ -34,14 +35,6 @@ class DataTable extends Table {
             'searching' => $this->searching,
             'ordering' => $this->ordering
         ));
-    }
-
-    public function __toString() {
-        $view = new View("display/table/dataTable.php");
-        $view->header = $this->header;
-        $view->rows = $this->rows;
-        $view->options = $this->getOptions();
-        return $view->renderToString();
     }
 
 }

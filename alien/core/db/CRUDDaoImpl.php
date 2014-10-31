@@ -82,13 +82,14 @@ abstract class CRUDDaoImpl implements CRUDDao {
      * Finds record by id and returns constructed object or false on failure
      *
      * @param int $id
+     * @throws RecordNotFoundException
      * @return ActiveRecord|bool
      */
     public function find($id) {
         $stmt = $this->prepareFindStatement($id);
         $result = $this->execute($stmt);
         if (!count($result)) {
-            return false;
+            throw new RecordNotFoundException("Record with id $id not found.");
         }
         $object = $this->createFromResultSet($result[0]);
         return $object;

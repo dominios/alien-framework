@@ -4,6 +4,8 @@ namespace Alien;
 
 use Alien\Controllers\BaseController;
 use Alien\Db\Connection;
+use Alien\Models\Authorization\Group;
+use Alien\Models\Authorization\GroupDao;
 use Alien\Models\Authorization\UserDao;
 use Alien\Models\School\BuildingDao;
 use Alien\Models\School\CourseDao;
@@ -60,10 +62,13 @@ final class Application {
         $sm->registerService($connection->getPDO());
 
         $userDao = new UserDao($connection->getPDO());
+        $groupDao = new GroupDao($connection->getPDO(), $userDao);
         $buildingDao = new BuildingDao($connection->getPDO());
         $courseDao = new CourseDao($connection->getPDO(), $userDao);
         $roomDao = new RoomDao($connection->getPDO(), $buildingDao, $userDao);
+
         $sm->registerService($userDao);
+        $sm->registerService($groupDao);
         $sm->registerService($buildingDao);
         $sm->registerService($courseDao);
         $sm->registerService($roomDao);

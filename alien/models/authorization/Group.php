@@ -2,102 +2,97 @@
 
 namespace Alien\Models\Authorization;
 
+use Alien\ActiveRecord;
+use DateTime;
 use PDO;
 use Alien\Application;
 use Alien\DBConfig;
 
-class Group implements \Alien\ActiveRecord {
+class Group implements ActiveRecord {
 
+    /**
+     * @var int
+     */
     private $id;
+
+    /**
+     * @var string
+     */
     private $name;
+
+    /**
+     * @var string
+     */
     private $description;
+
+    /**
+     * @var DateTime
+     */
     private $dateCreated;
+
+    /**
+     * @var User[]
+     */
     private $members;
+
+    /**
+     * @var Permission[]
+     */
     private $permissions;
 
-    public function __construct($id, $row = null) {
-        if ($row === null && $id === null) {
-            $this->id = null;
-            return;
-        } elseif ($row === null) {
-            $DBH = Application::getDatabaseHandler();
-            $Q = $DBH->prepare('SELECT * FROM ' . DBConfig::table(DBConfig::GROUPS) . ' WHERE id_g=:id');
-            $Q->bindValue(':id', (int) $id, PDO::PARAM_INT);
-            $Q->execute();
-            if (!$Q->rowCount()) {
-                $this->id = null;
-                return;
-            } else {
-                $row = $Q->fetch();
-            }
-        }
-
-        $this->id = (int) $row['id_g'];
-        $this->name = $row['name'];
-        $this->description = $row['description'];
-        $this->dateCreated = (int) $row['dateCreated'];
-
-        if (empty($DBH)) {
-            $DBH = Application::getDatabaseHandler();
-        }
-
-        $this->members = array();
-        foreach ($DBH->query('SELECT id_u FROM ' . DBConfig::table(DBConfig::GROUP_MEMBERS) . ' WHERE id_g=' . (int) $this->id) as $R) {
-            $this->members[] = $R['id_u'];
-        }
-
-        $this->permissions = array();
-        foreach ($DBH->query('SELECT id_p FROM ' . DBConfig::table(DBConfig::GROUP_PERMISSIONS) . ' WHERE id_g=' . (int) $this->id) as $R) {
-            $this->permissions[] = $R['id_p'];
-        }
+    public function __construct() {
     }
 
-    public function update() {
-        $DBH = Application::getDatabaseHandler();
-        $Q = $DBH->prepare('UPDATE ' . DBConfig::table(DBConfig::GROUPS) . ' SET name=:n, description=:d WHERE id_g=:id');
-        $Q->bindValue(':id', $this->id, PDO::PARAM_INT);
-        $Q->bindValue(':n', $this->name, PDO::PARAM_STR);
-        $Q->bindValue(':d', $this->description, PDO::PARAM_STR);
-        return $Q->execute() ? true : false;
+    public function setDateCreated($dateCreated) {
+        $this->dateCreated = $dateCreated;
+        return $this;
     }
 
-    public static function exists($id) {
-        $DBH = Application::getDatabaseHandler();
-        $STH = $DBH->prepare('SELECT 1 FROM ' . DBConfig::table(DBConfig::GROUPS) . ' WHERE id_g=:i LIMIT 1');
-        $STH->bindValue(':i', (int) $id, PDO::PARAM_INT);
-        $STH->execute();
-        return $STH->rowCount() ? true : false;
+    /**
+     * @return \DateTime
+     */
+    public function getDateCreated($format = null) {
+        return $format === null ? $this->dateCreated : $this->dateCreated->format($format);
     }
 
-    public static function create($initialValues) {
-        $DBH = Application::getDatabaseHandler();
-        $Q = $DBH->prepare('INSERT INTO ' . DBConfig::table(DBConfig::GROUPS) . ' (dateCreated) VALUES (:dc)');
-        $Q->bindValue(':dc', time(), PDO::PARAM_INT);
-        return $Q->execute() ? new Group($DBH->lastInsertId()) : false;
+    public function setDescription($description) {
+        $this->description = $description;
+        return $this;
     }
 
-    public function delete() {
+    /**
+     * @return string
+     */
+    public function getDescription() {
+        return $this->description;
+    }
 
-        if ($this->isDeletable()) {
-            $DBH = Application::getDatabaseHandler();
-            $Q = $DBH->exec('DELETE FROM ' . DBConfig::table(DBConfig::GROUPS) . ' WHERE id_g=' . (int) $this->id . ' LIMIT 1');
-            return true;
-        } else {
-            return false;
-        }
+    public function setId($id) {
+        $this->id = $id;
+        return $this;
+    }
+
+    /**
+     * @return int
+     */
+    public function getId() {
+        return $this->id;
+    }
+
+    public function setName($name) {
+        $this->name = $name;
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getName() {
+        return $this->name;
     }
 
     public function isDeletable() {
         return count($this->getMembers()) > 0 ? false : true;
-    }
-
-    public static function getList($fetch = false) {
-        $arr = array();
-        $DBH = Application::getDatabaseHandler();
-        foreach ($DBH->query('SELECT * FROM ' . DBConfig::table(DBConfig::GROUPS)) as $R) {
-            $arr[] = $fetch ? new Group($R['id_g'], $R) : $R['id_g'];
-        }
-        return $arr;
     }
 
     public function getPermissions($fetch = false) {
@@ -151,30 +146,6 @@ class Group implements \Alien\ActiveRecord {
         return $ret;
     }
 
-    public function getName() {
-        return $this->name;
-    }
-
-    public function getId() {
-        return $this->id;
-    }
-
-    public function getDateCreated($format = null) {
-        return $format === null ? $this->dateCreated : date($format, $this->dateCreated);
-    }
-
-    public function getDescription() {
-        return $this->description;
-    }
-
-    public function setName($name) {
-        $this->name = $name;
-    }
-
-    public function setDescription($description) {
-        $this->description = $description;
-    }
-
     public function addPermission(Permission $permission) {
         $DBH = Application::getDatabaseHandler();
         $STH = $DBH->prepare('INSERT INTO ' . DBConfig::table(DBConfig::GROUP_PERMISSIONS) . ' (id_p,id_g,since) VALUES (:idp,:idg,:s)');
@@ -193,5 +164,3 @@ class Group implements \Alien\ActiveRecord {
     }
 
 }
-
-?>

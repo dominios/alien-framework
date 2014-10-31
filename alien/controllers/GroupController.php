@@ -2,6 +2,11 @@
 
 namespace Alien\Controllers;
 
+use Alien\Db\RecordNotFoundException;
+use Alien\Forms\Group\EditForm;
+use Alien\Forms\Input;
+use Alien\Models\Authorization\GroupDao;
+use Alien\Table\DataTable;
 use Alien\View;
 use Alien\Response;
 use Alien\Notification;
@@ -10,9 +15,16 @@ use Alien\Models\Authorization\User;
 use Alien\Models\Authorization\Permission;
 use Alien\Controllers\BaseController;
 
-class GroupsController extends BaseController {
+class GroupController extends BaseController {
+
+    /**
+     * @var GroupDao
+     */
+    protected $groupDao;
 
     protected function initialize() {
+
+        $this->groupDao = $this->getServiceManager()->getDao('GroupDao');
 
         $this->defaultAction = 'viewList';
 
@@ -31,35 +43,68 @@ class GroupsController extends BaseController {
 
     private function leftMenuItems() {
         $items = Array();
-        $items[] = Array('permissions' => null, 'url' => BaseController::actionURL('groups', 'viewList'), 'img' => 'group', 'text' => 'Zoznam skupín');
-        $items[] = Array('permissions' => null, 'url' => BaseController::actionURL('groups', 'edit', array('id' => 0)), 'img' => 'edit', 'text' => 'Pridať/upraviť skupinu');
-//        $items[] = Array('permissions' => null, 'url' => BaseController::actionURL('groups', 'viewLogs'), 'img' => 'clock', 'text' => 'Posledná aktivita');
+        $items[] = Array('permissions' => null, 'url' => $this->actionUrl('viewList'), 'img' => 'group', 'text' => 'Zoznam skupín');
+        $items[] = Array('permissions' => null, 'url' => $this->actionUrl('edit', array('id' => 0)), 'img' => 'edit', 'text' => 'Pridať/upraviť skupinu');
         return $items;
     }
 
-    protected function viewList() {
-        $view = new View('display/groups/viewList.php', $this);
-        $view->groups = Group::getList(true);
+    protected function view() {
 
-        $response = array('Title' => 'Zoznam skupín', 'ContentMain' => $view->renderToString());
+        $data = $this->groupDao->getTableData($this->groupDao->getList());
+        $table = new DataTable($data);
+
+        $button = array(
+            'type' => 'a',
+            'text' => '[E]',
+            'class' => '',
+            'key' => '%id%',
+            'href' => $this->actionUrl('edit', array('id' => '%id%'))
+        );
+
+        $table->addButton($button);
+
+        $response = array(
+            'Title' => 'Zoznam skupín',
+            'ContentMain' => $table
+        );
+
         return new Response($response);
     }
 
     protected function edit() {
+
         if (!preg_match('/^[0-9]*$/', $_GET['id'])) {
             Notification::error('Neplatný identifikátor skupiny!', Notification::ERROR);
             return;
         }
-        $view = new View('display/groups/edit.php', $this);
-        $group = new Group((int) $_GET['id']);
-        $view->group = $group;
-        $view->returnAction = BaseController::actionURL('groups', 'viewList');
-        $view->deleteAction = BaseController::actionURL('groups', 'remove', array('id' => $_GET['id']));
 
-        $response = Array(
+        $group = $this->groupDao->find($_GET['id']);
+        if (!($group instanceof Group)) {
+            throw new RecordNotFoundException();
+        }
+
+        $form = EditForm::factory($group);
+
+        if ($form->isPostSubmit()) {
+            if ($form->validate()) {
+                $group->setName($_POST['groupName']);
+                $group->setDescription($_POST['groupDescription']);
+                $this->groupDao->update($group);
+                $this->redirect($this->actionUrl('view'));
+            }
+        }
+
+        $view = new View('display/group/edit.php', $this);
+        $view->form = $form;
+        $view->group = $group;
+        $view->returnAction = $this->actionUrl('view');
+        $view->deleteAction = $this->actionUrl('remove', array('id' => $_GET['id']));
+
+        $response = array(
             'Title' => (int) $_GET['id'] ? $group->getName() : 'Nová skupina',
             'ContentMain' => $view->renderToString()
         );
+
         return new Response($response);
     }
 
@@ -73,7 +118,7 @@ class GroupsController extends BaseController {
         $group->setName($_POST['groupName']);
         $group->setDescription($_POST['groupDescription']);
         $group->update();
-        $this->redirect(BaseController::actionURL('groups', 'edit', array('id' => $group->getId())));
+        $this->redirect(BaseController::staticActionURL('groups', 'edit', array('id' => $group->getId())));
     }
 
     protected function remove() {
@@ -83,7 +128,7 @@ class GroupsController extends BaseController {
                 $group->delete();
             }
         }
-        $this->redirect(BaseController::actionURL('groups', 'viewList'));
+        $this->redirect(BaseController::staticActionURL('groups', 'view'));
     }
 
     public function addMember() {
@@ -92,7 +137,7 @@ class GroupsController extends BaseController {
             $group = new Group($_GET['group']);
             $user->addGroup($group);
         }
-        $this->redirect(BaseController::actionURL('groups', 'edit', array('id' => $group->getId())));
+        $this->redirect(BaseController::staticActionURL('groups', 'edit', array('id' => $group->getId())));
     }
 
     protected function removeMember() {
@@ -101,7 +146,7 @@ class GroupsController extends BaseController {
             $group = new Group($_GET['group']);
             $user->removeGroup($group);
         }
-        $this->redirect(BaseController::actionURL('groups', 'edit', array('id' => $group->getId())));
+        $this->redirect(BaseController::staticActionURL('groups', 'edit', array('id' => $group->getId())));
     }
 
     protected function addPermission() {
@@ -110,7 +155,7 @@ class GroupsController extends BaseController {
             $permission = new Permission($_GET['permission']);
             $group->addPermission($permission);
         }
-        $this->redirect(BaseController::actionURL('groups', 'edit', array('id' => $group->getId())));
+        $this->redirect(BaseController::staticActionURL('groups', 'edit', array('id' => $group->getId())));
     }
 
     protected function removePermission() {
@@ -119,7 +164,7 @@ class GroupsController extends BaseController {
             $permission = new Permission($_GET['permission']);
             $group->removePermission($permission);
         }
-        $this->redirect(BaseController::actionURL('groups', 'edit', array('id' => $group->getId())));
+        $this->redirect(BaseController::staticActionURL('groups', 'edit', array('id' => $group->getId())));
     }
 
 }

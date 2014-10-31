@@ -34,10 +34,10 @@ class DashboardController extends BaseController {
             $msgText .= '<span class="badge badge-info badge-right">' . Message::getUnreadCount(Authorization::getCurrentUser()) . ' UNREAD</span>';
         }
         $items = Array();
-        $items[] = Array('permissions' => null, 'url' => BaseController::actionURL('dashboard', 'home'), 'img' => 'dashboard', 'text' => 'Prehľad');
-        $items[] = Array('permissions' => null, 'url' => BaseController::actionURL('dashboard', 'messages'), 'img' => 'message', 'text' => $msgText);
-        $items[] = Array('permissions' => null, 'url' => BaseController::actionURL('dashboard', 'profil'), 'img' => 'user', 'text' => 'Môj profil');
-        $items[] = Array('permissions' => null, 'url' => BaseController::actionURL('base', 'logout'), 'img' => 'logout', 'text' => 'Odhlásiť');
+        $items[] = Array('permissions' => null, 'url' => BaseController::staticActionURL('dashboard', 'home'), 'img' => 'dashboard', 'text' => 'Prehľad');
+        $items[] = Array('permissions' => null, 'url' => BaseController::staticActionURL('dashboard', 'messages'), 'img' => 'message', 'text' => $msgText);
+        $items[] = Array('permissions' => null, 'url' => BaseController::staticActionURL('dashboard', 'profil'), 'img' => 'user', 'text' => 'Môj profil');
+        $items[] = Array('permissions' => null, 'url' => BaseController::staticActionURL('base', 'logout'), 'img' => 'logout', 'text' => 'Odhlásiť');
         return $items;
     }
 
@@ -53,10 +53,10 @@ class DashboardController extends BaseController {
         $view = new View('display/dashboard/viewMessages.php');
         $view->inBox = Message::getListByRecipient(Authorization::getCurrentUser(), true);
         $view->outBox = Message::getListByAuthor(Authorization::getCurrentUser(), true);
-        $view->goToMessagePattern = BaseController::actionURL('dashboard', 'messages', array('id' => '%ID%'));
-        $view->replyMessagePattern = BaseController::actionURL('dashboard', 'composeMessage', array('id' => '%ID%'));
-        $view->composeMessageAction = BaseController::actionURL('dashboard', 'composeMessage');
-        $view->deleteMessagePattern = BaseController::actionURL('dashboard', 'deleteMessage', array('id' => '%ID%'));
+        $view->goToMessagePattern = BaseController::staticActionURL('dashboard', 'messages', array('id' => '%ID%'));
+        $view->replyMessagePattern = BaseController::staticActionURL('dashboard', 'composeMessage', array('id' => '%ID%'));
+        $view->composeMessageAction = BaseController::staticActionURL('dashboard', 'composeMessage');
+        $view->deleteMessagePattern = BaseController::staticActionURL('dashboard', 'deleteMessage', array('id' => '%ID%'));
         $message = Message::exists($_GET['id']) ? new Message($_GET['id']) : null;
         if ($message instanceof Message) {
             if ($message->isRecipient(Authorization::getCurrentUser()) && !$message->isSeen()) {
@@ -71,7 +71,7 @@ class DashboardController extends BaseController {
 
     protected function composeMessage() {
         $view = new View('display/dashboard/messageForm.php');
-        $view->returnAction = BaseController::actionURL('dashboard', 'messages');
+        $view->returnAction = BaseController::staticActionURL('dashboard', 'messages');
         $view->sender = Authorization::getCurrentUser();
         if (User::exists($_GET['id'])) {
             $user = new User($_GET['id']);
@@ -95,7 +95,7 @@ class DashboardController extends BaseController {
             Message::create($initial);
             Notification::success('Správa bola odoslaná.');
         }
-        $this->redirect(BaseController::actionURL('dashboard', 'messages'));
+        $this->redirect(BaseController::staticActionURL('dashboard', 'messages'));
     }
 
     protected function deleteMessage() {
@@ -105,7 +105,7 @@ class DashboardController extends BaseController {
             $message->update();
             Notification::success('Správa bola odstránená.');
         }
-        $this->redirect(BaseController::actionURL('dashboard', 'messages'));
+        $this->redirect(BaseController::staticActionURL('dashboard', 'messages'));
     }
 
     protected function profil() {
@@ -121,7 +121,7 @@ class DashboardController extends BaseController {
                     $user = Authorization::getCurrentUser();
                 } else {
                     Notification::error('Prístup odmiednutý.');
-                    $this->redirect(BaseController::actionURL('dashboard', 'profil'));
+                    $this->redirect(BaseController::staticActionURL('dashboard', 'profil'));
                     return;
                 }
                 $user->setLogin($_POST['userLogin']);
@@ -149,7 +149,7 @@ class DashboardController extends BaseController {
                     }
                 }
                 Notification::success('Zmeny boli uložené.');
-                $this->redirect(BaseController::actionURL('dashboard', 'profil'));
+                $this->redirect(BaseController::staticActionURL('dashboard', 'profil'));
             } else {
                 Notification::error('Zmeny sa nepodarilo uložiť.');
             }

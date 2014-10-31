@@ -36,10 +36,10 @@ class UsersController extends BaseController {
 
     private function leftMenuItems() {
         $items = Array();
-        $items[] = Array('permissions' => null, 'url' => BaseController::actionURL('users', 'viewList'), 'img' => 'user', 'text' => 'Zoznam používateľov');
-        $items[] = Array('permissions' => null, 'url' => BaseController::actionURL('users', 'edit', array('id' => 0)), 'img' => 'add-user', 'text' => 'Pridať/upraviť používateľa');
-        $items[] = Array('permissions' => null, 'url' => BaseController::actionURL('users', 'viewLogs'), 'img' => 'clock', 'text' => 'Posledná aktivita');
-        $items[] = Array('permissions' => null, 'url' => BaseController::actionURL('users', 'newsletter'), 'img' => 'magazine', 'text' => 'Newsletter');
+        $items[] = Array('permissions' => null, 'url' => BaseController::staticActionURL('users', 'viewList'), 'img' => 'user', 'text' => 'Zoznam používateľov');
+        $items[] = Array('permissions' => null, 'url' => BaseController::staticActionURL('users', 'edit', array('id' => 0)), 'img' => 'add-user', 'text' => 'Pridať/upraviť používateľa');
+        $items[] = Array('permissions' => null, 'url' => BaseController::staticActionURL('users', 'viewLogs'), 'img' => 'clock', 'text' => 'Posledná aktivita');
+        $items[] = Array('permissions' => null, 'url' => BaseController::staticActionURL('users', 'newsletter'), 'img' => 'magazine', 'text' => 'Newsletter');
         return $items;
     }
 
@@ -47,13 +47,13 @@ class UsersController extends BaseController {
 
         if (!Authorization::getCurrentUser()->hasPermission('USER_VIEW')) {
             Notification::error('Nedostatočné oprávnenia.');
-            $this->redirect(BaseController::actionURL('dashboard', 'home'));
+            $this->redirect(BaseController::staticActionURL('dashboard', 'home'));
         }
 
         $view = new View('display/users/viewList.php', $this);
         $view->users = User::getList(true);
-        $view->editActionPattern = BaseController::actionURL('users', 'edit', array('id' => '%ID%'));
-        $view->sendMessagePattern = BaseController::actionURL('dashboard', 'composeMessage', array('id' => '%ID%'));
+        $view->editActionPattern = BaseController::staticActionURL('users', 'edit', array('id' => '%ID%'));
+        $view->sendMessagePattern = BaseController::staticActionURL('dashboard', 'composeMessage', array('id' => '%ID%'));
         return new Response(array(
                 'Title' => 'Zoznam používateľov',
                 'ContentMain' => $view->renderToString()
@@ -65,12 +65,12 @@ class UsersController extends BaseController {
 
         if (!preg_match('/^[0-9]*$/', $_GET['id'])) {
             Notification::error('Neplatný identifikátor používateľa.');
-            $this->redirect(BaseController::actionURL('users', 'view'));
+            $this->redirect(BaseController::staticActionURL('users', 'view'));
         }
 
         if (!Authorization::getCurrentUser()->hasPermission(array('USERS_VIEW', 'USER_ADMIN'))) {
             Notification::error('Nedostatočné oprávnenia.');
-            $this->redirect(BaseController::actionURL('dashboard', 'home'));
+            $this->redirect(BaseController::staticActionURL('dashboard', 'home'));
         }
 
         $user = new User((int) $_GET['id']);
@@ -97,7 +97,7 @@ class UsersController extends BaseController {
                     $user->setPassword($_POST['userPass2']);
                 }
                 Notification::success('Zmeny boli uložené.');
-                $this->redirect(BaseController::actionURL('users', 'edit', array('id' => $user->getId())));
+                $this->redirect(BaseController::staticActionURL('users', 'edit', array('id' => $user->getId())));
             } else {
                 Notification::error('Zmeny sa nepodarilo uložiť.');
             }
@@ -121,21 +121,21 @@ class UsersController extends BaseController {
 
         if (!Authorization::getCurrentUser()->hasPermission(array('USERS_VIEW', 'USER_ADMIN'))) {
             Notification::error('Nedostatočné oprávnenia.');
-            $this->redirect(BaseController::actionURL('dashboard', 'home'));
+            $this->redirect(BaseController::staticActionURL('dashboard', 'home'));
         }
 
         if (User::exists($_GET['id'])) {
             $user = new User($_GET['id']);
             $user->delete();
         }
-        $this->redirect(BaseController::actionURL('users', 'viewList'));
+        $this->redirect(BaseController::staticActionURL('users', 'viewList'));
     }
 
     protected function addGroup() {
 
         if (!Authorization::getCurrentUser()->hasPermission(array('USERS_VIEW', 'USER_ADMIN'))) {
             Notification::error('Nedostatočné oprávnenia.');
-            $this->redirect(BaseController::actionURL('dashboard', 'home'));
+            $this->redirect(BaseController::staticActionURL('dashboard', 'home'));
         }
 
         if (User::exists($_GET['user']) && Group::exists($_GET['group'])) {
@@ -143,14 +143,14 @@ class UsersController extends BaseController {
             $group = new Group($_GET['group']);
             $user->addGroup($group);
         }
-        $this->redirect(BaseController::actionURL('users', 'edit', array('id' => $user->getId())));
+        $this->redirect(BaseController::staticActionURL('users', 'edit', array('id' => $user->getId())));
     }
 
     protected function removeGroup() {
 
         if (!Authorization::getCurrentUser()->hasPermission(array('USERS_VIEW', 'USER_ADMIN'))) {
             Notification::error('Nedostatočné oprávnenia.');
-            $this->redirect(BaseController::actionURL('dashboard', 'home'));
+            $this->redirect(BaseController::staticActionURL('dashboard', 'home'));
         }
 
         if (User::exists($_GET['user']) && Group::exists($_GET['group'])) {
@@ -158,14 +158,14 @@ class UsersController extends BaseController {
             $group = new Group($_GET['group']);
             $user->removeGroup($group);
         }
-        $this->redirect(BaseController::actionURL('users', 'edit', array('id' => $user->getId())));
+        $this->redirect(BaseController::staticActionURL('users', 'edit', array('id' => $user->getId())));
     }
 
     protected function addPermission() {
 
         if (!Authorization::getCurrentUser()->hasPermission(array('USERS_VIEW', 'USER_ADMIN'))) {
             Notification::error('Nedostatočné oprávnenia.');
-            $this->redirect(BaseController::actionURL('dashboard', 'home'));
+            $this->redirect(BaseController::staticActionURL('dashboard', 'home'));
         }
 
         if (User::exists($_GET['user']) && Permission::exists($_GET['permission'])) {
@@ -173,14 +173,14 @@ class UsersController extends BaseController {
             $permission = new Permission($_GET['permission']);
             $user->addPermission($permission);
         }
-        $this->redirect(BaseController::actionURL('users', 'edit', array('id' => $user->getId())));
+        $this->redirect(BaseController::staticActionURL('users', 'edit', array('id' => $user->getId())));
     }
 
     protected function removePermission() {
 
         if (!Authorization::getCurrentUser()->hasPermission(array('USERS_VIEW', 'USER_ADMIN'))) {
             Notification::error('Nedostatočné oprávnenia.');
-            $this->redirect(BaseController::actionURL('dashboard', 'home'));
+            $this->redirect(BaseController::staticActionURL('dashboard', 'home'));
         }
 
         if (User::exists($_GET['user']) && Permission::exists($_GET['permission'])) {
@@ -188,14 +188,14 @@ class UsersController extends BaseController {
             $permission = new Permission($_GET['permission']);
             $user->removePermission($permission);
         }
-        $this->redirect(BaseController::actionURL('users', 'edit', array('id' => $user->getId())));
+        $this->redirect(BaseController::staticActionURL('users', 'edit', array('id' => $user->getId())));
     }
 
     protected function resetPassword() {
 
         if (!Authorization::getCurrentUser()->hasPermission(array('USERS_VIEW', 'USER_ADMIN'))) {
             Notification::error('Nedostatočné oprávnenia.');
-            $this->redirect(BaseController::actionURL('dashboard', 'home'));
+            $this->redirect(BaseController::staticActionURL('dashboard', 'home'));
         }
 
         if (!preg_match('/^[0-9]*$/', $_GET['id'])) {

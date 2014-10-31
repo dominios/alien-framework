@@ -231,7 +231,7 @@ class BaseController {
      * @param null|array $params array of GET parameters
      * @return string URL
      */
-    public static function actionURL($controller, $action, $params = null) {
+    public static function staticActionURL($controller, $action, $params = null) {
         $url = '/';
         if (preg_match('/alien/', getcwd())) {
             $url .= 'alien/';
@@ -247,6 +247,11 @@ class BaseController {
             }
         }
         return $url;
+    }
+
+    public function actionUrl($action, $params = null) {
+        $controller = strtolower(str_replace('Controller', '', strip_namespace(BaseController::getCurrentControllerClass())));
+        return BaseController::staticActionURL($controller, $action, $params);
     }
 
     /**
@@ -287,7 +292,7 @@ class BaseController {
      * @return string
      */
     public static function getRefererActionURL() {
-        return BaseController::actionURL(BaseController::getControllerFromURL($_SERVER['HTTP_REFERER']), BaseController::getActionFromURL($_SERVER['HTTP_REFERER'], true));
+        return BaseController::staticActionURL(BaseController::getControllerFromURL($_SERVER['HTTP_REFERER']), BaseController::getActionFromURL($_SERVER['HTTP_REFERER'], true));
     }
 
     /**
@@ -307,7 +312,7 @@ class BaseController {
                 }
             }
         }
-        $this->redirect(BaseController::actionURL('dashboard', 'home'));
+        $this->redirect(BaseController::staticActionURL('dashboard', 'home'));
     }
 
     /**
