@@ -56,7 +56,7 @@ abstract class CRUDDaoImpl implements CRUDDao {
      * @return void
      */
     public function create(ActiveRecord $object) {
-        $stmt = $this->prepareCreateStatement();
+        $stmt = $this->prepareCreateStatement($object);
         $this->execute($stmt);
     }
 
