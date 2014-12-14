@@ -3,9 +3,10 @@
 namespace Alien\Models\School;
 
 
+use Alien\ActiveRecord;
 use Alien\Models\Authorization\User;
 
-class Room {
+class Room implements ActiveRecord {
 
     /**
      * @var int

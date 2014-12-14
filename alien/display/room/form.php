@@ -2,10 +2,10 @@
 <?= $this->form->getField('action'); ?>
 <?= $this->form->getField('id'); ?>
 
-    <section class="tabs" id="groupTabs">
+    <section class="tabs" id="roomTabs">
         <header>
             <ul>
-                <li class="active"><a href="#general"><span class="icon icon-group"></span>Budova</a></li>
+                <li class="active"><a href="#general"><span class="icon icon-group"></span>Miestnosť</a></li>
             </ul>
         </header>
         <section>

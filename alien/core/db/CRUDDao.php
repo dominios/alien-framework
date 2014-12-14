@@ -6,7 +6,7 @@ use Alien\ActiveRecord;
 
 interface CRUDDao {
 
-    public function create(ActiveRecord $object);
+    public function create(ActiveRecord &$object);
 
     public function delete(ActiveRecord $record);
 

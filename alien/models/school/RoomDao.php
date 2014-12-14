@@ -25,22 +25,18 @@ class RoomDao extends CRUDDaoImpl implements TableViewInterface {
     }
 
     /**
-     * @param Building $building
-     * @param \Alien\Models\Authorization\User $responsible
+     * @param Room $room
      * @throws \InvalidArgumentException
      * @return PDOStatement
      */
-    protected function prepareCreateStatement(Building $building = null, User $responsible = null) {
-        if (!($building instanceof Building)) {
-            throw new InvalidArgumentException("Building must be instance of " . __NAMESPACE__ . " class!");
-        }
-        if (!($responsible instanceof User)) {
-            throw new InvalidArgumentException("Building must be instance of " . __NAMESPACE__ . " class!");
+    protected function prepareCreateStatement(Room $room = null) {
+        if (!($room instanceof Room)) {
+            throw new InvalidArgumentException("Building must be instance of Room class!");
         }
         $conn = $this->getConnection();
         $stmt = $conn->prepare('INSERT INTO ' . DBConfig::ROOMS . ' (building, responsible) VALUES (:b, :r);');
-        $stmt->bindValue(':b', $building->getId(), PDO::PARAM_INT);
-        $stmt->bindValue(':r', $responsible->getId(), PDO::PARAM_INT);
+        $stmt->bindValue(':b', $room->getBuilding()->getId(), PDO::PARAM_INT);
+        $stmt->bindValue(':r', $room->getResponsible()->getId(), PDO::PARAM_INT);
         return $stmt;
     }
 
@@ -77,7 +73,7 @@ class RoomDao extends CRUDDaoImpl implements TableViewInterface {
             throw new InvalidArgumentException("Object must be instance of " . __NAMESPACE__ . " class!");
         }
         $conn = $this->getConnection();
-        $stmt = $conn->prepare('DELETE FROM ' . DBConfig::table(DBConfig::ROOMS) . ' WHERE id = "' . (int) $record->getId() . '";');
+        $stmt = $conn->prepare('DELETE FROM ' . DBConfig::ROOMS . ' WHERE id = "' . (int) $record->getId() . '";');
         return $stmt;
     }
 
@@ -102,7 +98,7 @@ class RoomDao extends CRUDDaoImpl implements TableViewInterface {
             throw new InvalidArgumentException("Object must be instance of " . __NAMESPACE__ . " class!");
         }
         $conn = $this->getConnection();
-        $stmt = $conn->prepare('UPDATE ' . DBConfig::table(DBConfig::ROOMS) . ' SET
+        $stmt = $conn->prepare('UPDATE ' . DBConfig::ROOMS . ' SET
             building=:b, responsible=:r, floor=:f, number=:n, capacity=:c
             WHERE id=:id;');
         $stmt->bindValue(':id', $room->getId(), PDO::PARAM_INT);
@@ -116,6 +112,7 @@ class RoomDao extends CRUDDaoImpl implements TableViewInterface {
 
     public function getTableHeader() {
         return array(
+            'id' => '#',
             'building' => 'Budova',
             'floor' => 'Poshodie',
             'number' => 'Miestnosť',
@@ -129,6 +126,7 @@ class RoomDao extends CRUDDaoImpl implements TableViewInterface {
             return array();
         }
         return array(
+            'id' => $object->getId(),
             'building' => $object->getBuilding()->getName(),
             'floor' => $object->getFloor(),
             'number' => $object->getNumber(),
