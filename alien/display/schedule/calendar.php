@@ -13,20 +13,13 @@
             lang: 'sk',
             defaultDate: '<?= date('Y-m-d', time()); ?>',
             defaultView: 'agendaWeek',
+            axisFormat: 'H:mm',
+            minTime: '07:00:00',
+            maxTime: '22:00:00',
+            allDaySlot: false,
             editable: false,
             eventLimit: false,
-            events: [
-                {
-                    title: 'Kurz AJ',
-                    start: '2014-10-29T09:00:00',
-                    end: '2014-10-29T10:30:00'
-                },
-                {
-                    title: 'Kurz NJ',
-                    start: '2014-10-29T11:00:00',
-                    end: '2014-10-29T12:30:00'
-                }
-            ]
+            events: <?= json_encode($this->events); ?>
         });
 
     });

@@ -3,19 +3,40 @@
 namespace Alien\Controllers;
 
 
+use Alien\Models\School\ScheduleEventDao;
 use Alien\Response;
 use Alien\Table\DataTable;
 use Alien\View;
+use DateTime;
 
-class ScheduleController extends BuildingController {
+class ScheduleController extends BaseController {
+
+    /**
+     * @var ScheduleEventDao
+     */
+    protected $scheduleEventDao;
 
     protected function initialize() {
-        return parent::initialize();
+        parent::initialize();
+        $this->scheduleEventDao = $this->getServiceManager()->getDao('ScheduleEventDao');
     }
 
     protected function view() {
 
         $view = new View('display/schedule/calendar.php');
+
+        $data = array();
+        $events = $this->scheduleEventDao->getList();
+        foreach ($events as $event) {
+            $data[] = array(
+                'title' => $event->getCourse()->getName(),
+                'start' => $event->getDateFrom(DateTime:: ISO8601),
+                'end' => $event->getDateTo(DateTime::ISO8601),
+                'color' => '#' . $event->getCourse()->getColor()
+            );
+        }
+
+        $view->events = $data;
 
         return new Response(array(
                 'Title' => 'Týždenný rozvrh',

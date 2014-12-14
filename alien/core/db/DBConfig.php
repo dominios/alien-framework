@@ -32,6 +32,7 @@ interface SchoolDBExtension {
     const COURSES = 'courses';
     const BUILDINGS = 'buildings';
     const ROOMS = 'rooms';
+    const SCHEDULE = 'schedule';
 
 }
 

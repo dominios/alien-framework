@@ -69,7 +69,8 @@ class CourseDao extends CRUDDaoImpl implements TableViewInterface {
                ->setDateCreated($dc)
                ->setDateStart($ds)
                ->setDateEnd($de)
-               ->setTeacher(new Teacher($this->userDao->find($result['teacher'])));
+               ->setTeacher(new Teacher($this->userDao->find($result['teacher'])))
+               ->setColor($result['color']);
         return $course;
     }
 
@@ -117,7 +118,7 @@ class CourseDao extends CRUDDaoImpl implements TableViewInterface {
         }
         $conn = $this->getConnection();
         $stmt = $conn->prepare('UPDATE ' . DBConfig::table(DBConfig::COURSES) . ' SET
-            name=:n, teacher=:t, capacity=:c, dateCreated=:dc, dateStart=:ds, dateEnd=:de
+            name=:n, teacher=:t, capacity=:c, dateCreated=:dc, dateStart=:ds, dateEnd=:de, color:cl
             WHERE id=:id;');
         $stmt->bindValue(':id', $room->getId(), PDO::PARAM_INT);
         $stmt->bindValue(':n', $room->getName(), PDO::PARAM_STR);
@@ -126,6 +127,7 @@ class CourseDao extends CRUDDaoImpl implements TableViewInterface {
         $stmt->bindValue(':dc', $room->getDateCreated()->format("u"), PDO::PARAM_INT);
         $stmt->bindValue(':ds', $room->getDateStart()->format("u"), PDO::PARAM_STR);
         $stmt->bindValue(':de', $room->getDateEnd()->format("u"), PDO::PARAM_STR);
+        $stmt->bindValue(':cl', $room->getColor(), PDO::PARAM_STR);
         return $stmt;
     }
 

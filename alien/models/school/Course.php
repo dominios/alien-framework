@@ -4,6 +4,7 @@ namespace Alien\Models\School;
 
 
 use Alien\Application;
+use Alien\Models\School\Teacher;
 use DateTime;
 
 class Course {
@@ -42,6 +43,11 @@ class Course {
      * @var DateTime
      */
     protected $dateEnd;
+
+    /**
+     * @var string
+     */
+    protected $color;
 
     public function setId($id) {
         $this->id = $id;
@@ -133,10 +139,22 @@ class Course {
     }
 
     /**
-     * @return \Alien\Models\School\Teacher
+     * @return Teacher
      */
     public function getTeacher() {
         return $this->teacher;
+    }
+
+    public function setColor($color) {
+        $this->color = $color;
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getColor() {
+        return $this->color;
     }
 
 
