@@ -3,7 +3,9 @@
 namespace Alien\Models\School;
 
 
-class Building {
+use Alien\ActiveRecord;
+
+class Building implements ActiveRecord {
 
     /**
      * @var int

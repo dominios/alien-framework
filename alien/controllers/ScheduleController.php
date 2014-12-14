@@ -3,6 +3,7 @@
 namespace Alien\Controllers;
 
 
+use Alien\Forms\Input;
 use Alien\Models\School\ScheduleEventDao;
 use Alien\Response;
 use Alien\Table\DataTable;
@@ -24,6 +25,9 @@ class ScheduleController extends BaseController {
     protected function view() {
 
         $view = new View('display/schedule/calendar.php');
+
+        $addButton = Input::button($this->actionUrl("addEvent"), 'Pridať udalosť');
+        $view->addButtton = $addButton;
 
         $data = array();
         $events = $this->scheduleEventDao->getList();

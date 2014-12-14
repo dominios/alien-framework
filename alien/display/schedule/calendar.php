@@ -1,5 +1,7 @@
 <div id="calendar"></div>
 
+<?= $this->addButtton; ?>
+
 <script type="text/javascript">
 
     $(document).ready(function () {
