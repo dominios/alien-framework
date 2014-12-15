@@ -143,6 +143,8 @@ class ScheduleController extends BaseController {
 
         $view->form = $form;
 
+        $view->imgSrc = '/tuke_' . strtolower($event->getRoom()->getBuilding()->getName()) . '.jpg';
+
         return new Response(array(
                 'Title' => 'Upraviť udalosť',
                 'ContentMain' => $view

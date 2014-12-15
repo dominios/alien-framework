@@ -91,14 +91,14 @@ class BuildingDao extends CRUDDaoImpl implements TableViewInterface {
         }
         $conn = $this->getConnection();
         $stmt = $conn->prepare('UPDATE ' . DBConfig::BUILDINGS . ' SET
-            name=:n, street=:s, zip=:z, city=:c, state=:s
+            name=:name, street=:street, zip=:zip, city=:city, state=:state
             WHERE id=:id;');
         $stmt->bindValue(':id', $room->getId(), PDO::PARAM_INT);
-        $stmt->bindValue(':n', $room->getName(), PDO::PARAM_STR);
-        $stmt->bindValue(':s', $room->getStreet(), PDO::PARAM_STR);
-        $stmt->bindValue(':c', $room->getCity(), PDO::PARAM_STR);
-        $stmt->bindValue(':z', $room->getZip(), PDO::PARAM_STR);
-        $stmt->bindValue(':s', $room->getState(), PDO::PARAM_STR);
+        $stmt->bindValue(':name', $room->getName(), PDO::PARAM_STR);
+        $stmt->bindValue(':street', $room->getStreet(), PDO::PARAM_STR);
+        $stmt->bindValue(':city', $room->getCity(), PDO::PARAM_STR);
+        $stmt->bindValue(':zip', $room->getZip(), PDO::PARAM_STR);
+        $stmt->bindValue(':state', $room->getState(), PDO::PARAM_STR);
         return $stmt;
     }
 
