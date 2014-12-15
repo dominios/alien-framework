@@ -51,7 +51,7 @@ class ScheduleEvent implements ActiveRecord {
         return $this->course;
     }
 
-    public function setDateFrom($dateFrom) {
+    public function setDateFrom(DateTime $dateFrom) {
         $this->dateFrom = $dateFrom;
         return $this;
     }
@@ -63,7 +63,7 @@ class ScheduleEvent implements ActiveRecord {
         return $format == null ? $this->dateFrom : $this->dateFrom->format($format);
     }
 
-    public function setDateTo($dateTo) {
+    public function setDateTo(DateTime $dateTo) {
         $this->dateTo = $dateTo;
         return $this;
     }

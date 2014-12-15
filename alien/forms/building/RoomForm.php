@@ -55,7 +55,7 @@ class RoomForm extends Form {
 
         $building = Input::select('roomBuilding')
                          ->setLabel('Budova')
-                         ->addToFieldset($generalFieldset);;
+                         ->addToFieldset($generalFieldset);
         foreach ($form->buildingDao->getList() as $i) {
             $opt = new Option($i->getName() . ' ' . $i->getStreet(), Option::TYPE_SELECT, $i->getId());
             if ($room->getBuilding() instanceof Building) {

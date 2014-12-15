@@ -5,6 +5,7 @@ namespace Alien\Forms;
 use Alien\Forms\Input\Button;
 use Alien\Forms\Input\Checkbox;
 use Alien\Forms\Input\Csrf;
+use Alien\Forms\Input\DateTimeLocal;
 use Alien\Forms\Input\Hidden;
 use Alien\Forms\Input\Password;
 use Alien\Forms\Input\Radio;
@@ -13,6 +14,7 @@ use Alien\Forms\Input\Submit;
 use Alien\Forms\Input\Text;
 use Alien\Forms\Input\Textarea;
 use Alien\Forms\Validator\ValidatorException;
+use DateTime;
 use InvalidArgumentException;
 
 abstract class Input {
@@ -296,6 +298,11 @@ abstract class Input {
      */
     public static function submit($name = '', $value = null) {
         $input = new Submit($name, $value);
+        return $input;
+    }
+
+    public static function dateTimeLocal($name, DateTime $defaultValue = null, DateTime $value = null) {
+        $input = new DateTimeLocal($name, $defaultValue, $value);
         return $input;
     }
 

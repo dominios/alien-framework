@@ -95,7 +95,7 @@ class RoomDao extends CRUDDaoImpl implements TableViewInterface {
      */
     protected function prepareUpdateStatement(ActiveRecord $room) {
         if (!($room instanceof Room)) {
-            throw new InvalidArgumentException("Object must be instance of " . __NAMESPACE__ . " class!");
+            throw new InvalidArgumentException("Object must be instance of Room class!");
         }
         $conn = $this->getConnection();
         $stmt = $conn->prepare('UPDATE ' . DBConfig::ROOMS . ' SET

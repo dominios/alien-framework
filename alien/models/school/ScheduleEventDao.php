@@ -13,6 +13,7 @@ use Alien\ActiveRecord;
 use Alien\Db\CRUDDaoImpl;
 use Alien\DBConfig;
 use DateTime;
+use InvalidArgumentException;
 use PDO;
 use PDOStatement;
 
@@ -36,11 +37,22 @@ class ScheduleEventDao extends CRUDDaoImpl {
 
 
     /**
+     * @param ScheduleEvent $event
+     * @throws \InvalidArgumentException
      * @return PDOStatement
      */
-    protected function prepareCreateStatement() {
-        // TODO: Implement prepareCreateStatement() method.
-        throw new \RuntimeException("Unsupported operation.");
+    protected function prepareCreateStatement(ScheduleEvent $event = null) {
+        if (!($event instanceof ScheduleEvent)) {
+            throw new InvalidArgumentException("Object must be instance of Event class!");
+        }
+        $conn = $this->getConnection();
+        $stmt = $conn->prepare('INSERT INTO ' . DBConfig::SCHEDULE . ' (room, year, course, dateFrom, dateTo) VALUES (:room, :year, :course, :dateFrom, :dateTo);');
+        $stmt->bindValue(':room', $event->getRoom()->getId());
+        $stmt->bindValue(':year', $event->getYear());
+        $stmt->bindValue(':course', $event->getCourse()->getId());
+        $stmt->bindValue(':dateFrom', $event->getDateFrom('U'));
+        $stmt->bindValue(':dateTo', $event->getDateTo('U'));
+        return $stmt;
     }
 
     /**
@@ -83,16 +95,30 @@ class ScheduleEventDao extends CRUDDaoImpl {
      * @return mixed
      */
     protected function prepareFindStatement($id) {
-        // TODO: Implement prepareFindStatement() method.
-        throw new \RuntimeException("Unsupported operation.");
+        $conn = $this->getConnection();
+        $stmt = $conn->prepare('SELECT * FROM ' . DBConfig::SCHEDULE . ' WHERE id = :i');
+        $stmt->bindValue(':i', $id, PDO::PARAM_INT);
+        return $stmt;
     }
 
     /**
-     * @param ActiveRecord $room
+     * @param \Alien\ActiveRecord $event
+     * @throws \InvalidArgumentException
+     * @internal param \Alien\ActiveRecord $room
      * @return PDOStatement
      */
-    protected function prepareUpdateStatement(ActiveRecord $room) {
-        // TODO: Implement prepareUpdateStatement() method.
-        throw new \RuntimeException("Unsupported operation.");
+    protected function prepareUpdateStatement(ActiveRecord $event) {
+        if (!($event instanceof ScheduleEvent)) {
+            throw new InvalidArgumentException("Object must be instance of Event class!");
+        }
+        $conn = $this->getConnection();
+        $stmt = $conn->prepare('UPDATE ' . DBConfig::SCHEDULE . ' SET room=:room, year=:year, course=:course, dateFrom=:dateFrom, dateTo=:dateTo WHERE id=:id');
+        $stmt->bindValue(':id', $event->getId());
+        $stmt->bindValue(':room', $event->getRoom()->getId());
+        $stmt->bindValue(':year', $event->getYear());
+        $stmt->bindValue(':course', $event->getCourse()->getId());
+        $stmt->bindValue(':dateFrom', $event->getDateFrom('U'));
+        $stmt->bindValue(':dateTo', $event->getDateTo('U'));
+        return $stmt;
     }
 }

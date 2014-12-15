@@ -9,7 +9,7 @@ class Checkbox extends Input {
     protected $checked = false;
 
     public function __construct($name, $value, $checked = false) {
-        parent::__construct($name, 'checkbox', $value);
+        parent::__construct($name, 'checkbox', $value, $value);
         $this->checked = $checked;
     }
 
