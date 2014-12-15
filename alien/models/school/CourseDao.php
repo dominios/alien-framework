@@ -42,7 +42,7 @@ class CourseDao extends CRUDDaoImpl implements TableViewInterface {
             throw new \InvalidArgumentException("Argument must by instance of " . __NAMESPACE__ . "!");
         }
         $conn = $this->getConnection();
-        $stmt = $conn->prepare('INSERT INTO ' . DBConfig::table(DBConfig::COURSES) . ' (teacher) VALUES (:t);');
+        $stmt = $conn->prepare('INSERT INTO ' . DBConfig::COURSES . ' (teacher) VALUES (:t);');
         $stmt->bindValue(':t', $teacher->getId(), PDO::PARAM_INT);
         return $stmt;
     }
@@ -69,7 +69,7 @@ class CourseDao extends CRUDDaoImpl implements TableViewInterface {
                ->setDateCreated($dc)
                ->setDateStart($ds)
                ->setDateEnd($de)
-               ->setTeacher(new Teacher($this->userDao->find($result['teacher'])))
+               ->setTeacher(($this->userDao->find($result['teacher'])))
                ->setColor($result['color']);
         return $course;
     }
@@ -147,7 +147,7 @@ class CourseDao extends CRUDDaoImpl implements TableViewInterface {
         }
         return array(
             'name' => $object->getName(),
-            'teacher' => $object->getTeacher()->getName(),
+            'teacher' => $object->getTeacher()->getFirstname() . ' ' . $object->getTeacher()->getSurname(),
             'capacity' => $object->getCapacity(),
             'dateStart' => $object->getDateStart('d.m.Y'),
             'dateEnd' => $object->getDateEnd('d.m.Y')

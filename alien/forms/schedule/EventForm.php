@@ -53,6 +53,13 @@ class EventForm extends Form {
 
         $generalFieldset = new Fieldset('general');
 
+        if ($event->getId()) {
+            Input::text('eventTeacher', 0, $event->getCourse()->getTeacher()->getFirstname() . ' ' . $event->getCourse()->getTeacher()->getSurname())
+                 ->setLabel('Vyučujúci')
+                 ->setDisabled(true)
+                 ->addToFieldset($generalFieldset);
+        }
+
         $room = Input::select('eventRoom')
                      ->setLabel('Miestnosť')
                      ->addToFieldset($generalFieldset);

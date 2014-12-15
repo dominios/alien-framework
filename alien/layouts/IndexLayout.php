@@ -103,14 +103,15 @@ class IndexLayout extends Layout {
         $userSubmenu[] = Array('permission' => null, 'url' => BaseController::staticActionURL('base', 'logout'), 'text' => 'Odhlásiť', 'img' => 'logout');
 
         $left = Array();
-        $left[] = Array('permission' => null, 'url' => BaseController::staticActionURL('dashboard', 'home'), 'text' => 'Dashboard', 'img' => 'dashboard', 'controller' => 'dashboard');
+//        $left[] = Array('permission' => null, 'url' => BaseController::staticActionURL('dashboard', 'home'), 'text' => 'Dashboard', 'img' => 'dashboard', 'controller' => 'dashboard');
         $left[] = Array('permission' => 'USER_VIEW', 'url' => BaseController::staticActionURL('users', 'viewList'), 'text' => 'Používatelia', 'img' => 'user', 'controller' => 'users');
-        $left[] = Array('permission' => 'GROUP_VIEW', 'url' => BaseController::staticActionURL('group', 'view'), 'text' => 'Skupiny', 'img' => 'group', 'controller' => 'groups');
+        $left[] = Array('permission' => 'GROUP_VIEW', 'url' => BaseController::staticActionURL('group', 'view'), 'text' => 'Skupiny', 'img' => 'group', 'controller' => 'group');
         $left[] = Array('permission' => null, 'url' => BaseController::staticActionURL('building', 'view'), 'text' => 'Budova', 'img' => 'home', 'controller' => 'building');
+        $left[] = Array('permission' => null, 'url' => BaseController::staticActionURL('schedule', 'view', array('interval' => 'week')), 'text' => 'Rozvrh', 'img' => 'clock', 'controller' => 'schedule');
         $left[] = Array('permission' => null, 'url' => BaseController::staticActionURL('course', 'view'), 'text' => 'Kurzy', 'img' => 'book-stack', 'controller' => 'course');
-        $left[] = Array('permission' => null, 'url' => BaseController::staticActionURL('users', 'viewList'), 'text' => 'Učitelia', 'img' => 'user', 'controller' => 'users');
-        $left[] = Array('permission' => null, 'url' => BaseController::staticActionURL('users', 'viewList'), 'text' => 'Študenti', 'img' => 'user', 'controller' => 'users');
-        $left[] = Array('permission' => null, 'url' => BaseController::staticActionURL('test', 'viewList'), 'text' => 'Testy', 'img' => 'note', 'controller' => 'test');
+//        $left[] = Array('permission' => null, 'url' => BaseController::staticActionURL('users', 'viewList'), 'text' => 'Učitelia', 'img' => 'user', 'controller' => 'users');
+//        $left[] = Array('permission' => null, 'url' => BaseController::staticActionURL('users', 'viewList'), 'text' => 'Študenti', 'img' => 'user', 'controller' => 'users');
+//        $left[] = Array('permission' => null, 'url' => BaseController::staticActionURL('test', 'viewList'), 'text' => 'Testy', 'img' => 'note', 'controller' => 'test');
 
         $right = array();
         $right[] = Array('permission' => null, 'url' => BaseController::staticActionURL('dashboard', '#'), 'text' => \Alien\Models\Authorization\Authorization::getCurrentUser()->getEmail(), 'img' => 'user-circle', 'submenu' => $userSubmenu);

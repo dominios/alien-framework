@@ -43,7 +43,7 @@ class GroupController extends BaseController {
 
     private function leftMenuItems() {
         $items = Array();
-        $items[] = Array('permissions' => null, 'url' => $this->actionUrl('viewList'), 'img' => 'group', 'text' => 'Zoznam skupín');
+        $items[] = Array('permissions' => null, 'url' => $this->actionUrl('view'), 'img' => 'group', 'text' => 'Zoznam skupín');
         $items[] = Array('permissions' => null, 'url' => $this->actionUrl('edit', array('id' => 0)), 'img' => 'edit', 'text' => 'Pridať/upraviť skupinu');
         return $items;
     }

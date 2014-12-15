@@ -60,7 +60,7 @@ class BuildingController extends BaseController {
         $items = Array();
         $items[] = Array('permissions' => null, 'url' => BaseController::staticActionURL('building', 'view'), 'img' => 'home', 'text' => 'Budovy');
         $items[] = Array('permissions' => null, 'url' => BaseController::staticActionURL('building', 'viewRooms'), 'img' => 'home', 'text' => 'Miestnosti');
-        $items[] = Array('permissions' => null, 'url' => BaseController::staticActionURL('schedule', 'view', array('interval' => 'week')), 'img' => 'home', 'text' => 'Rozvrh');
+//        $items[] = Array('permissions' => null, 'url' => BaseController::staticActionURL('schedule', 'view', array('interval' => 'week')), 'img' => 'home', 'text' => 'Rozvrh');
         return $items;
     }
 

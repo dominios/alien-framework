@@ -70,9 +70,9 @@ $menu .= '<div class="navbar-toggle" data-target="mainmenu"><span class="icon ic
 
 $menu .= '<nav class="navbar-content navbar-collapsed mainmenu">';
 
-$menu .= '<header class="navbar-header">';
-$menu .= '<img src="/alien/display/img/alien_logo_white.png" alt="ALiEN">';
-$menu .= '</header>';
+//$menu .= '<header class="navbar-header">';
+//$menu .= '<img src="/alien/display/img/alien_logo_white.png" alt="ALiEN">';
+//$menu .= '</header>';
 
 $menu .= '<ul>';
 foreach ($this->items['left'] as $item) {

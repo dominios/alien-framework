@@ -36,10 +36,10 @@ class UsersController extends BaseController {
 
     private function leftMenuItems() {
         $items = Array();
-        $items[] = Array('permissions' => null, 'url' => BaseController::staticActionURL('users', 'viewList'), 'img' => 'user', 'text' => 'Zoznam používateľov');
+        $items[] = Array('permissions' => null, 'url' => BaseController::staticActionURL('users', 'view'), 'img' => 'user', 'text' => 'Zoznam používateľov');
         $items[] = Array('permissions' => null, 'url' => BaseController::staticActionURL('users', 'edit', array('id' => 0)), 'img' => 'add-user', 'text' => 'Pridať/upraviť používateľa');
-        $items[] = Array('permissions' => null, 'url' => BaseController::staticActionURL('users', 'viewLogs'), 'img' => 'clock', 'text' => 'Posledná aktivita');
-        $items[] = Array('permissions' => null, 'url' => BaseController::staticActionURL('users', 'newsletter'), 'img' => 'magazine', 'text' => 'Newsletter');
+//        $items[] = Array('permissions' => null, 'url' => BaseController::staticActionURL('users', 'viewLogs'), 'img' => 'clock', 'text' => 'Posledná aktivita');
+//        $items[] = Array('permissions' => null, 'url' => BaseController::staticActionURL('users', 'newsletter'), 'img' => 'magazine', 'text' => 'Newsletter');
         return $items;
     }
 

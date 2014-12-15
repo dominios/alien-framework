@@ -131,7 +131,7 @@ class RoomDao extends CRUDDaoImpl implements TableViewInterface {
             'floor' => $object->getFloor(),
             'number' => $object->getNumber(),
             'capacity' => $object->getCapacity(),
-            'responsible' => $object->getResponsible()->getName()
+            'responsible' => $object->getResponsible()->getFirstname() . ' ' . $object->getResponsible()->getSurname()
         );
     }
 
