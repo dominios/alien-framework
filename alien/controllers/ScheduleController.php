@@ -50,7 +50,7 @@ class ScheduleController extends BaseController {
         $events = $this->scheduleEventDao->getList();
         foreach ($events as $event) {
             $data[] = array(
-                'title' => $event->getCourse()->getName() . "\n" . $event->getCourse()->getTeacher()->getFirstname() . ' ' . $event->getCourse()->getTeacher()->getSurname() . ' ',
+                'title' => $event->getCourse()->getName() . "\n" . $event->getCourse()->getTeacher()->getFirstname() . ' ' . $event->getCourse()->getTeacher()->getSurname() . "\n" . $event->getRoom()->getBuilding()->getName() . ', ' . $event->getRoom()->getNumber(),
                 'start' => $event->getDateFrom(DateTime:: ISO8601),
                 'end' => $event->getDateTo(DateTime::ISO8601),
                 'color' => '#' . $event->getCourse()->getColor(),
