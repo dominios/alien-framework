@@ -10,9 +10,138 @@ class Router {
 
     public final function __construct() {
         $this->routes = include 'routes.php';
-        print_r($this->routes);
     }
 
+    public function findMatch($request) {
+
+        $result = array(
+            'route' => null,
+            'namespace' => null,
+            'controller' => null,
+            'action' => null,
+            'params' => null
+        );
+
+        $match = false;
+        $parts = array_filter(explode('/', $request, 3));
+
+        foreach ($this->routes as $route => $options) {
+            if ($route == $parts[1]) {
+                $match = true;
+                $this->parseNode($parts[2], $options, $result);
+            }
+        }
+
+        if (!$match) {
+            throw new RouterException('Route not found.');
+        } else {
+            $params = $this->getQueryParams($request, $result);
+            $result['params'] = $params;
+        }
+
+        if ($result['controller'] === null) {
+            throw new RouterException('Controller not set.');
+        }
+
+        if ($result['action'] === null) {
+//            throw new RouterException('Action not set.');
+        }
+
+        return $result;
+    }
+
+    private function parseNode($url, $node, &$result) {
+
+        if (is_array($node)) {
+
+            $result['route'] .= $node['route'];
+
+            if (array_key_exists('namespace', $node)) {
+                $result['namespace'] = $node['namespace'];
+            }
+            if (array_key_exists('controller', $node)) {
+                $result['controller'] = $node['controller'];
+            }
+            if (array_key_exists('action', $node)) {
+                $result['action'] = $node['action'];
+            }
+            if (array_key_exists('childRoutes', $node)) {
+                $parts = array_filter(explode('/', $url, 2));
+                if (array_key_exists($parts[0], $node['childRoutes'])) {
+                    $this->parseNode($parts[1], $node['childRoutes'][$parts[0]], $result);
+                }
+            }
+        }
+
+        return $result;
+    }
+
+    private function getQueryParams($url, $route) {
+
+        if (strpos($route['route'], '[') !== false) {
+            $requiredPart = preg_replace('/\[.*$/', '', $route['route']);
+            var_dump("hladam $requiredPart v $url ");
+            if (strpos($url, $requiredPart) === false) {
+                throw new RouterException("Route mismatch.");
+            }
+        } else {
+            $requiredPart = $route['route'];
+        }
+
+
+        $optionals = array();
+        if (preg_match('/(\[.+\])/', $route['route'], $optionals)) {
+            unset($optionals[0]);
+            array_walk($optionals, function (&$value, $key) {
+                $value = preg_replace('/[\[\]]/', '', $value);
+            });
+        }
+
+        $params = array();
+        $i = 1;
+        $parametrized = implode('', array($requiredPart) + $optionals);
+        $parametrizedParts = explode('/', $parametrized);
+        $regexParts = array();
+        foreach ($parametrizedParts as $p) {
+            if (trim($p)) {
+                if (strpos($p, ':') !== false) {
+                    $params[str_replace(':', '', $p)] = $i;
+                    $regexParts[] = '(.*)';
+                } else {
+                    $regexParts[] = "($p)";
+                }
+                $i++;
+            }
+        }
+
+        $regex = '/^\/' . implode('\/', $regexParts) . '$/';
+
+        $paramsMatches = array();
+        if (preg_match($regex, $url, $paramsMatches)) {
+            foreach ($params as $key => $index) {
+                if ($paramsMatches[$index] == "") {
+                    throw new RouterException("Required argument not found.");
+                }
+                $params[$key] = $paramsMatches[$index];
+            }
+        } else {
+            if (count($params)) {
+                throw new RouterException("Required argument not found.");
+            }
+        }
+
+        return $params;
+
+    }
+
+    //
+
+
+    /**
+     * @param $route
+     * @throws RouterException
+     * @deprecated
+     */
     public function findRoute($route) {
         $route = str_replace('/', '', $route);
         if (array_key_exists($route, $this->routes['routes'])) {
@@ -29,6 +158,12 @@ class Router {
         }
     }
 
+    /**
+     * @param array $route
+     * @return bool
+     * @throws RouterException
+     * @deprecated
+     */
     public function validateRoute(array $route) {
         if (!class_exists($route['controller'])) {
             throw new RouterException("Route controller $route[controller] does not exists.");
@@ -40,6 +175,11 @@ class Router {
         return true;
     }
 
+    /**
+     * @param $route
+     * @throws RouterException
+     * @deprecated
+     */
     public function handle($route) {
         try {
             $route = $this->urlPath($route);
@@ -101,6 +241,11 @@ class Router {
         }
     }
 
+    /**
+     * @param $url
+     * @return mixed
+     * @deprecated
+     */
     public function urlPath($url) {
         $components = parse_url($url);
         return $components['path'];
@@ -154,6 +299,11 @@ class Router {
         );
     }
 
+    /**
+     * @param $query
+     * @return mixed
+     * @deprecated
+     */
     private function parseQueryString($query) {
         $GET = array();
         $params = explode('/', preg_replace('/\?.*/', '', $query)); // vyhodi vsetko ?... cize "stary get"

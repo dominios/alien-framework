@@ -4,8 +4,10 @@ namespace Alien;
 
 use Alien\Controllers\BaseController;
 use Alien\Db\Connection;
+use Alien\Models\Authorization\Authorization;
 use Alien\Models\Authorization\Group;
 use Alien\Models\Authorization\GroupDao;
+use Alien\Models\Authorization\User;
 use Alien\Models\Authorization\UserDao;
 use Alien\Models\School\BuildingDao;
 use Alien\Models\School\CourseDao;
@@ -18,11 +20,35 @@ use RuntimeException;
 
 final class Application {
 
+    /**
+     * @var Application
+     */
     private static $instance;
+
+    /**
+     * @var bool
+     */
     private static $boot = false;
+
+    /**
+     * @var array
+     */
     private $config;
+
+    /**
+     * @var Terminal
+     */
     private $console;
+
+    /**
+     * @var ServiceManager
+     */
     private $serviceManager;
+
+    /**
+     * @var Router
+     */
+    private $router;
 
     private function __construct() {
         $this->config = parse_ini_file('config.ini');
@@ -41,13 +67,18 @@ final class Application {
      * @throws RuntimeException
      */
     public static function boot() {
+
         if (self::$boot === true) {
             throw new RuntimeException("Application can boot only once.");
         }
+
         self::$boot = true;
         $app = Application::getInstance();
         date_default_timezone_set($app->config['timezone']);
         $app->console = Terminal::getInstance();
+
+        $router = new Router();
+        $app->router = $router;
 
         $sm = ServiceManager::initialize($app->config);
         $app->serviceManager = $sm;
@@ -83,22 +114,75 @@ final class Application {
      * @return string HTML output
      */
     public function run() {
-        ob_clean();
-        header('Content-Type: text/html; charset=utf-8');
-        $content = '';
+
+        // autorizacia & logika
+
+        $request = str_replace('/alien', '', $_SERVER['REQUEST_URI']);
+
+        echo '<pre>';
+//        $route = $this->router->findMatch($request);
+
+        $auth = Authorization::getInstance(); // TODO Autorizacia nech nieje static, ale cast app
+
+        // @TODO toto prerobit nejako krajsie a nie hardcodovat
+        if (!$auth->isLoggedIn()) {
+            if (isset($_POST['loginFormSubmit'])) {
+                if (!Authorization::getInstance()->isLoggedIn()) {
+                    Authorization::getInstance()->login($_POST['login'], $_POST['pass']);
+                    $user = Authorization::getCurrentUser();
+                    if ($user instanceof User) {
+                        if (Message::getUnreadCount($user)) {
+                            Notification::newMessages("");
+                            // $this->redirect(BaseController::staticActionURL('dashboard', 'home'));
+                            $route['controller'] = 'dashboard';
+                            $route['actions'] = array('home');
+                        }
+                    }
+                }
+            }
+        }
+
+        if (!$auth->isLoggedIn()) {
+            $layout = new \Alien\Layout\LoginLayout();
+            unset($route['actions']);
+        } else {
+            $layout = new \Alien\Layout\AdminLayout();
+//            $layout = new \Alien\Layout\IndexLayout();
+        }
+
+        if ($layout::useNotifications) {
+            $layout->setNotificationContainer(\Alien\NotificationContainer::getInstance());
+        }
+
+        // generovanie vystupu
+
+        ob_clean(); // TODO zmazat odtialto!
+
+        $controller = new BaseController();
+
         try {
-            $request = BaseController::parseRequest();
-            if (class_exists($request['controller'])) {
-                $controller = new $request['controller']($request['actions']);
-            } else {
-                $controller = new BaseController($request['actions']);
+
+            $route = $this->router->findMatch($request);
+            $className = '\\' . $route['namespace'] . '\\' . $route['controller'];
+
+            if (class_exists($className)) {
+                $controller = new ${className}();
             }
+
             $controller->setServiceManager($this->serviceManager);
-            $responses = $controller->doActions();
+
+            $controller->addAction($route['action']);
+
+            header('Content-Type: text/html; charset=utf-8'); // TODO typ podla response!
+            $content = '';
+
+            $responses = $controller->getResponses();
             foreach ($responses as $response) {
-                $controller->getLayout()->handleResponse($response);
+                $layout->handleResponse($response);
             }
-            $content .= $controller->getLayout()->__toString();
+            $content .= $layout->__toString();
+        } catch (RouterException $e) {
+            $controller->forceAction('error404', $e);
         } catch (BadFunctionCallException $e) {
             $controller->forceAction('error404', $e);
         } catch (Exception $e) {

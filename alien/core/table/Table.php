@@ -39,6 +39,8 @@ class Table {
             }
         }
         $view = new View($this->viewSrc);
+        $view->name = $this->name;
+        $view->description = $this->description;
         $view->header = $header;
         $view->rows = $rows;
         $view->options = $this->getOptions();
@@ -60,4 +62,23 @@ class Table {
     protected function getOptions() {
         return array();
     }
+
+    public function setDescription($description) {
+        $this->description = $description;
+        return $this;
+    }
+
+    public function getDescription() {
+        return $this->description;
+    }
+
+    public function setName($name) {
+        $this->name = $name;
+        return $this;
+    }
+
+    public function getName() {
+        return $this->name;
+    }
+
 }

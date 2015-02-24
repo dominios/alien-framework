@@ -2,6 +2,7 @@
 
 namespace Alien\Controllers;
 
+use Alien\Table\DataTable;
 use Alien\View;
 use Alien\Response;
 use Alien\Notification;
@@ -50,15 +51,19 @@ class UsersController extends BaseController {
             $this->redirect(BaseController::staticActionURL('dashboard', 'home'));
         }
 
-        $view = new View('display/users/viewList.php', $this);
-        $view->users = User::getList(true);
-        $view->editActionPattern = BaseController::staticActionURL('users', 'edit', array('id' => '%ID%'));
-        $view->sendMessagePattern = BaseController::staticActionURL('dashboard', 'composeMessage', array('id' => '%ID%'));
+        $dao = $this->getServiceManager()->getDao('UserDao');
+        $data = $dao->getTableData($dao->getList());
+        $table = new DataTable($data);
+        $table->setName('Zoznam pužívateľov');
+
+        $this->view->table = $table;
+
         return new Response(array(
                 'Title' => 'Zoznam používateľov',
-                'ContentMain' => $view->renderToString()
+                'ContentMain' => $this->view
             )
         );
+
     }
 
     protected function edit() {

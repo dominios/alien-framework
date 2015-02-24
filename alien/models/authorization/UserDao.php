@@ -9,8 +9,9 @@ use Alien\Models\Authorization\User;
 use InvalidArgumentException;
 use PDO;
 use PDOStatement;
+use TableViewInterface;
 
-class UserDao extends CRUDDaoImpl {
+class UserDao extends CRUDDaoImpl implements TableViewInterface {
 
     /**
      * @return PDOStatement
@@ -37,7 +38,7 @@ class UserDao extends CRUDDaoImpl {
      */
     protected function prepareSelectAllStatement() {
         $conn = $this->getConnection();
-        return $conn->prepare('SELECT * FROM test_users');
+        return $conn->prepare('SELECT * FROM test_users WHERE deleted <> 1');
     }
 
     /**
@@ -86,5 +87,41 @@ class UserDao extends CRUDDaoImpl {
         $stmt->bindValue(':fn', $room->getFirstname(), PDO::PARAM_STR);
         $stmt->bindValue(':sn', $room->getSurname(), PDO::PARAM_STR);
         return $stmt;
+    }
+
+    public function getTableHeader() {
+        return array(
+            'login' => 'Login',
+            'name' => 'Meno',
+            'surname' => 'Priezvisko',
+            'email' => 'Email',
+            'dateRegistered' => 'Dátum registrácie',
+            'dateLastActive' => 'Posledný prístup',
+        );
+    }
+
+    public function getTableRowData($object = null) {
+        if (!($object instanceof User)) {
+            return array();
+        }
+        return array(
+            'login' => $object->getLogin(),
+            'name' => $object->getFirstname(),
+            'surname' => $object->getSurname(),
+            'email' => $object->getEmail(),
+            'dateRegistered' => $object->getDateRegistered('d.m.Y'),
+            'dateLastActive' => $object->getLastActive('d.m.Y')
+        );
+    }
+
+    public function getTableData(array $array) {
+        $data = array();
+        foreach ($array as $i) {
+            $data[] = $this->getTableRowData($i);
+        }
+        return array(
+            'header' => $this->getTableHeader(),
+            'data' => $data
+        );
     }
 }

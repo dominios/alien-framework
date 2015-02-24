@@ -56,6 +56,13 @@ class BaseController {
      */
     private static $instance = null;
 
+
+    /**
+     * @var View
+     */
+    protected $view = null;
+
+
     /**
      * Controller constructor
      *
@@ -74,6 +81,14 @@ class BaseController {
         self::$instance = $this;
     }
 
+    public function clearQueue() {
+        $this->actions = array();
+    }
+
+    public function addAction($action) {
+        $this->actions[] = $action;
+    }
+
     /**
      * Initialize the Controller
      */
@@ -81,19 +96,19 @@ class BaseController {
 
         self::$currentController = get_called_class();
 
-        $auth = Authorization::getInstance();
-        if (!$auth->getInstance()->isLoggedIn() && !in_array('login', $this->actions)) {
-            unset($this->actions);
-            $this->setLayout(new \Alien\Layout\LoginLayout());
-            return;
-        }
-
-        $layout = new \Alien\Layout\IndexLayout();
-        if ($layout::useNotifications) {
-            $layout->setNotificationContainer(\Alien\NotificationContainer::getInstance());
-        }
-
-        $this->setLayout($layout);
+//        $auth = Authorization::getInstance();
+//        if (!$auth->getInstance()->isLoggedIn() && !in_array('login', $this->actions)) {
+//            unset($this->actions);
+//            $this->setLayout(new \Alien\Layout\LoginLayout());
+//            return;
+//        }
+//
+//        $layout = new \Alien\Layout\AdminLayout();
+//        if ($layout::useNotifications) {
+//            $layout->setNotificationContainer(\Alien\NotificationContainer::getInstance());
+//        }
+//
+//        $this->setLayout($layout);
 
     }
 
@@ -102,7 +117,7 @@ class BaseController {
      *
      * @return array
      */
-    public final function doActions() {
+    public final function getResponses() {
 
         $this->actions = array_unique($this->actions);
 
@@ -120,6 +135,10 @@ class BaseController {
         }
 
         foreach ($this->actions as $action) {
+
+            $viewSrc = strip_namespace(str_replace('Controller', '', $this->getCurrentControllerClass())) . '/' . $action;
+            $this->view = new View('display/' . strtolower($viewSrc . '.php'));
+
             if (!method_exists($this, $action)) {
             }
             if (!method_exists($this, $action) && $action != $this->defaultAction) {
@@ -139,6 +158,7 @@ class BaseController {
      * Gets layout
      *
      * @return Layout layout
+     * @deprecated
      */
     public function getLayout() {
         return $this->layout;
@@ -148,6 +168,7 @@ class BaseController {
      * Sets layout
      *
      * @param Layout $layout
+     * @deprecated
      */
     public function setLayout(Layout $layout) {
         $this->layout = $layout;
@@ -387,7 +408,7 @@ class BaseController {
         header($_SERVER['SERVER_PROTOCOL'] . ' 404 Page Not Found', true, 404);
         header('Content-Type: text/html; charset=utf-8');
         $response = new Response(array(
-                'Title' => '404 Page Not Found',
+                'ContentMain' => '<h1>404 Page Not Found</h1>',
             )
         );
         $this->getLayout()->handleResponse($response);

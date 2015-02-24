@@ -13,6 +13,7 @@ use Alien\Forms\Users\EditForm as ProfilForm;
 class DashboardController extends BaseController {
 
     protected function initialize() {
+
         $this->defaultAction = 'NOP';
 
         $parentResponse = parent::initialize();
@@ -42,10 +43,10 @@ class DashboardController extends BaseController {
     }
 
     protected function home() {
-        $content = '';
-        $view = new View('display/dashboard/home.php');
-        $content .= $view->renderToString();
-        $result = array('Title' => 'Dashboard', 'ContentMain' => $content);
+        $result = array(
+            'Title' => 'Úvodná obrazovka',
+            'ContentMain' => $this->view
+        );
         return new Response($result);
     }
 
