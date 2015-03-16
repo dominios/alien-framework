@@ -56,6 +56,10 @@ class BaseController {
      */
     private static $instance = null;
 
+    /**
+     * @var array
+     */
+    protected $route;
 
     /**
      * @var View
@@ -87,6 +91,14 @@ class BaseController {
 
     public function addAction($action) {
         $this->actions[] = $action;
+    }
+
+    public function setRoute($route) {
+        $this->route = $route;
+    }
+
+    public function getParam($key) {
+        return $this->route['params'][$key];
     }
 
     /**

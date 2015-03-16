@@ -2,6 +2,7 @@
 
 namespace Alien\Controllers;
 
+use Alien\Models\Authorization\UserDao;
 use Alien\Table\DataTable;
 use Alien\View;
 use Alien\Response;
@@ -24,6 +25,11 @@ class UsersController extends BaseController {
      */
     protected $authorization;
 
+    /**
+     * @var UserDao
+     */
+    protected $userDao;
+
     protected function initialize() {
 
         $this->defaultAction = 'viewList';
@@ -34,6 +40,7 @@ class UsersController extends BaseController {
         }
 
         $this->authorization = $this->getServiceManager()->getService('Authorization');
+        $this->userDao = $this->getServiceManager()->getDao('UserDao');
 
         return new Response(array(
                 'LeftTitle' => 'Používatelia',
@@ -63,7 +70,7 @@ class UsersController extends BaseController {
         $table = new DataTable($data);
         $table->setName('Zoznam pužívateľov');
 
-        if ($this->authorization->getCurrentUser()->hasPermission('USER_EDIT')) {
+        if ($this->authorization->getCurrentUser()->hasPermission('USER_ADMIN')) {
             $table->addHeaderColumn(array('edit' => ''));
             $table->addRowColumn(array(
                 'edit' => function ($row) {
@@ -89,12 +96,15 @@ class UsersController extends BaseController {
             $this->redirect(BaseController::staticActionURL('users', 'view'));
         }
 
-        if (!Authorization::getCurrentUser()->hasPermission(array('USERS_VIEW', 'USER_ADMIN'))) {
+
+        if (!$this->authorization->getCurrentUser()->hasPermission(array('USERS_VIEW', 'USER_ADMIN'))) {
             Notification::error('Nedostatočné oprávnenia.');
             $this->redirect(BaseController::staticActionURL('dashboard', 'home'));
         }
 
+
         $user = new User((int) $_GET['id']);
+        $user = $this->userDao->find($this->getParam('id'));
 
         $form = EditForm::factory($user);
 
@@ -128,7 +138,7 @@ class UsersController extends BaseController {
         $view->form = $form;
         $view->user = $user;
 
-        $view->userGroups = $user->getGroups(true);
+        $view->userGroups = $user->getGroups();
         $view->userPermissions = $user->getPermissions(true);
 
         return new Response(array(

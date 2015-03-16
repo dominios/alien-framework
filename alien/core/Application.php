@@ -178,6 +178,7 @@ final class Application {
 
             $controller->setServiceManager($this->serviceManager);
             $controller->addAction($route['action']);
+            $controller->setRoute($route);
 
             header('Content-Type: text/html; charset=utf-8'); // TODO typ podla response!
 

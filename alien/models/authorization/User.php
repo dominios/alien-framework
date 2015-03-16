@@ -58,12 +58,12 @@ class User implements ActiveRecord {
     /**
      * @var array
      */
-    private $permissions;
+    private $permissions = array();
 
     /**
      * @var array
      */
-    private $groups;
+    private $groups = array();
 
     /**
      * @var string
@@ -166,11 +166,13 @@ class User implements ActiveRecord {
 
     public function getPermissions($fetch = false, $includeGroups = false) {
         $arr = array();
-        foreach ($this->permissions as $p) {
-            if ($p instanceof Permission) {
-                $arr[] = $fetch ? $p : $p->getId();
-            } else {
-                $arr[] = $fetch ? new Permission($p) : $p;
+        if (sizeof($this->permissions)) {
+            foreach ($this->permissions as $p) {
+                if ($p instanceof Permission) {
+                    $arr[] = $fetch ? $p : $p->getId();
+                } else {
+                    $arr[] = $fetch ? new Permission($p) : $p;
+                }
             }
         }
         if ($includeGroups === true) {
