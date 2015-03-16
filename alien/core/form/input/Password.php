@@ -12,6 +12,7 @@ class Password extends Input {
     }
 
     public function __toString() {
+        $this->addCssClass('form-control');
         $ret = '';
         $ret .= '<input type="password" name="' . $this->name . '" value="' . $this->value . '" ' . $this->commonRenderAttributes(true) . '>';
         return $ret;

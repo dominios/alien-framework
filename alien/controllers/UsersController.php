@@ -102,8 +102,6 @@ class UsersController extends BaseController {
             $this->redirect(BaseController::staticActionURL('dashboard', 'home'));
         }
 
-
-        $user = new User((int) $_GET['id']);
         $user = $this->userDao->find($this->getParam('id'));
 
         $form = EditForm::factory($user);
@@ -112,23 +110,28 @@ class UsersController extends BaseController {
 
             if ($form->validate()) {
 
-                if (User::exists($_POST['userId'])) {
-                    $user = new User($_POST['userId']);
-                } else {
-                    $user = User::create(array('email' => $_POST['userEmail']));
-                }
-                $user->setLogin($_POST['userLogin']);
-                $user->setFirstname($_POST['userFirstname']);
-                $user->setSurname($_POST['userSurname']);
-                $user->setEmail($_POST['userEmail']);
-                $user->setStatus($_POST['userStatus']);
-                $user->update();
+                if ($user instanceof User) {
 
-                if ($_POST['userPass2'] === $_POST['userPass3'] && strlen($_POST['userPass2'])) {
-                    $user->setPassword($_POST['userPass2']);
+//                if (User::exists($_POST['userId'])) {
+//                    $user = new User($_POST['userId']);
+//                } else {
+//                    $user = User::create(array('email' => $_POST['userEmail']));
+//                }
+                    $user->setLogin($_POST['userLogin']);
+                    $user->setFirstname($_POST['userFirstname']);
+                    $user->setSurname($_POST['userSurname']);
+                    $user->setEmail($_POST['userEmail']);
+                    $user->setStatus($_POST['userStatus']);
+
+                    $this->userDao->update($user);
+
+                    if ($_POST['userPass2'] === $_POST['userPass3'] && strlen($_POST['userPass2'])) {
+                        $user->setPassword($_POST['userPass2']);
+                    }
+                    Notification::success('Zmeny boli uložené.');
+                    $this->redirect('/alien/user/edit/' . $user->getId());
                 }
-                Notification::success('Zmeny boli uložené.');
-                $this->redirect(BaseController::staticActionURL('users', 'edit', array('id' => $user->getId())));
+
             } else {
                 Notification::error('Zmeny sa nepodarilo uložiť.');
             }
@@ -142,7 +145,7 @@ class UsersController extends BaseController {
         $view->userPermissions = $user->getPermissions(true);
 
         return new Response(array(
-                'Title' => (int) $_GET['id'] ? $view->user->getLogin() : 'Nový používateľ',
+                'Title' => (int) $this->getParam('id') ? $view->user->getLogin() : 'Nový používateľ',
                 'ContentMain' => $view->renderToString()
             )
         );

@@ -24,6 +24,7 @@ class Select extends Input {
     }
 
     public function __toString() {
+        $this->addCssClass('form-control');
         $attrs = $this->commonRenderAttributes(true);
         if (!is_null($this->getSize())) {
             $attrs[] = 'size="' . $this->getSize() . '"';

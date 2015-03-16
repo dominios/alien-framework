@@ -35,9 +35,139 @@
     }
 </script>
 
-<?= $this->form->startTag(); ?>
-<?= $this->form->getField('action'); ?>
-<?= $this->form->getField('userId'); ?>
+<div class="row">
+    <div class="col-xs-12">
+        <h1 id="forms" class="page-header"><?= $this->user->getName(); ?>
+            <small><i class="fa fa-angle-double-right"></i> Úprava používateľa</small>
+        </h1>
+    </div>
+</div>
+
+<div class="row">
+
+    <div class="col-xs-12">
+
+        <?= $this->form->startTag(); ?>
+        <?= $this->form->getField('action'); ?>
+        <?= $this->form->getField('userId'); ?>
+
+        <ul class="nav nav-tabs" role="tablist" id="myTab">
+            <li role="presentation" class="active">
+                <a href="#profile" role="tab" data-toggle="tab"><i class="fa fa-user hidden-xs"></i> Profil</a>
+            </li>
+            <li role="presentation">
+                <a href="#groups" role="tab" data-toggle="tab"><i class="fa fa-group hidden-xs"></i> Skupiny</a>
+            </li>
+            <li role="presentation">
+                <a href="#permissions" role="tab" data-toggle="tab"><i class="fa fa-key hidden-xs"></i> Oprávnenia</a>
+            </li>
+        </ul>
+
+        <div class="tab-content">
+            <div role="tabpanel" class="tab-pane active" id="profile">
+
+                <div class="form-group">
+                    <label for="userLogin" class="col-sm-2 control-label">Login</label>
+
+                    <div class="col-sm-10">
+                        <?= $this->form->getField('userLogin'); ?>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="userFirstname" class="col-sm-2 control-label">Meno</label>
+
+                    <div class="col-sm-10">
+                        <?= $this->form->getField('userFirstname'); ?>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="userSurname" class="col-sm-2 control-label">Priezvisko</label>
+
+                    <div class="col-sm-10">
+                        <?= $this->form->getField('userSurname'); ?>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="userEmail" class="col-sm-2 control-label">Email</label>
+
+                    <div class="col-sm-10">
+                        <?= $this->form->getField('userEmail'); ?>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="userPass2" class="col-sm-2 control-label">Nové heslo</label>
+
+                    <div class="col-sm-10">
+                        <?= $this->form->getField('userPass2'); ?>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="userPass3" class="col-sm-2 control-label">Potrvdiť</label>
+
+                    <div class="col-sm-10">
+                        <?= $this->form->getField('userPass3'); ?>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="userPass3" class="col-sm-2 control-label">Status</label>
+
+                    <div class="col-sm-10">
+                        <?= $this->form->getField('userStatus'); ?>
+                    </div>
+                </div>
+
+                <div class="hr"></div>
+
+                <div class="form-group">
+                    <div class="col-sm-offset-2 col-sm-10">
+                        <?= $this->form->getField('buttonCancel'); ?>
+                        <?= $this->form->getField('buttonSave'); ?>
+                        <?= $this->form->getField('buttonMessage'); ?>
+                        <?= $this->form->getField('buttonResetPassword'); ?>
+                        <?= $this->form->getField('buttonDelete'); ?>
+                    </div>
+                </div>
+            </div>
+
+
+            <div role="tabpanel" class="tab-pane" id="groups">
+                <?
+                foreach ($this->userGroups as $group):
+                    $partialView = new \Alien\View('display/common/item.php');
+                    $partialView->icon = 'group';
+                    $partialView->item = $group;
+                    $partialView->dropLink = \Alien\Controllers\ BaseController:: staticActionURL('users', 'removeGroup', array('user' => $this->user->getId(), 'group' => $group->getId()));
+                    echo $partialView->renderToString();
+                endforeach;
+                ?>
+            </div>
+            <div role="tabpanel" class="tab-pane" id="permissions">
+                <?
+                foreach ($this->userPermissions as $permission):
+                    $partialView = new \Alien\View('display/common/item.php');
+                    $partialView->icon = 'shield';
+                    $partialView->item = $permission;
+                    $partialView->dropLink = \Alien\Controllers\ BaseController::staticActionURL('users', 'removePermission', array('user' => $this->user->getId(), 'permission' => $permission->getId()));
+                    echo $partialView->renderToString();
+                endforeach;
+                ?>
+            </div>
+        </div>
+
+        <?= $this->form->endTag(); ?>
+
+
+    </div>
+</div>
+
+<? return; ?>
+
 <section class="tabs" id="userTabs">
     <header>
         <ul>
@@ -47,57 +177,7 @@
         </ul>
     </header>
     <section>
-        <article id="user">
-            <table class="full">
-                <tr>
-                    <td style="width: 180px;"><span class="icon icon-user"></span>Login:</td>
-                    <td colspan="2"><?= $this->form->getField('userLogin'); ?></td>
-                </tr>
-                <tr>
-                    <td><span class="icon icon-user"></span>Meno:</td>
-                    <td colspan="2"><?= $this->form->getField('userFirstname'); ?></td>
-                </tr>
-                <tr>
-                    <td><span class="icon icon-user"></span>Priezvisko:</td>
-                    <td colspan="2"><?= $this->form->getField('userSurname'); ?></td>
-                </tr>
-                <tr>
-                    <td><span class="icon icon-email"></span>Email:</td>
-                    <td colspan="2"><?= $this->form->getField('userEmail'); ?></td>
-                </tr>
-                <tr>
-                    <td><span class="icon icon-key"></span>Nové heslo:</td>
-                    <td colspan="2"><?= $this->form->getField('userPass2'); ?></td>
-                </tr>
-                <tr>
-                    <td><span class="icon icon-key"></span>Potvrdiť heslo:</td>
-                    <td colspan="2"><?= $this->form->getField('userPass3'); ?></td>
-                </tr>
-                <tr>
-                    <td><span class="icon icon-checked-user"></span>Stav účtu:</td>
-                    <td colspan="2">
-                        <select name="userStatus">
-                            <option value="0" <?= !$this->user->getStatus() ? 'selected' : ''; ?>>Neaktívny</option>
-                            <option value="1" <?= $this->user->getStatus() ? 'selected' : ''; ?>>Aktívny</option>
-                        </select>
-                    </td>
-                </tr>
-                <tr>
-                    <td colspan="3">
-                        <div class="hr"></div>
-                    </td>
-                </tr>
-                <tr>
-                    <td colspan="3">
-                        <?= $this->form->getField('buttonCancel'); ?>
-                        <?= $this->form->getField('buttonSave'); ?>
-                        <?= $this->form->getField('buttonMessage'); ?>
-                        <?= $this->form->getField('buttonResetPassword'); ?>
-                        <?= $this->form->getField('buttonDelete'); ?>
-                    </td>
-                </tr>
-            </table>
-        </article>
+
         <article id="groups" class="tab-hidden">
             <div class="gridLayout">
                 <?

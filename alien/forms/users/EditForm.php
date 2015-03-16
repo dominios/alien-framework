@@ -16,45 +16,51 @@ class EditForm extends Form {
         parent::__construct('post', '', 'editUserForm');
     }
 
-    public static function factory(User $group) {
+    public static function factory(User $user) {
         parent::factory();
         $form = new EditForm();
-        $form->user = $group;
+        $form->addClass('form-horizontal');
+        $form->user = $user;
         $form->setId('userForm');
-        Input::hidden('action', 'users/edit')->addToForm($form);
-        Input::hidden('userId', $group->getId())->addToForm($form);
-        Input::text('userLogin', '', $group->getLogin())
+        Input::hidden('action', 'user/edit/' . $user->getId())->addToForm($form);
+        Input::hidden('userId', $user->getId())->addToForm($form);
+        Input::text('userLogin', '', $user->getLogin())
              ->setAutocomplete(false)
              ->addValidator(new Validator\RequiredValidator('login nemôže byť prázdny'))
              ->addToForm($form);
-        Input::text('userFirstname', '', $group->getFirstname())
+        Input::text('userFirstname', '', $user->getFirstname())
              ->setAutocomplete(false)
              ->addValidator(new Validator\RequiredValidator('krstné meno nemôže ostať prázdne'))
              ->addToForm($form);
-        Input::text('userSurname', '', $group->getSurname())
+        Input::text('userSurname', '', $user->getSurname())
              ->setAutocomplete(false)
              ->addValidator(new Validator\RequiredValidator('priezvisko nemôže ostať prázdne'))
              ->addToForm($form);
-        Input::text('userEmail', '', $group->getEmail())
+        Input::text('userEmail', '', $user->getEmail())
              ->setAutocomplete(false)
              ->addValidator(new Validator\EmailValidator('neplatná emailová adresa'))
-             ->addValidator(new Validator\CustomValidator('userUniqueEmail', array('ignoredUserId' => $group->getId()), 'tento email sa už používa'))
+             ->addValidator(new Validator\CustomValidator('userUniqueEmail', array('ignoredUserId' => $user->getId()), 'tento email sa už používa'))
              ->addToForm($form);
         Input::password('userCurrentPass', '')->addToForm($form);
         Input::password('userPass2', '')
              ->setAutocomplete(false)
-             ->addValidator(new Validator\LengthValidator(4, null, "'nové heslo musí mať aspoň 4 znaky'"))
+             ->addValidator((new Validator\LengthValidator(4, null, "'nové heslo musí mať aspoň 4 znaky'"))->setIsChainBreaking(false))
              ->addToForm($form);
         Input::password('userPass3', '')->addToForm($form);
 
-        Input::button(BaseController::staticActionURL('users', 'viewList'), 'Zrušiť', 'icon-back')->addCssClass('negative')->setName('buttonCancel')->addToForm($form);
-        Input::button("javascript: $('#userForm').submit();", 'Uložiť', 'icon-tick')->addCssClass('positive')->setName('buttonSave')->addToForm($form);
-        Input::button(BaseController::staticActionURL('dashboard', 'composeMessage', array('id' => $_GET['id'])), 'Poslať správu', 'icon-message')->setName('buttonMessage')->addToForm($form);
-        Input::button(BaseController::staticActionURL('users', 'resetPassword', array('id' => $_GET['id'])), 'Resetovať heslo', 'icon-shield')->setName('buttonResetPassword')->setDisabled(true)->addToForm($form);
-        Input::button(BaseController::staticActionURL('users', 'removeUser', array('id' => $_GET['id'])), 'Odstrániť používateľa', 'icon-delete')->setName('buttonDelete')->setDisabled(true)->addToForm($form);
+        $status = Input::select('userStatus');
+        $status->addOption(new Input\Option('aktívny', Input\Option::TYPE_SELECT, 1));
+        $status->addOption(new Input\Option('neaktívny', Input\Option::TYPE_SELECT, 0));
+        $status->addToForm($form);
 
-        Input::button('javascript: userShowAddGroupDialog(' . $group->getId() . ');', 'Pridať skupinu', 'icon-plus')->setName('buttonAddGroup')->addToForm($form);
-        Input::button('javascript: userShowAddPermissionDialog(' . $group->getId() . ');', 'Pridať oprávnenie', 'icon-plus')->setName('buttonAddPermission')->addToForm($form);
+        Input::button(BaseController::staticActionURL('users', 'viewList'), 'Zrušiť', 'fa fa-arrow-circle-left')->addCssClass('btn-danger')->setName('buttonCancel')->addToForm($form);
+        Input::button("javascript: $('#userForm').submit();", 'Uložiť', 'fa fa-check')->addCssClass('btn-success')->setName('buttonSave')->addToForm($form);
+        Input::button(BaseController::staticActionURL('dashboard', 'composeMessage', array('id' => $user->getId())), 'Poslať správu', 'fa fa-envelope')->addCssClass('btn-primary')->setName('buttonMessage')->addToForm($form);
+        Input::button(BaseController::staticActionURL('users', 'resetPassword', array('id' => $user->getId())), 'Resetovať heslo', 'fa fa-key')->setName('buttonResetPassword')->setDisabled(true)->addToForm($form);
+        Input::button(BaseController::staticActionURL('users', 'removeUser', array('id' => $user->getId())), 'Odstrániť používateľa', 'fa fa-times')->setName('buttonDelete')->setDisabled(true)->addToForm($form);
+
+        Input::button('javascript: userShowAddGroupDialog(' . $user->getId() . ');', 'Pridať skupinu', 'icon-plus')->setName('buttonAddGroup')->addToForm($form);
+        Input::button('javascript: userShowAddPermissionDialog(' . $user->getId() . ');', 'Pridať oprávnenie', 'icon-plus')->setName('buttonAddPermission')->addToForm($form);
 
         return $form;
     }

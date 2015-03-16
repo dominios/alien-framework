@@ -33,6 +33,11 @@ class Form {
     protected $id;
 
     /**
+     * @var string[] CSS class
+     */
+    protected $class = array();
+
+    /**
      * @var string form name
      */
     protected $name;
@@ -78,6 +83,7 @@ class Form {
         $attr = array();
         $attr[] = 'method="' . $this->method . '"';
         $attr[] = 'action="' . $this->action . '"';
+        $attr[] = 'class="' . implode(' ', $this->class) . '"';
         if ($this->id !== '') {
             $attr[] = 'id="' . $this->id . '"';
         }
@@ -285,5 +291,22 @@ class Form {
         $this->fieldsets[] = $fieldset;
         return $this;
     }
+
+    /**
+     * @param string $class
+     * @return $this
+     */
+    public function addClass($class) {
+        $this->class[] = $class;
+        return $this;
+    }
+
+    /**
+     * @return string[]
+     */
+    public function getClasses() {
+        return $this->class;
+    }
+
 
 }

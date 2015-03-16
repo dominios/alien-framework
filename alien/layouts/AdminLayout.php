@@ -25,11 +25,11 @@ class AdminLayout extends Layout {
 
     public function __construct() {
         $this->mainMenu = $this->generateTopMenu($this->topmenuItems());
-        $this->prependScript('/alien/js/jquery-ui.js');
-        $this->prependScript('//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js');
+        $this->prependScript('http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js');
+        $this->appendScript($this->layoutFolder . '/js/bootstrap.min.js');
+        $this->appendScript('/alien/js/jquery-ui.js');
         $this->appendScript('/alien/js/alien.js'); // TODO zbavit sa toho
         $this->appendScript('/alien/js/alien2.js'); // TODO zbavit sa toho
-        $this->appendScript($this->layoutFolder . '/js/bootstrap.min.js');
 //        $this->appendScript('/alien/plugins/ckeditor/ckeditor.js');
 //        $this->appendStylesheet('/alien/display/alien-theme/jquery-ui-1.10.3.custom.css');
 

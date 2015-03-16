@@ -11,6 +11,7 @@ class Text extends Input {
     }
 
     public function __toString() {
+        $this->addCssClass('form-control');
         return '<input type="text" name="' . $this->name . '" value="' . $this->value . '" ' . $this->commonRenderAttributes(true) . '>';
     }
 

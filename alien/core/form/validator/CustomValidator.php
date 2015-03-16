@@ -33,12 +33,13 @@ class CustomValidator extends Validator {
     }
 
     protected function userUniqueEmail(Input $input) {
-        $DBH = Application::getDatabaseHandler();
-        $Q = $DBH->prepare('SELECT 1 FROM ' . DBConfig::table(DBConfig::USERS) . ' WHERE email=:e && id_u!=:u LIMIT 1');
+        $app = Application::getInstance();
+        $DBH = $app->getServiceManager()->getService('PDO');
+        $Q = $DBH->prepare('SELECT * FROM test_users WHERE email=:e && id_u<>:u LIMIT 1');
         $Q->bindValue(':e', $input->getValue(), PDO::PARAM_STR);
         $Q->bindValue(':u', (int) $this->params['ignoredUserId'], PDO::PARAM_INT);
         $Q->execute();
-        return (bool) $Q->rowCount();
+        return !($Q->rowCount());
     }
 
     protected function templateUniqueName(Input $input) {

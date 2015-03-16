@@ -98,6 +98,12 @@ abstract class Input {
     protected $cssStyle;
 
     /**
+     * HTML DOM id
+     * @var string
+     */
+    protected $domId;
+
+    /**
      * Array of validators to check Input's value against when validated
      * @var array
      */
@@ -333,6 +339,12 @@ abstract class Input {
         if ($this->disabled === true) {
             $attr[] = 'disabled';
         }
+        if ($this->domId) {
+            $attr[] = 'id="' . $this->domId . '"';
+        } else {
+            $attr[] = 'id="' . $this->name . '"';
+        }
+
         return $toString ? implode(' ', $attr) : $attr;
     }
 
@@ -460,7 +472,9 @@ abstract class Input {
                     }
                 } catch (ValidatorException $e) {
                     $this->setErrorMessage($e->getMessage());
-                    $ret = false;
+                    if ($validator->isChainBreaking()) {
+                        $ret = false;
+                    }
                 }
             }
             $this->setValidationResult($ret);
@@ -641,6 +655,23 @@ abstract class Input {
     public function getLinkedInputs() {
         return $this->linkedInputs;
     }
+
+    /**
+     * @param string $domId
+     * @return $this
+     */
+    public function setDomId($domId) {
+        $this->domId = $domId;
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getDomId() {
+        return $this->domId;
+    }
+
 
     /**
      * Converts to HTML representation.

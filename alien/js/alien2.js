@@ -20,7 +20,7 @@ function getCookie(key) {
         url: '/getCookie.php',
         type: 'GET',
         data: 'key=' + key,
-        success: function(data) {
+        success: function (data) {
             ret += data;
         }
     });
@@ -33,7 +33,7 @@ function createDialog(header, content) {
     newhtml += "<div id='dialog-content'><p>" + content + "</p></div>";
     newhtml += "</div>";
     $("body").append(newhtml);
-    $(function() {
+    $(function () {
         $("#dialog-modal").dialog({
             modal: true,
             width: 'auto',
@@ -59,7 +59,7 @@ function showFilePreview(file) {
         type: "GET",
         data: "action=showFilePreview&file=" + file,
         timeout: 5000,
-        success: function(data) {
+        success: function (data) {
             json = jQuery.parseJSON(data);
 //            createDialog(json.header, json.content);
             createModal(json);
@@ -77,7 +77,7 @@ function showDisplayLayoutType(type) {
         type: "GET",
         data: "action=displayLayoutType&type=" + type,
         timeout: 5000,
-        success: function(data) {
+        success: function (data) {
             $("#viewContent").html(data);
         }
     });
@@ -92,37 +92,35 @@ function evalConsoleInput(input) {
         type: "GET",
         data: "action=evalConsoleInput&data=" + input,
         timeout: 5000,
-        success: function(data) {
+        success: function (data) {
             oldData = $("#ConsoleContent").html();
             $("#ConsoleContent").html(oldData + data);
         }
     });
 }
 
-$(document).ready(function($) {
+$(document).ready(function ($) {
 
     /* vygenerovanie error hlasky pod input */
-    $(".invalid[data-errorMsg]").each(function(i) {
+    $(".invalid[data-errorMsg]").each(function (i) {
         msg = $(this).attr('data-errorMsg');
-        width = $(this).width();
-        height = $(this).height();
-        elem = $('<div class="invalidHelper" style="margin-top: -' + height + 'px;">' + msg + '</div>');
+        elem = $('<div class="invalidHelper" style="  margin-top: -28px; right: 27px; position: absolute; color: #A94442;">' + msg + '</div>');
         $(this).after(elem);
-        elem.css('margin-left', width - elem.width() + 'px');
+        $(this).parents('.form-group').addClass('has-error');
     });
 
     /* terminalove okno */
     $("#ConsoleContainer").hide();
 
     /* vypnutie jQuery UI tooltipov pre rightpanel */
-    $(function() {
+    $(function () {
         $('.rightpanel').tooltip({
             track: false
         });
     });
 
     /* pre istotu buttony */
-    $('.button.disabled, button.disabled').click(function(e) {
+    $('.button.disabled, button.disabled').click(function (e) {
         e.preventDefault();
         e.stopPropagation();
     });
@@ -136,14 +134,14 @@ $(document).ready(function($) {
     });
 
     /* minimalizovanie main menu */
-    $("#mainmenuMinimizer").click(function() {
+    $("#mainmenuMinimizer").click(function () {
         $("#container").toggleClass('layout-fullsize');
         setCookie('layoutFullsize', $("#container").hasClass('layout-fullsize') ? false : true);
     });
 
 });
 
-$(document).keyup(function(e) {
+$(document).keyup(function (e) {
     if (e.keyCode === 13 && $("input.ConsoleInput:focus")) {
         evalConsoleInput($("input.ConsoleInput").val());
         $("input.ConsoleInput").val('');

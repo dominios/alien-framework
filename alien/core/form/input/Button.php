@@ -10,13 +10,14 @@ class Button extends Input {
         parent::__construct('', 'button', null, $action, null);
         $this->icon = $icon;
         $this->placeholder = $text;
-        $this->addCssClass('button');
+        $this->addCssClass('btn');
+        $this->addCssClass('btn-default');
     }
 
     public function __toString() {
         $attr = $this->commonRenderAttributes();
         $ret = '';
-        $icon = strlen($this->icon) ? '<span class="icon ' . $this->icon . ($this->disabled ? '' : '-light') . '"></span>' : '';
+        $icon = strlen($this->icon) ? '<i class="' . $this->icon . '"></i> ' : '';
         if (preg_match('/javascript/', $this->value)) {
             $attr[] = 'onClick="' . ($this->disabled ? 'javascript: return false;' : $this->value) . '"';
             $attr[] = 'href="#"';

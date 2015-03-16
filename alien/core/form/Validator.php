@@ -25,6 +25,11 @@ abstract class Validator {
     private $errorMessage;
 
     /**
+     * @var bool if set to false, does not have influence on form validation status
+     */
+    private $chainBreaking = true;
+
+    /**
      * @param Input $input
      * @return bool
      * @throws ValidatorException
@@ -75,6 +80,23 @@ abstract class Validator {
     public function getErrorMessage() {
         return $this->errorMessage;
     }
+
+    /**
+     * @param bool $breakChain
+     * @return $this
+     */
+    public function setIsChainBreaking($breakChain) {
+        $this->chainBreaking = $breakChain;
+        return $this;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function isChainBreaking() {
+        return $this->chainBreaking;
+    }
+
 
 }
 
