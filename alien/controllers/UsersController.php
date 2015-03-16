@@ -63,6 +63,15 @@ class UsersController extends BaseController {
         $table = new DataTable($data);
         $table->setName('Zoznam pužívateľov');
 
+        if ($this->authorization->getCurrentUser()->hasPermission('USER_EDIT')) {
+            $table->addHeaderColumn(array('edit' => ''));
+            $table->addRowColumn(array(
+                'edit' => function ($row) {
+                        return "<a href=\"/alien/user/edit/$row[id]\">UPRAVIŤ</a>";
+                    }
+            ));
+        };
+
         $this->view->table = $table;
 
         return new Response(array(

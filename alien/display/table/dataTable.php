@@ -13,17 +13,15 @@
         </tr>
         </thead>
         <tbody>
-        <tr>
-            <?
-            foreach ($this->rows as $key => $values):
-                echo "<tr>";
-                foreach ($values as $value):
-                    echo "<td>$value</td>";
-                endforeach;
-                echo "</tr>";
+        <?
+        foreach ($this->rows as $key => $values):
+            echo "<tr>";
+            foreach ($values as $value):
+                echo "<td>$value</td>";
             endforeach;
-            ?>
-        </tr>
+            echo "</tr>";
+        endforeach;
+        ?>
         </tbody>
     </table>
 </div>

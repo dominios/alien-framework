@@ -7,8 +7,3 @@
 </div>
 
 <?= $this->table; ?>
-
-<?php
-//$editAction = str_replace('%ID%', $user->getId(), $this->editActionPattern);
-//$sendMessageAction = str_replace('%ID%', $user->getId(), $this->sendMessagePattern);
-return;

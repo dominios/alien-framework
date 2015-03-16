@@ -136,6 +136,7 @@ class UserDao extends CRUDDaoImpl implements TableViewInterface {
 
     public function getTableHeader() {
         return array(
+            'id' => '#',
             'login' => 'Login',
             'name' => 'Meno',
             'surname' => 'Priezvisko',
@@ -150,6 +151,7 @@ class UserDao extends CRUDDaoImpl implements TableViewInterface {
             return array();
         }
         return array(
+            'id' => $object->getId(),
             'login' => $object->getLogin(),
             'name' => $object->getFirstname(),
             'surname' => $object->getSurname(),

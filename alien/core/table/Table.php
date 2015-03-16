@@ -81,4 +81,22 @@ class Table {
         return $this->name;
     }
 
+    public function addHeaderColumn(array $column) {
+        $this->header = array_merge($this->header, $column);
+        return $this;
+    }
+
+    /**
+     *
+     * @param array $column
+     * @return $this
+     */
+    public function addRowColumn(array $column) {
+        foreach ($this->rows as &$row) {
+            $value = array_values($column)[0];
+            $row[key($column)] = is_callable($value) ? $value($row) : $value;
+        }
+        return $this;
+    }
+
 }
