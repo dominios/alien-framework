@@ -26,9 +26,9 @@ if (!function_exists('\Alien\Layout\topmenuItemToString')) {
 
     function topmenuItemToString($item) {
 
-        if (!in_array($item['permission'], array('', NULL)) && !Authorization::getCurrentUser()->hasPermission((string) $item['permission'])) {
-            return "";
-        }
+//        if (!in_array($item['permission'], array('', NULL)) && !Authorization::getCurrentUser()->hasPermission((string) $item['permission'])) {
+//            return "";
+//        }
 
         $link = '';
         $submenu = '';

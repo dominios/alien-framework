@@ -85,7 +85,7 @@ class AdminLayout extends Layout {
 
         $messagesText = '';
         $messagesText .= 'Správy';
-        $unread = Message::getUnreadCount(Authorization::getCurrentUser());
+        $unread = false; // Message::getUnreadCount(Authorization::getCurrentUser());
         if ($unread) {
             $messagesText .= '<span class="badge badge-circular">' . $unread . '</span>';
         }
@@ -107,7 +107,7 @@ class AdminLayout extends Layout {
 //        $left[] = Array('permission' => null, 'url' => BaseController::staticActionURL('test', 'viewList'), 'text' => 'Testy', 'img' => 'note', 'controller' => 'test');
 
         $right = array();
-        $right[] = Array('permission' => null, 'url' => BaseController::staticActionURL('dashboard', '#'), 'text' => \Alien\Models\Authorization\Authorization::getCurrentUser()->getEmail(), 'img' => 'user-circle', 'submenu' => $userSubmenu);
+//        $right[] = Array('permission' => null, 'url' => BaseController::staticActionURL('dashboard', '#'), 'text' => \Alien\Models\Authorization\Authorization::getCurrentUser()->getEmail(), 'img' => 'user-circle', 'submenu' => $userSubmenu);
 
         $menus = array();
         $menus['left'] = $left;

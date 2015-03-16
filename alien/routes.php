@@ -1,6 +1,12 @@
 <?php
 
 return array(
+    'login' => array(
+        'route' => '/login',
+        'controller' => 'BaseController',
+        'namespace' => 'Alien\Controllers',
+        'action' => 'loginScreen'
+    ),
     'dashboard' => array(
         'route' => '/dashboard',
         'controller' => 'DashboardController',

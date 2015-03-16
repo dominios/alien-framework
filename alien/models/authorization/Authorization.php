@@ -3,74 +3,124 @@
 namespace Alien\Models\Authorization;
 
 use Alien\Application;
+use Alien\Db\RecordNotFoundException;
 use Alien\DBConfig;
+use Alien\ServiceManager;
+use Alien\ServiceManagerException;
 use PDO;
 
 class Authorization {
 
+    /**
+     * @var Authorization
+     */
     private static $instance = null;
-    private static $loginTimeOut;
-    private static $auth_id;
-    private static $user;
+
+    /**
+     * @var mixed
+     */
+    private $loginTimeOut;
+
+    /**
+     * @var int|null
+     */
+    private $authId;
+
+    /**
+     * @var User
+     */
+    private $user;
+
+    /**
+     * @var Permission[]
+     */
     public static $Permissions;
 
-    private function __construct() {
+    /**
+     * @var ServiceManager
+     */
+    private $serviceManager;
 
-        self::loadPermissions();
-        self::$loginTimeOut = Application::getParameter('loginTimeOut');
-        $DBH = Application::getDatabaseHandler();
+    public static function getInstance(ServiceManager $sm) {
+        if (self::$instance === null) {
+            self::$instance = new Authorization($sm);
+        }
+        return self::$instance;
+    }
+
+    private function __construct(ServiceManager $sm) {
+
+        $this->serviceManager = $sm;
+        $this->loadPermissions();
+        $this->loginTimeOut = Application::getParameter('loginTimeOut');
+        $DBH = $this->getServiceManager()->getService('PDO');
 
         if (@isset($_SESSION['id_auth'])) {
-            self::$auth_id = $_SESSION['id_auth'];
-            self::$user = self::getCurrentUser();
+
+            try {
+                $this->authId = $_SESSION['id_auth'];
+                $this->user = $this->getCurrentUser();
+            } catch (RecordNotFoundException $e) {
+                $this->user = new User();
+            }
+
         } else {
             $STH = $DBH->prepare("INSERT INTO " . DBConfig::table(DBConfig::AUTHORIZATION) . " (id_u, timeout, ip, url) VALUES (:idu, :to, :ip, :url);");
             $STH->bindValue(':idu', 0, PDO::PARAM_INT);
-            $STH->bindValue(':to', time() + self::$loginTimeOut, PDO::PARAM_INT);
+            $STH->bindValue(':to', time() + $this->loginTimeOut, PDO::PARAM_INT);
             $STH->bindValue(':ip', $_SERVER['REMOTE_ADDR'], PDO::PARAM_STR);
             $STH->bindValue(':url', $_SERVER['REQUEST_URI'], PDO::PARAM_STR);
             $STH->execute();
             $_SESSION['id_auth'] = $DBH->lastInsertId();
-            self::$user = new User(0);
-            self::$auth_id = $_SESSION['id_auth'];
+            $this->user = new User();
+            $this->authId = $_SESSION['id_auth'];
         }
-        self::validateSession();
+//        $this->validateSession();
+    }
+
+    public function setServiceManager($serviceManager) {
+        $this->serviceManager = $serviceManager;
+        return $this;
+    }
+
+    /**
+     * @return \Alien\ServiceManager
+     */
+    public function getServiceManager() {
+        return $this->serviceManager;
     }
 
     /**
      * nacita opravenania zo subora
      */
-    public static function loadPermissions() {
-        include 'PermissionList.php';
-        self::$Permissions = $permission;
-        unset($permission);
+    protected function loadPermissions() {
+        self::$Permissions = require_once 'PermissionsList.php';
     }
 
-    public static function getInstance() {
-        if (self::$instance === null) {
-            self::$instance = new Authorization();
-        }
-        return self::$instance;
-    }
-
-    public static function getLoginTimeOut() {
-        return self::$loginTimeOut;
+    public function getLoginTimeOut() {
+        return $this->loginTimeOut;
     }
 
     /**
      * vrati aktualneho usera v session
      * @return User user
      */
-    public static function getCurrentUser() {
-        if (self::$user == null) {
-            $DBH = Application::getDatabaseHandler();
+    public function getCurrentUser() {
+        if ($this->user === null) {
+            $DBH = $this->getServiceManager()->getService('PDO');
             $STH = $DBH->prepare("SELECT id_u FROM " . DBConfig::table(DBConfig::AUTHORIZATION) . " WHERE id_auth=:id ORDER BY id_auth DESC LIMIT 1;");
-            $STH->bindValue(':id', self::$auth_id);
+            $STH->bindValue(':id', $this->authId);
             $STH->execute();
             $row = $STH->fetch();
-            self::$user = new User($row['id_u']);
+
+            $userDao = $this->getServiceManager()->getDao('UserDao');
+            $this->user = $userDao->find($row['id_u']);
+
+            print_r($this->user);
+
+//            $this->user = new User($row['id_u']);
         }
-        return self::$user;
+        return $this->user;
     }
 
     /**
@@ -92,7 +142,7 @@ class Authorization {
                 $str = '';
                 foreach ($permissions as $p) {
                     $x = new Permission($p);
-                    $str.=$x->getLabel() . '; ';
+                    $str .= $x->getLabel() . '; ';
                 }
                 new Notification('Potrebné oprávnenia: ' . $str, 'warning');
 
@@ -104,16 +154,17 @@ class Authorization {
         }
     }
 
-    public static function getCurrentAuthId() {
-        return self::$auth_id;
+    public function getCurrentAuthId() {
+        return $this->authId;
     }
 
     private function validateSession() {
 
-        $DBH = Application::getDatabaseHandler();
+//        $DBH = Application::getDatabaseHandler();
+        $DBH = $this->getServiceManager()->getService('PDO');
 
         $STH = $DBH->prepare("SELECT timeout FROM " . DBConfig::table(DBConfig::AUTHORIZATION) . " WHERE id_auth=:id ORDER BY id_auth DESC LIMIT 1;");
-        $STH->bindValue(':id', self::$auth_id, PDO::PARAM_INT);
+        $STH->bindValue(':id', $this->authId, PDO::PARAM_INT);
         $STH->execute();
         if (!$STH->rowCount()) {
             $this->logout();
@@ -126,50 +177,37 @@ class Authorization {
         } else {
 
             $STH = $DBH->prepare('UPDATE ' . DBConfig::table(DBConfig::AUTHORIZATION) . ' SET timeout=:to, url=:url WHERE id_auth = :id;');
-            $STH->bindValue(':id', self::$auth_id, PDO::PARAM_INT);
-            $STH->bindValue(':to', time() + self::$loginTimeOut, PDO::PARAM_INT);
+            $STH->bindValue(':id', $this->authId, PDO::PARAM_INT);
+            $STH->bindValue(':to', time() + $this->loginTimeOut, PDO::PARAM_INT);
             $STH->bindValue(':url', $_SERVER['REQUEST_URI'], PDO::PARAM_STR);
             $STH->execute();
 
-            if ($this->getCurrentUser() !== 0) {
-                $this->getCurrentUser()->touch();
-            }
+//            if ($this->getCurrentUser() !== 0) {
+////                $this->getCurrentUser()->touch();
+//            }
         }
     }
 
     public function login($login, $password) {
 
-        $DBH = Application::getDatabaseHandler();
+        $db = $this->serviceManager->getService('PDO');
+        $userDao = $this->serviceManager->getDao('UserDao');
 
-        $STH = $DBH->prepare('SELECT * FROM ' . DBConfig::table(DBConfig::USERS) . ' WHERE login=:login && deleted!=1 LIMIT 1;');
-        $STH->bindValue(':login', $login, PDO::PARAM_STR);
-        $STH->execute();
-        if (!$STH->rowCount()) {
-            return false;
-        }
-        $row = $STH->fetch();
-        if (User::exists($row['id_u'])) {
-            $user = new User($row['id_u'], $row);
-        } else {
-            return false;
-        }
-
-        if (Authorization::getInstance()->isLoggedIn($user->getId())) {
+        $user = $userDao->getByLogin($login);
+        if ($this->isLoggedIn($user->getId())) {
             return false;
         }
 
         if (Authorization::validatePassword($password, $user->getPasswordHash())) {
             if (!$user->getStatus()) {
                 return false;
-            } elseif (time() < $user->getBanDate()) {
-                return false;
             } else {
-                self::$user = $user;
-                $timeout = time() + self::$loginTimeOut;
+                $this->user = $user;
+                $timeout = time() + $this->loginTimeOut;
                 $_SESSION['loginTimeOut'] = $timeout;
-                $STH = $DBH->prepare("UPDATE " . DBConfig::table(DBConfig::AUTHORIZATION) . " SET id_u=:id_u, timeout=:to, url=:url WHERE id_auth=:id_a LIMIT 1;");
-                $STH->bindValue(':id_a', self::$auth_id, PDO::PARAM_INT);
-                $STH->bindValue(':id_u', self::$user->getId(), PDO::PARAM_INT);
+                $STH = $db->prepare("UPDATE " . DBConfig::table(DBConfig::AUTHORIZATION) . " SET id_u=:id_u, timeout=:to, url=:url WHERE id_auth=:id_a LIMIT 1;");
+                $STH->bindValue(':id_a', $this->authId, PDO::PARAM_INT);
+                $STH->bindValue(':id_u', $this->user->getId(), PDO::PARAM_INT);
                 $STH->bindValue(':to', $timeout, PDO::PARAM_INT);
                 $STH->bindValue(':url', $_SERVER['REQUEST_URI'], PDO::PARAM_STR);
                 return $STH->execute() ? true : false;
@@ -221,10 +259,10 @@ class Authorization {
          * of the settings, separated by dollar signs
          */
         $param = '$' . implode('$', array(
-                    "2y", //select the most secure version of blowfish (>=PHP 5.3.7)
-                    str_pad($cost, 2, "0", STR_PAD_LEFT), //add the cost in two digits
-                    $salt //add the salt
-        ));
+                "2y", //select the most secure version of blowfish (>=PHP 5.3.7)
+                str_pad($cost, 2, "0", STR_PAD_LEFT), //add the cost in two digits
+                $salt //add the salt
+            ));
 
         //now do the actual hashing
         return crypt($password, $param);
@@ -235,7 +273,7 @@ class Authorization {
      * function.
      * @param string $password
      * @param string $hash
-     * @return type
+     * @return bool
      */
     public static function validatePassword($password, $hash) {
         /* Regenerating the with an available hash as the options parameter should

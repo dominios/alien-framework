@@ -399,6 +399,20 @@ class BaseController {
     protected function loginScreen() {
     }
 
+    protected function error403() {
+        ob_clean();
+        $this->setLayout(new ErrorLayout());
+        header($_SERVER['SERVER_PROTOCOL'] . ' 403 Forbideen', true, 403);
+        header('Content-Type: text/html; charset=utf-8');
+        $response = new Response(array(
+                'ContentMain' => '<h1>403 Forbidden</h1><pre>' . print_r($this->getServiceManager()->getService('Authorization')->getCurrentUser(), true) . '</pre>',
+            )
+        );
+        $this->getLayout()->handleResponse($response);
+        echo $this->getLayout()->__toString();
+        exit;
+    }
+
     /**
      * HTTP 404: Not Found page
      */

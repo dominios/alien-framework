@@ -12,6 +12,11 @@ use Alien\Forms\Users\EditForm as ProfilForm;
 
 class DashboardController extends BaseController {
 
+    /**
+     * @var Authorization
+     */
+    protected $authorization;
+
     protected function initialize() {
 
         $this->defaultAction = 'NOP';
@@ -20,6 +25,8 @@ class DashboardController extends BaseController {
         if ($parentResponse instanceof Response) {
             $data = $parentResponse->getData();
         }
+
+        $this->authorization = $this->getServiceManager()->getService('Authorization');
 
         return new Response(array(
                 'LeftTitle' => 'Dashboard',
@@ -31,8 +38,8 @@ class DashboardController extends BaseController {
 
     private function leftMenuItems() {
         $msgText = 'Správy';
-        if (Message::getUnreadCount(Authorization::getCurrentUser())) {
-            $msgText .= '<span class="badge badge-info badge-right">' . Message::getUnreadCount(Authorization::getCurrentUser()) . ' UNREAD</span>';
+        if (Message::getUnreadCount($this->authorization->getCurrentUser())) {
+            $msgText .= '<span class="badge badge-info badge-right">' . Message::getUnreadCount($this->authorization->getCurrentUser()) . ' UNREAD</span>';
         }
         $items = Array();
         $items[] = Array('permissions' => null, 'url' => BaseController::staticActionURL('dashboard', 'home'), 'img' => 'dashboard', 'text' => 'Prehľad');

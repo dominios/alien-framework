@@ -6,6 +6,7 @@ use Alien\Table\DataTable;
 use Alien\View;
 use Alien\Response;
 use Alien\Notification;
+use Alien\FordbiddenException;
 use Alien\Models\Authorization\User;
 use Alien\Models\Authorization\Group;
 use Alien\Models\Authorization\Permission;
@@ -18,6 +19,11 @@ use Alien\Forms\Users\EditForm;
 
 class UsersController extends BaseController {
 
+    /**
+     * @var Authorization
+     */
+    protected $authorization;
+
     protected function initialize() {
 
         $this->defaultAction = 'viewList';
@@ -26,6 +32,8 @@ class UsersController extends BaseController {
         if ($parentResponse instanceof Response) {
             $data = $parentResponse->getData();
         }
+
+        $this->authorization = $this->getServiceManager()->getService('Authorization');
 
         return new Response(array(
                 'LeftTitle' => 'Používatelia',
@@ -46,9 +54,8 @@ class UsersController extends BaseController {
 
     protected function viewList() {
 
-        if (!Authorization::getCurrentUser()->hasPermission('USER_VIEW')) {
-            Notification::error('Nedostatočné oprávnenia.');
-            $this->redirect(BaseController::staticActionURL('dashboard', 'home'));
+        if (!$this->authorization->getCurrentUser()->hasPermission('USER_VIEW')) {
+            throw new FordbiddenException('Neodstatočné oprávnenia.');
         }
 
         $dao = $this->getServiceManager()->getDao('UserDao');

@@ -134,6 +134,10 @@ class Router {
 
     }
 
+    public function getRoute($name) {
+        return $this->routes[$name];
+    }
+
     //
 
 

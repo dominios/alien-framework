@@ -46,6 +46,11 @@ final class Application {
     private $serviceManager;
 
     /**
+     * @var Authorization
+     */
+    private $authorization;
+
+    /**
      * @var Router
      */
     private $router;
@@ -93,7 +98,7 @@ final class Application {
 
         $sm->registerService($connection->getPDO());
 
-        $userDao = new UserDao($connection->getPDO());
+        $userDao = new UserDao($connection->getPDO(), $sm);
         $groupDao = new GroupDao($connection->getPDO(), $userDao);
         $buildingDao = new BuildingDao($connection->getPDO());
         $courseDao = new CourseDao($connection->getPDO(), $userDao);
@@ -106,6 +111,10 @@ final class Application {
         $sm->registerService($roomDao);
         $sm->registerService($scheduleEventDao);
 
+        $auth = Authorization::getInstance($sm);
+        $app->authorization = $auth;
+        $sm->registerService($auth);
+
     }
 
     /**
@@ -115,72 +124,71 @@ final class Application {
      */
     public function run() {
 
-        // autorizacia & logika
-
         $request = str_replace('/alien', '', $_SERVER['REQUEST_URI']);
 
-        echo '<pre>';
-//        $route = $this->router->findMatch($request);
-
-        $auth = Authorization::getInstance(); // TODO Autorizacia nech nieje static, ale cast app
+        $auth = $this->authorization;
 
         // @TODO toto prerobit nejako krajsie a nie hardcodovat
         if (!$auth->isLoggedIn()) {
             if (isset($_POST['loginFormSubmit'])) {
-                if (!Authorization::getInstance()->isLoggedIn()) {
-                    Authorization::getInstance()->login($_POST['login'], $_POST['pass']);
-                    $user = Authorization::getCurrentUser();
-                    if ($user instanceof User) {
-                        if (Message::getUnreadCount($user)) {
-                            Notification::newMessages("");
-                            // $this->redirect(BaseController::staticActionURL('dashboard', 'home'));
-                            $route['controller'] = 'dashboard';
-                            $route['actions'] = array('home');
-                        }
+                $auth->login($_POST['login'], $_POST['pass']);
+                $user = $auth->getCurrentUser();
+                if ($user instanceof User) {
+                    if (Message::getUnreadCount($user)) {
+                        Notification::newMessages("");
+                        // $this->redirect(BaseController::staticActionURL('dashboard', 'home'));
+//                        $route['controller'] = 'dashboard';
+//                        $route['actions'] = array('home');
                     }
                 }
             }
         }
 
-        if (!$auth->isLoggedIn()) {
-            $layout = new \Alien\Layout\LoginLayout();
-            unset($route['actions']);
-        } else {
-            $layout = new \Alien\Layout\AdminLayout();
-//            $layout = new \Alien\Layout\IndexLayout();
-        }
-
-        if ($layout::useNotifications) {
-            $layout->setNotificationContainer(\Alien\NotificationContainer::getInstance());
-        }
-
-        // generovanie vystupu
-
-        ob_clean(); // TODO zmazat odtialto!
-
         $controller = new BaseController();
+        $content = '';
 
         try {
 
-            $route = $this->router->findMatch($request);
+            if (!$auth->isLoggedIn()) {
+                $route = $this->router->getRoute('login');
+            } else {
+                $route = $this->router->findMatch($request);
+            }
+
+            if (!$auth->isLoggedIn()) {
+                $layout = new \Alien\Layout\LoginLayout();
+                $route = $this->router->getRoute('login');
+            } else {
+                $layout = new \Alien\Layout\AdminLayout();
+//            $layout = new \Alien\Layout\IndexLayout();
+            }
+
+            if ($layout::useNotifications) {
+                $layout->setNotificationContainer(\Alien\NotificationContainer::getInstance());
+            }
+
+            // generovanie vystupu
+            ob_clean(); // TODO zmazat odtialto!
+
             $className = '\\' . $route['namespace'] . '\\' . $route['controller'];
 
             if (class_exists($className)) {
-                $controller = new ${className}();
+                $controller = new $className();
             }
 
             $controller->setServiceManager($this->serviceManager);
-
             $controller->addAction($route['action']);
 
             header('Content-Type: text/html; charset=utf-8'); // TODO typ podla response!
-            $content = '';
 
             $responses = $controller->getResponses();
             foreach ($responses as $response) {
                 $layout->handleResponse($response);
             }
             $content .= $layout->__toString();
+
+        } catch (FordbiddenException $e) {
+            $controller->forceAction('error403', $e);
         } catch (RouterException $e) {
             $controller->forceAction('error404', $e);
         } catch (BadFunctionCallException $e) {
