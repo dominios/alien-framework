@@ -4,6 +4,7 @@ namespace Alien\Controllers;
 
 use Alien\Application;
 use Alien\Layout\ErrorLayout;
+use Alien\Router;
 use Alien\RouterException;
 use Alien\ServiceManager;
 use Alien\Terminal;
@@ -356,8 +357,8 @@ class BaseController {
      * @deprecated
      */
     private function logout() {
-        Authorization::getInstance()->logout();
-        $this->redirect('/alien');
+        $this->getServiceManager()->getService('Authorization')->logout();
+        $this->redirect(Router::getRouteUrl(''));
     }
 
     /**

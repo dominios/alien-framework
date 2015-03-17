@@ -7,8 +7,6 @@
     <title><?= $this->title; ?></title>
 
     <?= $this->metaScripts; ?>
-
-    <!-- Bootstrap -->
     <?= $this->metaStylesheets; ?>
 
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
@@ -34,45 +32,47 @@
         <nav class="collapse navbar-collapse bs-navbar-collapse" role="navigation">
             <ul class="nav navbar-nav">
                 <li class="active">
-                    <a href="#"><i class="fa fa-dashboard"></i> Dashboard</a>
+                    <a href="<?= \Alien\Router::getRouteUrl('dashboard'); ?>"><i class="fa fa-fw fa-dashboard"></i> Dashboard</a>
                 </li>
                 <li>
-                    <a href="#"><i class="fa fa-cog"></i> Systém</a>
+                    <a href="<?= \Alien\Router::getRouteUrl('course'); ?>"><i class="fa fa-fw fa-file"></i> Kurzy</a>
                 </li>
                 <li>
-                    <a href="#"><i class="fa fa-file-text-o"></i> Obsah</a>
+                    <a href="<?= \Alien\Router::getRouteUrl('schedule'); ?>"><i class="fa fa-fw fa-calendar"></i> Rozvrh</a>
                 </li>
-                <li>
-                    <a href="/alien/user/list"><i class="fa fa-user"></i> Používatelia</a>
-                </li>
-                <li>
-                    <a href="#"><i class="fa fa-group"></i> Skupiny</a>
-                </li>
-            </ul>
-            <ul class="nav navbar-nav navbar-right">
                 <li class="dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i
-                            class="fa fa-user"></i>
-                        admin@alien.com <span
-                            class="caret"></span></a>
-                    <ul class="dropdown-menu" role="menu">
-                        <li><a href="#"><i class="fa fa-user"></i> Profil</a></li>
-                        <li><a href="#"><i class="fa fa-envelope"></i> Messages
-                                <span class="badge pull-right">2</span></a>
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                        <i class="fa fa-fw fa-building"></i> Budovy
+                        <span class="caret"></span>
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li><a href="<?= \Alien\Router::getRouteUrl('building'); ?>"><i class="fa fa-fw fa-building"></i> Budovy</a></li>
+                        <li><a href="<?= \Alien\Router::getRouteUrl('room'); ?>"><i class="fa fa-fw fa-building"></i> Miestnosti</a></li>
+                    </ul>
+                </li>
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                        <i class="fa fa-fw fa-group"></i> Používatelia
+                        <span class="caret"></span>
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li>
+                            <a href="<?= \Alien\Router::getRouteUrl('user'); ?>"><i class="fa fa-fw fa-graduation-cap"></i> Učitelia</a>
                         </li>
-                        <li class="divider"></li>
-                        <li><a href="#"><i class="fa fa-sign-out"></i> Sign out</a></li>
+                        <li>
+                            <a href="<?= \Alien\Router::getRouteUrl('user'); ?>"><i class="fa fa-fw fa-user"></i> Študenti</a>
+                        </li>
+                        <li>
+                            <a href="<?= \Alien\Router::getRouteUrl('group'); ?>"><i class="fa fa-fw fa-key"></i> Oprávnenia</a>
+                        </li>
                     </ul>
                 </li>
             </ul>
-            <form class="navbar-form navbar-right" role="search">
-                <div class="form-group has-feedback">
-                    <div class="input-group">
-                        <input class="form-control" type="email" placeholder="Search">
-                        <span class="glyphicon glyphicon-search form-control-feedback"></span>
-                    </div>
-                </div>
-            </form>
+            <ul class="nav navbar-nav navbar-right">
+                <li>
+                    <a href="<?= \Alien\Router::getRouteUrl('logout'); ?>"><i class="fa fa-fw fa-sign-out"></i> Odhlásiť sa</a>
+                </li>
+            </ul>
         </nav>
     </div>
 </header>
