@@ -13,11 +13,53 @@ return array(
         'namespace' => 'Alien\Controllers',
         'action' => 'home'
     ),
+    'building' => array(
+        'route' => '/building',
+        'controller' => 'BuildingController',
+        'namespace' => 'Alien\Controllers',
+        'childRoutes' => array(
+            '' => array(
+                'route' => '',
+                'action' => 'listAction'
+            ),
+            'edit' => array(
+                'route' => '/edit/:id',
+                'action' => 'editAction'
+            ),
+            'add' => array(
+                'route' => '/add',
+                'action' => 'addBuildingAction',
+            ),
+            'remove' => array(
+                'route' => '/remove/:id',
+                'action' => 'removeBuildingAction',
+            )
+        )
+    ),
+    'course' => array(
+        'route' => '/course',
+        'controller' => 'CourseController',
+        'namespace' => 'Alien\Controllers',
+        'childRoutes' => array(
+            '' => array(
+                'route' => '',
+                'action' => 'listAction'
+            ),
+            'edit' => array(
+                'route' => '/edit/:id',
+                'action' => 'editAction'
+            )
+        )
+    ),
     'user' => array(
         'route' => '/user',
         'controller' => 'UsersController',
         'namespace' => 'Alien\Controllers',
         'childRoutes' => array(
+            '' => array(
+                'route' => '',
+                'action' => 'viewList'
+            ),
             'list' => array(
                 'route' => '/list',
                 'action' => 'viewList',

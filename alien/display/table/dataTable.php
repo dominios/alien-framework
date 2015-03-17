@@ -1,6 +1,6 @@
 <div class="panel panel-primary">
     <? if (strlen($this->name)): ?>
-        <div class="panel-heading"><i class="fa fa-user"></i> <?= $this->name; ?></div>
+        <div class="panel-heading"><?= $this->name; ?></div>
     <? endif; ?>
     <table class="table data-table">
         <thead>

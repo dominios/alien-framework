@@ -14,6 +14,7 @@ use Alien\Forms\Fieldset;
 use Alien\Forms\Form;
 use Alien\Forms\Input;
 use Alien\Models\School\Building;
+use Alien\Router;
 
 class BuildingForm extends Form {
 
@@ -31,10 +32,11 @@ class BuildingForm extends Form {
 
         $form = new BuildingForm();
         $form->building = $building;
+        $form->addClass('form-horizontal');
 
         $form->setId('buildingForm');
 
-        Input::hidden('action', 'building/addBuilding')->addToForm($form);
+        Input::hidden('action', Router::getRouteUrl('building/edit/' . $building->getId()))->addToForm($form);
         Input::hidden('id', $building->getId())->addToForm($form);
 
         $buildingFieldset = new Fieldset('general');
@@ -62,13 +64,13 @@ class BuildingForm extends Form {
         $submitFieldset = new Fieldset("submit");
         $submitFieldset->setViewSrc('display/common/submitFieldset.php');
 
-        Input::button(BaseController::staticActionURL('building', 'view'), 'Zrušiť')
-             ->addCssClass('negative')
+        Input::button(Router::getRouteUrl('building'), 'Zrušiť')
+             ->addCssClass('btn-danger')
              ->setName('buttonCancel')
              ->addToFieldset($submitFieldset);
 
         Input::button("javascript: $('#buildingForm').submit();", 'Uložiť')
-             ->addCssClass('positive')
+             ->addCssClass('btn-success')
              ->setName('buttonSave')
              ->addToFieldset($submitFieldset);
 

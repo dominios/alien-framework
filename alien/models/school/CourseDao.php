@@ -133,6 +133,7 @@ class CourseDao extends CRUDDaoImpl implements TableViewInterface {
 
     public function getTableHeader() {
         return array(
+            'id' => '#',
             'name' => 'Názov',
             'teacher' => 'Učiteľ',
             'capacity' => 'Kapacita',
@@ -146,6 +147,7 @@ class CourseDao extends CRUDDaoImpl implements TableViewInterface {
             return array();
         }
         return array(
+            'id' => $object->getId(),
             'name' => $object->getName(),
             'teacher' => $object->getTeacher()->getFirstname() . ' ' . $object->getTeacher()->getSurname(),
             'capacity' => $object->getCapacity(),

@@ -1,20 +1,23 @@
-<table class="full fieldset">
-    <tbody>
-    <tr>
-        <td>
-            <div class="hr"></div>
-        </td>
-    </tr>
-    <tr>
-        <td>
-            <? foreach ($this->fields as $field):
+<div class="hr"></div>
+
+<div class="form-group">
+    <div class="col-sm-offset-2 col-sm-10">
+        <div class="btn-group" role="group">
+            <? foreach ($this->fields as $field): ?>
+
+                <? if ($field instanceof \Alien\Forms\Input\Hidden):
+                    echo $field;
+                    continue;
+                endif;
+
                 if ($field instanceof \Alien\Forms\Input\Hidden):
                     echo $field;
                     continue;
                 endif;
                 echo $field;
+
             endforeach; ?>
-        </td>
-    </tr>
-    </tbody>
-</table>
+        </div>
+    </div>
+</div>
+

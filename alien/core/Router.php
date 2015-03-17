@@ -138,6 +138,10 @@ class Router {
         return $this->routes[$name];
     }
 
+    public static function getRouteUrl($route) {
+        return '/alien/' . $route;
+    }
+
     //
 
 

@@ -6,6 +6,7 @@ use Alien\Db\RecordNotFoundException;
 use Alien\Forms\Building\BuildingForm;
 use Alien\Forms\Building\RoomForm;
 use Alien\Forms\Input;
+use Alien\Models\Authorization\Authorization;
 use Alien\Models\Authorization\UserDao;
 use Alien\Models\School\Building;
 use Alien\Models\School\BuildingDao;
@@ -13,10 +14,16 @@ use Alien\Models\School\Room;
 use Alien\Models\School\RoomDao;
 use Alien\Notification;
 use Alien\Response;
+use Alien\Router;
 use Alien\Table\DataTable;
 use Alien\View;
 
 class BuildingController extends BaseController {
+
+    /**
+     * @var Authorization
+     */
+    private $authorization;
 
     /**
      * @var BuildingDao
@@ -35,18 +42,14 @@ class BuildingController extends BaseController {
 
     protected function initialize() {
 
-        $this->defaultAction = 'view';
+        $this->defaultAction = 'listAction';
 
         parent::initialize();
 
+        $this->authorization = $this->getServiceManager()->getService('Authorization');
         $this->buildingDao = $this->getServiceManager()->getDao('BuildingDao');
         $this->userDao = $this->getServiceManager()->getDao('UserDao');
         $this->roomDao = $this->getServiceManager()->getDao('RoomDao');
-
-//        $parentResponse = parent::initialize();
-//        if ($parentResponse instanceof Response) {
-//            $data = $parentResponse->getData();
-//        }
 
         return new Response(array(
                 'LeftTitle' => 'Budova',
@@ -64,53 +67,50 @@ class BuildingController extends BaseController {
         return $items;
     }
 
-    protected function view() {
-
-        $view = new View('display/building/view.php');
+    protected function listAction() {
 
         $buildingDao = $this->buildingDao;
         $data = $buildingDao->getTableData($buildingDao->getList());
 
         $table = new DataTable($data, array('ordering' => true));
+        $table->setName('Zoznam budov');
+        if ($this->authorization->getCurrentUser()->hasPermission('BUILDING_ADMIN')) {
+            $table->addHeaderColumn(array('edit' => ''));
+            $table->addRowColumn(array(
+                'edit' => function ($row) {
+                        $ret = "";
+                        $urlEdit = Router::getRouteUrl('building/edit/' . $row['id']);
+                        $urlRemove = Router::getRouteUrl('building/remove/' . $row['id']);
+                        $ret .= "<a href=\"$urlEdit\"><i class=\"fa fa-pencil\"></i></a>";
+                        $ret .= " <a href=\"$urlRemove\"><i class=\"fa fa-trash-o text-danger\"></i></a>";
+                        return $ret;
+                    }
+            ));
+        };
 
-        $table->addButton(array(
-            'type' => 'a',
-            'text' => '[Upraviť]',
-            'class' => '',
-            'key' => '%id%',
-            'href' => $this->actionUrl('editBuilding', array('id' => '%id%'))
-        ));
+        $this->view->table = $table;
 
-        $table->addButton(array(
-            'type' => 'a',
-            'text' => '[Vymazať]',
-            'class' => '',
-            'key' => '%id%',
-            'href' => $this->actionUrl('removeBuilding', array('id' => '%id%'))
-        ));
-
-        $view->table = $table;
-
-        $addButton = Input::button($this->actionUrl('addBuilding'), 'Pridať budovu');
-        $view->addButton = $addButton;
+        $addButton = Input::button($this->actionUrl('addBuilding'), 'Pridať budovu')->addCssClass('btn-primary')->setIcon('fa fa-plus');
+        $this->view->addButton = $addButton;
 
         return new Response(array(
                 'Title' => 'Zoznam budov',
-                'ContentMain' => $view->renderToString()
+                'ContentMain' => $this->view
             )
         );
     }
 
-    protected function editBuilding() {
+    protected function editAction() {
 
-        $building = $this->buildingDao->find($_GET['id']);
+        $building = $this->buildingDao->find($this->getParam('id'));
         if (!($building instanceof Building)) {
             throw new RecordNotFoundException();
         }
 
-        $view = new View('display/building/form.php');
         $form = BuildingForm::factory($building);
-        $form->getField('action', true)->setValue('building/editBuilding');
+//        $form->getField('action', true)->setValue('building/editBuilding');
+
+        $this->view->building = $building;
 
         if ($form->isPostSubmit()) {
             if ($form->validate()) {
@@ -121,30 +121,31 @@ class BuildingController extends BaseController {
                          ->setZip($_POST['buildingZip']);
                 $this->buildingDao->update($building);
                 Notification::success('Zmeny boli uložené');
-                $this->redirect($this->actionUrl('view'));
+                $this->redirect($this->actionUrl(''));
             }
         }
 
-        $view->form = $form;
+        $this->view->form = $form;
 
         return new Response(array(
                 'Title' => 'Upraviť budovu',
-                'ContentMain' => $view
+                'ContentMain' => $this->view
             )
         );
     }
 
-    protected function removeBuilding() {
-        $building = $this->buildingDao->find($_GET['id']);
+    protected function removeBuildingAction() {
+        $building = $this->buildingDao->find($this->getParam('id'));
         if ($building instanceof Building) {
             $this->buildingDao->delete($building);
         }
-        $this->redirect($this->actionUrl('view'));
+        $this->redirect($this->actionUrl(''));
     }
 
-    protected function addBuilding() {
+    protected function addBuildingAction() {
 
-        $view = new View('display/building/form.php');
+        $view = new View('display/building/editAction.php');
+
         $building = new Building();
         $form = BuildingForm::factory($building);
 
@@ -157,7 +158,7 @@ class BuildingController extends BaseController {
                          ->setZip($_REQUEST['buildingZip']);
                 $this->buildingDao->create($building);
                 Notification::success('Záznam pridaný');
-                $this->redirect($this->actionUrl('view'));
+                $this->redirect($this->actionUrl(''));
             }
         }
 
