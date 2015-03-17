@@ -10,10 +10,6 @@
 
     <div class="col-xs-12">
 
-        <?= $this->form->startTag(); ?>
-        <?= $this->form->getField('action'); ?>
-        <?= $this->form->getField('id'); ?>
-
         <ul class="nav nav-tabs" role="tablist" id="myTab">
             <li role="presentation" class="active">
                 <a href="#general" role="tab" data-toggle="tab"><i class="fa fa-building hidden-xs"></i> Budova</a>
@@ -23,8 +19,7 @@
         <div class="tab-content">
             <div role="tabpanel" class="tab-pane active" id="general">
 
-                <?= $this->form->getFieldset('general'); ?>
-                <?= $this->form->getFieldset('submit'); ?>
+                <?= $this->form; ?>
 
             </div>
         </div>

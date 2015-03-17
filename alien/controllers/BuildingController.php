@@ -90,7 +90,7 @@ class BuildingController extends BaseController {
 
         $this->view->table = $table;
 
-        $addButton = Input::button($this->actionUrl('addBuilding'), 'Pridať budovu')->addCssClass('btn-primary')->setIcon('fa fa-plus');
+        $addButton = Input::button($this->actionUrl('add'), 'Pridať budovu')->addCssClass('btn-primary')->setIcon('fa fa-plus');
         $this->view->addButton = $addButton;
 
         return new Response(array(
@@ -144,7 +144,7 @@ class BuildingController extends BaseController {
 
     protected function addBuildingAction() {
 
-        $view = new View('display/building/editAction.php');
+        $view = new View('display/building/editBuildingAction.php');
 
         $building = new Building();
         $form = BuildingForm::factory($building);
@@ -174,8 +174,6 @@ class BuildingController extends BaseController {
 
     protected function listRoomsAction() {
 
-        $view = new View('display/room/view.php');
-
         $roomDao = $this->roomDao;
         $data = $roomDao->getTableData($roomDao->getList());
 
@@ -197,8 +195,8 @@ class BuildingController extends BaseController {
 
         $this->view->table = $table;
 
-        $addButton = Input::button(Router::getRouteUrl('room/add'), 'Pridať miestnosť');
-        $view->addButton = $addButton;
+        $addButton = Input::button(Router::getRouteUrl('room/add'), 'Pridať miestnosť')->addCssClass('btn-primary')->setIcon('fa fa-plus');
+        $this->view->addButton = $addButton;
 
         return new Response(array(
                 'Title' => 'Zoznam miestností',
@@ -211,9 +209,9 @@ class BuildingController extends BaseController {
 
         $room = new Room();
 
-        $view = new View('display/room/form.php');
+        $view = new View('display/building/editRoomAction.php');
         $form = RoomForm::factory($room, $this->userDao, $this->buildingDao);
-        $form->getField('action', true)->setValue('building/addRoom');
+        $form->getField('action', true)->setValue('building/addRoomAction');
 
         if ($form->isPostSubmit()) {
             if ($form->validate()) {
