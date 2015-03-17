@@ -308,5 +308,24 @@ class Form {
         return $this->class;
     }
 
+    /**
+     * @return string
+     */
+    public function __toString() {
+        $ret = "";
+        $ret .= $this->startTag();
+        if (sizeof($this->fieldsets)) {
+            foreach ($this->fieldsets as $fs) {
+                $ret .= $fs->__toString();
+            }
+        }
+        if (sizeof($this->fields)) {
+            foreach ($this->fields as $f) {
+                $ret .= $f->__toString();
+            }
+        }
+        $ret .= $this->endTag();
+        return $ret;
+    }
 
 }
