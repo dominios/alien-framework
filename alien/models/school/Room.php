@@ -110,6 +110,8 @@ class Room implements ActiveRecord {
         return $this->responsible;
     }
 
-
+    public function getName() {
+        return $this->getBuilding()->getName() . ', ' . $this->getFloor() . '. posch., ' . $this->getNumber();
+    }
 }
 

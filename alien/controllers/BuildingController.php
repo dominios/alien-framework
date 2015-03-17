@@ -67,7 +67,7 @@ class BuildingController extends BaseController {
         return $items;
     }
 
-    protected function listAction() {
+    protected function listBuildingsAction() {
 
         $buildingDao = $this->buildingDao;
         $data = $buildingDao->getTableData($buildingDao->getList());
@@ -100,7 +100,7 @@ class BuildingController extends BaseController {
         );
     }
 
-    protected function editAction() {
+    protected function editBuildingAction() {
 
         $building = $this->buildingDao->find($this->getParam('id'));
         if (!($building instanceof Building)) {
@@ -172,44 +172,42 @@ class BuildingController extends BaseController {
 
     }
 
-    protected function viewRooms() {
+    protected function listRoomsAction() {
 
         $view = new View('display/room/view.php');
 
-        $roomDao = $this->getServiceManager()->getDao('RoomDao');
+        $roomDao = $this->roomDao;
         $data = $roomDao->getTableData($roomDao->getList());
 
-        $table = new DataTable($data, array('ordering' => true));
+        $table = new DataTable($data);
+        $table->setName('Zoznam miestností');
+        if ($this->authorization->getCurrentUser()->hasPermission('BUILDING_ADMIN')) {
+            $table->addHeaderColumn(array('edit' => ''));
+            $table->addRowColumn(array(
+                'edit' => function ($row) {
+                        $ret = "";
+                        $urlEdit = Router::getRouteUrl('room/edit/' . $row['id']);
+                        $urlRemove = Router::getRouteUrl('room/remove/' . $row['id']);
+                        $ret .= "<a href=\"$urlEdit\"><i class=\"fa fa-pencil\"></i></a>";
+                        $ret .= " <a href=\"$urlRemove\"><i class=\"fa fa-trash-o text-danger\"></i></a>";
+                        return $ret;
+                    }
+            ));
+        };
 
-        $table->addButton(array(
-            'type' => 'a',
-            'text' => '[Upraviť]',
-            'class' => '',
-            'key' => '%id%',
-            'href' => $this->actionUrl('editRoom', array('id' => '%id%'))
-        ));
+        $this->view->table = $table;
 
-        $table->addButton(array(
-            'type' => 'a',
-            'text' => '[Vymazať]',
-            'class' => '',
-            'key' => '%id%',
-            'href' => $this->actionUrl('removeRoom', array('id' => '%id%'))
-        ));
-
-        $view->table = $table;
-
-        $addButton = Input::button($this->actionUrl('addRoom'), 'Pridať miestnosť');
+        $addButton = Input::button(Router::getRouteUrl('room/add'), 'Pridať miestnosť');
         $view->addButton = $addButton;
 
         return new Response(array(
                 'Title' => 'Zoznam miestností',
-                'ContentMain' => $view
+                'ContentMain' => $this->view
             )
         );
     }
 
-    protected function addRoom() {
+    protected function addRoomAction() {
 
         $room = new Room();
 
@@ -231,7 +229,7 @@ class BuildingController extends BaseController {
                 $this->roomDao->create($room);
                 $this->roomDao->update($room);
                 Notification::success('Záznam pridaný');
-                $this->redirect($this->actionUrl('viewRooms'));
+                $this->redirect(Router::getRouteUrl('room'));
             }
         }
 
@@ -244,15 +242,15 @@ class BuildingController extends BaseController {
         );
     }
 
-    protected function editRoom() {
+    protected function editRoomAction() {
 
         try {
 
-            $room = $this->roomDao->find($_GET['id']);
+            $room = $this->roomDao->find($this->getParam('id'));
 
-            $view = new View('display/room/form.php');
+            $view = $this->view;
             $form = RoomForm::factory($room, $this->userDao, $this->buildingDao);
-            $form->getField('action', true)->setValue('building/editRoom');
+//            $form->getField('action', true)->setValue('building/editRoom');
 
             if ($form->isPostSubmit()) {
                 if ($form->validate()) {
@@ -268,6 +266,7 @@ class BuildingController extends BaseController {
             }
 
             $view->form = $form;
+            $view->room = $room;
 
             return new Response(array(
                     'Title' => 'Upraviť miestnosť',
@@ -277,15 +276,15 @@ class BuildingController extends BaseController {
 
         } catch (RecordNotFoundException $e) {
             Notification::warning('Room not found');
-            $this->redirect($this->actionUrl('viewRooms'));
+            $this->redirect(Router::getRouteUrl('room'));
         }
     }
 
-    protected function removeRoom() {
-        $room = $this->roomDao->find($_GET['id']);
+    protected function removeRoomAction() {
+        $room = $this->roomDao->find($this->getParam('id'));
         if ($room instanceof Room) {
             $this->roomDao->delete($room);
         }
-        $this->redirect($this->actionUrl('viewRooms'));
+        $this->redirect(Router::getRouteUrl('room'));
     }
 }

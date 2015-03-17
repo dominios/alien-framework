@@ -20,11 +20,11 @@ return array(
         'childRoutes' => array(
             '' => array(
                 'route' => '',
-                'action' => 'listAction'
+                'action' => 'listBuildingsAction'
             ),
             'edit' => array(
                 'route' => '/edit/:id',
-                'action' => 'editAction'
+                'action' => 'editBuildingAction'
             ),
             'add' => array(
                 'route' => '/add',
@@ -33,6 +33,29 @@ return array(
             'remove' => array(
                 'route' => '/remove/:id',
                 'action' => 'removeBuildingAction',
+            )
+        )
+    ),
+    'room' => array(
+        'route' => 'room',
+        'controller' => 'BuildingController',
+        'namespace' => 'Alien\Controllers',
+        'childRoutes' => array(
+            '' => array(
+                'route' => '',
+                'action' => 'listRoomsAction'
+            ),
+            'edit' => array(
+                'route' => '/edit/:id',
+                'action' => 'editRoomAction'
+            ),
+            'add' => array(
+                'route' => '/add',
+                'action' => 'addRoomAction',
+            ),
+            'remove' => array(
+                'route' => '/remove/:id',
+                'action' => 'removeRoomAction',
             )
         )
     ),

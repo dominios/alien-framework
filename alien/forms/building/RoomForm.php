@@ -13,6 +13,7 @@ use Alien\Models\Authorization\UserDao;
 use Alien\Models\School\Building;
 use Alien\Models\School\BuildingDao;
 use Alien\Models\School\Room;
+use Alien\Router;
 
 class RoomForm extends Form {
 
@@ -37,6 +38,7 @@ class RoomForm extends Form {
 
     /**
      * @param Room $room
+     * @return \Alien\Forms\Building\RoomForm
      */
     public static function factory(Room $room, UserDao $userDao, BuildingDao $buildingDao) {
         parent::factory();
@@ -46,9 +48,10 @@ class RoomForm extends Form {
         $form->buildingDao = $buildingDao;
         $form->room = $room;
 
+        $form->addClass('form-horizontal');
         $form->setId('roomForm');
 
-        Input::hidden('action', 'building/addRoom')->addToForm($form);
+        Input::hidden('action', Router::getRouteUrl('room/edit/' . $room->getId()))->addToForm($form);
         Input::hidden('id', $room->getId())->addToForm($form);
 
         $generalFieldset = new Fieldset('general');
@@ -80,7 +83,8 @@ class RoomForm extends Form {
 
         $responsible = Input::select('roomResponsible')
                             ->setLabel('Zodpovedný')
-                            ->addToFieldset($generalFieldset);;
+                            ->addToFieldset($generalFieldset);
+
         foreach ($form->userDao->getList() as $i) {
             $opt = new Option($i->getLogin(), Option::TYPE_SELECT, $i->getId());
             if ($room->getResponsible() instanceof User) {
@@ -94,13 +98,13 @@ class RoomForm extends Form {
         $submitFieldset = new Fieldset("submit");
         $submitFieldset->setViewSrc('display/common/submitFieldset.php');
 
-        Input::button(BaseController::staticActionURL('building', 'view'), 'Zrušiť')
-             ->addCssClass('negative')
+        Input::button(Router::getRouteUrl('room'), 'Zrušiť')
+             ->addCssClass('btn-danger')
              ->setName('buttonCancel')
              ->addToFieldset($submitFieldset);
 
         Input::button("javascript: $('#roomForm').submit();", 'Uložiť')
-             ->addCssClass('positive')
+             ->addCssClass('btn-success')
              ->setName('buttonSave')
              ->addToFieldset($submitFieldset);
 
