@@ -4,10 +4,11 @@ namespace Alien\Models\School;
 
 
 use Alien\Application;
+use Alien\DBRecord;
 use Alien\Models\School\Teacher;
 use DateTime;
 
-class Course {
+class Course implements DBRecord {
 
     /**
      * @var int

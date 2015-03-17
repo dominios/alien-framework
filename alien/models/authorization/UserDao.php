@@ -2,7 +2,7 @@
 
 namespace Alien\Models\Authorization;
 
-use Alien\ActiveRecord;
+use Alien\DBRecord;
 use Alien\Db\CRUDDaoImpl;
 use Alien\DBConfig;
 use Alien\Models\Authorization\User;
@@ -38,7 +38,7 @@ class UserDao extends CRUDDaoImpl implements TableViewInterface {
 
     /**
      * @param array $result
-     * @return ActiveRecord
+     * @return DBRecord
      */
     protected function createFromResultSet(array $result) {
         $user = new User();
@@ -88,11 +88,11 @@ class UserDao extends CRUDDaoImpl implements TableViewInterface {
     }
 
     /**
-     * @param ActiveRecord $record
+     * @param DBRecord $record
      * @throws \InvalidArgumentException
      * @return PDOStatement
      */
-    protected function prepareDeleteStatement(ActiveRecord $record) {
+    protected function prepareDeleteStatement(DBRecord $record) {
         if (!($record instanceof User)) {
             throw new InvalidArgumentException("Object must be instance of User class!");
         }
@@ -113,24 +113,24 @@ class UserDao extends CRUDDaoImpl implements TableViewInterface {
     }
 
     /**
-     * @param ActiveRecord $room
+     * @param DBRecord $record
      * @throws InvalidArgumentException
      * @return PDOStatement
      */
-    protected function prepareUpdateStatement(ActiveRecord $room) {
-        if (!($room instanceof User)) {
+    protected function prepareUpdateStatement(DBRecord $record) {
+        if (!($record instanceof User)) {
             throw new InvalidArgumentException("Object must be instance of User class!");
         }
         $conn = $this->getConnection();
         $stmt = $conn->prepare('UPDATE ' . DBConfig::table(DBConfig::USERS) . ' SET
             login=:login, email=:email, activated=:status, firstname=:fn, surname=:sn
             WHERE id_u=:id;');
-        $stmt->bindValue(':id', $room->getId(), PDO::PARAM_INT);
-        $stmt->bindValue(':login', $room->getLogin(), PDO::PARAM_STR);
-        $stmt->bindValue(':email', $room->getEmail(), PDO::PARAM_STR);
-        $stmt->bindValue(':status', $room->getStatus(), PDO::PARAM_INT);
-        $stmt->bindValue(':fn', $room->getFirstname(), PDO::PARAM_STR);
-        $stmt->bindValue(':sn', $room->getSurname(), PDO::PARAM_STR);
+        $stmt->bindValue(':id', $record->getId(), PDO::PARAM_INT);
+        $stmt->bindValue(':login', $record->getLogin(), PDO::PARAM_STR);
+        $stmt->bindValue(':email', $record->getEmail(), PDO::PARAM_STR);
+        $stmt->bindValue(':status', $record->getStatus(), PDO::PARAM_INT);
+        $stmt->bindValue(':fn', $record->getFirstname(), PDO::PARAM_STR);
+        $stmt->bindValue(':sn', $record->getSurname(), PDO::PARAM_STR);
         return $stmt;
     }
 

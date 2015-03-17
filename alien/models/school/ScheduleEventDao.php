@@ -9,7 +9,7 @@
 namespace Alien\Models\School;
 
 
-use Alien\ActiveRecord;
+use Alien\DBRecord;
 use Alien\Db\CRUDDaoImpl;
 use Alien\DBConfig;
 use DateTime;
@@ -57,7 +57,7 @@ class ScheduleEventDao extends CRUDDaoImpl {
 
     /**
      * @param array $result
-     * @return ActiveRecord
+     * @return DBRecord
      */
     protected function createFromResultSet(array $result) {
         $event = new ScheduleEvent();
@@ -82,10 +82,10 @@ class ScheduleEventDao extends CRUDDaoImpl {
     }
 
     /**
-     * @param ActiveRecord $record
+     * @param DBRecord $record
      * @return PDOStatement
      */
-    protected function prepareDeleteStatement(ActiveRecord $record) {
+    protected function prepareDeleteStatement(DBRecord $record) {
         // TODO: Implement prepareDeleteStatement() method.
         throw new \RuntimeException("Unsupported operation.");
     }
@@ -102,12 +102,12 @@ class ScheduleEventDao extends CRUDDaoImpl {
     }
 
     /**
-     * @param \Alien\ActiveRecord $event
+     * @param \Alien\DBRecord $event
      * @throws \InvalidArgumentException
      * @internal param \Alien\ActiveRecord $room
      * @return PDOStatement
      */
-    protected function prepareUpdateStatement(ActiveRecord $event) {
+    protected function prepareUpdateStatement(DBRecord $event) {
         if (!($event instanceof ScheduleEvent)) {
             throw new InvalidArgumentException("Object must be instance of Event class!");
         }

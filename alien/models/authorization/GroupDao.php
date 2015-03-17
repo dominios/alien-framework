@@ -3,7 +3,7 @@
 namespace Alien\Models\Authorization;
 
 
-use Alien\ActiveRecord;
+use Alien\DBRecord;
 use Alien\Db\CRUDDaoImpl;
 use Alien\DBConfig;
 use DateTime;
@@ -37,7 +37,7 @@ class GroupDao extends CRUDDaoImpl implements TableViewInterface {
 
     /**
      * @param array $result
-     * @return ActiveRecord
+     * @return DBRecord
      */
     protected function createFromResultSet(array $result) {
         $group = new Group();
@@ -59,11 +59,11 @@ class GroupDao extends CRUDDaoImpl implements TableViewInterface {
     }
 
     /**
-     * @param ActiveRecord $record
+     * @param DBRecord $record
      * @throws \InvalidArgumentException
      * @return PDOStatement
      */
-    protected function prepareDeleteStatement(ActiveRecord $record) {
+    protected function prepareDeleteStatement(DBRecord $record) {
         if (!($record instanceof Group)) {
             throw new InvalidArgumentException("Argument must be instance of " . __NAMESPACE__ . " class!");
         }
@@ -84,11 +84,11 @@ class GroupDao extends CRUDDaoImpl implements TableViewInterface {
     }
 
     /**
-     * @param ActiveRecord $group
+     * @param DBRecord $group
      * @throws \InvalidArgumentException
      * @return PDOStatement
      */
-    protected function prepareUpdateStatement(ActiveRecord $group) {
+    protected function prepareUpdateStatement(DBRecord $group) {
         if (!($group instanceof Group)) {
             throw new InvalidArgumentException("Argument must be instance of " . __NAMESPACE__ . " class!");
         }

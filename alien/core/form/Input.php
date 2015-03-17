@@ -4,6 +4,7 @@ namespace Alien\Forms;
 
 use Alien\Forms\Input\Button;
 use Alien\Forms\Input\Checkbox;
+use Alien\Forms\Input\Color;
 use Alien\Forms\Input\Csrf;
 use Alien\Forms\Input\DateTimeLocal;
 use Alien\Forms\Input\Hidden;
@@ -224,6 +225,17 @@ abstract class Input {
     public static function password($name, $defaultValue, $value = null, $size = null) {
         $input = new Password($name, $defaultValue, $value, $size);
         return $input;
+    }
+
+    /**
+     * Factory method fod color input
+     * @param string $name
+     * @param string $defaultValue
+     * @param string|null $value
+     * @return Color
+     */
+    public static function color($name, $defaultValue, $value = null) {
+        return new Color($name, $defaultValue, $value, 2);
     }
 
     /**

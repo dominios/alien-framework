@@ -2,12 +2,12 @@
 
 namespace Alien\Models\School;
 
-use Alien\ActiveRecord;
+use Alien\DBRecord;
 use Alien\Models\School\Course;
 use Alien\Models\School\Room;
 use DateTime;
 
-class ScheduleEvent implements ActiveRecord {
+class ScheduleEvent implements DBRecord {
 
     /**
      * @var int

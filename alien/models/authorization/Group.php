@@ -2,13 +2,13 @@
 
 namespace Alien\Models\Authorization;
 
-use Alien\ActiveRecord;
+use Alien\DBRecord;
 use DateTime;
 use PDO;
 use Alien\Application;
 use Alien\DBConfig;
 
-class Group implements ActiveRecord {
+class Group implements DBRecord {
 
     /**
      * @var int

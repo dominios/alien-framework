@@ -71,6 +71,14 @@ return array(
             'edit' => array(
                 'route' => '/edit/:id',
                 'action' => 'editAction'
+            ),
+            'new' => array(
+                'route' => '/new',
+                'action' => 'newAction'
+            ),
+            'remove' => array(
+                'route' => '/remove/:id',
+                'action' => 'removeAction'
             )
         )
     ),

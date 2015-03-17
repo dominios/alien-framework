@@ -2,7 +2,7 @@
 
 namespace Alien\Models\School;
 
-use Alien\ActiveRecord;
+use Alien\DBRecord;
 use Alien\Db\CRUDDaoImpl;
 use Alien\DBConfig;
 use InvalidArgumentException;
@@ -34,7 +34,7 @@ class BuildingDao extends CRUDDaoImpl implements TableViewInterface {
 
     /**
      * @param array $result
-     * @return ActiveRecord
+     * @return DBRecord
      */
     protected function createFromResultSet(array $result) {
         $building = new Building();
@@ -56,11 +56,11 @@ class BuildingDao extends CRUDDaoImpl implements TableViewInterface {
     }
 
     /**
-     * @param ActiveRecord $record
+     * @param DBRecord $record
      * @throws \InvalidArgumentException
      * @return PDOStatement
      */
-    protected function prepareDeleteStatement(ActiveRecord $record) {
+    protected function prepareDeleteStatement(DBRecord $record) {
         if (!($record instanceof Building)) {
             throw new InvalidArgumentException("Object must be instance of " . __NAMESPACE__ . " class!");
         }
@@ -81,24 +81,24 @@ class BuildingDao extends CRUDDaoImpl implements TableViewInterface {
     }
 
     /**
-     * @param ActiveRecord $room
+     * @param DBRecord $record
      * @throws InvalidArgumentException
      * @return PDOStatement
      */
-    protected function prepareUpdateStatement(ActiveRecord $room) {
-        if (!($room instanceof Building)) {
+    protected function prepareUpdateStatement(DBRecord $record) {
+        if (!($record instanceof Building)) {
             throw new InvalidArgumentException("Object must be instance of " . __NAMESPACE__ . " class!");
         }
         $conn = $this->getConnection();
         $stmt = $conn->prepare('UPDATE ' . DBConfig::BUILDINGS . ' SET
             name=:name, street=:street, zip=:zip, city=:city, state=:state
             WHERE id=:id;');
-        $stmt->bindValue(':id', $room->getId(), PDO::PARAM_INT);
-        $stmt->bindValue(':name', $room->getName(), PDO::PARAM_STR);
-        $stmt->bindValue(':street', $room->getStreet(), PDO::PARAM_STR);
-        $stmt->bindValue(':city', $room->getCity(), PDO::PARAM_STR);
-        $stmt->bindValue(':zip', $room->getZip(), PDO::PARAM_STR);
-        $stmt->bindValue(':state', $room->getState(), PDO::PARAM_STR);
+        $stmt->bindValue(':id', $record->getId(), PDO::PARAM_INT);
+        $stmt->bindValue(':name', $record->getName(), PDO::PARAM_STR);
+        $stmt->bindValue(':street', $record->getStreet(), PDO::PARAM_STR);
+        $stmt->bindValue(':city', $record->getCity(), PDO::PARAM_STR);
+        $stmt->bindValue(':zip', $record->getZip(), PDO::PARAM_STR);
+        $stmt->bindValue(':state', $record->getState(), PDO::PARAM_STR);
         return $stmt;
     }
 

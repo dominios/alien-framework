@@ -9,7 +9,7 @@
 namespace Alien\Models\School;
 
 
-use Alien\ActiveRecord;
+use Alien\DBRecord;
 use Alien\Db\CRUDDaoImpl;
 use Alien\DBConfig;
 use Alien\Models\Authorization\UserDao;
@@ -37,19 +37,19 @@ class CourseDao extends CRUDDaoImpl implements TableViewInterface {
      * @throws \InvalidArgumentException
      * @return PDOStatement
      */
-    protected function prepareCreateStatement(Teacher $teacher = null) {
-        if (!($teacher instanceof Teacher)) {
-            throw new \InvalidArgumentException("Argument must by instance of " . __NAMESPACE__ . "!");
+    protected function prepareCreateStatement(Course $course = null) {
+        if (!($course instanceof Course)) {
+            throw new \InvalidArgumentException("Argument must by instance of Course !");
         }
         $conn = $this->getConnection();
         $stmt = $conn->prepare('INSERT INTO ' . DBConfig::COURSES . ' (teacher) VALUES (:t);');
-        $stmt->bindValue(':t', $teacher->getId(), PDO::PARAM_INT);
+        $stmt->bindValue(':t', $course->getTeacher()->getId(), PDO::PARAM_INT);
         return $stmt;
     }
 
     /**
      * @param array $result
-     * @return ActiveRecord
+     * @return DBRecord
      */
     protected function createFromResultSet(array $result) {
 
@@ -79,20 +79,20 @@ class CourseDao extends CRUDDaoImpl implements TableViewInterface {
      */
     protected function prepareSelectAllStatement() {
         $conn = $this->getConnection();
-        return $conn->prepare('SELECT * FROM ' . DBConfig::COURSES);
+        return $conn->prepare('SELECT * FROM courses');
     }
 
     /**
-     * @param ActiveRecord $record
+     * @param DBRecord $record
      * @throws \InvalidArgumentException
      * @return PDOStatement
      */
-    protected function prepareDeleteStatement(ActiveRecord $record) {
+    protected function prepareDeleteStatement(DBRecord $record) {
         if (!($record instanceof Course)) {
-            throw new InvalidArgumentException("Object must be instance of " . __NAMESPACE__ . " class!");
+            throw new InvalidArgumentException("Object must be instance of Course class!");
         }
         $conn = $this->getConnection();
-        $stmt = $conn->prepare('DELETE FROM ' . DBConfig::table(DBConfig::COURSES) . ' WHERE id = "' . (int) $record->getId() . '";');
+        $stmt = $conn->prepare('DELETE FROM ' . DBConfig::COURSES . ' WHERE id = "' . (int) $record->getId() . '";');
         return $stmt;
     }
 
@@ -108,26 +108,26 @@ class CourseDao extends CRUDDaoImpl implements TableViewInterface {
     }
 
     /**
-     * @param ActiveRecord $room
+     * @param DBRecord $course
      * @throws InvalidArgumentException
      * @return PDOStatement
      */
-    protected function prepareUpdateStatement(ActiveRecord $room) {
-        if (!($room instanceof Course)) {
-            throw new InvalidArgumentException("Object must be instance of " . __NAMESPACE__ . " class!");
+    protected function prepareUpdateStatement(DBRecord $course) {
+        if (!($course instanceof Course)) {
+            throw new InvalidArgumentException("Object must be instance of Course class!");
         }
         $conn = $this->getConnection();
-        $stmt = $conn->prepare('UPDATE ' . DBConfig::table(DBConfig::COURSES) . ' SET
-            name=:n, teacher=:t, capacity=:c, dateCreated=:dc, dateStart=:ds, dateEnd=:de, color:cl
-            WHERE id=:id;');
-        $stmt->bindValue(':id', $room->getId(), PDO::PARAM_INT);
-        $stmt->bindValue(':n', $room->getName(), PDO::PARAM_STR);
-        $stmt->bindValue(':t', $room->getTeacher()->getId(), PDO::PARAM_STR);
-        $stmt->bindValue(':c', $room->getCapacity(), PDO::PARAM_INT);
-        $stmt->bindValue(':dc', $room->getDateCreated()->format("u"), PDO::PARAM_INT);
-        $stmt->bindValue(':ds', $room->getDateStart()->format("u"), PDO::PARAM_STR);
-        $stmt->bindValue(':de', $room->getDateEnd()->format("u"), PDO::PARAM_STR);
-        $stmt->bindValue(':cl', $room->getColor(), PDO::PARAM_STR);
+        $stmt = $conn->prepare('UPDATE courses SET
+            name =:name, teacher =:teacher, capacity =:capacity, dateCreated =:dateCreated, dateStart =:dateStart, dateEnd =:dateEnd, color =:color
+            WHERE id =:id;');
+        $stmt->bindValue(':id', $course->getId(), PDO::PARAM_INT);
+        $stmt->bindValue(':name', $course->getName(), PDO::PARAM_STR);
+        $stmt->bindValue(':teacher', $course->getTeacher()->getId(), PDO::PARAM_STR);
+        $stmt->bindValue(':capacity', $course->getCapacity(), PDO::PARAM_INT);
+        $stmt->bindValue(':dateCreated', $course->getDateCreated()->format("U"), PDO::PARAM_INT);
+        $stmt->bindValue(':dateStart', $course->getDateStart()->format("U"), PDO::PARAM_INT);
+        $stmt->bindValue(':dateEnd', $course->getDateEnd()->format("U"), PDO::PARAM_INT);
+        $stmt->bindValue(':color', $course->getColor(), PDO::PARAM_STR);
         return $stmt;
     }
 

@@ -5,10 +5,10 @@ namespace Alien\Models\Authorization;
 use DateTime;
 use PDO;
 use Alien\Application;
-use Alien\ActiveRecord;
+use Alien\DBRecord;
 use Alien\DBConfig;
 
-class User implements ActiveRecord {
+class User implements DBRecord {
 
     /**
      * @var int

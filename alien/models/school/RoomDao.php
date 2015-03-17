@@ -3,7 +3,7 @@
 namespace Alien\Models\School;
 
 
-use Alien\ActiveRecord;
+use Alien\DBRecord;
 use Alien\Db\CRUDDaoImpl;
 use Alien\DBConfig;
 use Alien\Models\Authorization\User;
@@ -42,7 +42,7 @@ class RoomDao extends CRUDDaoImpl implements TableViewInterface {
 
     /**
      * @param array $result
-     * @return ActiveRecord
+     * @return DBRecord
      */
     protected function createFromResultSet(array $result) {
         $room = new Room();
@@ -64,11 +64,11 @@ class RoomDao extends CRUDDaoImpl implements TableViewInterface {
     }
 
     /**
-     * @param ActiveRecord $record
+     * @param DBRecord $record
      * @throws \InvalidArgumentException
      * @return PDOStatement
      */
-    protected function prepareDeleteStatement(ActiveRecord $record) {
+    protected function prepareDeleteStatement(DBRecord $record) {
         if (!($record instanceof Room)) {
             throw new InvalidArgumentException("Object must be instance of " . __NAMESPACE__ . " class!");
         }
@@ -89,24 +89,24 @@ class RoomDao extends CRUDDaoImpl implements TableViewInterface {
     }
 
     /**
-     * @param ActiveRecord $room
+     * @param DBRecord $record
      * @throws \InvalidArgumentException
      * @return PDOStatement
      */
-    protected function prepareUpdateStatement(ActiveRecord $room) {
-        if (!($room instanceof Room)) {
+    protected function prepareUpdateStatement(DBRecord $record) {
+        if (!($record instanceof Room)) {
             throw new InvalidArgumentException("Object must be instance of Room class!");
         }
         $conn = $this->getConnection();
         $stmt = $conn->prepare('UPDATE ' . DBConfig::ROOMS . ' SET
             building=:b, responsible=:r, floor=:f, number=:n, capacity=:c
             WHERE id=:id;');
-        $stmt->bindValue(':id', $room->getId(), PDO::PARAM_INT);
-        $stmt->bindValue(':b', $room->getBuilding()->getId(), PDO::PARAM_INT);
-        $stmt->bindValue(':r', $room->getResponsible()->getId(), PDO::PARAM_INT);
-        $stmt->bindValue(':f', $room->getFloor(), PDO::PARAM_INT);
-        $stmt->bindValue(':n', $room->getNumber(), PDO::PARAM_STR);
-        $stmt->bindValue(':c', $room->getCapacity(), PDO::PARAM_INT);
+        $stmt->bindValue(':id', $record->getId(), PDO::PARAM_INT);
+        $stmt->bindValue(':b', $record->getBuilding()->getId(), PDO::PARAM_INT);
+        $stmt->bindValue(':r', $record->getResponsible()->getId(), PDO::PARAM_INT);
+        $stmt->bindValue(':f', $record->getFloor(), PDO::PARAM_INT);
+        $stmt->bindValue(':n', $record->getNumber(), PDO::PARAM_STR);
+        $stmt->bindValue(':c', $record->getCapacity(), PDO::PARAM_INT);
         return $stmt;
     }
 

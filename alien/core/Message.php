@@ -5,7 +5,7 @@ namespace Alien;
 use \PDO;
 use Alien\Models\Authorization\User;
 
-class Message implements ActiveRecord {
+class Message implements DBRecord {
 
     private $id;
     private $author;

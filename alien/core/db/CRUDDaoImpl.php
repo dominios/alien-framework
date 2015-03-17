@@ -2,7 +2,7 @@
 
 namespace Alien\Db;
 
-use Alien\ActiveRecord;
+use Alien\DBRecord;
 use PDO;
 use PDOException;
 use PDOStatement;
@@ -52,10 +52,10 @@ abstract class CRUDDaoImpl implements CRUDDao {
     /**
      * Saves new object into database
      *
-     * @param ActiveRecord $object
+     * @param DBRecord $object
      * @return void
      */
-    public function create(ActiveRecord &$object) {
+    public function create(DBRecord &$object) {
         $stmt = $this->prepareCreateStatement($object);
         $this->execute($stmt);
         $object->setId($this->getConnection()->lastInsertId());
@@ -64,17 +64,17 @@ abstract class CRUDDaoImpl implements CRUDDao {
     /**
      * Delete record of object in database
      *
-     * @param ActiveRecord $record
+     * @param DBRecord $record
      */
-    public function delete(ActiveRecord $record) {
+    public function delete(DBRecord $record) {
         $stmt = $this->prepareDeleteStatement($record);
         $this->execute($stmt);
     }
 
     /**
-     * @param ActiveRecord $record
+     * @param DBRecord $record
      */
-    public function update(ActiveRecord $record) {
+    public function update(DBRecord $record) {
         $stmt = $this->prepareUpdateStatement($record);
         $this->execute($stmt);
     }
@@ -84,7 +84,7 @@ abstract class CRUDDaoImpl implements CRUDDao {
      *
      * @param int $id
      * @throws RecordNotFoundException
-     * @return ActiveRecord|bool
+     * @return DBRecord|bool
      */
     public function find($id) {
         $stmt = $this->prepareFindStatement($id);
@@ -99,7 +99,7 @@ abstract class CRUDDaoImpl implements CRUDDao {
     /**
      * Returns flat array of all objects
      *
-     * @return ActiveRecord[]
+     * @return DBRecord[]
      */
     public function getList() {
         $stmt = $this->prepareSelectAllStatement();
@@ -128,7 +128,7 @@ abstract class CRUDDaoImpl implements CRUDDao {
 
     /**
      * @param array $result
-     * @return ActiveRecord
+     * @return DBRecord
      */
     protected abstract function createFromResultSet(array $result);
 
@@ -138,10 +138,10 @@ abstract class CRUDDaoImpl implements CRUDDao {
     protected abstract function prepareSelectAllStatement();
 
     /**
-     * @param ActiveRecord $record
+     * @param DBRecord $record
      * @return PDOStatement
      */
-    protected abstract function prepareDeleteStatement(ActiveRecord $record);
+    protected abstract function prepareDeleteStatement(DBRecord $record);
 
     /**
      * @param int $id
@@ -150,9 +150,9 @@ abstract class CRUDDaoImpl implements CRUDDao {
     protected abstract function prepareFindStatement($id);
 
     /**
-     * @param ActiveRecord $room
+     * @param DBRecord $record
      * @return PDOStatement
      */
-    protected abstract function prepareUpdateStatement(ActiveRecord $room);
+    protected abstract function prepareUpdateStatement(DBRecord $record);
 
 }

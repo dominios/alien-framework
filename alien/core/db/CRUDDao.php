@@ -2,15 +2,15 @@
 
 namespace Alien\Db;
 
-use Alien\ActiveRecord;
+use Alien\DBRecord;
 
 interface CRUDDao {
 
-    public function create(ActiveRecord &$object);
+    public function create(DBRecord &$object);
 
-    public function delete(ActiveRecord $record);
+    public function delete(DBRecord $record);
 
-    public function update(ActiveRecord $record);
+    public function update(DBRecord $record);
 
     public function find($id);
 
