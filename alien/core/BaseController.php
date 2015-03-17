@@ -4,6 +4,7 @@ namespace Alien\Controllers;
 
 use Alien\Application;
 use Alien\Layout\ErrorLayout;
+use Alien\RouterException;
 use Alien\ServiceManager;
 use Alien\Terminal;
 use Alien\Response;
@@ -152,6 +153,7 @@ class BaseController {
             $this->view = new View('display/' . strtolower($viewSrc . '.php'));
 
             if (!method_exists($this, $action)) {
+                throw new RouterException();
             }
             if (!method_exists($this, $action) && $action != $this->defaultAction) {
                 $action = $this->defaultAction;
