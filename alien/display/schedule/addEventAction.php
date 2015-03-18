@@ -31,6 +31,10 @@
 
     $(function () {
 
+        $("select[name=eventCourse]").change(function () {
+            window.location = '<?= \Alien\Router::getRouteUrl('schedule/addEvent/'); ?>' + $(this).val();
+        });
+
         $('input[name=eventRepeatWeeks]').parents('.form-group').hide();
 
         $("input[name=eventRepeat]").change(function () {

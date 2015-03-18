@@ -81,6 +81,9 @@ class EventForm extends Form {
         if ($event->getId()) {
             $course->setDisabled(true);
         }
+
+        $course->addOption(new Option(' --- Vybrať kurz', Option::TYPE_SELECT, ""));
+
         foreach ($form->courseDao->getList() as $i) {
             $name = $i->getName();
             $opt = new Option($name, Option::TYPE_SELECT, $i->getId());
@@ -92,12 +95,13 @@ class EventForm extends Form {
             $course->addOption($opt);
         }
 
-        Input::dateTimeLocal('eventDateFrom', null, $event->getDateFrom())
+        $dateFromDefault = $event->getCourse() instanceof Course ? $event->getCourse()->getDateStart() : $event->getDateFrom();
+        Input::dateTimeLocal('eventDateFrom', null, $dateFromDefault)
              ->setLabel('Začiatok')
              ->addToFieldset($generalFieldset);
 
-
-        Input::dateTimeLocal('eventDateTo', null, $event->getDateTo())
+        $dateEndDefault = $event->getCourse() instanceof Course ? $event->getCourse()->getDateStart() : $event->getDateFrom();
+        Input::dateTimeLocal('eventDateTo', null, $dateEndDefault)
              ->setLabel('Koniec')
              ->addToFieldset($generalFieldset);
 

@@ -24,7 +24,7 @@ if (!function_exists('\Alien\renderNotification')) {
                 $title = 'Úspech';
                 break;
             case Notification::WARNING:
-                $icon = 'fa fa-fw fa-warnin';
+                $icon = 'fa fa-fw fa-warning';
                 $class = 'alert-warning';
                 $title = 'Varovanie';
                 break;

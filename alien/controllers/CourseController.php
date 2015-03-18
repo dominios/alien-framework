@@ -145,7 +145,11 @@ class CourseController extends BaseController {
     protected function removeAction() {
         $course = $this->courseDao->find($this->getParam('id'));
         if ($course instanceof Course) {
-            $this->courseDao->delete($course);
+            try {
+                $this->courseDao->delete($course);
+            } catch (\PDOException $e) {
+                Notification::error('Kurz sa nepodarilo odstrániť.');
+            }
         }
         $this->redirect(Router::getRouteUrl('course'));
     }

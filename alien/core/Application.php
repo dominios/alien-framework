@@ -138,7 +138,7 @@ final class Application {
                 $user = $auth->getCurrentUser();
                 if ($user instanceof User) {
                     if (Message::getUnreadCount($user)) {
-                        Notification::newMessages("");
+//                        Notification::newMessages("");
                         // $this->redirect(BaseController::staticActionURL('dashboard', 'home'));
 //                        $route['controller'] = 'dashboard';
 //                        $route['actions'] = array('home');

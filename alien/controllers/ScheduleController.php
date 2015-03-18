@@ -74,6 +74,12 @@ class ScheduleController extends BaseController {
 //        $view = new View('display/schedule/addEventAction.php');
         $view = $this->view;
         $event = new ScheduleEvent();
+
+        if ($this->getParam('courseId')) {
+            $course = $this->courseDao->find($this->getParam('courseId'));
+            $event->setCourse($course);
+        }
+
         $form = EventForm::factory($event, $this->courseDao, $this->roomDao);
         $form->getField('action', true)->setValue('schedule/addEvent');
 
@@ -104,7 +110,7 @@ class ScheduleController extends BaseController {
                 }
 
                 Notification::success('Záznam pridaný');
-                $this->redirect($this->actionUrl('view'));
+                $this->redirect(Router::getRouteUrl('schedule'));
             }
         }
 

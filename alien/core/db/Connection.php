@@ -25,7 +25,7 @@ class Connection {
         try {
             # MySQL with PDO_MYSQL
             $pdo = new PDO("mysql:host=$host;dbname=$database;charset=utf8", $username, $password);
-            $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_WARNING); // ZMENIT POTOM LEN NA EXCEPTION
+            $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION); // ZMENIT POTOM LEN NA EXCEPTION
             $pdo->query('SET NAMES utf8');
         } catch (PDOException $e) {
             header("HTTP/1.1 503 Service Unavailable");
