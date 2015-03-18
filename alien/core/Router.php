@@ -88,7 +88,6 @@ class Router {
             $requiredPart = $route['route'];
         }
 
-
         $optionals = array();
         if (preg_match('/(\[.+\])/', $route['route'], $optionals)) {
             unset($optionals[0]);
@@ -114,12 +113,17 @@ class Router {
             }
         }
 
-        $regex = '/^\/' . implode('\/', $regexParts) . '$/';
+        $regex = '/^\/' . implode('\/?', $regexParts) . '$/';
 
         $paramsMatches = array();
+
+        $optionals = array_map(function ($e) {
+            return str_replace('/:', '', $e);
+        }, $optionals);
+
         if (preg_match($regex, $url, $paramsMatches)) {
             foreach ($params as $key => $index) {
-                if ($paramsMatches[$index] == "") {
+                if ($paramsMatches[$index] == "" && !in_array($key, $optionals)) {
                     throw new RouterException("Required argument not found.");
                 }
                 $params[$key] = $paramsMatches[$index];
