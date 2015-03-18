@@ -47,6 +47,7 @@ class EventForm extends Form {
         $form->roomDao = $roomDao;
 
         $form->setId('eventForm');
+        $form->addClass('form-horizontal');
 
         Input::hidden('action', 'schedule/view/interval/week')->addToForm($form);
         Input::hidden('id', $event->getId())->addToForm($form);
@@ -115,12 +116,12 @@ class EventForm extends Form {
         $submitFieldset->setViewSrc('display/common/submitFieldset.php');
 
         Input::button(BaseController::staticActionURL('schedule', 'view', array('interval' => 'week')), 'Zrušiť')
-             ->addCssClass('negative')
+             ->addCssClass('btn-danger')
              ->setName('buttonCancel')
              ->addToFieldset($submitFieldset);
 
         Input::button("javascript: $('#eventForm').submit();", 'Uložiť')
-             ->addCssClass('positive')
+             ->addCssClass('btn-success')
              ->setName('buttonSave')
              ->addToFieldset($submitFieldset);
 

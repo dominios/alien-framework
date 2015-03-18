@@ -1,4 +1,4 @@
-<div class="hr"></div>
+<div class="hr hr-dashed col-xs-offset-2"></div>
 
 <div class="form-group">
     <div class="col-sm-offset-2 col-sm-10">

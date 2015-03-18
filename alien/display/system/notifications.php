@@ -9,37 +9,37 @@ if (!function_exists('\Alien\renderNotification')) {
     function renderNotification(Notification $notification) {
         switch ($notification->getType()) {
             case Notification::INFO:
-                $icon = 'icon-notify-info';
-                $class = 'not-info';
+                $icon = 'fa fa-fw fa-info-circle';
+                $class = 'alert-info';
                 $title = 'Informácia';
                 break;
             case Notification::NEW_MESSAGES:
-                $icon = 'icon-notify-messages';
-                $class = 'not-info';
+                $icon = 'fa fa-fw fa-info-circle';
+                $class = 'alert-info';
                 $title = 'Informácia';
                 break;
             case Notification::SUCCESS:
-                $icon = 'icon-notify-ok';
-                $class = 'not-success';
+                $icon = 'fa fa-fw fa-check-circle';
+                $class = 'alert-success';
                 $title = 'Úspech';
                 break;
             case Notification::WARNING:
-                $icon = 'icon-notify-warning';
-                $class = 'not-warning';
+                $icon = 'fa fa-fw fa-warnin';
+                $class = 'alert-warning';
                 $title = 'Varovanie';
                 break;
             case Notification::ERROR:
-                $icon = 'icon-notify-error';
-                $class = 'not-error';
+                $icon = 'fa fa-fw fa-exclamation-circle';
+                $class = 'alert-danger';
                 $title = 'Chyba';
                 break;
             case Notification::ACCESS_DENIED:
-                $icon = 'icon-notify-private';
-                $class = 'not-error';
+                $icon = 'fa fa-fw fa-exclamation-circle';
+                $class = 'alert-danger';
                 $title = 'Nepovolený prístup';
                 break;
         }
-        return ('<div class="notify ' . $class . '"><span class="icon ' . $icon . '"></span>' . '<b>' . $title . ':</b> ' . $notification->getMessage() . '</div>');
+        return ('<div class="alert ' . $class . '"><i class="fa ' . $icon . '"></i>' . '<b>' . $title . ':</b> ' . $notification->getMessage() . '</div>');
     }
 
 }
@@ -65,9 +65,9 @@ if (!$this instanceof \Alien\View) {
         endforeach;
         ?>
         <script type="text/javascript">
-            $(function() {
+            $(function () {
                 $("#notifyArea").addClass('visible');
-                setTimeout(function() {
+                setTimeout(function () {
                     $('#notifyArea').removeClass("visible");
                 }, 4000);
             });

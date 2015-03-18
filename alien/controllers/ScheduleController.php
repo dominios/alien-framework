@@ -12,6 +12,7 @@ use Alien\Models\School\ScheduleEvent;
 use Alien\Models\School\ScheduleEventDao;
 use Alien\Notification;
 use Alien\Response;
+use Alien\Router;
 use Alien\View;
 use DateTime;
 
@@ -39,23 +40,24 @@ class ScheduleController extends BaseController {
         $this->courseDao = $this->getServiceManager()->getDao('CourseDao');
     }
 
-    protected function view() {
+    protected function calendarAction() {
 
-        $view = new View('display/schedule/calendar.php');
+        $view = $this->view;
 
-        $addButton = Input::button($this->actionUrl("addEvent"), 'Pridať udalosť');
-        $view->addButtton = $addButton;
+        $view->addButtton = Input::button(Router::getRouteUrl('schedule/addEvent'), 'Pridať udalosť')->addCssClass('btn-primary')->setIcon('fa fa-plus');;
 
         $data = array();
         $events = $this->scheduleEventDao->getList();
         foreach ($events as $event) {
-            $data[] = array(
-                'title' => $event->getCourse()->getName() . "\n" . $event->getCourse()->getTeacher()->getFirstname() . ' ' . $event->getCourse()->getTeacher()->getSurname() . "\n" . $event->getRoom()->getBuilding()->getName() . ', ' . $event->getRoom()->getNumber(),
-                'start' => $event->getDateFrom(DateTime:: ISO8601),
-                'end' => $event->getDateTo(DateTime::ISO8601),
-                'color' => '#' . $event->getCourse()->getColor(),
-                'url' => $this->actionUrl('editEvent', array('id' => $event->getId()))
-            );
+            if ($event instanceof ScheduleEvent) {
+                $data[] = array(
+                    'title' => $event->getCourse()->getName() . "\n" . $event->getCourse()->getTeacher()->getFirstname() . ' ' . $event->getCourse()->getTeacher()->getSurname() . "\n" . $event->getRoom()->getBuilding()->getName() . ', ' . $event->getRoom()->getNumber(),
+                    'start' => $event->getDateFrom(DateTime:: ISO8601),
+                    'end' => $event->getDateTo(DateTime::ISO8601),
+                    'color' => '#' . $event->getCourse()->getColor(),
+                    'url' => $this->actionUrl('editEvent', array('id' => $event->getId()))
+                );
+            }
         }
 
         $view->events = $data;
@@ -67,9 +69,10 @@ class ScheduleController extends BaseController {
         );
     }
 
-    protected function addEvent() {
+    protected function addEventAction() {
 
-        $view = new View('display/schedule/eventForm.php');
+//        $view = new View('display/schedule/addEventAction.php');
+        $view = $this->view;
         $event = new ScheduleEvent();
         $form = EventForm::factory($event, $this->courseDao, $this->roomDao);
         $form->getField('action', true)->setValue('schedule/addEvent');

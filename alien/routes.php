@@ -88,6 +88,21 @@ return array(
             )
         )
     ),
+    'schedule' => array(
+        'route' => '/schedule',
+        'controller' => 'ScheduleController',
+        'namespace' => 'Alien\Controllers',
+        'childRoutes' => array(
+            '' => array(
+                'route' => '',
+                'action' => 'calendarAction'
+            ),
+            'addEvent' => array(
+                'route' => 'addEvent',
+                'action' => 'addEventAction'
+            )
+        )
+    ),
     'user' => array(
         'route' => '/user',
         'controller' => 'UsersController',

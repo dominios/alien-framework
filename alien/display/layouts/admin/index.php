@@ -70,7 +70,7 @@
             </ul>
             <ul class="nav navbar-nav navbar-right">
                 <li>
-                    <a href="<?= \Alien\Router::getRouteUrl('logout'); ?>"><i class="fa fa-fw fa-sign-out"></i> Odhlásiť sa</a>
+                    <a href="<?= \Alien\Router::getRouteUrl('logout'); ?>">Odhlásiť sa <i class="fa fa-fw fa-sign-out"></i></a>
                 </li>
             </ul>
         </nav>
@@ -129,6 +129,10 @@
 
     </div>
 </div>
+
+<section id="notifications">
+    <?= $this->notifications; ?>
+</section>
 
 </body>
 </html>

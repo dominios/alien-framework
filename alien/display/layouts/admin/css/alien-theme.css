@@ -56,6 +56,59 @@ body {
     border-bottom-right-radius: 4px;
 }
 
+.space-5 {
+    width: 100%;
+    margin-bottom: 5px;
+}
+
+.space-10 {
+    width: 100%;
+    margin-bottom: 10px;
+}
+
+.space-15 {
+    width: 100%;
+    margin-bottom: 15px;
+}
+
+.hr {
+    height: 1px;
+    padding-top: 15px;
+    margin-bottom: 15px;
+    border: none;
+    border-bottom: 1px solid #dddddd;
+}
+
+.hr-dotted {
+    border-bottom-style: dotted;
+}
+
+.hr-dashed {
+    border-bottom-style: dashed;
+}
+
+#notifyArea {
+    position: relative;
+    display: block;
+    visibility: hidden;
+    opacity: 0;
+    margin: 0px auto;
+    z-index: 1;
+    transform: translateY(95px);
+    -webkit-transform: translateY(95px);
+    transition: opacity .35s, visibility .35s, transform .5s;
+    -webkit-transition: opacity .35s, visibility .35s, -webkit-transform .5s;
+    transition-timing-function: ease;
+    -webkit-transition-timing-function: ease;
+}
+
+#notifyArea.visible {
+    opacity: 1;
+    transform: translateY(70px);
+    -webkit-transform: translateY(70px);
+    visibility: visible;
+}
+
 @media (min-width: 991px) {
 
     #sidebar {

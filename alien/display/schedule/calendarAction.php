@@ -1,6 +1,16 @@
-<div id="calendar"></div>
+<div class="row">
+    <div class="col-xs-12">
+        <?= $this->addButtton; ?>
+    </div>
+</div>
 
-<?= $this->addButtton; ?>
+<div class="space-15"></div>
+
+<div class="row">
+    <div class="col-xs-12">
+        <div id="calendar"></div>
+    </div>
+</div>
 
 <script type="text/javascript">
 
