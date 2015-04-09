@@ -16,6 +16,9 @@ abstract class CRUDDaoImpl implements CRUDDao {
      */
     private $connection;
 
+    /**
+     * @param PDO $connection
+     */
     public function __construct(PDO $connection) {
         $this->connection = $connection;
     }
@@ -30,7 +33,7 @@ abstract class CRUDDaoImpl implements CRUDDao {
     }
 
     /**
-     * Executes prepared statement and returns fetched result
+     * Executes prepared statement passed in argument and returns fetched result
      *
      * @param PDOStatement $statement
      * @return array
@@ -50,7 +53,7 @@ abstract class CRUDDaoImpl implements CRUDDao {
     }
 
     /**
-     * Saves new object into database
+     * Insert's object into database nd gives new ID to object
      *
      * @param DBRecord $object
      * @return void
@@ -62,9 +65,10 @@ abstract class CRUDDaoImpl implements CRUDDao {
     }
 
     /**
-     * Delete record of object in database
+     * Delete object from database
      *
      * @param DBRecord $record
+     * @return void
      */
     public function delete(DBRecord $record) {
         $stmt = $this->prepareDeleteStatement($record);
@@ -72,7 +76,11 @@ abstract class CRUDDaoImpl implements CRUDDao {
     }
 
     /**
+     *
+     * Update object in database.
+     *
      * @param DBRecord $record
+     * @return void
      */
     public function update(DBRecord $record) {
         $stmt = $this->prepareUpdateStatement($record);
@@ -80,11 +88,11 @@ abstract class CRUDDaoImpl implements CRUDDao {
     }
 
     /**
-     * Finds record by id and returns constructed object or false on failure
+     * Finds object by id and return it or throw exception on error.
      *
      * @param int $id
      * @throws RecordNotFoundException
-     * @return DBRecord|bool
+     * @return DBRecord
      */
     public function find($id) {
         $stmt = $this->prepareFindStatement($id);
@@ -97,7 +105,7 @@ abstract class CRUDDaoImpl implements CRUDDao {
     }
 
     /**
-     * Returns flat array of all objects
+     * Returns array of all objects.
      *
      * @return DBRecord[]
      */
@@ -122,34 +130,46 @@ abstract class CRUDDaoImpl implements CRUDDao {
     }
 
     /**
+     * Returns query for CREATE operation.
+     *
      * @return PDOStatement
      */
     protected abstract function prepareCreateStatement();
 
     /**
+     * Factory method
+     *
      * @param array $result
      * @return DBRecord
      */
     protected abstract function createFromResultSet(array $result);
 
     /**
+     * Returns query for non conditional SELECT operation.
+     *
      * @return PDOStatement
      */
     protected abstract function prepareSelectAllStatement();
 
     /**
+     * Returns query for DELETE operation.
+     *
      * @param DBRecord $record
      * @return PDOStatement
      */
     protected abstract function prepareDeleteStatement(DBRecord $record);
 
     /**
+     * Returns query for finding single object by it's id.
+     *
      * @param int $id
      * @return mixed
      */
     protected abstract function prepareFindStatement($id);
 
     /**
+     * Returns query for UPDATE operation.
+     *
      * @param DBRecord $record
      * @return PDOStatement
      */
