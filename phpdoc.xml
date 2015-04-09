@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<phpdoc>
+    <title>Tvorba frameworku pre webovské aplikácie | Diplomová práca</title>
+    <parser>
+        <target>phpdocs/output</target>
+        <extensions>
+            <extension>php</extension>
+        </extensions>
+        <visibility/>
+    </parser>
+    <transformer>
+        <target>phpdocs/docs</target>
+    </transformer>
+    <files>
+        <directory>.</directory>
+        <ignore>alien/plugins/*</ignore>
+        <ignore>alien/display/*</ignore>
+        <ignore>alien/js/*</ignore>
+        <ignore>alien/templates/*</ignore>
+        <ignore>alien/email/*</ignore>
+    </files>
+</phpdoc>
