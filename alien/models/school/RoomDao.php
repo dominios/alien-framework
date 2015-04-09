@@ -6,12 +6,11 @@ namespace Alien\Models\School;
 use Alien\DBRecord;
 use Alien\Db\CRUDDaoImpl;
 use Alien\DBConfig;
-use Alien\Models\Authorization\User;
 use Alien\Models\Authorization\UserDao;
+use Alien\TableViewInterface;
 use InvalidArgumentException;
 use PDO;
 use PDOStatement;
-use TableViewInterface;
 
 class RoomDao extends CRUDDaoImpl implements TableViewInterface {
 

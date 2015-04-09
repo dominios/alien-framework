@@ -6,11 +6,11 @@ namespace Alien\Models\Authorization;
 use Alien\DBRecord;
 use Alien\Db\CRUDDaoImpl;
 use Alien\DBConfig;
+use Alien\TableViewInterface;
 use DateTime;
 use InvalidArgumentException;
 use PDO;
 use PDOStatement;
-use TableViewInterface;
 
 class GroupDao extends CRUDDaoImpl implements TableViewInterface {
 

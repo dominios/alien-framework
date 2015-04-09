@@ -1,5 +1,7 @@
 <?php
 
+namespace Alien;
+
 interface TableViewInterface {
 
     public function getTableHeader();

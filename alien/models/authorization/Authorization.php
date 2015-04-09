@@ -282,4 +282,16 @@ class Authorization {
         return crypt($password, $hash) == $hash;
     }
 
+    public function generatePassword($length = 12) {
+        $possible_letters = '23456789bcdfghjkmnpqrstvwxyzBCDFGHJKMNPQRSTVWXYZ_?!$';
+        $number_of_characters = $length;
+        $code = '';
+        $i = 0;
+        while ($i < $number_of_characters) {
+            $code .= substr($possible_letters, mt_rand(0, strlen($possible_letters) - 1), 1);
+            $i++;
+        }
+        return $code;
+    }
+
 }

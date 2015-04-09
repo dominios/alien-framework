@@ -5,7 +5,13 @@ namespace Alien;
 use Alien\Db\CRUDDao;
 use ReflectionClass;
 
-final class ServiceManager {
+interface IServiceManager {
+    public function registerService($service);
+
+    public function getService($name);
+}
+
+final class ServiceManager implements IServiceManager {
 
     /**
      * @var ServiceManager

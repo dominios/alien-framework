@@ -5,13 +5,12 @@ namespace Alien\Models\Authorization;
 use Alien\DBRecord;
 use Alien\Db\CRUDDaoImpl;
 use Alien\DBConfig;
-use Alien\Models\Authorization\User;
 use Alien\ServiceManager;
+use Alien\TableViewInterface;
 use DateTime;
 use InvalidArgumentException;
 use PDO;
 use PDOStatement;
-use TableViewInterface;
 
 class UserDao extends CRUDDaoImpl implements TableViewInterface {
 

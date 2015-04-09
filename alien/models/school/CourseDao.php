@@ -1,23 +1,16 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: Domino
- * Date: 26.10.2014
- * Time: 14:00
- */
 
 namespace Alien\Models\School;
-
 
 use Alien\DBRecord;
 use Alien\Db\CRUDDaoImpl;
 use Alien\DBConfig;
 use Alien\Models\Authorization\UserDao;
+use Alien\TableViewInterface;
 use DateTime;
 use InvalidArgumentException;
 use PDO;
 use PDOStatement;
-use TableViewInterface;
 
 class CourseDao extends CRUDDaoImpl implements TableViewInterface {
 

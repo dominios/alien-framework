@@ -1,13 +1,6 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: Domino
- * Date: 1.11.2014
- * Time: 17:54
- */
 
 namespace Alien\Models\School;
-
 
 use Alien\DBRecord;
 use Alien\Db\CRUDDaoImpl;
