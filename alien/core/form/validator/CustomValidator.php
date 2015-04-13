@@ -3,18 +3,31 @@
 namespace Alien\Forms\Validator;
 
 use Alien\Application;
-use Alien\DBConfig;
 use Alien\Forms\Input;
 use Alien\Forms\Validator;
-use Alien\Models\Content\Page;
-use Alien\Models\Content\Template;
 use PDO;
 
+/**
+ * Class CustomValidator, wraps custom validation methods in single class.
+ * @package Alien\Forms\Validator
+ */
 class CustomValidator extends Validator {
 
+    /**
+     * @var string name of this class method to call
+     */
     private $methodName;
+
+    /**
+     * @var array custom params
+     */
     private $params;
 
+    /**
+     * @param string $methodName
+     * @param array $params
+     * @param string|null $errorMessage
+     */
     public function  __construct($methodName, $params, $errorMessage = null) {
         $this->methodName = $methodName;
         $this->params = $params;
@@ -32,6 +45,11 @@ class CustomValidator extends Validator {
         return true;
     }
 
+    /**
+     * Checks if given input's value is unique email in database.
+     * @param Input $input
+     * @return bool
+     */
     protected function userUniqueEmail(Input $input) {
         $app = Application::getInstance();
         $DBH = $app->getServiceManager()->getService('PDO');
@@ -42,11 +60,4 @@ class CustomValidator extends Validator {
         return !($Q->rowCount());
     }
 
-    protected function templateUniqueName(Input $input) {
-        return (bool) Template::isTemplateNameInUse($input->getValue(), $this->params['ignore']);
-    }
-
-    protected function pageSeolink(Input $input) {
-        return (bool) Page::isSeolinkInUse($input->getValue(), $this->params['ignore']);
-    }
 }

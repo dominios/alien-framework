@@ -5,11 +5,27 @@ namespace Alien\Forms\Validator;
 use Alien\Forms\Input;
 use Alien\Forms\Validator;
 
+/**
+ * Class RangeValidator, valdidates given number against minimum and maximum value
+ * @package Alien\Forms\Validator
+ */
 class RangeValidator extends Validator {
 
+    /**
+     * @var float
+     */
     private $min;
+
+    /**
+     * @var float
+     */
     private $max;
 
+    /**
+     * @param float $min
+     * @param float $max
+     * @param string|null $errorMessage
+     */
     public function __construct($min, $max, $errorMessage = null) {
         $this->min = $min;
         $this->max = $max;

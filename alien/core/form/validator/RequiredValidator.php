@@ -5,10 +5,17 @@ namespace Alien\Forms\Validator;
 use Alien\Forms\Input;
 use Alien\Forms\Validator;
 
+/**
+ * Class RequiredValidator, tests if is set value of given input and not equals false
+ * @package Alien\Forms\Validator
+ */
 class RequiredValidator extends Validator {
 
     const DEFAULT_ERROR_MESSAGE = "Column %name% is required.";
 
+    /**
+     * @param string|null $errorMessage
+     */
     public function __construct($errorMessage = null) {
         if ($errorMessage !== null) {
             $this->setErrorMessage($errorMessage);

@@ -5,13 +5,29 @@ namespace Alien\Forms\Validator;
 use Alien\Forms\Input;
 use Alien\Forms\Validator;
 
+/**
+ * Class RegexValidator, validates given string input against regular expression
+ * @package Alien\Forms\Validator
+ */
 class RegexValidator extends Validator {
 
     const DEFAULT_ERROR_MESSAGE = 'Entered value does not match regular expression.';
 
+    /**
+     * @var string
+     */
     private $pattern;
+
+    /**
+     * @var string
+     */
     private $modifiers;
 
+    /**
+     * @param string $pattern
+     * @param string|null $modifiers
+     * @param string|null $errorMessage
+     */
     public function __construct($pattern, $modifiers = null, $errorMessage = null) {
         $this->pattern = $pattern;
         $this->setErrorMessage(is_null($errorMessage) ? self::DEFAULT_ERROR_MESSAGE : $errorMessage);
@@ -24,6 +40,10 @@ class RegexValidator extends Validator {
         return true;
     }
 
+    /**
+     * @param string $modifiers
+     * @return $this
+     */
     public function setModifiers($modifiers) {
         $this->modifiers = $modifiers;
         return $this;

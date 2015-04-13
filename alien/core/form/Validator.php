@@ -6,12 +6,6 @@ use Alien\Forms\Validator\CsrfValidator;
 use Alien\Forms\Validator\CustomValidator;
 use Alien\Forms\Validator\RegexValidator;
 use Alien\Forms\Validator\ValidatorException;
-use Alien\Models\Content\Page;
-use Alien\Models\Content\Template;
-use Alien\Notification;
-use PDO;
-use Alien\Application;
-use Alien\DBConfig;
 
 /**
  * Class Validator
@@ -30,6 +24,7 @@ abstract class Validator {
     private $chainBreaking = true;
 
     /**
+     * Validates Input
      * @param Input $input
      * @return bool
      * @throws ValidatorException
@@ -37,7 +32,8 @@ abstract class Validator {
     public abstract function validate(Input $input);
 
     /**
-     * @deprecated
+     * Factory method for CSRF validator
+     * @deprecated should use CsrfValidator directly
      * @return CsrfValidator
      */
     public static function csrf() {
@@ -45,8 +41,9 @@ abstract class Validator {
     }
 
     /**
-     * @deprecated
-     * @param $pattern
+     * Factory method for Regex validator
+     * @deprecated should use RegexValidator directly
+     * @param string $pattern
      * @param null $errorMessage
      * @return RegexValidator
      */
@@ -55,10 +52,11 @@ abstract class Validator {
     }
 
     /**
-     * @deprecated
-     * @param $methodName
-     * @param $params
-     * @param null $errorMessage
+     * Factory method for Custom validator
+     * @deprecated should use CustomValidator directly
+     * @param string $methodName
+     * @param array $params
+     * @param string|null $errorMessage
      * @return Validator
      */
     public static function custom($methodName, $params, $errorMessage = null) {
@@ -66,6 +64,7 @@ abstract class Validator {
     }
 
     /**
+     * Sets message appended to Input if validation result eqauls false.
      * @param string $errorMessage
      * @return Validator
      */
@@ -75,6 +74,7 @@ abstract class Validator {
     }
 
     /**
+     * Returns error message
      * @return string
      */
     public function getErrorMessage() {
@@ -82,6 +82,7 @@ abstract class Validator {
     }
 
     /**
+     * Sets if should continue validating in case of validation result equals to false
      * @param bool $breakChain
      * @return $this
      */
@@ -91,6 +92,7 @@ abstract class Validator {
     }
 
     /**
+     * Returns if should stop validating in first false result
      * @return boolean
      */
     public function isChainBreaking() {

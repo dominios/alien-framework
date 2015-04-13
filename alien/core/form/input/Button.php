@@ -4,8 +4,17 @@ namespace Alien\Forms\Input;
 
 use Alien\Forms\Input;
 
+/**
+ * Class Button, represents HTML buttons
+ * @package Alien\Forms\Input
+ */
 class Button extends Input {
 
+    /**
+     * @param string $action
+     * @param string $text
+     * @param null|string $icon
+     */
     public function __construct($action, $text, $icon = null) {
         parent::__construct('', 'button', null, $action, null);
         $this->icon = $icon;

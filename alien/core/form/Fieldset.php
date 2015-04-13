@@ -10,6 +10,10 @@ use Countable;
 use SeekableIterator;
 use OutOfBoundsException;
 
+/**
+ * Class Fieldset
+ * @package Alien\Forms
+ */
 class Fieldset implements Iterator, Countable, SeekableIterator {
 
     const DEFAULT_VIEW = 'display/common/fieldset.php';
@@ -32,7 +36,7 @@ class Fieldset implements Iterator, Countable, SeekableIterator {
     protected $viewSrc;
 
     /**
-     * @param String $name
+     * @param string $name
      * @throws InvalidArgumentException
      */
     public function __construct($name) {
@@ -45,7 +49,6 @@ class Fieldset implements Iterator, Countable, SeekableIterator {
     }
 
     /**
-     * (PHP 5 &gt;= 5.0.0)<br/>
      * Return the current element
      * @link http://php.net/manual/en/iterator.current.php
      * @return Input current Input field
@@ -55,7 +58,6 @@ class Fieldset implements Iterator, Countable, SeekableIterator {
     }
 
     /**
-     * (PHP 5 &gt;= 5.0.0)<br/>
      * Move forward to next element
      * @link http://php.net/manual/en/iterator.next.php
      * @return void Any returned value is ignored.
@@ -65,7 +67,6 @@ class Fieldset implements Iterator, Countable, SeekableIterator {
     }
 
     /**
-     * (PHP 5 &gt;= 5.0.0)<br/>
      * Return the key of the current element
      * @link http://php.net/manual/en/iterator.key.php
      * @return mixed scalar on success, or null on failure.
@@ -75,7 +76,6 @@ class Fieldset implements Iterator, Countable, SeekableIterator {
     }
 
     /**
-     * (PHP 5 &gt;= 5.0.0)<br/>
      * Checks if current position is valid
      * @link http://php.net/manual/en/iterator.valid.php
      * @return boolean The return value will be casted to boolean and then evaluated.
@@ -86,7 +86,6 @@ class Fieldset implements Iterator, Countable, SeekableIterator {
     }
 
     /**
-     * (PHP 5 &gt;= 5.0.0)<br/>
      * Rewind the Iterator to the first element
      * @link http://php.net/manual/en/iterator.rewind.php
      * @return void Any returned value is ignored.
@@ -96,12 +95,9 @@ class Fieldset implements Iterator, Countable, SeekableIterator {
     }
 
     /**
-     * (PHP 5 &gt;= 5.1.0)<br/>
      * Count elements of an object
      * @link http://php.net/manual/en/countable.count.php
      * @return int The custom count as an integer.
-     * </p>
-     * <p>
      * The return value is cast to an integer.
      */
     public function count() {
@@ -109,12 +105,11 @@ class Fieldset implements Iterator, Countable, SeekableIterator {
     }
 
     /**
-     * (PHP 5 &gt;= 5.1.0)<br/>
      * Seeks to a position
      * @link http://php.net/manual/en/seekableiterator.seek.php
-     * @param int $position <p>
+     * @param int $position
      * The position to seek to.
-     * </p>
+     * @throws \OutOfBoundsException
      * @return void
      */
     public function seek($position) {
@@ -124,10 +119,18 @@ class Fieldset implements Iterator, Countable, SeekableIterator {
         $this->position = $position;
     }
 
+    /**
+     * Push element to fieldset
+     * @param Input $field
+     */
     public function push(Input $field) {
         array_push($this->fields, $field);
     }
 
+    /**
+     * Returns the last element in fieldset, or NULL if fieldset is empty
+     * @return mixed
+     */
     public function pop() {
         return array_pop($this->fields);
     }
@@ -139,24 +142,39 @@ class Fieldset implements Iterator, Countable, SeekableIterator {
         return $this->name;
     }
 
+    /**
+     * Renders fieldset into string
+     * @return string
+     */
     public function __toString() {
         $view = new View(strlen($this->getViewSrc()) ? $this->getViewSrc() : Fieldset::DEFAULT_VIEW);
         $view->fields = $this;
         return $view->__toString();
     }
 
+    /**
+     * Sets path to HTML template
+     * @param string $viewSrc
+     * @return $this
+     */
     public function setViewSrc($viewSrc) {
         $this->viewSrc = $viewSrc;
         return $this;
     }
 
     /**
-     * @return String
+     * @return string
      */
     public function getViewSrc() {
         return $this->viewSrc;
     }
 
+    /**
+     * Returns input with given name. Throws Exception if no element is found.
+     * @param string $name
+     * @return Input
+     * @throws \Exception
+     */
     public function getField($name) {
         foreach ($this->fields as $field) {
             if ($field->getName() === $name) {

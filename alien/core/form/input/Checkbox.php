@@ -4,10 +4,22 @@ namespace Alien\Forms\Input;
 
 use Alien\Forms\Input;
 
+/**
+ * Class Checkbox, represents HTML input type checkbox
+ * @package Alien\Forms\Input
+ */
 class Checkbox extends Input {
 
+    /**
+     * @var bool
+     */
     protected $checked = false;
 
+    /**
+     * @param string $name
+     * @param string $value
+     * @param bool $checked
+     */
     public function __construct($name, $value, $checked = false) {
         parent::__construct($name, 'checkbox', $value, $value);
         $this->checked = $checked;

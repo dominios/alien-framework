@@ -4,8 +4,17 @@ namespace Alien\Forms\Input;
 
 use Alien\Forms\Input;
 
+/**
+ * Class Textarea, represents HTML textarea
+ * @package Alien\Forms\Input
+ */
 class Textarea extends Input {
 
+    /**
+     * @param string $name
+     * @param string $defaultValue
+     * @param string|null $value
+     */
     public function __construct($name, $defaultValue, $value = null) {
         parent::__construct($name, 'textarea', $defaultValue, $value);
     }

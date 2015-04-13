@@ -5,6 +5,10 @@ namespace Alien\Forms\Validator;
 use Alien\Forms\Input;
 use Alien\Forms\Validator;
 
+/**
+ * Class CsrfValidator, protects against Cross-Site Request Forgery attacks
+ * @package Alien\Forms\Validator
+ */
 class CsrfValidator extends Validator {
 
     public function validate(Input $input) {

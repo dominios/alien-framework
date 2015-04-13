@@ -5,6 +5,10 @@ namespace Alien\Forms\Input;
 use Alien\Forms\Input;
 use DateTime;
 
+/**
+ * Class DateTimeLocal, represents HTML input type datetime-local
+ * @package Alien\Forms\Input
+ */
 class DateTimeLocal extends Input {
 
     /**
@@ -17,6 +21,11 @@ class DateTimeLocal extends Input {
      */
     protected $defaultValue;
 
+    /**
+     * @param string $name
+     * @param DateTime $defaultValue
+     * @param DateTime $value
+     */
     public function __construct($name, DateTime $defaultValue = null, DateTime $value = null) {
         parent::__construct($name, 'datetime-local', $defaultValue, $value);
     }

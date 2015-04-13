@@ -5,11 +5,27 @@ namespace Alien\Forms\Validator;
 use Alien\Forms\Input;
 use Alien\Forms\Validator;
 
+/**
+ * Class LengthValidator, validates string input against given minimum and maximum length
+ * @package Alien\Forms\Validator
+ */
 class LengthValidator extends Validator {
 
+    /**
+     * @var int
+     */
     private $min;
+
+    /**
+     * @var int
+     */
     private $max;
 
+    /**
+     * @param int $min
+     * @param int $max
+     * @param string|null $errorMessage
+     */
     public function __construct($min, $max, $errorMessage = null) {
         $this->min = $min;
         $this->max = $max;

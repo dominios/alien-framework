@@ -18,6 +18,12 @@ use Alien\Forms\Validator\ValidatorException;
 use DateTime;
 use InvalidArgumentException;
 
+/**
+ * Abstract representation of every Input
+ *
+ * Class Input
+ * @package Alien\Forms
+ */
 abstract class Input {
 
     /**
@@ -27,7 +33,7 @@ abstract class Input {
     protected static $autoHydrate = true;
 
     /**
-     * Array to use for hydration. Null represents default state in which $_POST is used
+     * Array to use for hydration. Null represents default state in which $_POST superglobal array is used
      * @var null
      */
     protected static $hydratorArray = null;

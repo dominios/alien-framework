@@ -4,8 +4,16 @@ namespace Alien\Forms\Input;
 
 use Alien\Forms\Input;
 
+/**
+ * Class Hidden, represents HTML input type hidden
+ * @package Alien\Forms\Input
+ */
 class Hidden extends Input {
 
+    /**
+     * @param string $name
+     * @param null|string $value
+     */
     public function __construct($name, $value = null) {
         parent::__construct($name, 'hidden', null, $value);
     }

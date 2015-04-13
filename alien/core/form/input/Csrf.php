@@ -4,16 +4,31 @@ namespace Alien\Forms\Input;
 
 use Alien\Forms\Validator;
 
+/**
+ * Class Csrf, use for preventing agains Cross-Site Request Forgery attacks
+ * @package Alien\Forms\Input
+ */
 class Csrf extends Hidden {
 
+    /**
+     * Timetout time for one token in seconds
+     */
     const DEFAULT_TOKEN_TIMEOUT = 3600;
 
+    /**
+     * @param int|null $tokenTimeout
+     */
     public function __construct($tokenTimeout = null) {
         $token = $this->generateToken($tokenTimeout);
         parent::__construct('csrfToken', $token);
         $this->addValidator(Validator::csrf());
     }
 
+    /**
+     * Generate new token
+     * @param int $tokenTimeout
+     * @return mixed
+     */
     private function generateToken($tokenTimeout = null) {
         $token = array(
             'token' => $this->rand_chars(),

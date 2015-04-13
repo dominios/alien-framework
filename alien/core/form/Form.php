@@ -5,6 +5,10 @@ namespace Alien\Forms;
 use Exception;
 use InvalidArgumentException;
 
+/**
+ * Class Form
+ * @package Alien\Forms
+ */
 class Form {
 
     /**
