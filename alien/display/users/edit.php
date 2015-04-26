@@ -137,14 +137,34 @@
 
 
             <div role="tabpanel" class="tab-pane" id="groups">
+                <table class="table table-condensed">
+                    <?
+                    $user = $this->user;
+                    foreach ($this->groups as $group) {
+                        if ($group instanceof \Alien\Models\Authorization\Group && $user instanceof \Alien\Models\Authorization\User) {
+                            echo '<tr>';
+                            if ($user->isMemberOfGroup($group)) {
+                                echo '<td><i class="fa fa-fw fa-check text-success"></i> členom</td>';
+                                echo '<td><i class="fa fa-fw fa-group"></i> ' . $group->getName() . '</td>';
+                                echo '<td><a href="' . \Alien\Router::getRouteUrl('user/removeGroup/' . $user->getId() . '-' . $group->getId()) . '" class="text-danger"><i class="fa fa-fw fa-trash-o"></i></a></td>';
+                            } else {
+                                echo '<td><i class="fa fa-fw fa-times text-danger"></i> nie je členom</td>';
+                                echo '<td><i class="fa fa-fw fa-group"></i> ' . $group->getName() . '</td>';
+                                echo '<td><a href="' . \Alien\Router::getRouteUrl('user/addGroup/' . $user->getId() . '-' . $group->getId()) . '" class="text-primary"><i class="fa fa-fw fa-plus-circle"></i></a></td>';
+                            }
+                            echo "</tr>";
+                        }
+                    }
+                    ?>
+                </table>
                 <?
-                foreach ($this->userGroups as $group):
-                    $partialView = new \Alien\View('display/common/item.php');
-                    $partialView->icon = 'group';
-                    $partialView->item = $group;
-                    $partialView->dropLink = \Alien\Controllers\ BaseController:: staticActionURL('users', 'removeGroup', array('user' => $this->user->getId(), 'group' => $group->getId()));
-                    echo $partialView->renderToString();
-                endforeach;
+                //                foreach ($this->userGroups as $group):
+                //                    $partialView = new \Alien\View('display/common/item.php');
+                //                    $partialView->icon = 'group';
+                //                    $partialView->item = $group;
+                //                    $partialView->dropLink = \Alien\Controllers\ BaseController:: staticActionURL('users', 'removeGroup', array('user' => $this->user->getId(), 'group' => $group->getId()));
+                //                    echo $partialView->renderToString();
+                //                endforeach;
                 ?>
             </div>
             <div role="tabpanel" class="tab-pane" id="permissions">

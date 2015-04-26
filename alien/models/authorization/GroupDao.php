@@ -135,12 +135,14 @@ class GroupDao extends CRUDDaoImpl implements TableViewInterface {
     }
 
     public function getUserGroups(User $user) {
-        $stmt = $this->getConnection()->prepare('SELECT id_g FROM ' . DBConfig::table(DBConfig::GROUP_MEMBERS) . ' WHERE id_u=:id;');
+        $stmt = $this->getConnection()->prepare('SELECT id_g FROM test_group_members WHERE id_u=:id;');
         $stmt->bindValue(':id', $user->getId());
         $result = $this->customQuery($stmt);
-        return array_map(function ($item) {
-                return $this->createFromResultSet($item);
-            }, $result
-        );
+
+        $ret = array();
+        foreach ($result as $r) {
+            $ret[] = $this->find($r['id_g']);
+        }
+        return $ret;
     }
 }

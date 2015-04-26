@@ -112,8 +112,8 @@ return array(
                 'route' => '',
                 'action' => 'viewList'
             ),
-            'list' => array(
-                'route' => '/list',
+            'filter' => array(
+                'route' => '/filter[/:filter]',
                 'action' => 'viewList',
             ),
             'edit' => array(
@@ -123,6 +123,14 @@ return array(
             'remove' => array(
                 'route' => '/remove/:id',
                 'action' => 'remove'
+            ),
+            'addGroup' => array(
+                'route' => '/addGroup/:ug',
+                'action' => 'addGroup'
+            ),
+            'removeGroup' => array(
+                'route' => '/removeGroup/:ug',
+                'action' => 'removeGroup'
             )
         )
     )

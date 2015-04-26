@@ -109,8 +109,8 @@ abstract class CRUDDaoImpl implements CRUDDao {
      *
      * @return DBRecord[]
      */
-    public function getList() {
-        $stmt = $this->prepareSelectAllStatement();
+    public function getList($filter = null) {
+        $stmt = $this->prepareSelectAllStatement($filter);
         $result = $this->execute($stmt);
         $ret = array();
         foreach ($result as $row) {

@@ -332,6 +332,16 @@ class User implements DBRecord {
 //        }
 //    }
 
+    public function isMemberOfGroup(Group $group) {
+        foreach ($this->getGroups() as $g) {
+            if ($g->getId() == $group->getId()) {
+                return true;
+            }
+        }
+        return false;
+
+    }
+
     public function getEmail() {
         return $this->email;
     }

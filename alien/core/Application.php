@@ -185,6 +185,11 @@ final class Application {
 
             header('Content-Type: text/html; charset=utf-8'); // TODO typ podla response!
 
+//            Notification::success("Vzorové úspešné hlásenie.");
+//            Notification::information("Vzorové informatívne hlásenie.");
+//            Notification::warning("Vzorové varovanie.");
+//            Notification::error("Vzorová chyba.");
+
             $responses = $controller->getResponses();
             foreach ($responses as $response) {
                 $layout->handleResponse($response);

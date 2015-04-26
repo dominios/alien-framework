@@ -81,9 +81,14 @@ class UserDao extends CRUDDaoImpl implements TableViewInterface {
     /**
      * @return PDOStatement
      */
-    protected function prepareSelectAllStatement() {
+    protected function prepareSelectAllStatement($filter = null) {
         $conn = $this->getConnection();
-        return $conn->prepare('SELECT * FROM test_users WHERE deleted <> 1');
+        $and = array(true);
+        $and[] = 'deleted <> 1';
+        if ($filter) {
+            $and[] .= 'id_g = ' . $filter;
+        }
+        return $conn->prepare('SELECT * FROM test_users u JOIN test_group_members gm ON gm.id_u = u.id_u WHERE ' . implode(' AND ', $and));
     }
 
     /**
@@ -178,4 +183,20 @@ class UserDao extends CRUDDaoImpl implements TableViewInterface {
         $result = $this->customQuery($stmt);
         return $this->createFromResultSet($result[0]);
     }
+
+    public function addGroup(User $user, Group $group) {
+        $stmt = $this->getConnection()->prepare('INSERT INTO test_group_members (id_u, id_g, since) VALUES (:u, :g, :s);');
+        $stmt->bindValue(':u', $user->getId());
+        $stmt->bindValue(':g', $group->getId());
+        $stmt->bindValue(':s', time());
+        return $this->customQuery($stmt);
+    }
+
+    public function removeGroup(User $user, Group $group) {
+        $stmt = $this->getConnection()->prepare('DELETE FROM test_group_members WHERE id_u=:u && id_g=:g');
+        $stmt->bindValue(':u', $user->getId());
+        $stmt->bindValue(':g', $group->getId());
+        return $this->customQuery($stmt);
+    }
+
 }

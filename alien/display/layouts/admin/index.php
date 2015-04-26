@@ -57,13 +57,13 @@
                     </a>
                     <ul class="dropdown-menu">
                         <li>
-                            <a href="<?= \Alien\Router::getRouteUrl('user'); ?>"><i class="fa fa-fw fa-graduation-cap"></i> Učitelia</a>
+                            <a href="<?= \Alien\Router::getRouteUrl('user/filter/4'); ?>"><i class="fa fa-fw fa-graduation-cap"></i> Učitelia</a>
                         </li>
                         <li>
-                            <a href="<?= \Alien\Router::getRouteUrl('user'); ?>"><i class="fa fa-fw fa-user"></i> Študenti</a>
+                            <a href="<?= \Alien\Router::getRouteUrl('user/filter/3'); ?>"><i class="fa fa-fw fa-group"></i> Študenti</a>
                         </li>
                         <li>
-                            <a href="<?= \Alien\Router::getRouteUrl('group'); ?>"><i class="fa fa-fw fa-key"></i> Oprávnenia</a>
+                            <a href="<?= \Alien\Router::getRouteUrl('user'); ?>"><i class="fa fa-fw fa-user"></i> Všetci</a>
                         </li>
                     </ul>
                 </li>

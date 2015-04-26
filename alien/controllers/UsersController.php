@@ -65,10 +65,27 @@ class UsersController extends BaseController {
             throw new FordbiddenException('Neodstatočné oprávnenia.');
         }
 
+        $filter = $this->getParam('filter');
+
+        switch ($filter) {
+            case 1:
+                $zoznam = 'adminov';
+                break;
+            case 4:
+                $zoznam = 'učiteľov';
+                break;
+            case 3:
+                $zoznam = 'študentov';
+                break;
+            default:
+                $zoznam = 'používateľov';
+                break;
+        }
+
         $dao = $this->getServiceManager()->getDao('UserDao');
-        $data = $dao->getTableData($dao->getList());
+        $data = $dao->getTableData($dao->getList($filter));
         $table = new DataTable($data);
-        $table->setName('Zoznam pužívateľov');
+        $table->setName('Zoznam ' . $zoznam);
 
         if ($this->authorization->getCurrentUser()->hasPermission('USER_ADMIN')) {
             $table->addHeaderColumn(array('edit' => ''));
@@ -82,7 +99,7 @@ class UsersController extends BaseController {
         $this->view->table = $table;
 
         return new Response(array(
-                'Title' => 'Zoznam používateľov',
+                'Title' => 'Zoznam ' . $zoznam,
                 'ContentMain' => $this->view
             )
         );
@@ -101,6 +118,9 @@ class UsersController extends BaseController {
             Notification::error('Nedostatočné oprávnenia.');
             $this->redirect(BaseController::staticActionURL('dashboard', 'home'));
         }
+
+
+        $groups = $this->serviceManager->getDao('GroupDao')->getList();
 
         $user = $this->userDao->find($this->getParam('id'));
 
@@ -140,6 +160,7 @@ class UsersController extends BaseController {
         $view = new View('display/users/edit.php', $this);
         $view->form = $form;
         $view->user = $user;
+        $view->groups = $groups;
 
         $view->userGroups = $user->getGroups();
         $view->userPermissions = $user->getPermissions(true);
@@ -166,33 +187,19 @@ class UsersController extends BaseController {
     }
 
     protected function addGroup() {
-
-        if (!Authorization::getCurrentUser()->hasPermission(array('USERS_VIEW', 'USER_ADMIN'))) {
-            Notification::error('Nedostatočné oprávnenia.');
-            $this->redirect(BaseController::staticActionURL('dashboard', 'home'));
-        }
-
-        if (User::exists($_GET['user']) && Group::exists($_GET['group'])) {
-            $user = new User($_GET['user']);
-            $group = new Group($_GET['group']);
-            $user->addGroup($group);
-        }
-        $this->redirect(BaseController::staticActionURL('users', 'edit', array('id' => $user->getId())));
+        $params = explode('-', $this->getParam('ug'));
+        $user = $this->userDao->find($params[0]);
+        $group = $this->serviceManager->getDao('GroupDao')->find($params[1]);
+        $this->userDao->addGroup($user, $group);
+        $this->redirect('/alien/user/edit/' . $user->getId());
     }
 
     protected function removeGroup() {
-
-        if (!Authorization::getCurrentUser()->hasPermission(array('USERS_VIEW', 'USER_ADMIN'))) {
-            Notification::error('Nedostatočné oprávnenia.');
-            $this->redirect(BaseController::staticActionURL('dashboard', 'home'));
-        }
-
-        if (User::exists($_GET['user']) && Group::exists($_GET['group'])) {
-            $user = new User($_GET['user']);
-            $group = new Group($_GET['group']);
-            $user->removeGroup($group);
-        }
-        $this->redirect(BaseController::staticActionURL('users', 'edit', array('id' => $user->getId())));
+        $params = explode('-', $this->getParam('ug'));
+        $user = $this->userDao->find($params[0]);
+        $group = $this->serviceManager->getDao('GroupDao')->find($params[1]);
+        $this->userDao->removeGroup($user, $group);
+        $this->redirect('/alien/user/edit/' . $user->getId());
     }
 
     protected function addPermission() {
