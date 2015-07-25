@@ -2,8 +2,8 @@
 
 namespace Alien;
 
-use \PDO;
 use Alien\Models\Authorization\User;
+use PDO;
 
 class Message implements DBRecord {
 

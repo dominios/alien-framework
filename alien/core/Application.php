@@ -4,12 +4,9 @@ namespace Alien;
 
 use Alien\Controllers\BaseController;
 use Alien\Db\Connection;
-use Alien\Models\Authorization\Authorization;
-use Alien\Models\Authorization\Group;
-use Alien\Models\Authorization\GroupDao;
-use Alien\Models\Authorization\User;
-use Alien\Models\Authorization\UserDao;
 use Alien\Di\ServiceManager;
+use Alien\Models\Authorization\Authorization;
+use Alien\Models\Authorization\User;
 use BadFunctionCallException;
 use Exception;
 use PDO;
@@ -76,6 +73,21 @@ final class Application {
 
         self::$boot = true;
         $app = Application::getInstance();
+
+        if($app->config['autoload']) {
+            foreach($app->config['autoload'] as $dir) {
+                $dh = \opendir($dir);
+                if ($dh) {
+                    while (false !== ($file = readdir($dh))) {
+                        if (!is_dir($dir . '/' . $file)) {
+                            include_once $dir . '/' . $file;;
+                        }
+                    }
+                    closedir($dh);
+                }
+            }
+        }
+
         date_default_timezone_set($app->config['timezone']);
         $app->console = Terminal::getInstance();
 

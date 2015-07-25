@@ -4,7 +4,7 @@ namespace Alien\Form\Validator;
 
 use Alien\Application;
 use Alien\Form\Input;
-use Alien\Form\Validator;
+use Alien\Form\Validator\Exception\ValidatorException;
 use PDO;
 
 /**

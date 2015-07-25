@@ -63,32 +63,44 @@ function class_autoloader($class) {
         include 'plugins/phpmailer/class.phpmailer.php';
     }
 
-    $class = str_replace(__NAMESPACE__ . '\\', '', $class);
 
-    // core sa nacita vzdy cele
-    $autoloadDirectories = array();
-    $autoloadDirectories[] = 'core';
-    $autoloadDirectories[] = 'core/Di';
-    $autoloadDirectories[] = 'core/Di/Exception';
-    $autoloadDirectories[] = 'core/Form';
-    $autoloadDirectories[] = 'core/Form/Input';
-    $autoloadDirectories[] = 'core/Form/Validator';
-    $autoloadDirectories[] = 'core/table';
-    $autoloadDirectories[] = 'layouts';
-    $autoloadDirectories[] = 'core/Db';
-//    $autoloadDirectories[] = 'core/annotation';
-
-    foreach ($autoloadDirectories as $dir) {
-        $dh = \opendir($dir);
-        if ($dh) {
-            while (false !== ($file = readdir($dh))) {
-                if (!is_dir($dir . '/' . $file)) {
-                    include_once $dir . '/' . $file;;
-                }
-            }
-            closedir($dh);
+    if(strpos($class, __NAMESPACE__) !== false) {
+        $searchedFile = getcwd() . '\core\\' . str_replace(__NAMESPACE__ . '\\', '', $class) . '.php';
+        if (file_exists($searchedFile)) {
+            require_once $searchedFile;
+        } else {
+//            var_dump($searchedFile);
+//            throw new \RuntimeException("Class $class could not be loaded from file $searchedFile");
         }
     }
+
+    $class = str_replace(__NAMESPACE__ . '\\', '', $class);
+
+//    // core sa nacita vzdy cele
+//    $autoloadDirectories = array();
+//    $autoloadDirectories[] = 'core';
+//    $autoloadDirectories[] = 'core/Di';
+//    $autoloadDirectories[] = 'core/Di/Exception';
+//    $autoloadDirectories[] = 'core/Form';
+//    $autoloadDirectories[] = 'core/Form/Input';
+//    $autoloadDirectories[] = 'core/Form/Validator';
+//    $autoloadDirectories[] = 'core/Form/Validator/Exception';
+//    $autoloadDirectories[] = 'core/table';
+//    $autoloadDirectories[] = 'layouts';
+//    $autoloadDirectories[] = 'core/Db';
+////    $autoloadDirectories[] = 'core/annotation';
+//
+//    foreach ($autoloadDirectories as $dir) {
+//        $dh = \opendir($dir);
+//        if ($dh) {
+//            while (false !== ($file = readdir($dh))) {
+//                if (!is_dir($dir . '/' . $file)) {
+//                    include_once $dir . '/' . $file;;
+//                }
+//            }
+//            closedir($dh);
+//        }
+//    }
 
     // controllery
     if (preg_match('/(.*)Controller$/', $class)) {

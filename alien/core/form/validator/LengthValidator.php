@@ -3,11 +3,11 @@
 namespace Alien\Form\Validator;
 
 use Alien\Form\Input;
-use Alien\Form\Validator;
+use Alien\Form\Validator\Exception\ValidatorException;
 
 /**
  * Class LengthValidator, validates string input against given minimum and maximum length
- * @package Alien\Forms\Validator
+ * @package Alien\Form\Validator
  */
 class LengthValidator extends Validator {
 

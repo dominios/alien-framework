@@ -3,7 +3,6 @@
 namespace Alien\Form\Validator;
 
 use Alien\Form\Input;
-use Alien\Form\Validator;
 
 /**
  * Class RequiredValidator, tests if is set value of given input and not equals false

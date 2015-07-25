@@ -4,6 +4,7 @@ namespace Alien\Form\Validator;
 
 use Alien\Form\Input;
 use Alien\Form\Validator;
+use Alien\Form\Validator\Exception\ValidatorException;
 
 /**
  * Class CsrfValidator, protects against Cross-Site Request Forgery attacks

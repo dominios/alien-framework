@@ -1,6 +1,6 @@
 <?php
 
-namespace Alien;
+namespace Alien\Table;
 
 interface TableViewInterface {
 

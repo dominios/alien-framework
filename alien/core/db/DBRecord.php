@@ -1,6 +1,6 @@
 <?php
 
-namespace Alien;
+namespace Alien\Db;
 
 /**
  * Interface DBRecord

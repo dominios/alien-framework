@@ -1,17 +1,15 @@
 <?php
 
-namespace Alien\Form;
+namespace Alien\Form\Validator;
 
-use Alien\Form\Validator\CsrfValidator;
-use Alien\Form\Validator\CustomValidator;
-use Alien\Form\Validator\RegexValidator;
-use Alien\Form\Validator\ValidatorException;
+use Alien\Form\Input;
+use Alien\Form\Validator\Exception\ValidatorException;
 
 /**
  * Class Validator
- * @package Alien\Forms
+ * @package Alien\Form\Validator
  */
-abstract class Validator {
+abstract class Validator implements ValidatorInterface {
 
     /**
      * @var string Message to print if validation fails

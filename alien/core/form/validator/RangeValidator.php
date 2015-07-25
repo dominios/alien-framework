@@ -3,7 +3,7 @@
 namespace Alien\Form\Validator;
 
 use Alien\Form\Input;
-use Alien\Form\Validator;
+use Alien\Form\Validator\Exception\ValidatorException;
 
 /**
  * Class RangeValidator, valdidates given number against minimum and maximum value

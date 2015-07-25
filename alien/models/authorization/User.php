@@ -2,11 +2,9 @@
 
 namespace Alien\Models\Authorization;
 
-use DateTime;
-use PDO;
 use Alien\Application;
-use Alien\DBRecord;
-use Alien\DBConfig;
+use Alien\Db\DBRecord;
+use DateTime;
 
 class User implements DBRecord {
 

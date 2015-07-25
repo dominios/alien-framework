@@ -6,7 +6,7 @@ use Alien\DBRecord;
 use Alien\Db\CRUDDaoImpl;
 use Alien\DBConfig;
 use Alien\Di\ServiceManager;
-use Alien\TableViewInterface;
+use Alien\Table\TableViewInterface;
 use DateTime;
 use InvalidArgumentException;
 use PDO;
