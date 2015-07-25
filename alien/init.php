@@ -69,6 +69,8 @@ function class_autoloader($class) {
     $autoloadDirectories = array();
     $autoloadDirectories[] = 'core';
     $autoloadDirectories[] = 'core/form';
+    $autoloadDirectories[] = 'core/Di';
+    $autoloadDirectories[] = 'core/Di/Exception';
     $autoloadDirectories[] = 'core/form/input';
     $autoloadDirectories[] = 'core/form/validator';
     $autoloadDirectories[] = 'core/table';

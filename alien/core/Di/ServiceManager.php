@@ -1,17 +1,14 @@
 <?php
 
-namespace Alien;
+namespace Alien\Di;
 
 use Alien\Db\CRUDDao;
+use Alien\Di\Exception\InvalidServiceException;
+use Alien\Di\Exception\ServiceAlreadyExistsException;
+use Alien\Di\Exception\ServiceNotFoundException;
 use ReflectionClass;
 
-interface IServiceManager {
-    public function registerService($service);
-
-    public function getService($name);
-}
-
-final class ServiceManager implements IServiceManager {
+final class ServiceManager implements ServiceManagerInterface {
 
     /**
      * @var ServiceManager
@@ -22,6 +19,9 @@ final class ServiceManager implements IServiceManager {
      * @var array
      */
     private $services = array();
+
+    /** @var array */
+    private $factories = array();
 
     private function __construct() {
     }
@@ -37,7 +37,8 @@ final class ServiceManager implements IServiceManager {
      */
     public static function initialize(array $config) {
         if (self::$instance === null) {
-            self::$instance = new ServiceManager;
+            self::$instance = new self;
+            self::$instance->factories = $config['factories'];
         }
         return self::$instance;
     }
@@ -52,16 +53,30 @@ final class ServiceManager implements IServiceManager {
      * @return object
      */
     public function getService($name) {
+
+        if(array_key_exists($name, $this->services)) {
+            return $this->services[$name];
+        }
+
+        if(array_key_exists($name, $this->factories)) {
+            $service = $this->factories[$name]($this);
+            $this->registerService($service);
+            return $service;
+        }
+
+        throw new ServiceNotFoundException("Service $name is not registered.");
+
+
         $test = strpos($name, '\\');
         if (!$test) {
             if (!array_key_exists($name, $this->services)) {
-                throw new ServiceManagerException("Multiple services with name $name registered, namespace required.");
+                throw new ServiceNotFoundException("Multiple or none services with name $name registered, namespace required.");
             }
         } elseif ($test != 0) {
             $name = '\\' . $name;
         }
         if (!array_key_exists($name, $this->services)) {
-            throw new ServiceManagerException("Requested service $name is not available.");
+            throw new ServiceNotFoundException("Requested service $name is not available.");
         }
         return $this->services[$name];
     }
@@ -80,7 +95,7 @@ final class ServiceManager implements IServiceManager {
         if ($dao instanceof CRUDDao) {
             return $dao;
         } else {
-            throw new ServiceManagerException("No DAO service registered with name '$name'.");
+            throw new ServiceNotFoundException("No DAO service registered with name '$name'.");
         }
     }
 
@@ -95,16 +110,17 @@ final class ServiceManager implements IServiceManager {
      * @param object $service
      * @throws ServiceManagerException
      */
-    public function registerService($service) {
+    public function registerService($service, $name = null) {
+
         if (!is_object($service)) {
-            throw new ServiceManagerException("Injected service is invalid.");
+            throw new InvalidServiceException("Injected service is invalid.");
         }
 
         $reflection = new ReflectionClass($service);
 
         $namespaceName = '\\' . $reflection->getName();
         if (array_key_exists($namespaceName, $this->services)) {
-            throw new ServiceManagerException("Service $namespaceName already registered.");
+            throw new ServiceAlreadyExistsException("Service $namespaceName already registered.");
         }
         $this->services[$namespaceName] = $service;
 

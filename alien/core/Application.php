@@ -9,11 +9,7 @@ use Alien\Models\Authorization\Group;
 use Alien\Models\Authorization\GroupDao;
 use Alien\Models\Authorization\User;
 use Alien\Models\Authorization\UserDao;
-use Alien\Models\School\BuildingDao;
-use Alien\Models\School\CourseDao;
-use Alien\Models\School\RoomDao;
-use Alien\Models\School\ScheduleEventDao;
-use Alien\Models\School\TeacherDao;
+use Alien\Di\ServiceManager;
 use BadFunctionCallException;
 use Exception;
 use PDO;
@@ -57,7 +53,7 @@ final class Application {
     private $router;
 
     private function __construct() {
-        $this->config = parse_ini_file('config.ini');
+        $this->config = include 'config.php';
     }
 
     public static final function getInstance() {
@@ -68,7 +64,7 @@ final class Application {
     }
 
     /**
-     * Initialize applicatin. Can be run only once.
+     * Initialize application. Can be run only once.
      *
      * @throws RuntimeException
      */
@@ -90,29 +86,14 @@ final class Application {
         $app->serviceManager = $sm;
 
         $connection = new Connection(array(
-            'host' => $app->config['dbHost'],
-            'database' => $app->config['dbDatabase'],
-            'username' => $app->config['dbUsername'],
-            'password' => $app->config['dbPassword'],
-            'prefix' => $app->config['dbPrefix']
+            'host' => $app->config['database']['host'],
+            'database' => $app->config['database']['database'],
+            'username' => $app->config['database']['user'],
+            'password' => $app->config['database']['password'],
+            'prefix' => $app->config['database']['prefix']
         ));
 
         $sm->registerService($connection->getPDO());
-
-        $userDao = new UserDao($connection->getPDO(), $sm);
-        $groupDao = new GroupDao($connection->getPDO(), $userDao);
-        $buildingDao = new BuildingDao($connection->getPDO());
-        $courseDao = new CourseDao($connection->getPDO(), $userDao);
-        $roomDao = new RoomDao($connection->getPDO(), $buildingDao, $userDao);
-        $scheduleEventDao = new ScheduleEventDao($connection->getPDO(), $courseDao, $roomDao);
-        $teacherDao = new TeacherDao($connection->getPDO(), $sm);
-        $sm->registerService($userDao);
-        $sm->registerService($groupDao);
-        $sm->registerService($buildingDao);
-        $sm->registerService($courseDao);
-        $sm->registerService($roomDao);
-        $sm->registerService($scheduleEventDao);
-        $sm->registerService($teacherDao);
 
         $auth = Authorization::getInstance($sm);
         $app->authorization = $auth;

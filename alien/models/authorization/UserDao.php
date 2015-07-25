@@ -5,7 +5,7 @@ namespace Alien\Models\Authorization;
 use Alien\DBRecord;
 use Alien\Db\CRUDDaoImpl;
 use Alien\DBConfig;
-use Alien\ServiceManager;
+use Alien\Di\ServiceManager;
 use Alien\TableViewInterface;
 use DateTime;
 use InvalidArgumentException;

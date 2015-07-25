@@ -5,8 +5,8 @@ namespace Alien\Models\Authorization;
 use Alien\Application;
 use Alien\Db\RecordNotFoundException;
 use Alien\DBConfig;
-use Alien\ServiceManager;
-use Alien\ServiceManagerException;
+use Alien\Di\ServiceManager;
+use Alien\Di\Exception\ServiceNotFoundException;
 use PDO;
 
 class Authorization {

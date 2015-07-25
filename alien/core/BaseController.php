@@ -3,10 +3,11 @@
 namespace Alien\Controllers;
 
 use Alien\Application;
+use Alien\Di\ServiceManager;
 use Alien\Layout\ErrorLayout;
 use Alien\Router;
 use Alien\RouterException;
-use Alien\ServiceManager;
+use Alien\Di;
 use Alien\Terminal;
 use Alien\Response;
 use Alien\Models\Authorization\Authorization;
@@ -128,8 +129,8 @@ class BaseController {
 
     /**
      * Run all actions
-     *
      * @return array
+     * @throws RouterException
      */
     public final function getResponses() {
 
@@ -329,36 +330,6 @@ class BaseController {
      */
     public static function getRefererActionURL() {
         return BaseController::staticActionURL(BaseController::getControllerFromURL($_SERVER['HTTP_REFERER']), BaseController::getActionFromURL($_SERVER['HTTP_REFERER'], true));
-    }
-
-    /**
-     * Perform login action
-     *
-     * @deprecated
-     */
-    private function login() {
-        if (isset($_POST['loginFormSubmit'])) {
-            if (!Authorization::getInstance()->isLoggedIn()) {
-                Authorization::getInstance()->login($_POST['login'], $_POST['pass']);
-                $user = Authorization::getCurrentUser();
-                if ($user instanceof User) {
-                    if (Message::getUnreadCount($user)) {
-                        Notification::newMessages("");
-                    }
-                }
-            }
-        }
-        $this->redirect(BaseController::staticActionURL('dashboard', 'home'));
-    }
-
-    /**
-     * Perform logout action
-     *
-     * @deprecated
-     */
-    private function logout() {
-        $this->getServiceManager()->getService('Authorization')->logout();
-        $this->redirect(Router::getRouteUrl(''));
     }
 
     /**
