@@ -1,6 +1,6 @@
 <?php
 
-namespace Alien\Forms\Validator;
+namespace Alien\Form\Validator;
 
 use Exception;
 

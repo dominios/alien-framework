@@ -3,7 +3,7 @@
 namespace Alien\Table;
 
 
-use Alien\Forms\Input;
+use Alien\Form\Input;
 use Alien\View;
 
 class Table {

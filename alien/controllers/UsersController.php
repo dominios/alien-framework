@@ -13,10 +13,10 @@ use Alien\Models\Authorization\Group;
 use Alien\Models\Authorization\Permission;
 use Alien\Models\Authorization\Authorization;
 use Alien\Controllers\BaseController;
-use Alien\Forms\Form;
-use Alien\Forms\Input;
-use Alien\Forms\Validator;
-use Alien\Forms\Users\EditForm;
+use Alien\Form\Form;
+use Alien\Form\Input;
+use Alien\Form\Validator;
+use Alien\Form\Users\EditForm;
 
 class UsersController extends BaseController {
 

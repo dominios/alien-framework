@@ -1,11 +1,11 @@
 <?php
 
-namespace Alien\Forms;
+namespace Alien\Form;
 
-use Alien\Forms\Validator\CsrfValidator;
-use Alien\Forms\Validator\CustomValidator;
-use Alien\Forms\Validator\RegexValidator;
-use Alien\Forms\Validator\ValidatorException;
+use Alien\Form\Validator\CsrfValidator;
+use Alien\Form\Validator\CustomValidator;
+use Alien\Form\Validator\RegexValidator;
+use Alien\Form\Validator\ValidatorException;
 
 /**
  * Class Validator

@@ -68,14 +68,14 @@ function class_autoloader($class) {
     // core sa nacita vzdy cele
     $autoloadDirectories = array();
     $autoloadDirectories[] = 'core';
-    $autoloadDirectories[] = 'core/form';
     $autoloadDirectories[] = 'core/Di';
     $autoloadDirectories[] = 'core/Di/Exception';
-    $autoloadDirectories[] = 'core/form/input';
-    $autoloadDirectories[] = 'core/form/validator';
+    $autoloadDirectories[] = 'core/Form';
+    $autoloadDirectories[] = 'core/Form/Input';
+    $autoloadDirectories[] = 'core/Form/Validator';
     $autoloadDirectories[] = 'core/table';
     $autoloadDirectories[] = 'layouts';
-    $autoloadDirectories[] = 'core/db';
+    $autoloadDirectories[] = 'core/Db';
 //    $autoloadDirectories[] = 'core/annotation';
 
     foreach ($autoloadDirectories as $dir) {

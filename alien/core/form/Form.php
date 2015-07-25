@@ -1,6 +1,6 @@
 <?php
 
-namespace Alien\Forms;
+namespace Alien\Form;
 
 use Exception;
 use InvalidArgumentException;

@@ -1,11 +1,11 @@
 <?php
 
-namespace Alien\Forms\Group;
+namespace Alien\Form\Group;
 
-use Alien\Forms\Fieldset;
-use Alien\Forms\Form;
-use Alien\Forms\Input;
-use Alien\Forms\Validator;
+use Alien\Form\Fieldset;
+use Alien\Form\Form;
+use Alien\Form\Input;
+use Alien\Form\Validator;
 use Alien\Controllers\BaseController;
 use Alien\Models\Authorization\Group;
 

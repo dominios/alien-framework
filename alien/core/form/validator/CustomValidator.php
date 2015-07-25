@@ -1,10 +1,10 @@
 <?php
 
-namespace Alien\Forms\Validator;
+namespace Alien\Form\Validator;
 
 use Alien\Application;
-use Alien\Forms\Input;
-use Alien\Forms\Validator;
+use Alien\Form\Input;
+use Alien\Form\Validator;
 use PDO;
 
 /**

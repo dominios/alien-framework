@@ -3,7 +3,7 @@
 namespace Alien\Layout;
 
 use Alien\Controllers\BaseController;
-use Alien\Forms\Input;
+use Alien\Form\Input;
 use Alien\Models\Authorization\Authorization;
 
 // perm testy dorobit !

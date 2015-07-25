@@ -1,10 +1,10 @@
 <?php
 
-namespace Alien\Forms\Users;
+namespace Alien\Form\Users;
 
-use Alien\Forms\Form;
-use Alien\Forms\Input;
-use Alien\Forms\Validator;
+use Alien\Form\Form;
+use Alien\Form\Input;
+use Alien\Form\Validator;
 use Alien\Controllers\BaseController;
 use Alien\Models\Authorization\User;
 

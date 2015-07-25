@@ -1,8 +1,8 @@
 <?php
 
-namespace Alien\Forms\Input;
+namespace Alien\Form\Input;
 
-use Alien\Forms\Validator;
+use Alien\Form\Validator;
 
 /**
  * Class Csrf, use for preventing agains Cross-Site Request Forgery attacks

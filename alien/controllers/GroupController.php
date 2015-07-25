@@ -3,8 +3,8 @@
 namespace Alien\Controllers;
 
 use Alien\Db\RecordNotFoundException;
-use Alien\Forms\Group\EditForm;
-use Alien\Forms\Input;
+use Alien\Form\Group\EditForm;
+use Alien\Form\Input;
 use Alien\Models\Authorization\GroupDao;
 use Alien\Table\DataTable;
 use Alien\View;

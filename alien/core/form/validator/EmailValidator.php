@@ -1,8 +1,8 @@
 <?php
 
-namespace Alien\Forms\Validator;
+namespace Alien\Form\Validator;
 
-use Alien\Forms\Validator;
+use Alien\Form\Validator;
 
 /**
  * Class EmailValidator, validates if value is valid email address

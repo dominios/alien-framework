@@ -1,9 +1,9 @@
 <?php
 
-namespace Alien\Forms\Validator;
+namespace Alien\Form\Validator;
 
-use Alien\Forms\Input;
-use Alien\Forms\Validator;
+use Alien\Form\Input;
+use Alien\Form\Validator;
 
 /**
  * Class RequiredValidator, tests if is set value of given input and not equals false

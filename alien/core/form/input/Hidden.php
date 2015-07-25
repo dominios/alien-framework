@@ -1,8 +1,8 @@
 <?php
 
-namespace Alien\Forms\Input;
+namespace Alien\Form\Input;
 
-use Alien\Forms\Input;
+use Alien\Form\Input;
 
 /**
  * Class Hidden, represents HTML input type hidden

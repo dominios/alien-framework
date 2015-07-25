@@ -1,6 +1,6 @@
 <? foreach ($this->fields as $field): ?>
 
-    <? if ($field instanceof \Alien\Forms\Input\Hidden):
+    <? if ($field instanceof \Alien\Form\Input\Hidden):
         echo $field;
         continue;
     endif;?>

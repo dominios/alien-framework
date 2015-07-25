@@ -1,20 +1,20 @@
 <?php
 
-namespace Alien\Forms;
+namespace Alien\Form;
 
-use Alien\Forms\Input\Button;
-use Alien\Forms\Input\Checkbox;
-use Alien\Forms\Input\Color;
-use Alien\Forms\Input\Csrf;
-use Alien\Forms\Input\DateTimeLocal;
-use Alien\Forms\Input\Hidden;
-use Alien\Forms\Input\Password;
-use Alien\Forms\Input\Radio;
-use Alien\Forms\Input\Select;
-use Alien\Forms\Input\Submit;
-use Alien\Forms\Input\Text;
-use Alien\Forms\Input\Textarea;
-use Alien\Forms\Validator\ValidatorException;
+use Alien\Form\Input\Button;
+use Alien\Form\Input\Checkbox;
+use Alien\Form\Input\Color;
+use Alien\Form\Input\Csrf;
+use Alien\Form\Input\DateTimeLocal;
+use Alien\Form\Input\Hidden;
+use Alien\Form\Input\Password;
+use Alien\Form\Input\Radio;
+use Alien\Form\Input\Select;
+use Alien\Form\Input\Submit;
+use Alien\Form\Input\Text;
+use Alien\Form\Input\Textarea;
+use Alien\Form\Validator\ValidatorException;
 use DateTime;
 use InvalidArgumentException;
 

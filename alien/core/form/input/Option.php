@@ -1,8 +1,8 @@
 <?php
 
-namespace Alien\Forms\Input;
+namespace Alien\Form\Input;
 
-use Alien\Forms\Input;
+use Alien\Form\Input;
 
 /**
  * Class Option, represents options for select and radio inputs
