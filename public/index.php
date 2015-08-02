@@ -20,6 +20,9 @@ $urls = [
 try {
     Application::boot();
     $app = Application::getInstance();
+
+    $router = $app->getServiceManager()->getService('Router');
+
     $app->run();
 } catch (\Exception $e) {
     echo "<h1>Internal Server Error</h1>";

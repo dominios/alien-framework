@@ -91,11 +91,10 @@ final class Application {
         date_default_timezone_set($app->config['timezone']);
         $app->console = Terminal::getInstance();
 
-        $router = new Router();
-        $app->router = $router;
-
         $sm = ServiceManager::initialize($app->config);
         $app->serviceManager = $sm;
+
+        $app->router = $sm->getService('Router');
 
         $connection = new Connection(array(
             'host' => $app->config['database']['host'],
