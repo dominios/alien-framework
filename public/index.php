@@ -18,12 +18,30 @@ $urls = [
 ];
 
 try {
+
+    header("Content-Type: text/plain; charset=UTF8");
+
     Application::boot();
     $app = Application::getInstance();
 
+    /* @var Alien\Routing\Router $router */
     $router = $app->getServiceManager()->getService('Router');
 
-    $app->run();
+    foreach($urls as $u) {
+        echo "Test URL: " . $u . "\n";
+        try {
+            $match = $router->getMatch($u);
+            echo "Match: ";
+            echo print_r($match);
+            echo "\n";
+        } catch (\Alien\Routing\Exception\RouteNotFoundException $e) {
+            echo "Route not found\n";
+        }
+        echo "\n";
+    }
+
+//    $app->run();
+
 } catch (\Exception $e) {
     echo "<h1>Internal Server Error</h1>";
     echo "<strong>" . get_class($e) . ": " . $e->getMessage() . "</strong> at <strong>" . $e->getFile() . "</strong> on line <strong>" . $e->getLine() . "</strong>";

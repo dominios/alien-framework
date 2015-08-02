@@ -5,7 +5,7 @@ namespace Alien\Controllers;
 use Alien\Application;
 use Alien\Di\ServiceManager;
 use Alien\Layout\ErrorLayout;
-use Alien\Router;
+use Alien\Routing;
 use Alien\RouterException;
 use Alien\Di;
 use Alien\Terminal;

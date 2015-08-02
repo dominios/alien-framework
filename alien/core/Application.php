@@ -147,7 +147,7 @@ final class Application {
             if (!$auth->isLoggedIn()) {
                 $route = $this->router->getRoute('login');
             } else {
-                $route = $this->router->findMatch($request);
+                $route = $this->router->getMatch($request);
             }
 
             if (!$auth->isLoggedIn()) {

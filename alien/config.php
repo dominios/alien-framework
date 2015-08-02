@@ -14,7 +14,8 @@ return [
 
     'factories' => [
         'Router' => function(\Alien\Di\ServiceManager $sm) {
-            return new \Alien\Router();
+            $routes = include 'routes.php';
+            return new \Alien\Routing\Router($routes);
         },
         'UserDao' => function(\Alien\Di\ServiceManager $sm) {
             $userDao = new \Alien\Models\Authorization\UserDao($sm->getService('PDO'), $sm);

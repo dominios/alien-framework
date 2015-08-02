@@ -28,7 +28,7 @@ echo "<pre>";
 $router = new \Alien\Router();
 
 foreach ($testedRoutes as $r) {
-    $router->findMatch($r);
+    $router->getMatch($r);
 }
 
 
