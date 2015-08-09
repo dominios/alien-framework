@@ -3,7 +3,7 @@
 namespace Alien\Controllers;
 
 use Alien\Application;
-use Alien\Di\ServiceManager;
+use Alien\Di\ServiceLocator;
 use Alien\Layout\ErrorLayout;
 use Alien\Routing;
 use Alien\RouterException;
@@ -20,9 +20,9 @@ use Alien\View;
 class BaseController {
 
     /**
-     * @var ServiceManager
+     * @var ServiceLocator
      */
-    protected $serviceManager;
+    protected $serviceLocator;
 
     /**
      * @var string
@@ -391,7 +391,7 @@ class BaseController {
         header($_SERVER['SERVER_PROTOCOL'] . ' 403 Forbideen', true, 403);
         header('Content-Type: text/html; charset=utf-8');
         $response = new Response(array(
-                'ContentMain' => '<h1>403 Forbidden</h1><pre>' . print_r($this->getServiceManager()->getService('Authorization')->getCurrentUser(), true) . '</pre>',
+                'ContentMain' => '<h1>403 Forbidden</h1><pre>' . print_r($this->getServiceLocator()->getService('Authorization')->getCurrentUser(), true) . '</pre>',
             )
         );
         $this->getLayout()->handleResponse($response);
@@ -441,21 +441,21 @@ class BaseController {
     /**
      * Sets service manager
      *
-     * @param ServiceManager $serviceManager
+     * @param ServiceLocator $serviceLocator
      * @return $this
      */
-    public function setServiceManager(ServiceManager $serviceManager) {
-        $this->serviceManager = $serviceManager;
+    public function setServiceLocator(ServiceLocator $serviceLocator) {
+        $this->serviceLocator = $serviceLocator;
         return $this;
     }
 
     /**
      * Gets service manager
      *
-     * @return ServiceManager
+     * @return ServiceLocator
      */
-    public function getServiceManager() {
-        return $this->serviceManager;
+    public function getServiceLocator() {
+        return $this->serviceLocator;
     }
 
 }

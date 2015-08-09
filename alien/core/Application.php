@@ -4,7 +4,7 @@ namespace Alien;
 
 use Alien\Controllers\BaseController;
 use Alien\Db\Connection;
-use Alien\Di\ServiceManager;
+use Alien\Di\ServiceLocator;
 use Alien\Models\Authorization\Authorization;
 use Alien\Models\Authorization\User;
 use BadFunctionCallException;
@@ -35,7 +35,7 @@ final class Application {
     private $console;
 
     /**
-     * @var ServiceManager
+     * @var ServiceLocator
      */
     private $serviceManager;
 
@@ -91,7 +91,7 @@ final class Application {
         date_default_timezone_set($app->config['timezone']);
         $app->console = Terminal::getInstance();
 
-        $sm = ServiceManager::initialize($app->config);
+        $sm = ServiceLocator::initialize($app->config);
         $app->serviceManager = $sm;
 
         $app->router = $sm->getService('Router');
@@ -171,7 +171,7 @@ final class Application {
                 $controller = new $className();
             }
 
-            $controller->setServiceManager($this->serviceManager);
+            $controller->setServiceLocator($this->serviceManager);
             $controller->addAction($route['action']);
             $controller->setRoute($route);
 
@@ -210,10 +210,10 @@ final class Application {
     }
 
     /**
-     * Gets database connection service object from ServiceManager
+     * Gets database connection service object from ServiceLocator
      *
      * @return PDO database connection
-     * @deprecated use ServiceManager directly. This method will be removed in future!
+     * @deprecated use ServiceLocator directly. This method will be removed in future!
      */
     public static final function getDatabaseHandler() {
         $app = Application::getInstance();
@@ -232,9 +232,9 @@ final class Application {
     }
 
     /**
-     * Returns initialized ServiceManager object
+     * Returns initialized ServiceLocator object
      *
-     * @return ServiceManager
+     * @return ServiceLocator
      */
     public function getServiceManager() {
         return $this->serviceManager;

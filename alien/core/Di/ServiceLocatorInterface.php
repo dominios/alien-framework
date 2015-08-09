@@ -2,7 +2,7 @@
 
 namespace Alien\Di;
 
-interface ServiceManagerInterface {
+interface ServiceLocatorInterface {
 
     public function registerService($service);
 

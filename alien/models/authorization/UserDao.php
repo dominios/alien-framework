@@ -5,7 +5,7 @@ namespace Alien\Models\Authorization;
 use Alien\DBRecord;
 use Alien\Db\CRUDDaoImpl;
 use Alien\DBConfig;
-use Alien\Di\ServiceManager;
+use Alien\Di\ServiceLocator;
 use Alien\Table\TableViewInterface;
 use DateTime;
 use InvalidArgumentException;
@@ -15,11 +15,11 @@ use PDOStatement;
 class UserDao extends CRUDDaoImpl implements TableViewInterface {
 
     /**
-     * @var ServiceManager
+     * @var ServiceLocator
      */
     protected $serviceManager;
 
-    public function __construct(PDO $connection, ServiceManager $sm) {
+    public function __construct(PDO $connection, ServiceLocator $sm) {
         parent::__construct($connection);
         $this->serviceManager = $sm;
     }

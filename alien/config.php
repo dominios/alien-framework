@@ -13,11 +13,11 @@ return [
     ],
 
     'factories' => [
-        'Router' => function(\Alien\Di\ServiceManager $sm) {
+        'Router' => function(\Alien\Di\ServiceLocator $sm) {
             $routes = include 'routes.php';
             return new \Alien\Routing\Router($routes);
         },
-        'UserDao' => function(\Alien\Di\ServiceManager $sm) {
+        'UserDao' => function(\Alien\Di\ServiceLocator $sm) {
             $userDao = new \Alien\Models\Authorization\UserDao($sm->getService('PDO'), $sm);
             return $userDao;
         }

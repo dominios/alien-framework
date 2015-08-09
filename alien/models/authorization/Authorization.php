@@ -5,7 +5,7 @@ namespace Alien\Models\Authorization;
 use Alien\Application;
 use Alien\Db\RecordNotFoundException;
 use Alien\DBConfig;
-use Alien\Di\ServiceManager;
+use Alien\Di\ServiceLocator;
 use Alien\Di\Exception\ServiceNotFoundException;
 use PDO;
 
@@ -37,18 +37,18 @@ class Authorization {
     public static $Permissions;
 
     /**
-     * @var ServiceManager
+     * @var ServiceLocator
      */
     private $serviceManager;
 
-    public static function getInstance(ServiceManager $sm) {
+    public static function getInstance(ServiceLocator $sm) {
         if (self::$instance === null) {
             self::$instance = new Authorization($sm);
         }
         return self::$instance;
     }
 
-    private function __construct(ServiceManager $sm) {
+    private function __construct(ServiceLocator $sm) {
 
         $this->serviceManager = $sm;
         $this->loadPermissions();

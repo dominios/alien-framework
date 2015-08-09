@@ -8,10 +8,10 @@ use Alien\Di\Exception\ServiceAlreadyExistsException;
 use Alien\Di\Exception\ServiceNotFoundException;
 use ReflectionClass;
 
-final class ServiceManager implements ServiceManagerInterface {
+final class ServiceLocator implements ServiceLocatorInterface {
 
     /**
-     * @var ServiceManager
+     * @var ServiceLocator
      */
     private static $instance = null;
 
@@ -30,10 +30,10 @@ final class ServiceManager implements ServiceManagerInterface {
     }
 
     /**
-     * Initialize the ServiceManager
+     * Initialize the ServiceLocator
      *
      * @param array $config currently not used, but can change in future
-     * @return ServiceManager
+     * @return ServiceLocator
      */
     public static function initialize(array $config) {
         if (self::$instance === null) {
@@ -82,7 +82,7 @@ final class ServiceManager implements ServiceManagerInterface {
     }
 
     /**
-     * Gets DAO service by name. Due to added type-check, it's more IDE-friendly then simple ServiceManager::getServce().
+     * Gets DAO service by name. Due to added type-check, it's more IDE-friendly then simple ServiceLocator::getServce().
      * Searched name can be even namespaed name of DAO class or simple name. If there are more then one services with same
      * simple name, not available ServiceManagerException will be thrown.
      *
@@ -101,7 +101,7 @@ final class ServiceManager implements ServiceManagerInterface {
 
     /**
      * Register any object as service. Any object can be registered only once.
-     * Registered services may be called by ServiceManager::getService() method using their full name (with namespace) or with simple name,
+     * Registered services may be called by ServiceLocator::getService() method using their full name (with namespace) or with simple name,
      * however registering two different services with same simple name leads to disable this feature for such classes, so they are accessible
      * only with their full namespaced names.
      *
