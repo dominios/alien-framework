@@ -24,7 +24,7 @@ class GroupController extends BaseController {
 
     protected function initialize() {
 
-        $this->groupDao = $this->getServiceManager()->getDao('GroupDao');
+        $this->groupDao = $this->getServiceLocator()->getDao('GroupDao');
 
         $this->defaultAction = 'viewList';
 

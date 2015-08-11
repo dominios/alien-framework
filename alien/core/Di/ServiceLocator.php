@@ -2,6 +2,7 @@
 
 namespace Alien\Di;
 
+use Alien\Configuration;
 use Alien\Db\CRUDDao;
 use Alien\Di\Exception\InvalidServiceException;
 use Alien\Di\Exception\ServiceAlreadyExistsException;
@@ -35,10 +36,10 @@ final class ServiceLocator implements ServiceLocatorInterface {
      * @param array $config currently not used, but can change in future
      * @return ServiceLocator
      */
-    public static function initialize(array $config) {
+    public static function initialize(Configuration $config) {
         if (self::$instance === null) {
             self::$instance = new self;
-            self::$instance->factories = $config['factories'];
+            self::$instance->factories = $config->get('factories');
         }
         return self::$instance;
     }

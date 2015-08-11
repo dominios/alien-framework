@@ -21,11 +21,15 @@ try {
 
     header("Content-Type: text/plain; charset=UTF8");
 
-    Application::boot();
-    $app = Application::getInstance();
+    $confFinfo = new SplFileInfo(__DIR__ . '/../alien/config.php');
+    $config = new \Alien\Configuration();
+    $config->loadConfigurationFromFile($confFinfo);
+
+    $app = new Application($config);
+    $app->bootstrap();
 
     /* @var Alien\Routing\Router $router */
-    $router = $app->getServiceManager()->getService('Router');
+    $router = $app->getServiceLocator()->getService('Router');
 
     foreach($urls as $u) {
         echo "Test URL: " . $u . "\n";

@@ -52,7 +52,7 @@ class CustomValidator extends Validator {
      */
     protected function userUniqueEmail(Input $input) {
         $app = Application::getInstance();
-        $DBH = $app->getServiceManager()->getService('PDO');
+        $DBH = $app->getServiceLocator()->getService('PDO');
         $Q = $DBH->prepare('SELECT * FROM test_users WHERE email=:e && id_u<>:u LIMIT 1');
         $Q->bindValue(':e', $input->getValue(), PDO::PARAM_STR);
         $Q->bindValue(':u', (int) $this->params['ignoredUserId'], PDO::PARAM_INT);

@@ -39,8 +39,8 @@ class UsersController extends BaseController {
             $data = $parentResponse->getData();
         }
 
-        $this->authorization = $this->getServiceManager()->getService('Authorization');
-        $this->userDao = $this->getServiceManager()->getDao('UserDao');
+        $this->authorization = $this->getServiceLocator()->getService('Authorization');
+        $this->userDao = $this->getServiceLocator()->getDao('UserDao');
 
         return new Response(array(
                 'LeftTitle' => 'Používatelia',
@@ -82,7 +82,7 @@ class UsersController extends BaseController {
                 break;
         }
 
-        $dao = $this->getServiceManager()->getDao('UserDao');
+        $dao = $this->getServiceLocator()->getDao('UserDao');
         $data = $dao->getTableData($dao->getList($filter));
         $table = new DataTable($data);
         $table->setName('Zoznam ' . $zoznam);
@@ -120,7 +120,7 @@ class UsersController extends BaseController {
         }
 
 
-        $groups = $this->serviceManager->getDao('GroupDao')->getList();
+        $groups = $this->serviceLocator->getDao('GroupDao')->getList();
 
         $user = $this->userDao->find($this->getParam('id'));
 
@@ -189,7 +189,7 @@ class UsersController extends BaseController {
     protected function addGroup() {
         $params = explode('-', $this->getParam('ug'));
         $user = $this->userDao->find($params[0]);
-        $group = $this->serviceManager->getDao('GroupDao')->find($params[1]);
+        $group = $this->serviceLocator->getDao('GroupDao')->find($params[1]);
         $this->userDao->addGroup($user, $group);
         $this->redirect('/alien/user/edit/' . $user->getId());
     }
@@ -197,7 +197,7 @@ class UsersController extends BaseController {
     protected function removeGroup() {
         $params = explode('-', $this->getParam('ug'));
         $user = $this->userDao->find($params[0]);
-        $group = $this->serviceManager->getDao('GroupDao')->find($params[1]);
+        $group = $this->serviceLocator->getDao('GroupDao')->find($params[1]);
         $this->userDao->removeGroup($user, $group);
         $this->redirect('/alien/user/edit/' . $user->getId());
     }

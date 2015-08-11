@@ -7,37 +7,22 @@ use Alien\Db\Connection;
 use Alien\Di\ServiceLocator;
 use Alien\Models\Authorization\Authorization;
 use Alien\Models\Authorization\User;
+use Alien\Routing\Router;
 use BadFunctionCallException;
 use Exception;
-use PDO;
 use RuntimeException;
 
-final class Application {
+class Application {
 
     /**
-     * @var Application
+     * @var Configuration
      */
-    private static $instance;
-
-    /**
-     * @var bool
-     */
-    private static $boot = false;
-
-    /**
-     * @var array
-     */
-    private $config;
-
-    /**
-     * @var Terminal
-     */
-    private $console;
+    private $configuration;
 
     /**
      * @var ServiceLocator
      */
-    private $serviceManager;
+    private $serviceLocator;
 
     /**
      * @var Authorization
@@ -49,33 +34,42 @@ final class Application {
      */
     private $router;
 
-    private function __construct() {
-        $this->config = include 'config.php';
-    }
-
-    public static final function getInstance() {
-        if (self::$instance === null) {
-            self::$instance = new Application;
-        }
-        return self::$instance;
+    /**
+     * @param Configuration $configuration
+     * @todo config nieje vhodnejsie do boostrapu?
+     */
+    public function __construct(Configuration $configuration = null) {
+        $this->configuration = $configuration;
     }
 
     /**
-     * Initialize application. Can be run only once.
+     * Returns configuration object
+     * @return Configuration
+     */
+    public function getConfiguration() {
+        return $this->configuration;
+    }
+
+    /**
+     * Sets configuration
+     * @param Configuration $configuration
+     */
+    public function setConfiguration(Configuration $configuration) {
+        $this->configuration = $configuration;
+    }
+
+    /**
+     * Initialize application. Should be run only once.
      *
      * @throws RuntimeException
      */
-    public static function boot() {
+    public function bootstrap() {
 
-        if (self::$boot === true) {
-            throw new RuntimeException("Application can boot only once.");
-        }
+        $app = $this;
 
-        self::$boot = true;
-        $app = Application::getInstance();
-
-        if($app->config['autoload']) {
-            foreach($app->config['autoload'] as $dir) {
+        if($app->getConfiguration()->get('autoload')) {
+            // @todo prerobit ked tak OOP cez FileDirectoryIterator...
+            foreach($app->getConfiguration()->get('autoload') as $dir) {
                 $dh = \opendir($dir);
                 if ($dh) {
                     while (false !== ($file = readdir($dh))) {
@@ -88,26 +82,29 @@ final class Application {
             }
         }
 
-        date_default_timezone_set($app->config['timezone']);
-        $app->console = Terminal::getInstance();
+        date_default_timezone_set($app->getConfiguration()->get('timezone'));
 
-        $sm = ServiceLocator::initialize($app->config);
-        $app->serviceManager = $sm;
+        // @todo odstranit singleton!
+        $sm = ServiceLocator::initialize($app->getConfiguration());
+        $app->serviceLocator = $sm;
 
         $app->router = $sm->getService('Router');
 
+        $dbConfig = $this->getConfiguration()->get('database');
         $connection = new Connection(array(
-            'host' => $app->config['database']['host'],
-            'database' => $app->config['database']['database'],
-            'username' => $app->config['database']['user'],
-            'password' => $app->config['database']['password'],
-            'prefix' => $app->config['database']['prefix']
+            'host' => $dbConfig['host'],
+            'database' => $dbConfig['database'],
+            'username' => $dbConfig['user'],
+            'password' => $dbConfig['password'],
+            'prefix' => $dbConfig['prefix']
         ));
-
+        // @todo neprehodit Connection resp. PDO do service locatora tiez?
         $sm->registerService($connection->getPDO());
 
+        // @todo opat ten singleton...
         $auth = Authorization::getInstance($sm);
         $app->authorization = $auth;
+        // @todo a opat registracia service...
         $sm->registerService($auth);
 
     }
@@ -116,6 +113,7 @@ final class Application {
      * Runs application MVC and renders output into string
      *
      * @return string HTML output
+     * @todo toto takto zostat nemoze, privela zavislosti
      */
     public function run() {
 
@@ -171,7 +169,7 @@ final class Application {
                 $controller = new $className();
             }
 
-            $controller->setServiceLocator($this->serviceManager);
+            $controller->setServiceLocator($this->serviceLocator);
             $controller->addAction($route['action']);
             $controller->setRoute($route);
 
@@ -202,41 +200,12 @@ final class Application {
     }
 
     /**
-     * @return Terminal
-     * @deprecated
-     */
-    public function getConsole() {
-        return $this->console;
-    }
-
-    /**
-     * Gets database connection service object from ServiceLocator
-     *
-     * @return PDO database connection
-     * @deprecated use ServiceLocator directly. This method will be removed in future!
-     */
-    public static final function getDatabaseHandler() {
-        $app = Application::getInstance();
-        return $app->getServiceManager()->getService('PDO');
-    }
-
-    /**
-     * Returns system configuration value by key
-     *
-     * @param string $param key
-     * @return mixed value
-     * @deprecated
-     */
-    public static final function getParameter($param) {
-        return self::getInstance()->config[$param];
-    }
-
-    /**
      * Returns initialized ServiceLocator object
      *
      * @return ServiceLocator
      */
-    public function getServiceManager() {
-        return $this->serviceManager;
+    public function getServiceLocator() {
+        return $this->serviceLocator;
     }
+
 }

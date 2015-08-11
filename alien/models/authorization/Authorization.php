@@ -52,7 +52,7 @@ class Authorization {
 
         $this->serviceManager = $sm;
         $this->loadPermissions();
-        $this->loginTimeOut = Application::getParameter('loginTimeOut');
+        $this->loginTimeOut = 20*60; // @todo cele zle, vela dependencies... Application::getParameter('loginTimeOut');
         $DBH = $this->getServiceManager()->getService('PDO');
 
         if (@isset($_SESSION['id_auth'])) {

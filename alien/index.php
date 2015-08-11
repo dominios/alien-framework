@@ -2,16 +2,12 @@
 
 namespace Alien;
 
-use Alien\Models\Authorization\Authorization;
-
 ob_start();
 
 try {
     require_once 'init.php';
 
-    Application::boot();
-//Authorization::getInstance();
-    $application = Application::getInstance();
+    throw new \RuntimeException("UNDER CONSTRUCTION");
     echo $application->run();
 
 } catch (\Exception $e) {
