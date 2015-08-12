@@ -13,12 +13,23 @@ return [
     ],
 
     'factories' => [
-        'Router' => function(\Alien\Di\ServiceLocator $sm) {
+        'Router' => function(\Alien\Di\ServiceLocator $sl) {
             $routes = include 'routes.php';
             return new \Alien\Routing\Router($routes);
         },
-        'UserDao' => function(\Alien\Di\ServiceLocator $sm) {
-            $userDao = new \Alien\Models\Authorization\UserDao($sm->getService('PDO'), $sm);
+        'Connection' => function(\Alien\Di\ServiceLocator $sl) {
+            $conf = $sl->getService('\Alien\Configuration')->get('database');
+            $connection = new Alien\Db\Connection(
+                $conf['host'],
+                $conf['user'],
+                $conf['password'],
+                $conf['database']
+            );
+            $connection->setDbPrefix($conf['prefix']);
+            return $connection;
+        },
+        'UserDao' => function(\Alien\Di\ServiceLocator $sl) {
+            $userDao = new \Alien\Models\Authorization\UserDao($sl->getService('PDO'), $sl);
             return $userDao;
         }
     ]

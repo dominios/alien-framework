@@ -5,8 +5,13 @@ namespace Alien\Db;
 use Alien\DBConfig;
 use DateTime;
 use PDO;
-use PDOException;
 
+/**
+ * Class Connection
+ *
+ * Framework wrapper of PDO connection
+ * @package Alien\Db
+ */
 class Connection {
 
     /**
@@ -14,23 +19,21 @@ class Connection {
      */
     private $PDO = null;
 
-    public function __construct(array $config) {
+    /**
+     * Creates new connection based on PDO framework
+     *
+     * Also <code>UTF8 names</code> and timezone based on current <code>DateTime</code> during initialization.
+     * @param $host string
+     * @param $username string
+     * @param $password string
+     * @param $database string
+     */
+    public function __construct($host, $username, $password, $database) {
 
-        $host = $config['host'];
-        $database = $config['database'];
-        $username = $config['username'];
-        $password = $config['password'];
-        $prefix = $config['prefix'];
+        $pdo = new PDO("mysql:host=$host;dbname=$database;charset=utf8", $username, $password);
+        $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+        $pdo->query('SET NAMES utf8');
 
-        try {
-            # MySQL with PDO_MYSQL
-            $pdo = new PDO("mysql:host=$host;dbname=$database;charset=utf8", $username, $password);
-            $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION); // ZMENIT POTOM LEN NA EXCEPTION
-            $pdo->query('SET NAMES utf8');
-        } catch (PDOException $e) {
-            header("HTTP/1.1 503 Service Unavailable");
-            die('error 503 connect na databazu, prerobit na error hlasku!');
-        }
         /* nastavenie timezone */
         $now = new DateTime();
         $mins = $now->getOffset() / 60;
@@ -43,10 +46,19 @@ class Connection {
         $this->PDO = $pdo;
 
         require_once 'DBConfig.php';
+    }
+
+    /**
+     * Sets database tables prefix when DBConfig class is used
+     * @param $prefix
+     * @deprecated
+     */
+    public function setDbPrefix($prefix) {
         DBConfig::setDBPrefix($prefix);
     }
 
     /**
+     * Returns PDO object
      * @return PDO
      */
     public function getPDO() {

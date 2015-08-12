@@ -9,7 +9,7 @@ use Alien\Di\Exception\ServiceAlreadyExistsException;
 use Alien\Di\Exception\ServiceNotFoundException;
 use ReflectionClass;
 
-final class ServiceLocator implements ServiceLocatorInterface {
+class ServiceLocator implements ServiceLocatorInterface {
 
     /**
      * @var ServiceLocator

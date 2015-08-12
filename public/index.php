@@ -25,8 +25,8 @@ try {
     $config = new \Alien\Configuration();
     $config->loadConfigurationFromFile($confFinfo);
 
-    $app = new Application($config);
-    $app->bootstrap();
+    $app = new Application();
+    $app->bootstrap($config);
 
     /* @var Alien\Routing\Router $router */
     $router = $app->getServiceLocator()->getService('Router');

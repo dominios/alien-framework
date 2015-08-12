@@ -10,6 +10,8 @@ use Alien\Models\Authorization\User;
 use Alien\Routing\Router;
 use BadFunctionCallException;
 use Exception;
+use RecursiveDirectoryIterator;
+use RecursiveIteratorIterator;
 use RuntimeException;
 
 class Application {
@@ -35,14 +37,6 @@ class Application {
     private $router;
 
     /**
-     * @param Configuration $configuration
-     * @todo config nieje vhodnejsie do boostrapu?
-     */
-    public function __construct(Configuration $configuration = null) {
-        $this->configuration = $configuration;
-    }
-
-    /**
      * Returns configuration object
      * @return Configuration
      */
@@ -60,50 +54,42 @@ class Application {
 
     /**
      * Initialize application. Should be run only once.
-     *
-     * @throws RuntimeException
+     * @param Configuration $configuration
      */
-    public function bootstrap() {
+    public function bootstrap(Configuration $configuration = null) {
 
-        $app = $this;
+        $this->configuration = $configuration;
 
-        if($app->getConfiguration()->get('autoload')) {
-            // @todo prerobit ked tak OOP cez FileDirectoryIterator...
-            foreach($app->getConfiguration()->get('autoload') as $dir) {
-                $dh = \opendir($dir);
-                if ($dh) {
-                    while (false !== ($file = readdir($dh))) {
-                        if (!is_dir($dir . '/' . $file)) {
-                            include_once $dir . '/' . $file;;
-                        }
-                    }
-                    closedir($dh);
+        date_default_timezone_set($this->getConfiguration()->get('timezone'));
+
+        if($this->getConfiguration()->get('autoload')) {
+            foreach($this->getConfiguration()->get('autoload') as $dir) {
+                $files = new RecursiveIteratorIterator(
+                    new RecursiveDirectoryIterator($dir, RecursiveDirectoryIterator::SKIP_DOTS),
+                    RecursiveIteratorIterator::SELF_FIRST
+                );
+                foreach ($files as $fileinfo) {
+                    require_once $fileinfo->getBasename();
                 }
             }
         }
 
-        date_default_timezone_set($app->getConfiguration()->get('timezone'));
-
         // @todo odstranit singleton!
-        $sm = ServiceLocator::initialize($app->getConfiguration());
-        $app->serviceLocator = $sm;
+        $sm = ServiceLocator::initialize($this->getConfiguration());
+        $this->serviceLocator = $sm;
+        $sm->registerService($configuration);
 
-        $app->router = $sm->getService('Router');
+        $this->router = $sm->getService('Router');
 
         $dbConfig = $this->getConfiguration()->get('database');
-        $connection = new Connection(array(
-            'host' => $dbConfig['host'],
-            'database' => $dbConfig['database'],
-            'username' => $dbConfig['user'],
-            'password' => $dbConfig['password'],
-            'prefix' => $dbConfig['prefix']
-        ));
+        $connection = $sm->getService('Connection');
+
         // @todo neprehodit Connection resp. PDO do service locatora tiez?
         $sm->registerService($connection->getPDO());
 
         // @todo opat ten singleton...
         $auth = Authorization::getInstance($sm);
-        $app->authorization = $auth;
+        $this->authorization = $auth;
         // @todo a opat registracia service...
         $sm->registerService($auth);
 
