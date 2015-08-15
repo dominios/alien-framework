@@ -7,6 +7,7 @@ use Alien\Form\Input;
 use Alien\Form\Validator;
 use Alien\Controllers\BaseController;
 use Alien\Models\Authorization\User;
+use Alien\Models\Authorization\UserInterface;
 
 class EditForm extends Form {
 
@@ -16,7 +17,7 @@ class EditForm extends Form {
         parent::__construct('post', '', 'editUserForm');
     }
 
-    public static function factory(User $user) {
+    public static function factory(UserInterface $user) {
         parent::factory();
         $form = new EditForm();
         $form->addClass('form-horizontal');

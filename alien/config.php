@@ -28,10 +28,10 @@ return [
             $connection->setDbPrefix($conf['prefix']);
             return $connection;
         },
-        'UserDao' => function(\Alien\Di\ServiceLocator $sl) {
-            $userDao = new \Alien\Models\Authorization\UserDao($sl->getService('PDO'), $sl);
-            return $userDao;
-        }
+        'Authorization' => function(\Alien\Di\ServiceLocator $sl) {
+            $auth = new \Alien\Rbac\Authorization($sl);
+            return $auth;
+        },
     ]
 
 ];

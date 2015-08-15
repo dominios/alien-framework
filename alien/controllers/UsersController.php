@@ -132,10 +132,10 @@ class UsersController extends BaseController {
 
                 if ($user instanceof User) {
 
-//                if (User::exists($_POST['userId'])) {
-//                    $user = new User($_POST['userId']);
+//                if (Role::exists($_POST['userId'])) {
+//                    $user = new Role($_POST['userId']);
 //                } else {
-//                    $user = User::create(array('email' => $_POST['userEmail']));
+//                    $user = Role::create(array('email' => $_POST['userEmail']));
 //                }
                     $user->setLogin($_POST['userLogin']);
                     $user->setFirstname($_POST['userFirstname']);
