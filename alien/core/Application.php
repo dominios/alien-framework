@@ -3,16 +3,12 @@
 namespace Alien;
 
 use Alien\Controllers\BaseController;
-use Alien\Db\Connection;
 use Alien\Di\ServiceLocator;
-use Alien\Models\Authorization\Authorization;
-use Alien\Models\Authorization\User;
 use Alien\Routing\Router;
 use BadFunctionCallException;
 use Exception;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
-use RuntimeException;
 
 class Application {
 
@@ -28,13 +24,9 @@ class Application {
 
     /**
      * @var Authorization
+     * @todo nech nieje priamo sucatou triedy
      */
     private $authorization;
-
-    /**
-     * @var Router
-     */
-    private $router;
 
     /**
      * Returns configuration object
@@ -78,8 +70,6 @@ class Application {
         $sm = ServiceLocator::initialize($this->getConfiguration());
         $this->serviceLocator = $sm;
         $sm->registerService($configuration);
-
-        $this->router = $sm->getService('Router');
 
         $connection = $sm->getService('Connection');
 

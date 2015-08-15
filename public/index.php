@@ -1,6 +1,7 @@
 <?php
 
-use Alien\Application;
+
+use Application\Application;
 
 chdir('..');
 
@@ -42,6 +43,7 @@ try {
             echo "Route not found\n";
         }
         echo "\n";
+        $app->run();
     }
 
 //    $app->run();

@@ -1,4 +1,9 @@
 <?php
+/**
+ * inicializacia
+ * @todo vsetko co sa da nech ide z Application::bootstrap() tento subor by mal obsahovat minimum logiky
+ */
+
 
 namespace Alien;
 
@@ -42,8 +47,13 @@ if (!preg_match('/\/alien$/', getcwd()) && file_exists('alien')) {
     chdir('alien');
 }
 
+// @todo urobit samostatnu zlozku a loadovat z configu
 include_once 'functions.php';
 
+/**
+ * @param $class string Class name
+ * @todo PSR-4 autoloader
+ */
 function class_autoloader($class) {
 
     if (class_exists($class)) {
@@ -63,84 +73,20 @@ function class_autoloader($class) {
         include 'plugins/phpmailer/class.phpmailer.php';
     }
 
-
     if(strpos($class, __NAMESPACE__) !== false) {
         $searchedFile = getcwd() . '\core\\' . str_replace(__NAMESPACE__ . '\\', '', $class) . '.php';
         if (file_exists($searchedFile)) {
             require_once $searchedFile;
-        } else {
-//            var_dump($searchedFile);
-//            throw new \RuntimeException("Class $class could not be loaded from file $searchedFile");
+            return;
         }
     }
 
-    $class = str_replace(__NAMESPACE__ . '\\', '', $class);
-
-//    // core sa nacita vzdy cele
-//    $autoloadDirectories = array();
-//    $autoloadDirectories[] = 'core';
-//    $autoloadDirectories[] = 'core/Di';
-//    $autoloadDirectories[] = 'core/Di/Exception';
-//    $autoloadDirectories[] = 'core/Form';
-//    $autoloadDirectories[] = 'core/Form/Input';
-//    $autoloadDirectories[] = 'core/Form/Validator';
-//    $autoloadDirectories[] = 'core/Form/Validator/Exception';
-//    $autoloadDirectories[] = 'core/table';
-//    $autoloadDirectories[] = 'layouts';
-//    $autoloadDirectories[] = 'core/Db';
-////    $autoloadDirectories[] = 'core/annotation';
-//
-//    foreach ($autoloadDirectories as $dir) {
-//        $dh = \opendir($dir);
-//        if ($dh) {
-//            while (false !== ($file = readdir($dh))) {
-//                if (!is_dir($dir . '/' . $file)) {
-//                    include_once $dir . '/' . $file;;
-//                }
-//            }
-//            closedir($dh);
-//        }
-//    }
-
-    // controllery
-    if (preg_match('/(.*)Controller$/', $class)) {
-        $class = str_replace('Controllers\\', '', $class);
-        $file = 'controllers/' . $class . '.php';
-        if (file_exists($file)) {
-            include_once $file;
-        }
-        return;
-    }
-
-    // modely
-    if (preg_match('/models/i', $class)) {
-        $class = str_replace('Models\\', '', $class);
-        $arr = explode('\\', $class, 2);
-        $dir = strtolower($arr[0]);
-        $class = $arr[1];
-        $file = 'models/' . $dir . '/' . $class . '.php';
-        if (file_exists($file)) {
-            include_once $file;
-        } else {
-            $file = 'models/' . $dir . '/' . $class . 'Interface' . '.php';
-            if (file_exists($file)) {
-                include_once $file;
-            }
-        }
-        return;
-    }
-
-    // formulare
-    if (preg_match('/form/i', $class)) {
-        $class = str_replace('Forms\\', '', $class);
-        $arr = explode('\\', $class, 2);
-        $dir = strtolower($arr[0]);
-        $class = $arr[1];
-        $file = 'forms/' . $dir . '/' . $class . '.php';
-        if (file_exists($file)) {
-            include_once $file;
-        }
-        return;
+    // ide o modul
+    $parts = explode('/', '$class');
+    $modul = $parts[0];
+    $searchedFile = 'module\\' . $class . '.php';
+    if(file_exists($searchedFile)) {
+        require_once $searchedFile;
     }
 
     return;
