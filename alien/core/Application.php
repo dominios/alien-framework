@@ -81,17 +81,10 @@ class Application {
 
         $this->router = $sm->getService('Router');
 
-        $dbConfig = $this->getConfiguration()->get('database');
         $connection = $sm->getService('Connection');
 
         // @todo neprehodit Connection resp. PDO do service locatora tiez?
         $sm->registerService($connection->getPDO());
-
-        // @todo opat ten singleton...
-        $auth = Authorization::getInstance($sm);
-        $this->authorization = $auth;
-        // @todo a opat registracia service...
-        $sm->registerService($auth);
 
     }
 
@@ -123,6 +116,7 @@ class Application {
             }
         }
 
+        // @todo fuj!
         $controller = new BaseController();
         $content = '';
 

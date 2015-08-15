@@ -3,6 +3,7 @@
 namespace Alien;
 
 use Alien\Models\Authorization\User;
+use Alien\Models\Authorization\UserInterface;
 use PDO;
 
 class Message implements DBRecord {
@@ -100,7 +101,7 @@ class Message implements DBRecord {
         return $arr;
     }
 
-    public static function getListByRecipient(User $user, $fetch = false) {
+    public static function getListByRecipient(UserInterface $user, $fetch = false) {
         $arr = array();
         $DBH = Application::getDatabaseHandler();
         foreach ($DBH->query('SELECT * FROM ' . DBConfig::table(DBConfig::MESSAGES) . ' WHERE recipient=' . (int) $user->getId() . ' && deletedByRecipient!=1 ORDER BY id DESC') as $R) {
@@ -109,13 +110,13 @@ class Message implements DBRecord {
         return $arr;
     }
 
-    public static function getUnreadCount(User $user) {
+    public static function getUnreadCount(UserInterface $user) {
         $DBH = Application::getDatabaseHandler();
         $R = $DBH->query('SELECT COUNT(*) FROM ' . DBConfig::table(DBConfig::MESSAGES) . ' WHERE recipient=' . (int) $user->getId() . ' && dateSeen IS NULL')->fetch();
         return $R['COUNT(*)'];
     }
 
-    public static function getListByAuthor(User $user, $fetch = false) {
+    public static function getListByAuthor(UserInterface $user, $fetch = false) {
         $arr = array();
         $DBH = Application::getDatabaseHandler();
         foreach ($DBH->query('SELECT * FROM ' . DBConfig::table(DBConfig::MESSAGES) . ' WHERE author=' . (int) $user->getId() . ' && deletedByAuthor!=1 ORDER BY id DESC') as $R) {
@@ -132,11 +133,11 @@ class Message implements DBRecord {
         return $this->author;
     }
 
-    public function isRecipient(User $user) {
+    public function isRecipient(UserInterface $user) {
         return $user->getId() == $this->recipient->getId() ? true : false;
     }
 
-    public function isAuthor(User $user) {
+    public function isAuthor(UserInterface $user) {
         return $user->getId() == $this->author->getId() ? true : false;
     }
 
@@ -196,7 +197,7 @@ class Message implements DBRecord {
         $this->deletedByRecipient = $deletedByRecipient;
     }
 
-    public function setDeletedByUser(User $user, $bool) {
+    public function setDeletedByUser(UserInterface $user, $bool) {
         if ($user->getId() == $this->author->getId()) {
             $this->deletedByAuthor = $bool;
         }
