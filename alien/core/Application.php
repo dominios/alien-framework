@@ -52,7 +52,10 @@ class Application {
 
         $this->configuration = $configuration;
 
-        date_default_timezone_set($this->getConfiguration()->get('timezone'));
+        $timeZone = $this->getConfiguration()->get('timezone');
+        if($timeZone) {
+            date_default_timezone_set($timeZone);
+        }
 
         if($this->getConfiguration()->get('autoload')) {
             foreach($this->getConfiguration()->get('autoload') as $dir) {
@@ -70,12 +73,7 @@ class Application {
         $sm = ServiceLocator::initialize($this->getConfiguration());
         $this->serviceLocator = $sm;
         $sm->registerService($configuration);
-
-        $connection = $sm->getService('Connection');
-
-        // @todo neprehodit Connection resp. PDO do service locatora tiez?
-        $sm->registerService($connection->getPDO());
-
+        
     }
 
     /**
