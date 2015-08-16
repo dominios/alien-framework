@@ -1,7 +1,16 @@
 <?php
 
 namespace Alien\Routing;
+use Alien\Routing\Exception\InvalidRequest;
 
+/**
+ * Class HttpRequest
+ *
+ * Request-Line   = Method SP Request-URI SP HTTP-Version CRLF
+ *
+ * @package Alien\Routing
+ * @see http://www.w3.org/Protocols/rfc2616/rfc2616-sec5.html
+ */
 class HttpRequest implements RequestInterface {
 
     const VERSION_10 = '1.0';
@@ -35,8 +44,55 @@ class HttpRequest implements RequestInterface {
      */
     protected $version;
 
+    /**
+     * @var string
+     */
+    protected $uri;
+
+    /**
+     * @var array
+     */
+    protected $params;
+
     public static function createFromString($string) {
-        throw new \RuntimeException("Not implemented yet.");
+
+        // Request-Line   = Method SP Request-URI SP HTTP-Version CRLF
+        // example:
+        // GET http://www.example.com/index.html HTTP/1.1
+
+        $parts = explode(" ", $string);
+        if(count($parts) != 3) {
+            throw new \InvalidArgumentException("String does not contains all parts.");
+        }
+        $method = trim($parts[0]);
+        if(!in_array($method, [
+            self::METHOD_GET,
+            self::METHOD_CONNECT,
+            self::METHOD_DELETE,
+            self::METHOD_HEAD,
+            self::METHOD_OPTIONS,
+            self::METHOD_POST,
+            self::METHOD_PUT,
+            self::METHOD_TRACE
+        ])) {
+            throw new InvalidRequest("Method $method is not supported HTTP method.");
+        }
+
+        $uri = trim($parts[1]);
+        if(!strlen($uri)) {
+            throw new InvalidRequest("URI cannot be empty.");
+        }
+
+        $version = explode('/', trim($parts[2]))[1];
+        if(!in_array($version, [self::VERSION_10, self::VERSION_11])) {
+            throw new InvalidRequest("Unsupported HTTP version $version.");
+        }
+
+        $request = new self;
+        $request->setMethod($method);
+        $request->setUri($uri);
+        $request->setVersion($version);
+        return $request;
     }
 
     public function getHeaders($name = null) {
@@ -83,6 +139,18 @@ class HttpRequest implements RequestInterface {
         throw new \RuntimeException("Not implemented yet.");
     }
 
+    public function hasParams() {
+        throw new \RuntimeException("Not implemented yet.");
+    }
+
+    public function getParams() {
+        throw new \RuntimeException("Not implemented yet.");
+    }
+
+    public function getParam() {
+        throw new \RuntimeException("Not implemented yet.");
+    }
+
     /**
      * @param \string[] $headers
      * @return HttpRequest
@@ -116,6 +184,15 @@ class HttpRequest implements RequestInterface {
      */
     public function setVersion($version) {
         $this->version = $version;
+        return $this;
+    }
+
+    /**
+     * @param string $uri
+     * @return HttpRequest
+     */
+    public function setUri($uri) {
+        $this->uri = $uri;
         return $this;
     }
 
