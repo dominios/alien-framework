@@ -73,7 +73,7 @@ class Application {
         $sm = ServiceLocator::initialize($this->getConfiguration());
         $this->serviceLocator = $sm;
         $sm->registerService($configuration);
-        
+
     }
 
     /**
