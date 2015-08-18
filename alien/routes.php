@@ -5,6 +5,13 @@ return array(
         'route' => '/route',
         'controller' => 'BaseController',
         'namespace' => 'Alien\Controllers',
-        'action' => 'index'
+        'action' => 'index',
+        'childRoutes' => [
+            'sub' => [
+                'route' => '/sub',
+                'controller' => 'SubController',
+                'action' => 'some'
+            ]
+        ]
     ),
 );

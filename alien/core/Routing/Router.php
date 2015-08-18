@@ -34,6 +34,8 @@ use Alien\Routing\Exception\InvalidConfigurationException;
  *
  * Child route automatically <b>inherits</b> all it's parent settings, but can freely overwrite it by defining new value.
  *
+ * <b>WARNING:</b> empty route name and single slash are handled as equal!
+ *
  * @package Alien
  */
 class Router {
@@ -55,14 +57,18 @@ class Router {
     }
 
     /**
-     * Search for match in available routes
+     * Search for route configuration
      *
-     * @param array $request
+     * Method accepts any string, which should be matched by router. Use slash as delimiter of tree-structure parts.
+     * If match is found, associative array with following keys is returned:
+     * <code>["route", "namespace", "controller", "action", "params"]</code>
+     *
+     * @param string $requestString
      * @return array configuration of found match
      * @throws RouteNotFoundException when no match found in available routes
-     * @throws InvalidConfigurationException when configuration of route is invalid
+     * @throws InvalidConfigurationException when configuration of matched route is invalid
      */
-    public function getMatch($request) {
+    public function getMatchedConfiguration($requestString) {
 
         $result = array(
             'route' => null,
@@ -72,20 +78,30 @@ class Router {
             'params' => null
         );
 
+        // add slash at beginning of string if not present
+        if(strpos($requestString, '/') !== 0) {
+            $requestString = '/' . $requestString;
+        }
+
         $match = false;
-        $parts = array_filter(explode('/', $request, 3));
+        // do not explode if only single slash "/" given
+        if(strlen($requestString) === 1) {
+            $parts[] = '';
+        } else {
+            $parts = array_values(array_filter(explode('/', $requestString, 3)));
+        }
 
         foreach ($this->routes as $route => $options) {
-            if ($route == $parts[1]) {
+            if ($route == $parts[0]) {
                 $match = true;
-                $this->parseNode($parts[2], $options, $result);
+                $this->parseNode(implode('/', $parts), $options, $result);
             }
         }
 
         if (!$match) {
             throw new RouteNotFoundException('Route not found.');
         } else {
-            $params = $this->getQueryParams($request, $result);
+            $params = $this->getQueryParams($requestString, $result);
             $result['params'] = $params;
         }
 
@@ -120,9 +136,11 @@ class Router {
                 $result['action'] = $node['action'];
             }
             if (array_key_exists('childRoutes', $node)) {
-                $parts = array_filter(explode('/', $url, 2));
-                if (array_key_exists($parts[0], $node['childRoutes'])) {
-                    $this->parseNode($parts[1], $node['childRoutes'][$parts[0]], $result);
+                $parts = array_values(array_filter(explode('/', $url, 2)));
+                if(count($parts) > 1) {
+                    if (array_key_exists($parts[1], $node['childRoutes'])) {
+                        $this->parseNode($parts[1], $node['childRoutes'][$parts[1]], $result);
+                    }
                 }
             }
         }
@@ -203,11 +221,18 @@ class Router {
     /**
      * Returns route configuration by it's name
      *
+     * This method is able to find match only at top level of tree.
+     *
      * @param string $name
      * @return array
+     * @throws RouteNotFoundException when route is not found
      */
     public function getRoute($name) {
-        return $this->routes[$name];
+        if(array_key_exists($name, $this->routes)) {
+            return $this->routes[$name];
+        } else {
+            throw new RouteNotFoundException("Route not found");
+        }
     }
 
     /**
@@ -216,7 +241,7 @@ class Router {
      * @return string
      */
     public static function getRouteUrl($route) {
-        return '/alien/' . $route;
+        return $route;
     }
 
 }
