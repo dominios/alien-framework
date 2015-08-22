@@ -151,7 +151,8 @@ class Router {
     }
 
     /**
-     * Checks route configuration and retrieve query parameters.
+     * Checks route configuration and retrieve values for route parameters.
+     * Not present optional parameters are replaced with <code>null</code> value.
      *
      * @param string $url requested URL
      * @param array $route route configuration
@@ -173,28 +174,27 @@ class Router {
         }
 
         $optionals = [];
-        if (preg_match('/(\[.+\])/', $route['route'], $optionals)) {
-            unset($optionals[0]);
-            array_walk($optionals, function (&$value, $key) {
-                $value = preg_replace('/[\[\]]/', '', $value);
-            });
+        if (preg_match('/(\[\/\:[\w\d]+\])/', $route['route'], $optionals)) {
+            $optionals = array_filter(array_unique($optionals));
+            $optionals = array_map(function ($opt) {
+                return preg_replace('/[\[\]]/', '', $opt);
+            }, $optionals);
         }
 
         $params = [];
         $i = 1;
-        $parametrized = implode('', [$requiredPart] + $optionals);
-        $parametrizedParts = explode('/', $parametrized);
+        $parametrized = implode('', array_merge([$requiredPart], $optionals));
+        $parametrizedParts = array_filter(explode('/', $parametrized));
         $regexParts = [];
-        foreach ($parametrizedParts as $p) {
-            if (trim($p)) {
-                if (strpos($p, ':') !== false) {
-                    $params[str_replace(':', '', $p)] = $i;
-                    $regexParts[] = '([\w\d]+)';
-                } else {
-                    $regexParts[] = "($p)";
-                }
-                $i++;
+
+        foreach ($parametrizedParts as $part) {
+            if (strpos($part, ':') !== false) {
+                $params[str_replace(':', '', $part)] = $i;
+                $regexParts[] = '([\w\d]+)';
+            } else {
+                $regexParts[] = "($part)";
             }
+            $i++;
         }
 
         $regex = '/^\/' . implode('\/', $regexParts) . '$/';
@@ -212,13 +212,16 @@ class Router {
                 $params[$key] = $paramsMatches[$index];
             }
         } else {
-            if (count($params)) {
+            if (count($params) && count($params) > count($optionals)) {
                 throw new InvalidRequest("Number of arguments mismatch");
+            } elseif (count($optionals)) {
+                $params = array_map(function($p) {
+                    return null;
+                }, $params);
             }
         }
 
         return $params;
-
     }
 
     /**

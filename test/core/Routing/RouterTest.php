@@ -50,6 +50,12 @@ class RouterTest extends PHPUnit_Framework_TestCase {
                 'controller' => 'ParametricController',
                 'namespace' => 'Parametric\Namespace',
                 'action' => 'doSomething',
+            ],
+            'optional' => [
+                'route' => '/optional[/:foo]',
+                'controller' => 'OptionalController',
+                'namespace' => 'Optional\Namespace',
+                'action' => 'doSomething'
             ]
         ];
         $this->router = new Router($routes);
@@ -155,7 +161,29 @@ class RouterTest extends PHPUnit_Framework_TestCase {
     }
 
     public function testSimpleRouteWithOptionalParams() {
+        $testRoute1 = 'optional/bar';
+        $expectedResult1 = [
+            'route' => '/optional[/:foo]',
+            'controller' => 'OptionalController',
+            'namespace' => 'Optional\Namespace',
+            'action' => 'doSomething',
+            'params' => [
+                'foo' => 'bar'
+            ]
+        ];
+        $this->assertEquals($expectedResult1, $this->router->getMatchedConfiguration($testRoute1));
 
+        $testRoute2 = 'optional';
+        $expectedResult2 = [
+            'route' => '/optional[/:foo]',
+            'controller' => 'OptionalController',
+            'namespace' => 'Optional\Namespace',
+            'action' => 'doSomething',
+            'params' => [
+                'foo' => null
+            ]
+        ];
+        $this->assertEquals($expectedResult2, $this->router->getMatchedConfiguration($testRoute2));
     }
 
 }
