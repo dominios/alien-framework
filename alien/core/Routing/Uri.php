@@ -1,12 +1,10 @@
 <?php
 
 namespace Alien\Routing;
-
-use Alien\Routing\Exception\InvalidRequest;
+use InvalidArgumentException;
 
 /**
- * Class Uri
- * @package Alien\Routing
+ * Uri object encapsulation
  *
  * foo://username:password@example.com:8042/over/there/index.dtb?type=animal&name=narwhal#nose
  *   \_/   \_______________/ \_________/ \__/            \___/ \_/ \______________________/ \__/
@@ -34,6 +32,7 @@ use Alien\Routing\Exception\InvalidRequest;
  *  /    \ /      \ /         \ /           \
  *  mailto:username@example.com?subject=Topic
  *
+ * @package Alien\Routing
  */
 class Uri {
 
@@ -77,11 +76,21 @@ class Uri {
      */
     protected $fragment = "";
 
+    /**
+     * Factory method for creation from string
+     * Method should be able to instantiate various given URIs: absolute, relative, ...
+     *
+     * Example of URI:<br>
+     * <i>foo://username:password@example.com:8042/over/there/index.dtb?type=animal&name=narwhal#nose<i>
+     *
+     * @param $string URI in string
+     * @return Uri object
+     * @throws InvalidArgumentException when given string is not valid URI
+     */
     public static function createFromString($string) {
-        // foo://username:password@example.com:8042/over/there/index.dtb?type=animal&name=narwhal#nose
         $parts = parse_url($string);
         if($parts === false) {
-            throw new \InvalidArgumentException("String is not valid URI");
+            throw new InvalidArgumentException("String is not valid URI");
         }
         $uri = new self;
         if(array_key_exists('scheme', $parts)) {
@@ -112,6 +121,7 @@ class Uri {
     }
 
     /**
+     * Returns protocol used if set
      * @return string
      */
     public function getProtocol()
@@ -120,6 +130,7 @@ class Uri {
     }
 
     /**
+     * Sets protocol
      * @param string $protocol
      * @return Uri
      */
@@ -130,6 +141,7 @@ class Uri {
     }
 
     /**
+     * Returns username if set
      * @return string
      */
     public function getUsername()
@@ -138,6 +150,7 @@ class Uri {
     }
 
     /**
+     * Sets username
      * @param string $username
      * @return Uri
      */
@@ -148,6 +161,7 @@ class Uri {
     }
 
     /**
+     * Returns password if set
      * @return string
      */
     public function getPassword()
@@ -156,6 +170,7 @@ class Uri {
     }
 
     /**
+     * Sets password
      * @param string $password
      * @return Uri
      */
@@ -166,6 +181,7 @@ class Uri {
     }
 
     /**
+     * Returns host if set
      * @return string
      */
     public function getHost()
@@ -174,6 +190,7 @@ class Uri {
     }
 
     /**
+     * Sets host
      * @param string $host
      * @return Uri
      */
@@ -184,6 +201,7 @@ class Uri {
     }
 
     /**
+     * Returns host of set
      * @return string
      */
     public function getPort()
@@ -192,6 +210,7 @@ class Uri {
     }
 
     /**
+     * Sets port
      * @param string $port
      * @return Uri
      */
@@ -202,6 +221,7 @@ class Uri {
     }
 
     /**
+     * Returns directory path if set
      * @return string
      */
     public function getPath()
@@ -210,6 +230,7 @@ class Uri {
     }
 
     /**
+     * Sets path
      * @param string $path
      * @return Uri
      */
@@ -220,6 +241,7 @@ class Uri {
     }
 
     /**
+     * Returns query parameters if set
      * @return string
      */
     public function getQuery()
@@ -228,6 +250,7 @@ class Uri {
     }
 
     /**
+     * Sets query parameters as string
      * @param string $query
      * @return Uri
      */
@@ -238,6 +261,7 @@ class Uri {
     }
 
     /**
+     * Returns fragment if set
      * @return string
      */
     public function getFragment()
@@ -246,6 +270,7 @@ class Uri {
     }
 
     /**
+     * Sets fragment
      * @param string $fragment
      * @return Uri
      */
@@ -256,6 +281,8 @@ class Uri {
     }
 
     /**
+     * Returns all domains as array
+     * Top level domains is at the highest index
      * @return string[]
      */
     public function getDomains()
@@ -264,7 +291,7 @@ class Uri {
     }
 
     /**
-     * Returns key => value array of query (GET) parameters from URI
+     * Returns key/value array of query (GET) parameters from URI
      * @return array
      */
     public function getParams()

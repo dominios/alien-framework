@@ -2,12 +2,12 @@
 
 namespace Alien\Routing;
 
-use Alien\Routing\Exception\InvalidRequest;
-use Alien\Routing\Exception\RouteNotFoundException;
 use Alien\Routing\Exception\InvalidConfigurationException;
+use Alien\Routing\Exception\InvalidRequestException;
+use Alien\Routing\Exception\RouteNotFoundException;
 
 /**
- * Class Router
+ * Matching string requests with defined configurations
  *
  * Router consists of array-like routes configuration. This configuration can be:
  *
@@ -40,7 +40,8 @@ use Alien\Routing\Exception\InvalidConfigurationException;
  *
  * @package Alien
  */
-class Router {
+class Router
+{
 
     /**
      * Array of available routes.
@@ -54,7 +55,8 @@ class Router {
     /**
      * @param array $routes array with configuration of routes
      */
-    public final function __construct(array $routes) {
+    public function __construct(array $routes)
+    {
         $this->routes = $routes;
     }
 
@@ -70,7 +72,8 @@ class Router {
      * @throws RouteNotFoundException when no match found in available routes
      * @throws InvalidConfigurationException when configuration of matched route is invalid
      */
-    public function getMatchedConfiguration($requestString) {
+    public function getMatchedConfiguration($requestString)
+    {
 
         $result = array(
             'route' => null,
@@ -81,13 +84,13 @@ class Router {
         );
 
         // add slash at beginning of string if not present
-        if(strpos($requestString, '/') !== 0) {
+        if (strpos($requestString, '/') !== 0) {
             $requestString = '/' . $requestString;
         }
 
         $match = false;
         // do not explode if only single slash "/" given
-        if(strlen($requestString) === 1) {
+        if (strlen($requestString) === 1) {
             $parts[] = '';
         } else {
             $parts = array_values(array_filter(explode('/', $requestString, 3)));
@@ -115,14 +118,18 @@ class Router {
     }
 
     /**
-     * Parse single node and return result
+     * Parse single node and return configuration
+     * Configuration contains route pattern, controller namespace and class name, action to call and parameters.
      *
-     * @param string $url
-     * @param array $node
-     * @param array $result
-     * @return array
+     * <b>NOTE:</b> <code>$result</code> argument is passed by value due to sharing between multiple calls on different route configurations when parsing tree structure
+     *
+     * @param string $url parsing URL
+     * @param array $node configuration of parsing route
+     * @param array $result configuration of parsed route
+     * @return array configuration of parsed route
      */
-    private function parseNode($url, $node, &$result) {
+    private function parseNode($url, $node, &$result)
+    {
 
         if (is_array($node)) {
 
@@ -139,7 +146,7 @@ class Router {
             }
             if (array_key_exists('childRoutes', $node)) {
                 $parts = array_values(array_filter(explode('/', $url, 2)));
-                if(count($parts) > 1) {
+                if (count($parts) > 1) {
                     if (array_key_exists($parts[1], $node['childRoutes'])) {
                         $this->parseNode($parts[1], $node['childRoutes'][$parts[1]], $result);
                     }
@@ -158,8 +165,8 @@ class Router {
      * @param array $route route configuration
      * @return array key-value parameters
      * @throws InvalidConfigurationException when requested URL not matches given route configuration
-     * @throws InvalidRequest when invalid number of required parameters given
-     * @throws InvalidRequest when required argument is not found
+     * @throws InvalidRequestException when invalid number of required parameters given
+     * @throws InvalidRequestException when required argument is not found
      */
     private function getQueryParams($url, $route)
     {
@@ -207,15 +214,15 @@ class Router {
         if (preg_match($regex, $url, $paramsMatches)) {
             foreach ($params as $key => $index) {
                 if ($paramsMatches[$index] == "" && !in_array($key, $optionals)) {
-                    throw new InvalidRequest("Required argument $key not found");
+                    throw new InvalidRequestException("Required argument $key not found");
                 }
                 $params[$key] = $paramsMatches[$index];
             }
         } else {
             if (count($params) && count($params) > count($optionals)) {
-                throw new InvalidRequest("Number of arguments mismatch");
+                throw new InvalidRequestException("Number of arguments mismatch");
             } elseif (count($optionals)) {
-                $params = array_map(function($p) {
+                $params = array_map(function ($p) {
                     return null;
                 }, $params);
             }
@@ -227,14 +234,15 @@ class Router {
     /**
      * Returns route configuration by it's name
      *
-     * This method is able to find match only at top level of tree.
+     * <b>NOTE</b>: This method is able to find match only at top level of tree (simple routes only).
      *
      * @param string $name
      * @return array
      * @throws RouteNotFoundException when route is not found
      */
-    public function getRoute($name) {
-        if(array_key_exists($name, $this->routes)) {
+    public function getRoute($name)
+    {
+        if (array_key_exists($name, $this->routes)) {
             return $this->routes[$name];
         } else {
             throw new RouteNotFoundException("Route not found");
@@ -246,7 +254,8 @@ class Router {
      * @param string $route
      * @return string
      */
-    public static function getRouteUrl($route) {
+    public static function getRouteUrl($route)
+    {
         return $route;
     }
 

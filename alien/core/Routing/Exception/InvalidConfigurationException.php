@@ -4,4 +4,10 @@ namespace Alien\Routing\Exception;
 
 use InvalidArgumentException;
 
-class InvalidConfigurationException extends InvalidArgumentException {}
+/**
+ * InvalidConfigurationException
+ * @package Alien\Routing\Exception
+ */
+class InvalidConfigurationException extends InvalidArgumentException
+{
+}

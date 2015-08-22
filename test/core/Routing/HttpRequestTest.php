@@ -2,7 +2,7 @@
 
 require_once __DIR__ . '/../../../alien/core/Routing/RequestInterface.php';
 require_once __DIR__ . '/../../../alien/core/Routing/HttpRequest.php';
-require_once __DIR__ . '/../../../alien/core/Routing/Exception/InvalidRequest.php';
+require_once __DIR__ . '/../../../alien/core/Routing/Exception/InvalidHttpRequestException.php';
 
 use Alien\Routing\HttpRequest;
 
@@ -40,14 +40,14 @@ class HttpRequestTest extends PHPUnit_Framework_TestCase {
     }
 
     /**
-     * @expectedException \Alien\Routing\Exception\InvalidRequest
+     * @expectedException \Alien\Routing\Exception\InvalidHttpRequestException
      */
     public function testInvalidMethodException() {
         $this->assertEmpty(HttpRequest::createFromString('GETX http://www.example.com/index.html HTTP/1.0'));
     }
 
     /**
-     * @expectedException \Alien\Routing\Exception\InvalidRequest
+     * @expectedException \Alien\Routing\Exception\InvalidHttpRequestException
      */
     public function testInvalidVersionException() {
         $this->assertEmpty(HttpRequest::createFromString('GET http://www.example.com/index.html HTTP/1.2'));
