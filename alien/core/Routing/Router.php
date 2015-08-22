@@ -2,6 +2,7 @@
 
 namespace Alien\Routing;
 
+use Alien\Routing\Exception\InvalidRequest;
 use Alien\Routing\Exception\RouteNotFoundException;
 use Alien\Routing\Exception\InvalidConfigurationException;
 
@@ -28,7 +29,8 @@ use Alien\Routing\Exception\InvalidConfigurationException;
  * <li><b>action</b>: with exact method name to call in used controller.</li>
  * </ul>
  *
- * When using <b>tree structure</b>, each <i>Route</i> may also have defined multiple or none <i>child</i> routes.
+ * When using <b>tree structure</b>, each <i>Route</i> may also
+ * have defined multiple or none <i>child</i> routes.
  * In that case, child <i>route</i> has all of it's parent's routes patterns used as <b>prefix</b>, delimited with slash.
  * For example, route <i>"foo"</i> has child route <i>"boo"</i>. To match this URL, input must be <i>"/foo/bar"</i>.
  *
@@ -149,26 +151,28 @@ class Router {
     }
 
     /**
-     * Returns parameter's values defined at route configuration
+     * Checks route configuration and retrieve query parameters.
      *
-     * @param string $url
-     * @param array $route
-     * @return array
-     * @throws RouterException
+     * @param string $url requested URL
+     * @param array $route route configuration
+     * @return array key-value parameters
+     * @throws InvalidConfigurationException when requested URL not matches given route configuration
+     * @throws InvalidRequest when invalid number of required parameters given
+     * @throws InvalidRequest when required argument is not found
      */
-    private function getQueryParams($url, $route) {
+    private function getQueryParams($url, $route)
+    {
 
         if (strpos($route['route'], '[') !== false) {
             $requiredPart = preg_replace('/\[.*$/', '', $route['route']);
-            var_dump("hladam $requiredPart v $url ");
             if (strpos($url, $requiredPart) === false) {
-                throw new RouterException("Route mismatch.");
+                throw new InvalidConfigurationException("Route mismatch");
             }
         } else {
             $requiredPart = $route['route'];
         }
 
-        $optionals = array();
+        $optionals = [];
         if (preg_match('/(\[.+\])/', $route['route'], $optionals)) {
             unset($optionals[0]);
             array_walk($optionals, function (&$value, $key) {
@@ -176,16 +180,16 @@ class Router {
             });
         }
 
-        $params = array();
+        $params = [];
         $i = 1;
-        $parametrized = implode('', array($requiredPart) + $optionals);
+        $parametrized = implode('', [$requiredPart] + $optionals);
         $parametrizedParts = explode('/', $parametrized);
-        $regexParts = array();
+        $regexParts = [];
         foreach ($parametrizedParts as $p) {
             if (trim($p)) {
                 if (strpos($p, ':') !== false) {
                     $params[str_replace(':', '', $p)] = $i;
-                    $regexParts[] = '(.*)';
+                    $regexParts[] = '([\w\d]+)';
                 } else {
                     $regexParts[] = "($p)";
                 }
@@ -193,9 +197,8 @@ class Router {
             }
         }
 
-        $regex = '/^\/' . implode('\/?', $regexParts) . '$/';
-
-        $paramsMatches = array();
+        $regex = '/^\/' . implode('\/', $regexParts) . '$/';
+        $paramsMatches = [];
 
         $optionals = array_map(function ($e) {
             return str_replace('/:', '', $e);
@@ -204,13 +207,13 @@ class Router {
         if (preg_match($regex, $url, $paramsMatches)) {
             foreach ($params as $key => $index) {
                 if ($paramsMatches[$index] == "" && !in_array($key, $optionals)) {
-                    throw new RouterException("Required argument not found.");
+                    throw new InvalidRequest("Required argument $key not found");
                 }
                 $params[$key] = $paramsMatches[$index];
             }
         } else {
             if (count($params)) {
-                throw new RouterException("Required argument not found.");
+                throw new InvalidRequest("Number of arguments mismatch");
             }
         }
 

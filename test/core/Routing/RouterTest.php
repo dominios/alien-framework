@@ -38,6 +38,18 @@ class RouterTest extends PHPUnit_Framework_TestCase {
                         'action' => 'child2'
                     ]
                 ]
+            ],
+            'parametric' => [
+                'route' => '/parametric/:foo',
+                'controller' => 'ParametricController',
+                'namespace' => 'Parametric\Namespace',
+                'action' => 'doSomething',
+            ],
+            'twoParams' => [
+                'route' => '/twoParams/:foo1/:foo2',
+                'controller' => 'ParametricController',
+                'namespace' => 'Parametric\Namespace',
+                'action' => 'doSomething',
             ]
         ];
         $this->router = new Router($routes);
@@ -113,6 +125,37 @@ class RouterTest extends PHPUnit_Framework_TestCase {
         $empty = '';
         $singleSlash = '/';
         $this->assertSame($this->router->getMatchedConfiguration($empty), $this->router->getMatchedConfiguration($singleSlash));
+    }
+
+    public function testSimpleRouteWithMandatoryParams() {
+        $testRoute1 = 'parametric/bar';
+        $expectedResult = [
+            'route' => '/parametric/:foo',
+            'controller' => 'ParametricController',
+            'namespace' => 'Parametric\Namespace',
+            'action' => 'doSomething',
+            'params' => [
+                'foo' => 'bar'
+            ]
+        ];
+        $this->assertEquals($expectedResult, $this->router->getMatchedConfiguration($testRoute1));
+
+        $testRoute2 = 'twoParams/bar1/bar2';
+        $expectedResult = [
+            'route' => '/twoParams/:foo1/:foo2',
+            'controller' => 'ParametricController',
+            'namespace' => 'Parametric\Namespace',
+            'action' => 'doSomething',
+            'params' => [
+                'foo1' => 'bar1',
+                'foo2' => 'bar2'
+            ]
+        ];
+        $this->assertEquals($expectedResult, $this->router->getMatchedConfiguration($testRoute2));
+    }
+
+    public function testSimpleRouteWithOptionalParams() {
+
     }
 
 }
