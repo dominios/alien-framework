@@ -48,6 +48,19 @@ class Route implements RouteInterface
     }
 
     /**
+     * Factory method for creation from framework-like route configuration
+     * @param array $configuration
+     * @return RouteInterface
+     */
+    public static function createFromRouteConfiguration(array $configuration) {
+        $className = $configuration['namespace'] . '\\' . $configuration['controller'];
+        $action = $configuration['action'];
+        $route = $configuration['route'];
+        $params = isset($configuration['params']) && is_array($configuration['params']) ? $configuration['params'] : [];
+        return new self($className, $action, $route, $params);
+    }
+
+    /**
      * Returns controller class name
      * @return string
      */

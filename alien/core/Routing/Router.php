@@ -61,6 +61,16 @@ class Router
     }
 
     /**
+     * Returns URL address of requested route
+     * @param string $route
+     * @return string
+     */
+    public static function getRouteUrl($route)
+    {
+        return $route;
+    }
+
+    /**
      * Search for route configuration
      *
      * Method accepts any string, which should be matched by router. Use slash as delimiter of tree-structure parts.
@@ -237,26 +247,16 @@ class Router
      * <b>NOTE</b>: This method is able to find match only at top level of tree (simple routes only).
      *
      * @param string $name
-     * @return array
+     * @return RouteInterface
      * @throws RouteNotFoundException when route is not found
      */
     public function getRoute($name)
     {
         if (array_key_exists($name, $this->routes)) {
-            return $this->routes[$name];
+            return Route::createFromRouteConfiguration($this->routes[$name]);
         } else {
             throw new RouteNotFoundException("Route not found");
         }
-    }
-
-    /**
-     * Returns URL address of requested route
-     * @param string $route
-     * @return string
-     */
-    public static function getRouteUrl($route)
-    {
-        return $route;
     }
 
 }
