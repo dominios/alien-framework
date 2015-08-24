@@ -12,13 +12,13 @@ use Alien\Models\Authorization\User;
 use Alien\Models\Authorization\Group;
 use Alien\Models\Authorization\Permission;
 use Alien\Models\Authorization\Authorization;
-use Alien\Controllers\BaseController;
+use Alien\Controllers\AbstractController;
 use Alien\Form\Form;
 use Alien\Form\Input;
 use Alien\Form\Validator;
 use Alien\Form\Users\EditForm;
 
-class UsersController extends BaseController {
+class UsersController extends AbstractController {
 
     /**
      * @var Authorization
@@ -52,10 +52,10 @@ class UsersController extends BaseController {
 
     private function leftMenuItems() {
         $items = Array();
-        $items[] = Array('permissions' => null, 'url' => BaseController::staticActionURL('users', 'view'), 'img' => 'user', 'text' => 'Zoznam používateľov');
-        $items[] = Array('permissions' => null, 'url' => BaseController::staticActionURL('users', 'edit', array('id' => 0)), 'img' => 'add-user', 'text' => 'Pridať/upraviť používateľa');
-//        $items[] = Array('permissions' => null, 'url' => BaseController::staticActionURL('users', 'viewLogs'), 'img' => 'clock', 'text' => 'Posledná aktivita');
-//        $items[] = Array('permissions' => null, 'url' => BaseController::staticActionURL('users', 'newsletter'), 'img' => 'magazine', 'text' => 'Newsletter');
+        $items[] = Array('permissions' => null, 'url' => AbstractController::staticActionURL('users', 'view'), 'img' => 'user', 'text' => 'Zoznam používateľov');
+        $items[] = Array('permissions' => null, 'url' => AbstractController::staticActionURL('users', 'edit', array('id' => 0)), 'img' => 'add-user', 'text' => 'Pridať/upraviť používateľa');
+//        $items[] = Array('permissions' => null, 'url' => AbstractController::staticActionURL('users', 'viewLogs'), 'img' => 'clock', 'text' => 'Posledná aktivita');
+//        $items[] = Array('permissions' => null, 'url' => AbstractController::staticActionURL('users', 'newsletter'), 'img' => 'magazine', 'text' => 'Newsletter');
         return $items;
     }
 
@@ -110,13 +110,13 @@ class UsersController extends BaseController {
 
         if (!preg_match('/^[0-9]*$/', $_GET['id'])) {
             Notification::error('Neplatný identifikátor používateľa.');
-            $this->redirect(BaseController::staticActionURL('users', 'view'));
+            $this->redirect(AbstractController::staticActionURL('users', 'view'));
         }
 
 
         if (!$this->authorization->getCurrentUser()->hasPermission(array('USERS_VIEW', 'USER_ADMIN'))) {
             Notification::error('Nedostatočné oprávnenia.');
-            $this->redirect(BaseController::staticActionURL('dashboard', 'home'));
+            $this->redirect(AbstractController::staticActionURL('dashboard', 'home'));
         }
 
 
@@ -176,14 +176,14 @@ class UsersController extends BaseController {
 
         if (!Authorization::getCurrentUser()->hasPermission(array('USERS_VIEW', 'USER_ADMIN'))) {
             Notification::error('Nedostatočné oprávnenia.');
-            $this->redirect(BaseController::staticActionURL('dashboard', 'home'));
+            $this->redirect(AbstractController::staticActionURL('dashboard', 'home'));
         }
 
         if (User::exists($_GET['id'])) {
             $user = new User($_GET['id']);
             $user->delete();
         }
-        $this->redirect(BaseController::staticActionURL('users', 'viewList'));
+        $this->redirect(AbstractController::staticActionURL('users', 'viewList'));
     }
 
     protected function addGroup() {
@@ -206,7 +206,7 @@ class UsersController extends BaseController {
 
         if (!Authorization::getCurrentUser()->hasPermission(array('USERS_VIEW', 'USER_ADMIN'))) {
             Notification::error('Nedostatočné oprávnenia.');
-            $this->redirect(BaseController::staticActionURL('dashboard', 'home'));
+            $this->redirect(AbstractController::staticActionURL('dashboard', 'home'));
         }
 
         if (User::exists($_GET['user']) && Permission::exists($_GET['permission'])) {
@@ -214,14 +214,14 @@ class UsersController extends BaseController {
             $permission = new Permission($_GET['permission']);
             $user->addPermission($permission);
         }
-        $this->redirect(BaseController::staticActionURL('users', 'edit', array('id' => $user->getId())));
+        $this->redirect(AbstractController::staticActionURL('users', 'edit', array('id' => $user->getId())));
     }
 
     protected function removePermission() {
 
         if (!Authorization::getCurrentUser()->hasPermission(array('USERS_VIEW', 'USER_ADMIN'))) {
             Notification::error('Nedostatočné oprávnenia.');
-            $this->redirect(BaseController::staticActionURL('dashboard', 'home'));
+            $this->redirect(AbstractController::staticActionURL('dashboard', 'home'));
         }
 
         if (User::exists($_GET['user']) && Permission::exists($_GET['permission'])) {
@@ -229,14 +229,14 @@ class UsersController extends BaseController {
             $permission = new Permission($_GET['permission']);
             $user->removePermission($permission);
         }
-        $this->redirect(BaseController::staticActionURL('users', 'edit', array('id' => $user->getId())));
+        $this->redirect(AbstractController::staticActionURL('users', 'edit', array('id' => $user->getId())));
     }
 
     protected function resetPassword() {
 
         if (!Authorization::getCurrentUser()->hasPermission(array('USERS_VIEW', 'USER_ADMIN'))) {
             Notification::error('Nedostatočné oprávnenia.');
-            $this->redirect(BaseController::staticActionURL('dashboard', 'home'));
+            $this->redirect(AbstractController::staticActionURL('dashboard', 'home'));
         }
 
         if (!preg_match('/^[0-9]*$/', $_GET['id'])) {

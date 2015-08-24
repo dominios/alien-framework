@@ -2,7 +2,7 @@
 
 namespace Alien\Layout;
 
-use Alien\Controllers\BaseController;
+use Alien\Controllers\AbstractController;
 
 $menu = '';
 
@@ -13,7 +13,7 @@ foreach ($this->items as $item) {
     $icon = '<span class="icon icon-' . $item['img'] . '"></span>';
 
     $class = '';
-    if (BaseController::isActionInActionList(BaseController::getActionFromURL($item['url'])) || (isset($item['regex']) && preg_match('/' . $item['regex'] . '/i', $_SERVER['REQUEST_URI']))) {
+    if (AbstractController::isActionInActionList(AbstractController::getActionFromURL($item['url'])) || (isset($item['regex']) && preg_match('/' . $item['regex'] . '/i', $_SERVER['REQUEST_URI']))) {
         $class .= 'highlight';
     }
 

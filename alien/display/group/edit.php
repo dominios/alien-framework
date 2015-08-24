@@ -63,7 +63,7 @@ $permissions = $this->group->getPermissions(true);
                     $partialView = new \Alien\View('display/common/item.php');
                     $partialView->icon = 'user';
                     $partialView->item = $member;
-                    $partialView->dropLink = \Alien\Controllers\BaseController::staticActionURL('group', 'removeMember', array('group' => $this->group->getId(), 'user' => $member->getId()));
+                    $partialView->dropLink = \Alien\Controllers\AbstractController::staticActionURL('group', 'removeMember', array('group' => $this->group->getId(), 'user' => $member->getId()));
                     echo $partialView->renderToString();
                 endforeach;
                 ?>
@@ -81,7 +81,7 @@ $permissions = $this->group->getPermissions(true);
                     $partialView = new \Alien\View('display/common/item.php');
                     $partialView->icon = 'shield';
                     $partialView->item = $permission;
-                    $partialView->dropLink = \Alien\Controllers\BaseController::staticActionURL('group', 'removePermission', array('group' => $this->group->getId(), 'permission' => $permission->getId()));
+                    $partialView->dropLink = \Alien\Controllers\AbstractController::staticActionURL('group', 'removePermission', array('group' => $this->group->getId(), 'permission' => $permission->getId()));
                     echo $partialView->renderToString();
                 endforeach;
                 ?>

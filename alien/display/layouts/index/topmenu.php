@@ -2,7 +2,7 @@
 
 namespace Alien\Layout;
 
-use Alien\Controllers\BaseController;
+use Alien\Controllers\AbstractController;
 use Alien\Form\Input;
 use Alien\Models\Authorization\Authorization;
 
@@ -36,7 +36,7 @@ if (!function_exists('\Alien\Layout\topmenuItemToString')) {
         $href = preg_match('/#$/', $item['url']) ? '#' : $item['url'];
 
         $class = '';
-        if (stristr(BaseController::getCurrentControllerClass(), $item['controller'])) {
+        if (stristr(AbstractController::getCurrentControllerClass(), $item['controller'])) {
             $class = 'highlight';
         }
 

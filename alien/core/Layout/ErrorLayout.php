@@ -5,7 +5,7 @@ namespace Alien\Layout;
 use Alien\View;
 use Alien\Response;
 use Alien\Message;
-use Alien\Controllers\BaseController;
+use Alien\Controllers\AbstractController;
 use Alien\Models\Authorization\Authorization;
 
 class ErrorLayout extends AdminLayout {

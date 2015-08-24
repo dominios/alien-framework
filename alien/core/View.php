@@ -2,7 +2,7 @@
 
 namespace Alien;
 
-use Alien\Controllers\BaseController;
+use Alien\Controllers\AbstractController;
 
 class View {
 
@@ -12,7 +12,7 @@ class View {
     private $autoEscape = true;
     private $autoStripTags = false;
 
-    public function __construct($script, BaseController $controller = null) {
+    public function __construct($script, AbstractController $controller = null) {
         $this->script = $script;
         $this->controller = $controller;
     }

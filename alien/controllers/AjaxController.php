@@ -13,7 +13,7 @@ use Alien\Models\Authorization\Group;
 use Alien\Models\Authorization\Permission;
 use Alien\View;
 
-class AjaxController extends BaseController {
+class AjaxController extends AbstractController {
 
     /**
      * @param $REQ request pole
@@ -213,7 +213,7 @@ class AjaxController extends BaseController {
                     $partial = new View('display/common/item.php');
                     $partial->icon = 'group';
                     $partial->item = new Group($group);
-                    $partial->onClick = 'javascript: window.location="' . \Alien\Controllers\BaseController::staticActionURL('users', 'addGroup', array('user' => $user->getId(), 'group' => $group)) . '"';
+                    $partial->onClick = 'javascript: window.location="' . \Alien\Controllers\AbstractController::staticActionURL('users', 'addGroup', array('user' => $user->getId(), 'group' => $group)) . '"';
                     $ret .= $partial->renderToString();
                 }
                 $ret .= '</div>';
@@ -248,7 +248,7 @@ class AjaxController extends BaseController {
                     $partial = new View('display/common/item.php');
                     $partial->icon = 'shield';
                     $partial->item = new Permission($permission);
-                    $partial->onClick = 'javascript: window.location="' . \Alien\Controllers\BaseController::staticActionURL('users', 'addPermission', array('user' => $user->getId(), 'permission' => $permission)) . '"';
+                    $partial->onClick = 'javascript: window.location="' . \Alien\Controllers\AbstractController::staticActionURL('users', 'addPermission', array('user' => $user->getId(), 'permission' => $permission)) . '"';
                     $ret .= $partial->renderToString();
                 }
                 $ret .= '</div>';
@@ -283,7 +283,7 @@ class AjaxController extends BaseController {
                     $partial = new View('display/common/item.php');
                     $partial->icon = 'user';
                     $partial->item = new User($user);
-                    $partial->onClick = 'javascript: window.location="' . \Alien\Controllers\BaseController::staticActionURL('groups', 'addMember', array('group' => $group->getId(), 'user' => $user)) . '"';
+                    $partial->onClick = 'javascript: window.location="' . \Alien\Controllers\AbstractController::staticActionURL('groups', 'addMember', array('group' => $group->getId(), 'user' => $user)) . '"';
                     $ret .= $partial->renderToString();
                 }
                 $ret .= '</div>';
@@ -318,7 +318,7 @@ class AjaxController extends BaseController {
                     $partial = new View('display/common/item.php');
                     $partial->icon = 'shield';
                     $partial->item = new Permission($permission);
-                    $partial->onClick = 'javascript: window.location="' . \Alien\Controllers\BaseController::staticActionURL('groups', 'addPermission', array('group' => $group->getId(), 'permission' => $permission)) . '"';
+                    $partial->onClick = 'javascript: window.location="' . \Alien\Controllers\AbstractController::staticActionURL('groups', 'addPermission', array('group' => $group->getId(), 'permission' => $permission)) . '"';
                     $ret .= $partial->renderToString();
                 }
                 $ret .= '</div>';

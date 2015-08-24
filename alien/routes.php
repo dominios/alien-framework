@@ -3,7 +3,7 @@
 return array(
     'route' => array(
         'route' => '/route',
-        'controller' => 'BaseController',
+        'controller' => 'AbstractController',
         'namespace' => 'Alien\Controllers',
         'action' => 'index',
         'childRoutes' => [

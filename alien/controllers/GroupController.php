@@ -13,9 +13,9 @@ use Alien\Notification;
 use Alien\Models\Authorization\Group;
 use Alien\Models\Authorization\User;
 use Alien\Models\Authorization\Permission;
-use Alien\Controllers\BaseController;
+use Alien\Controllers\AbstractController;
 
-class GroupController extends BaseController {
+class GroupController extends AbstractController {
 
     /**
      * @var GroupDao
@@ -118,7 +118,7 @@ class GroupController extends BaseController {
         $group->setName($_POST['groupName']);
         $group->setDescription($_POST['groupDescription']);
         $group->update();
-        $this->redirect(BaseController::staticActionURL('groups', 'edit', array('id' => $group->getId())));
+        $this->redirect(AbstractController::staticActionURL('groups', 'edit', array('id' => $group->getId())));
     }
 
     protected function remove() {
@@ -128,7 +128,7 @@ class GroupController extends BaseController {
                 $group->delete();
             }
         }
-        $this->redirect(BaseController::staticActionURL('groups', 'view'));
+        $this->redirect(AbstractController::staticActionURL('groups', 'view'));
     }
 
     public function addMember() {
@@ -137,7 +137,7 @@ class GroupController extends BaseController {
             $group = new Group($_GET['group']);
             $user->addGroup($group);
         }
-        $this->redirect(BaseController::staticActionURL('groups', 'edit', array('id' => $group->getId())));
+        $this->redirect(AbstractController::staticActionURL('groups', 'edit', array('id' => $group->getId())));
     }
 
     protected function removeMember() {
@@ -146,7 +146,7 @@ class GroupController extends BaseController {
             $group = new Group($_GET['group']);
             $user->removeGroup($group);
         }
-        $this->redirect(BaseController::staticActionURL('groups', 'edit', array('id' => $group->getId())));
+        $this->redirect(AbstractController::staticActionURL('groups', 'edit', array('id' => $group->getId())));
     }
 
     protected function addPermission() {
@@ -155,7 +155,7 @@ class GroupController extends BaseController {
             $permission = new Permission($_GET['permission']);
             $group->addPermission($permission);
         }
-        $this->redirect(BaseController::staticActionURL('groups', 'edit', array('id' => $group->getId())));
+        $this->redirect(AbstractController::staticActionURL('groups', 'edit', array('id' => $group->getId())));
     }
 
     protected function removePermission() {
@@ -164,7 +164,7 @@ class GroupController extends BaseController {
             $permission = new Permission($_GET['permission']);
             $group->removePermission($permission);
         }
-        $this->redirect(BaseController::staticActionURL('groups', 'edit', array('id' => $group->getId())));
+        $this->redirect(AbstractController::staticActionURL('groups', 'edit', array('id' => $group->getId())));
     }
 
 }

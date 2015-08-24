@@ -2,7 +2,7 @@
 
 namespace Alien;
 
-use Alien\Controllers\BaseController;
+use Alien\Controllers\AbstractController;
 use Alien\Di\ServiceLocator;
 use Alien\Routing\Router;
 use BadFunctionCallException;
@@ -96,7 +96,7 @@ class Application {
                 if ($user instanceof User) {
                     if (Message::getUnreadCount($user)) {
 //                        Notification::newMessages("");
-                        // $this->redirect(BaseController::staticActionURL('dashboard', 'home'));
+                        // $this->redirect(AbstractController::staticActionURL('dashboard', 'home'));
 //                        $route['controller'] = 'dashboard';
 //                        $route['actions'] = array('home');
                     }
@@ -105,7 +105,7 @@ class Application {
         }
 
         // @todo fuj!
-        $controller = new BaseController();
+        $controller = new AbstractController();
         $content = '';
 
         try {

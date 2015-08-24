@@ -6,7 +6,7 @@ use Alien\Form\Fieldset;
 use Alien\Form\Form;
 use Alien\Form\Input;
 use Alien\Form\Validator;
-use Alien\Controllers\BaseController;
+use Alien\Controllers\AbstractController;
 use Alien\Models\Authorization\Group;
 
 class EditForm extends Form {
@@ -45,7 +45,7 @@ class EditForm extends Form {
              ->setAutocomplete(false)
              ->addToFieldset($groupFieldset);
 
-        Input::button(BaseController::staticActionURL('group', 'view'), 'Zrušiť', 'icon-back')
+        Input::button(AbstractController::staticActionURL('group', 'view'), 'Zrušiť', 'icon-back')
              ->addCssClass('negative')
              ->setName('buttonCancel')
              ->addToFieldset($submitFieldset);
@@ -55,7 +55,7 @@ class EditForm extends Form {
              ->setName('buttonSave')
              ->addToFieldset($submitFieldset);
 
-        Input::button(BaseController::staticActionURL('group', 'remove', array('id' => $_GET['id'])), 'Odstrániť používateľa', 'icon-delete')
+        Input::button(AbstractController::staticActionURL('group', 'remove', array('id' => $_GET['id'])), 'Odstrániť používateľa', 'icon-delete')
              ->setName('buttonDelete')
              ->setDisabled(true)
              ->addToFieldset($submitFieldset);

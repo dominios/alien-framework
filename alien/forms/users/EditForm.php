@@ -5,7 +5,7 @@ namespace Alien\Form\Users;
 use Alien\Form\Form;
 use Alien\Form\Input;
 use Alien\Form\Validator;
-use Alien\Controllers\BaseController;
+use Alien\Controllers\AbstractController;
 use Alien\Models\Authorization\User;
 use Alien\Models\Authorization\UserInterface;
 
@@ -54,11 +54,11 @@ class EditForm extends Form {
         $status->addOption(new Input\Option('neaktívny', Input\Option::TYPE_SELECT, 0));
         $status->addToForm($form);
 
-        Input::button(BaseController::staticActionURL('users', 'viewList'), 'Zrušiť', 'fa fa-arrow-circle-left')->addCssClass('btn-danger')->setName('buttonCancel')->addToForm($form);
+        Input::button(AbstractController::staticActionURL('users', 'viewList'), 'Zrušiť', 'fa fa-arrow-circle-left')->addCssClass('btn-danger')->setName('buttonCancel')->addToForm($form);
         Input::button("javascript: $('#userForm').submit();", 'Uložiť', 'fa fa-check')->addCssClass('btn-success')->setName('buttonSave')->addToForm($form);
-        Input::button(BaseController::staticActionURL('dashboard', 'composeMessage', array('id' => $user->getId())), 'Poslať správu', 'fa fa-envelope')->addCssClass('btn-primary')->setName('buttonMessage')->addToForm($form);
-        Input::button(BaseController::staticActionURL('users', 'resetPassword', array('id' => $user->getId())), 'Resetovať heslo', 'fa fa-key')->setName('buttonResetPassword')->setDisabled(true)->addToForm($form);
-        Input::button(BaseController::staticActionURL('users', 'removeUser', array('id' => $user->getId())), 'Odstrániť používateľa', 'fa fa-times')->setName('buttonDelete')->setDisabled(true)->addToForm($form);
+        Input::button(AbstractController::staticActionURL('dashboard', 'composeMessage', array('id' => $user->getId())), 'Poslať správu', 'fa fa-envelope')->addCssClass('btn-primary')->setName('buttonMessage')->addToForm($form);
+        Input::button(AbstractController::staticActionURL('users', 'resetPassword', array('id' => $user->getId())), 'Resetovať heslo', 'fa fa-key')->setName('buttonResetPassword')->setDisabled(true)->addToForm($form);
+        Input::button(AbstractController::staticActionURL('users', 'removeUser', array('id' => $user->getId())), 'Odstrániť používateľa', 'fa fa-times')->setName('buttonDelete')->setDisabled(true)->addToForm($form);
 
         Input::button('javascript: userShowAddGroupDialog(' . $user->getId() . ');', 'Pridať skupinu', 'icon-plus')->setName('buttonAddGroup')->addToForm($form);
         Input::button('javascript: userShowAddPermissionDialog(' . $user->getId() . ');', 'Pridať oprávnenie', 'icon-plus')->setName('buttonAddPermission')->addToForm($form);
