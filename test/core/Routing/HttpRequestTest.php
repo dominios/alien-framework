@@ -54,7 +54,7 @@ class HttpRequestTest extends PHPUnit_Framework_TestCase {
     }
 
     /**
-     * @expectedException \InvalidArgumentException
+     * @expectedException \Alien\Routing\Exception\InvalidHttpRequestException
      */
     public function testInvalidUriException() {
         $this->assertEmpty(HttpRequest::createFromString('GET    HTTP/1.2'));
