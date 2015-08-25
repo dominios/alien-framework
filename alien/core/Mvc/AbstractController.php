@@ -2,9 +2,9 @@
 
 namespace Alien\Mvc;
 
-use Alien\Di;
 use Alien\Di\ServiceLocatorInterface;
 use Alien\Routing;
+use Alien\Routing\RouteInterface;
 use Alien\View;
 
 /**
@@ -28,63 +28,49 @@ class AbstractController
 {
 
     /**
-     * @var string
-     * @deprecated
-     */
-    private static $currentController;
-    /**
      * Automatically injected instance of <i>ServiceLocator</i>
-     * @var Di\ServiceLocatorInterface
+     * @var ServiceLocatorInterface
      */
     protected $serviceLocator;
+
     /**
      * Name of default action to call
      * @var string
      */
     protected $defaultAction;
+
     /**
      * Array of actions co execute
      * @var array
-     * @deprecated
      */
     protected $actions;
+
     /**
-     * @var array
-     * @deprecated
-     * @todo co to je? zamenit ked tak za Route
+     * @var RouteInterface
      */
     protected $route;
+
     /**
      * Automatically created View object
      * @var View
      */
     protected $view = null;
+
     /**
      * @var array POST array
      * @todo co s tym?
      */
     private $POST;
+    
     /**
      * @var array GET array
      * @todo co s tym?
      */
     private $GET;
 
-    /**
-     * @param array|null $args array of actions
-     * @todo argumenty odtialto dat prec
-     */
-    public function __construct($args = null)
+    public function __construct()
     {
-        if (is_array($args)) {
-            $this->actions = $args;
-        } else {
-            if ($args === null) {
-                $this->actions[] = $this->defaultAction;
-            } else {
-                $this->actions[] = $args;
-            }
-        }
+        $this->clearQueue();
     }
 
     /**
@@ -168,11 +154,9 @@ class AbstractController
 
     /**
      * Sets route
-     * @param $route
-     * @deprecated
-     * @todo wtf? zamenit ked tak za Route
+     * @param $route RouteInterface
      */
-    public function setRoute($route)
+    public function setRoute(RouteInterface $route)
     {
         $this->route = $route;
     }
@@ -294,11 +278,7 @@ class AbstractController
      */
     public function isActionInActionList($action)
     {
-        if (in_array($action, $this->actions)) {
-            return true;
-        } else {
-            return false;
-        }
+        return in_array($action, $this->actions);
     }
 
     /**
@@ -307,7 +287,6 @@ class AbstractController
      * <b>NOTE:</b> any action inserted into queue <i>after</i> calling this method is executed as well.
      *
      * @param string $action action name to execute
-     * @return mixed
      */
     public function forceAction($action)
     {
@@ -316,7 +295,7 @@ class AbstractController
     }
 
     /**
-     * Clears queue of actions to execute
+     * Clears queue of actions
      */
     public function clearQueue()
     {
@@ -334,7 +313,7 @@ class AbstractController
 
     /**
      * Returns ServiceLocator instance
-     * @return ServiceLocator
+     * @return ServiceLocatorInterface
      */
     public function getServiceLocator()
     {

@@ -1,6 +1,5 @@
 <?php
 
-
 use Application\Application;
 
 chdir('..');

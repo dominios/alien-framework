@@ -52,6 +52,17 @@ class Response implements ResponseInterface
     }
 
     /**
+     * Sets HTTP status code
+     * @param int $status
+     * @return Response
+     */
+    public function setStatus($status)
+    {
+        $this->status = $status;
+        return $this;
+    }
+
+    /**
      * Returns response content
      * @return mixed
      */
@@ -68,17 +79,6 @@ class Response implements ResponseInterface
     public function setContent($content)
     {
         $this->content = $content;
-        return $this;
-    }
-
-    /**
-     * Sets HTTP status code
-     * @param int $status
-     * @return Response
-     */
-    public function setStatus($status)
-    {
-        $this->status = $status;
         return $this;
     }
 
