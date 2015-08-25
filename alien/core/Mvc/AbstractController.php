@@ -3,6 +3,8 @@
 namespace Alien\Mvc;
 
 use Alien\Di\ServiceLocatorInterface;
+use Alien\Mvc\Exception\NoResponseException;
+use Alien\Mvc\Exception\NotFoundException;
 use Alien\Routing;
 use Alien\Routing\RouteInterface;
 use Alien\View;
@@ -51,17 +53,23 @@ class AbstractController
     protected $route;
 
     /**
-     * Automatically created View object
+     * Automatically prepared View instance
      * @var View
      */
     protected $view = null;
+
+    /**
+     * Automatically prepared response instance
+     * @var Response
+     */
+    protected $response;
 
     /**
      * @var array POST array
      * @todo co s tym?
      */
     private $POST;
-    
+
     /**
      * @var array GET array
      * @todo co s tym?
@@ -71,6 +79,14 @@ class AbstractController
     public function __construct()
     {
         $this->clearQueue();
+    }
+
+    /**
+     * Clears queue of actions
+     */
+    public function clearQueue()
+    {
+        $this->actions = [];
     }
 
     /**
@@ -173,11 +189,20 @@ class AbstractController
     }
 
     /**
-     * Run all actions
-     * @return array
-     * @todo prepisat krajsie; odstranit dependencies; napisat poriadny doc comment
+     * Execute all actions in queue and return responses
+     *
+     * This method filters queue and ensure, that each action will be executed only once.
+     * Each action name is then checked, if contains suffix <i>Action</i> and adds it if not.
+     * During execution, <code>prepareView()</code> and <code>prepareResponse()</code> methods are called
+     * to prepare instances of automatically available objects via <code>$this</code>.
+     *
+     * Each action should modify prepared <i>Response</i> (set it's content etc.) while returning nothing,
+     * or return new instance instead.
+     *
+     * <b>WARNING:</b> if multiple actions are in queue, <i>View</i> and <i>Response</i> instances are re-created for each action execution.
+     * @return Response[]
      */
-    public final function getResponses()
+    public function getResponses()
     {
 
         // call every action at most 1 time
@@ -185,76 +210,73 @@ class AbstractController
 
         $responses = [];
 
-        // search for initialize() method and if found, execute it
-        if (method_exists(get_called_class(), 'initialize')) {
-            $response = $this->initialize();
-            if ($response instanceof Response) {
-                array_push($responses, $response);
-            }
-        }
-
         // if no actions are set, try to run default action
         if (!sizeof($this->actions)) {
             $this->actions[] = $this->defaultAction;
         }
 
+        // checks if action name ends with postfix Action and adds it if not
+        $this->actions = array_map(function ($action) {
+            return preg_match('/(\w+)Action$/', $action) ? $action : $action . 'Action';
+        }, $this->actions);
+
         // execute actions queue
         foreach ($this->actions as $action) {
 
-            $viewSrc = strip_namespace(str_replace('Controller', '', $this->getCurrentControllerClass())) . '/' . $action;
-            $this->view = new View('display/' . strtolower($viewSrc . '.php'));
+            $this->view = $this->prepareView($action);
 
             if (!method_exists($this, $action)) {
-                throw new RouterException();
+                throw new NotFoundException("Action $action not found");
             }
-            if (!method_exists($this, $action) && $action != $this->defaultAction) {
-                $action = $this->defaultAction;
-                $this->redirect($action);
-            }
+
             $response = $this->$action();
-            if ($response instanceof Response) {
+            if (is_null($response)) {
+                array_push($responses, $this->getResponse());
+            } else if ($response instanceof ResponseInterface) {
                 array_push($responses, $response);
+            } else {
+                throw new NoResponseException("Response of action $action is empty");
             }
+
         }
 
         return $responses;
     }
 
     /**
-     * Initialize the Controller
-     * @deprecated
+     * Create automatically available View object
+     * @param $action string action name
+     * @return View
      */
-    protected function initialize()
+    protected function prepareView($action)
     {
+        $src = '';
+        $src .= 'view/';
+        $src .= strip_namespace(str_replace('Controller', '', get_called_class()));
+        $src .= '/' . $action;
+        $src .= '.php';
+        return new View($src);
     }
 
     /**
-     * Gets current controller class name
-     *
-     * @return string
-     * @deprecated
-     * @todo odstranit uplne
+     * Returns last prepared Response object if exists or prepare one
+     * @return Response
      */
-    public static function getCurrentControllerClass()
+    public function getResponse()
     {
-        return self::$currentController;
+        if ($this->response === null) {
+            $this->response = $this->prepareResponse();
+        }
+        return $this->response;
     }
 
     /**
-     * Perform redirect operation
-     *
-     * @param string $action URL to redirect
-     * @param int $statusCode HTTP status code
-     * @deprecated
-     * @todo akciu prerobit na Route ked tak
-     * @todo Notifikacie odstranit ak su nastavene
+     * Create automatically available Response object
+     * @return Response
      */
-    protected function redirect($action, $statusCode = 301)
+    protected function prepareResponse()
     {
-        ob_clean();
-        header('Location: ' . $action, false, $statusCode);
-        ob_end_flush();
-        exit;
+        return new Response(null, Response::HTTP_SUCCESS, 'text/plain;charset=UTF8');
     }
 
     /**
@@ -284,6 +306,7 @@ class AbstractController
     /**
      * Forces to execute given action.
      * All actions are removed from queue by calling this method. Execution continues with given action name.
+     *
      * <b>NOTE:</b> any action inserted into queue <i>after</i> calling this method is executed as well.
      *
      * @param string $action action name to execute
@@ -292,14 +315,6 @@ class AbstractController
     {
         $this->clearQueue();
         $this->addAction($action);
-    }
-
-    /**
-     * Clears queue of actions
-     */
-    public function clearQueue()
-    {
-        $this->actions = [];
     }
 
     /**
@@ -339,6 +354,23 @@ class AbstractController
     protected function refresh()
     {
         $this->redirect($_SERVER['REQUEST_URI']);
+    }
+
+    /**
+     * Perform redirect operation
+     *
+     * @param string $action URL to redirect
+     * @param int $statusCode HTTP status code
+     * @deprecated
+     * @todo akciu prerobit na Route ked tak
+     * @todo Notifikacie odstranit ak su nastavene
+     */
+    protected function redirect($action, $statusCode = 301)
+    {
+        ob_clean();
+        header('Location: ' . $action, false, $statusCode);
+        ob_end_flush();
+        exit;
     }
 
 }

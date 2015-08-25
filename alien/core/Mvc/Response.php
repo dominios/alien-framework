@@ -34,12 +34,14 @@ class Response implements ResponseInterface
 
     /**
      * @param mixed $content response content
-     * @param int $status HTTP status code (default: 200)
+     * @param int $status HTTP status code
+     * @param string $contentType content type
      */
-    public function __construct($content = null, $status = self::HTTP_SUCCESS)
+    public function __construct($content = null, $status = self::HTTP_SUCCESS, $contentType = 'text/plain;charset=UTF8')
     {
         $this->status = $status;
         $this->content = $content;
+        $this->contentType = $contentType;
     }
 
     /**
@@ -81,6 +83,27 @@ class Response implements ResponseInterface
         $this->content = $content;
         return $this;
     }
+
+    /**
+     * Returns content type
+     * @return string
+     */
+    public function getContentType()
+    {
+        return $this->contentType;
+    }
+
+    /**
+     * Sets content type
+     * @param string $contentType
+     * @return Response
+     */
+    public function setContentType($contentType)
+    {
+        $this->contentType = $contentType;
+        return $this;
+    }
+
 
 }
 
