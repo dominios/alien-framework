@@ -11,7 +11,7 @@ try {
 
     header("Content-Type: text/plain; charset=UTF8");
 
-    $confFinfo = new SplFileInfo(__DIR__ . '/../alien/config.php');
+    $confFinfo = new SplFileInfo(__DIR__ . "/../alien/module/Application/config.php");
     $config = new \Alien\Configuration();
     $config->loadConfigurationFromFile($confFinfo);
 

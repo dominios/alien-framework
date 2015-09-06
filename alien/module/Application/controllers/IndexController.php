@@ -1,6 +1,6 @@
 <?php
 
-namespace Application;
+namespace Application\Controllers;
 
 use Alien\Mvc\AbstractController;
 use Alien\Mvc\Component\TextComponent;
@@ -10,7 +10,7 @@ class IndexController extends AbstractController {
 
     protected function prepareView($action)
     {
-        return new View(__DIR__ . '/views/' . str_replace('Action', '', $action) . '.phtml');
+        return new View(__DIR__ . '/../views/index/' . str_replace('Action', '', $action) . '.phtml');
     }
 
     protected function indexAction() {

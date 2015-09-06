@@ -4,7 +4,7 @@ return array(
     '' => array(
         'route' => '/',
         'controller' => 'IndexController',
-        'namespace' => 'Application',
+        'namespace' => 'Application\Controllers',
         'action' => 'index',
     ),
 );

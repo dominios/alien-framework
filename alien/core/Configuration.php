@@ -2,6 +2,7 @@
 
 namespace Alien;
 
+use Alien\Exception\IOException;
 use InvalidArgumentException;
 use SplFileInfo;
 use UnexpectedValueException;
@@ -19,18 +20,18 @@ class Configuration {
      * Targeted file should return php array.
      *
      * @param SplFileInfo $finfo
-     * @throws InvalidArgumentException when file is not readable
-     * @throws InvalidArgumentException when argument is not file
+     * @throws IOException when file is not readable
+     * @throws IOException when argument is not file
      * @throws UnexpectedValueException when file does not contain valid array
      */
     public function loadConfigurationFromFile(SplFileInfo $finfo) {
         if(!$finfo->isReadable()) {
-            throw new InvalidArgumentException("File is not readable.");
+            throw new IOException("File is not readable.");
         }
         if(!$finfo->isFile()) {
-            throw new InvalidArgumentException("Argument is not valid file.");
+            throw new IOException("Argument is not valid file.");
         }
-        $conf = include $finfo->getBasename();
+        $conf = include $finfo->getPath() .'/' . $finfo->getBasename();
         if(!is_array($conf)) {
             throw new UnexpectedValueException("Configuration is not an array.");
         }
