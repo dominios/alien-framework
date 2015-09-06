@@ -69,10 +69,9 @@ class Application {
             }
         }
 
-        // @todo odstranit singleton!
-        $sm = ServiceLocator::initialize($this->getConfiguration());
-        $this->serviceLocator = $sm;
-        $sm->registerService($configuration);
+        $sl = new ServiceLocator($this->getConfiguration());
+        $this->serviceLocator = $sl;
+        $sl->registerService($configuration);
 
     }
 

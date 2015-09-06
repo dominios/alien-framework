@@ -12,12 +12,12 @@ return [
         'prefix' => 'test'
     ],
 
-    'factories' => [
-        'Router' => function(\Alien\Di\ServiceLocator $sl) {
+    'services' => [
+        'Router' => function (\Alien\Di\ServiceLocator $sl) {
             $routes = include 'routes.php';
             return new \Alien\Routing\Router($routes);
         },
-        'Connection' => function(\Alien\Di\ServiceLocator $sl) {
+        'Connection' => function (\Alien\Di\ServiceLocator $sl) {
             $conf = $sl->getService('\Alien\Configuration')->get('database');
             $connection = new Alien\Db\Connection(
                 $conf['host'],
@@ -28,7 +28,7 @@ return [
             $connection->setDbPrefix($conf['prefix']);
             return $connection;
         },
-        'Authorization' => function(\Alien\Di\ServiceLocator $sl) {
+        'Authorization' => function (\Alien\Di\ServiceLocator $sl) {
             $auth = new \Alien\Rbac\Authorization($sl);
             return $auth;
         },
