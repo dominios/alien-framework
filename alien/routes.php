@@ -1,10 +1,10 @@
 <?php
 
 return array(
-    'home' => array(
-        'route' => '/home',
+    '' => array(
+        'route' => '/',
         'controller' => 'IndexController',
         'namespace' => 'Application',
-        'action' => 'home',
+        'action' => 'index',
     ),
 );

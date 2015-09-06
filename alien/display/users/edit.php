@@ -163,7 +163,7 @@
                 //                    $partialView->icon = 'group';
                 //                    $partialView->item = $group;
                 //                    $partialView->dropLink = \Alien\Controllers\ AbstractController:: staticActionURL('users', 'removeGroup', array('user' => $this->user->getId(), 'group' => $group->getId()));
-                //                    echo $partialView->renderToString();
+                //                    echo $partialView->render();
                 //                endforeach;
                 ?>
             </div>

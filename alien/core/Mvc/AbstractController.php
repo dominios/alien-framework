@@ -7,7 +7,6 @@ use Alien\Mvc\Exception\NoResponseException;
 use Alien\Mvc\Exception\NotFoundException;
 use Alien\Routing;
 use Alien\Routing\RouteInterface;
-use Alien\View;
 
 /**
  * Basic controller logic, parent of any controller defined in application
