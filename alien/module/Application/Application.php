@@ -2,6 +2,7 @@
 
 namespace Application;
 
+use Alien\Configuration;
 use Alien\Mvc\AbstractController;
 use Alien\Mvc\Response;
 use Alien\Mvc\ResponseInterface;
@@ -17,6 +18,12 @@ class Application extends \Alien\Application {
     protected $router;
 
     public function run() {
+
+        $routesFile = new \SplFileInfo(__DIR__ . '/routes.php');
+        $routesConfig = new Configuration();
+        $routesConfig->loadConfigurationFromFile($routesFile);
+        $merged = $this->getConfiguration()->merge($this->getConfiguration(), $routesConfig);
+        $this->setConfiguration($merged);
 
         $this->router = $this->getServiceLocator()->getService('Router');
 

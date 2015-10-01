@@ -68,9 +68,12 @@ class Configuration implements ConfigurationInterface
         }
 
         $merged = [];
-        foreach (func_get_args() as $configuration) {
+        $arguments = func_get_args();
+        foreach ($arguments as $configuration) {
             if ($configuration instanceof Configuration) {
-                $merged = array_merge($merged, $configuration->config);
+                if(is_array($configuration->config)) {
+                    $merged = array_merge($merged, $configuration->config);
+                }
             } else {
                 throw new UnexpectedValueException("Cannot merge other type then " . __CLASS__);
             }
