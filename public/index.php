@@ -15,6 +15,12 @@ try {
     $config = new \Alien\Configuration();
     $config->loadConfigurationFromFile($confFinfo);
 
+    $routesFinfo = new \SplFileInfo(__DIR__ . "/../alien/module/Application/routes.php");
+    $routesConfig = new \Alien\Configuration();
+    $routesConfig->loadConfigurationFromFile($routesFinfo);
+
+    $config->mergeWith($routesConfig);
+
     $app = new Application();
     $app->bootstrap($config);
 

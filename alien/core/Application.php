@@ -10,7 +10,7 @@ use Exception;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
 
-class Application {
+class   Application {
 
     /**
      * @var Configuration

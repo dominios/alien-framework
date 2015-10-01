@@ -3,8 +3,8 @@
 namespace Alien;
 
 use Alien\Exception\IOException;
+use InvalidArgumentException;
 use SplFileInfo;
-use UnderflowException;
 use UnexpectedValueException;
 
 class Configuration implements ConfigurationInterface
@@ -51,6 +51,31 @@ class Configuration implements ConfigurationInterface
     }
 
     /**
+     * Merge current configuration with given configurations
+     *
+     * When calling this method, current settings are merged directly with
+     * other configurations.
+     *
+     * <b>WARNING</b>: Order of arguments is important!
+     *
+     * @param Configuration $configuration,... configurations to merge with
+     * * @throws InvalidArgumentException when no configurations given
+     */
+    public function mergeWith(Configuration $configuration)
+    {
+        if (!func_num_args()) {
+            throw new InvalidArgumentException("No arguments given");
+        }
+
+        $merged = $this;
+        $arguments = func_get_args();
+        foreach ($arguments as $arg) {
+            $merged = $this->merge($merged, $arg);
+        }
+        $this->config = $merged->config;
+    }
+
+    /**
      * Merge given configurations into one
      *
      * Merges multiple configurations into single configuration.
@@ -60,22 +85,23 @@ class Configuration implements ConfigurationInterface
      *
      * @param Configuration $configuration,... configurations to merge
      * @return Configuration merged configuration
+     * @throws InvalidArgumentException when no configurations given
      */
     public function merge(Configuration $configuration)
     {
         if (!func_num_args()) {
-            throw new UnderflowException("No arguments given");
+            throw new InvalidArgumentException("No arguments given");
         }
 
         $merged = [];
         $arguments = func_get_args();
         foreach ($arguments as $configuration) {
             if ($configuration instanceof Configuration) {
-                if(is_array($configuration->config)) {
+                if (is_array($configuration->config)) {
                     $merged = array_merge($merged, $configuration->config);
                 }
             } else {
-                throw new UnexpectedValueException("Cannot merge other type then " . __CLASS__);
+                throw new UnexpectedValueException("Cannot merge other type then " . __CLASS__ . ", " . get_class($configuration) . ' given');
             }
         }
 
