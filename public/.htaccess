@@ -16,8 +16,8 @@ RewriteBase /
 #RewriteCond %{HTTP_HOST} ^domain\.sk$ [NC]
 #RewriteRule ^(.*)$ http://www.domain.sk/$1 [L,R=301,QSA]
 
-#RewriteCond %{REQUEST_FILENAME} -s
-#RewriteCond %{REQUEST_FILENAME} -l
-#RewriteCond %{REQUEST_FILENAME} -d
+RewriteCond %{REQUEST_FILENAME} -s
+RewriteCond %{REQUEST_FILENAME} -l
+RewriteCond %{REQUEST_FILENAME} -d
 
 RewriteRule ^(.*)$ index.php [L,QSA]
