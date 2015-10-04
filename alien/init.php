@@ -84,7 +84,7 @@ function class_autoloader($class) {
     // ide o modul
     $parts = explode('/', '$class');
     $modul = $parts[0];
-    $searchedFile = 'module\\' . $class . '.php';
+    $searchedFile = '..\module\\' . $class . '.php';
     if(file_exists($searchedFile)) {
         require_once $searchedFile;
     }
