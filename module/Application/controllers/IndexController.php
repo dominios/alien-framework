@@ -15,25 +15,19 @@ class IndexController extends AbstractController
         return new View(__DIR__ . '/../views/index/' . str_replace('Action', '', $action) . '.phtml');
     }
 
+    protected function createComponentFromFactory($name) {
+        $config = $this->getServiceLocator()->getService('Alien\Configuration');
+        $factories = $config->get('controllers')[__CLASS__]['components'];
+        return $factories[$name]();
+    }
+
     protected function indexAction()
     {
 
         $this->view->setVariable('projectName', 'ALiEN Framework CSM');
-        $this->view->addComponent($this->createComponentNav());
+        $this->view->addComponent($this->createComponentFromFactory('nav'));
         $this->getResponse()->setContentType('text/html;charset=UTF8');
         $this->getResponse()->setContent($this->view->render());
-    }
-
-    public function createComponentNav()
-    {
-        return new NavigationComponent([
-            'Home' => '#',
-            'Projects' => '#',
-            'Services' => '#',
-            'Downloads' => '#',
-            'About' => '#',
-            'Contact' => '#',
-        ]);
     }
 
     public function createComponentParagraph() {

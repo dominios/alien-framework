@@ -19,7 +19,11 @@ try {
     $routesConfig = new \Alien\Configuration();
     $routesConfig->loadConfigurationFromFile($routesFinfo);
 
-    $config->mergeWith($routesConfig);
+    $controllersFinfo = new SplFileInfo(__DIR__ . "/../module/Application/controllers.php");
+    $controllersConfig = new \Alien\Configuration();
+    $controllersConfig->loadConfigurationFromFile($controllersFinfo);
+
+    $config->mergeWith($routesConfig, $controllersConfig);
 
     $app = new Application();
     $app->bootstrap($config);
