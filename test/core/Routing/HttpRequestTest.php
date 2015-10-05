@@ -1,9 +1,5 @@
 <?php
 
-require_once __DIR__ . '/../../../alien/core/Routing/RequestInterface.php';
-require_once __DIR__ . '/../../../alien/core/Routing/HttpRequest.php';
-require_once __DIR__ . '/../../../alien/core/Routing/Exception/InvalidHttpRequestException.php';
-
 use Alien\Routing\HttpRequest;
 
 class HttpRequestTest extends PHPUnit_Framework_TestCase {

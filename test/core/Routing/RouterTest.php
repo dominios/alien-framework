@@ -2,10 +2,6 @@
 
 use Alien\Routing\Router;
 
-require_once __DIR__ . '/../../../alien/core/Routing/Router.php';
-require_once __DIR__ . '/../../../alien/core/Routing/Exception/RouteNotFoundException.php';
-require_once __DIR__ . '/../../../alien/core/Routing/Exception/InvalidConfigurationException.php';
-
 class RouterTest extends PHPUnit_Framework_TestCase {
 
     /**

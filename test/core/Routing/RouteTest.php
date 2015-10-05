@@ -2,9 +2,6 @@
 
 use Alien\Routing\Route;
 
-require_once __DIR__ . '/../../../alien/core/Routing/RouteInterface.php';
-require_once __DIR__ . '/../../../alien/core/Routing/Route.php';
-
 class RouteTest extends PHPUnit_Framework_TestCase
 {
 

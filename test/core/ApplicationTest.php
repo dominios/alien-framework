@@ -1,10 +1,5 @@
 <?php
 
-require_once __DIR__ . '/../../alien/core/Configuration.php';
-require_once __DIR__ . '/../../alien/core/Application.php';
-require_once __DIR__ . '/../../alien/core/Di/ServiceLocatorInterface.php';
-require_once __DIR__ . '/../../alien/core/Di/ServiceLocator.php';
-
 use Alien\Application;
 
 class ApplicationTest extends PHPUnit_Framework_TestCase {

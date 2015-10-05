@@ -2,8 +2,6 @@
 
 use Alien\Routing\Uri;
 
-require_once __DIR__ . '/../../../alien/core/Routing/Uri.php';
-
 class UriTest extends PHPUnit_Framework_TestCase {
 
     private $correctFullUrl;
