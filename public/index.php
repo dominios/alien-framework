@@ -2,24 +2,16 @@
 
 use Application\Application;
 
-chdir('..');
-
-require_once 'alien/core/Application.php';
-require_once 'alien/init.php';
+require_once __DIR__ . '/../alien/init.php';
 
 try {
 
     header("Content-Type: text/plain; charset=UTF8");
 
-    $confFinfo = new SplFileInfo(__DIR__ . "/../module/Application/config.php");
-    $config = new \Alien\Configuration();
-    $config->loadConfigurationFromFile($confFinfo);
+    $baseConfig = new SplFileInfo(__DIR__ . "/../module/Application/config/config.php");
+    $controllersConfig = new SplFileInfo(__DIR__ . "/../module/Application/config/controllers.php");
 
-    $controllersFinfo = new SplFileInfo(__DIR__ . "/../module/Application/controllers.php");
-    $controllersConfig = new \Alien\Configuration();
-    $controllersConfig->loadConfigurationFromFile($controllersFinfo);
-
-    $config->mergeWith($controllersConfig);
+    $config = new \Alien\Configuration($baseConfig, $controllersConfig);
 
     $app = new Application();
     $app->bootstrap($config);

@@ -16,6 +16,40 @@ class Configuration implements ConfigurationInterface
     private $config;
 
     /**
+     * Crates new instance of Configuration
+     *
+     * Multiple arguments can be passed to constructor. Constructor accepts variable
+     * count of arguments (also none). You can pass arrays or other instances of
+     * <code>Configuration</code>. Result will be merge of all given arguments.
+     *
+     * @param array|Configuration|SplFileFinfo $configurations,... configrutions to merge
+     * @throws InvalidArgumentException when any of arguments is of unsupported type
+     */
+    public function __construct()
+    {
+        $merged = [];
+        if (func_num_args()) {
+            $args = func_get_args();
+            foreach ($args as $arg) {
+                if (is_array($arg)) {
+                    $merged = array_merge($merged, $arg);
+                } else if ($arg instanceof Configuration) {
+                    $toMerge = $arg->config;
+                    $merged = array_merge($merged, $toMerge);
+                } else if ($arg instanceof SplFileInfo) {
+                    // beware: this configuration is temporarily overriden when calling this method!
+                    $this->loadConfigurationFromFile($arg);
+                    $toMerge = $this->config;
+                    $merged = array_merge($merged, $toMerge);
+                } else {
+                    throw new InvalidArgumentException("Invalid type " . gettype($arg) . " given to make merged configuration");
+                }
+            }
+        }
+        $this->config = $merged;
+    }
+
+    /**
      * Loads configuration from given file
      *
      * Targeted file should return php array.
