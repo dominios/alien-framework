@@ -3,22 +3,37 @@
 namespace Application\Controllers;
 
 use Alien\Mvc\AbstractController;
+use Alien\Mvc\Component\NavigationComponent;
 use Alien\Mvc\Component\TextComponent;
 use Alien\Mvc\View;
 
-class IndexController extends AbstractController {
+class IndexController extends AbstractController
+{
 
     protected function prepareView($action)
     {
         return new View(__DIR__ . '/../views/index/' . str_replace('Action', '', $action) . '.phtml');
     }
 
-    protected function indexAction() {
+    protected function indexAction()
+    {
 
-        $this->view->addComponent($this->createComponentParagraph());
-
+        $this->view->setVariable('projectName', 'ALiEN Framework CSM');
+        $this->view->addComponent($this->createComponentNav());
         $this->getResponse()->setContentType('text/html;charset=UTF8');
         $this->getResponse()->setContent($this->view->render());
+    }
+
+    public function createComponentNav()
+    {
+        return new NavigationComponent([
+            'Home' => '#',
+            'Projects' => '#',
+            'Services' => '#',
+            'Downloads' => '#',
+            'About' => '#',
+            'Contact' => '#',
+        ]);
     }
 
     public function createComponentParagraph() {
