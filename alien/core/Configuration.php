@@ -7,6 +7,14 @@ use InvalidArgumentException;
 use SplFileInfo;
 use UnexpectedValueException;
 
+/**
+ * Provides key/value based access interface to configuration array.
+ *
+ * All data are read-only and cannot be overridden. Configuration can be
+ * merged with other configurations via API methods.
+ *
+ * @package Alien
+ */
 class Configuration implements ConfigurationInterface
 {
 
@@ -16,16 +24,19 @@ class Configuration implements ConfigurationInterface
     private $config;
 
     /**
-     * Crates new instance of Configuration
+     * Constructor.
      *
      * Multiple arguments can be passed to constructor. Constructor accepts variable
-     * count of arguments (also none). You can pass arrays or other instances of
-     * <code>Configuration</code>. Result will be merge of all given arguments.
+     * count of arguments (also none).
      *
-     * @param array|Configuration|SplFileFinfo $configurations,... configrutions to merge
+     * Supported types of arguments are: <code>array</code>, <code>SplFileInfo</code> with file
+     * that contains desired configuration and instance of <code>Configuration</code> itself.
+     * Result will be merge of all given arguments.
+     *
+     * @param SplFileInfo|Configuration|array $configurations optional configurations to merge
      * @throws InvalidArgumentException when any of arguments is of unsupported type
      */
-    public function __construct()
+    public function __construct($configurations = null /*, ... */)
     {
         $merged = [];
         if (func_num_args()) {
@@ -37,7 +48,7 @@ class Configuration implements ConfigurationInterface
                     $toMerge = $arg->config;
                     $merged = array_merge($merged, $toMerge);
                 } else if ($arg instanceof SplFileInfo) {
-                    // beware: this configuration is temporarily overriden when calling this method!
+                    // beware: this configuration is temporarily overridden when calling this method!
                     $this->loadConfigurationFromFile($arg);
                     $toMerge = $this->config;
                     $merged = array_merge($merged, $toMerge);
@@ -50,11 +61,11 @@ class Configuration implements ConfigurationInterface
     }
 
     /**
-     * Loads configuration from given file
+     * Loads configuration from given file.
      *
-     * Targeted file should return php array.
+     * <b>WARNING</b>: Targeted file should return php array or error occur.
      *
-     * @param SplFileInfo $finfo
+     * @param SplFileInfo $finfo file to load configuration from
      * @throws IOException when file is not readable
      * @throws IOException when argument is not file
      * @throws UnexpectedValueException when file does not contain valid array
@@ -75,7 +86,7 @@ class Configuration implements ConfigurationInterface
     }
 
     /**
-     * Returns value of single parameter identified by it's key
+     * Returns value of single parameter identified by it's key.
      * @param $key string
      * @return mixed
      */
@@ -85,7 +96,7 @@ class Configuration implements ConfigurationInterface
     }
 
     /**
-     * Merge current configuration with given configurations
+     * Merge current configuration with given configurations.
      *
      * When calling this method, current settings are merged directly with
      * other configurations.
@@ -95,7 +106,7 @@ class Configuration implements ConfigurationInterface
      * @param Configuration $configuration,... configurations to merge with
      * * @throws InvalidArgumentException when no configurations given
      */
-    public function mergeWith(Configuration $configuration)
+    public function mergeWith(Configuration $configuration /*, ... */)
     {
         if (!func_num_args()) {
             throw new InvalidArgumentException("No arguments given");
@@ -110,18 +121,18 @@ class Configuration implements ConfigurationInterface
     }
 
     /**
-     * Merge given configurations into one
+     * Merge all given configurations into one.
      *
      * Merges multiple configurations into single configuration.
      * New instance is returned when merged.
      *
      * <b>WARNING</b>: Order of arguments is important!
      *
-     * @param Configuration $configuration,... configurations to merge
+     * @param Configuration $configuration configurations to merge
      * @return Configuration merged configuration
      * @throws InvalidArgumentException when no configurations given
      */
-    public function merge(Configuration $configuration)
+    public function merge(Configuration $configuration /*, ... */)
     {
         if (!func_num_args()) {
             throw new InvalidArgumentException("No arguments given");

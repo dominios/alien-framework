@@ -12,8 +12,8 @@
         <target>phpdocs/docs</target>
     </transformer>
     <files>
-        <directory>.</directory>
-        <ignore>test/*</ignore>
+        <directory>alien</directory>
+        <directory>module</directory>
         <ignore>alien/plugins/*</ignore>
         <ignore>alien/display/*</ignore>
         <ignore>alien/js/*</ignore>
