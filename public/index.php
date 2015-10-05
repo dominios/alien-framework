@@ -15,15 +15,11 @@ try {
     $config = new \Alien\Configuration();
     $config->loadConfigurationFromFile($confFinfo);
 
-    $routesFinfo = new \SplFileInfo(__DIR__ . "/../module/Application/routes.php");
-    $routesConfig = new \Alien\Configuration();
-    $routesConfig->loadConfigurationFromFile($routesFinfo);
-
     $controllersFinfo = new SplFileInfo(__DIR__ . "/../module/Application/controllers.php");
     $controllersConfig = new \Alien\Configuration();
     $controllersConfig->loadConfigurationFromFile($controllersFinfo);
 
-    $config->mergeWith($routesConfig, $controllersConfig);
+    $config->mergeWith($controllersConfig);
 
     $app = new Application();
     $app->bootstrap($config);

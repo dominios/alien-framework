@@ -1,13 +1,10 @@
 <?php
 
-return [
-
-    'routes' => [
-        'xxx' => []
-    ],
-
-    'params' => [
-        'x' => 'y'
-    ],
-
-];
+return array(
+    '' => array(
+        'route' => '/',
+        'controller' => 'IndexController',
+        'namespace' => 'Application\Controllers',
+        'action' => 'index',
+    ),
+);
