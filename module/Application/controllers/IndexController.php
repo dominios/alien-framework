@@ -6,9 +6,16 @@ use Alien\Mvc\AbstractController;
 use Alien\Mvc\Component\NavigationComponent;
 use Alien\Mvc\Component\TextComponent;
 use Alien\Mvc\View;
+use Application\Models\Cms\Cms;
 
 class IndexController extends AbstractController
 {
+
+    private $cms;
+
+    public function __construct() {
+        $this->cms = new Cms;
+    }
 
     protected function prepareView($action)
     {
@@ -23,20 +30,11 @@ class IndexController extends AbstractController
 
     protected function indexAction()
     {
-
-        $this->view->setVariable('projectName', 'ALiEN Framework CSM');
+        $this->view->setVariable('projectName', 'ALiEN Framework CMS');
         $this->view->addComponent($this->createComponentFromFactory('nav'));
+        $this->view->setVariable('cms', $this->cms->getHeader()->render());
         $this->getResponse()->setContentType('text/html;charset=UTF8');
         $this->getResponse()->setContent($this->view->render());
     }
 
-    public function createComponentParagraph() {
-        $textComponent = new TextComponent('Paragraph');
-        $textComponent->setContent('Lorem ipsum dolor sit amet,
-            everti oblique conclusionemque nam an, facilisis definitionem cu eos.
-            Omnis lorem salutatus ei qui. Cum wisi nonumy ei, et maiorum recusabo disputando ius.
-            Probatus eleifend forensibus cu sea, mucius assueverit eu vim.
-        ');
-        return $textComponent;
-    }
 }

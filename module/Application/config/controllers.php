@@ -8,7 +8,7 @@ return [
             },
             'components' => [
                 'nav' => function() {
-                    return new \Alien\Mvc\Component\NavigationComponent([
+                    return new \Application\Models\Cms\Components\Navigation\NavigationComponent([
                         'Home' => '#',
                         'Projects' => '#',
                         'Services' => '#',
