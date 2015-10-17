@@ -3,16 +3,19 @@
 return [
     'api' => [
         'route' => '/api',
-        'namespace' => 'Application\Controllers',
-        'action' => 'index',
+        'namespace' => '',
+        'action' => '',
         'childRoutes' => [
             'v1' => [
                 'route' => '/v1',
+                'namespace' => '',
+                'action' => '',
                 'childRoutes' => [
                     'nav' => [
                         'route' => '/nav/:method[/:id]',
+                        'namespace' => '',
                         'controller' => 'Application\Controllers\Rest\NavController',
-                        'action' => 'indexAction'
+                        'action' => 'index'
                     ]
                 ]
             ]
