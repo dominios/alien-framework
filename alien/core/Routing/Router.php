@@ -155,10 +155,12 @@ class Router
                 $result['action'] = $node['action'];
             }
             if (array_key_exists('childRoutes', $node)) {
-                $parts = array_values(array_filter(explode('/', $url, 2)));
+                $parts = array_values(array_filter(explode('/', $url)));
                 if (count($parts) > 1) {
                     if (array_key_exists($parts[1], $node['childRoutes'])) {
-                        $this->parseNode($parts[1], $node['childRoutes'][$parts[1]], $result);
+                        $key = array_search($parts[1], $parts);
+                        $rest = array_slice($parts, $key);
+                        $this->parseNode(implode('/', $rest), $node['childRoutes'][$parts[1]], $result);
                     }
                 }
             }
@@ -178,18 +180,19 @@ class Router
      * @throws InvalidRequestException when invalid number of required parameters given
      * @throws InvalidRequestException when required argument is not found
      */
-    private function getQueryParams($url, $route)
+    private function getQueryParams($url, array $route)
     {
 
+        // kontroluje ci sa v najdenej konfiguracii nachadza aj nepovinna cast
+        // ak ano, kontroluje najprv pattern ako taky, ci je v poriadku (ci obsahuje povinne premenne)
+        // vysledkom je $requiredPart - povinna zlozka URL
         if (strpos($route['route'], '[') !== false) {
             $requiredPart = preg_replace('/\[.*$/', '', $route['route']);
-            if (strpos($url, $requiredPart) === false) {
-                throw new InvalidConfigurationException("Route mismatch");
-            }
         } else {
             $requiredPart = $route['route'];
         }
 
+        // zisti nepovinne argumenty a vrati ich pole
         $optionals = [];
         if (preg_match('/(\[\/\:[\w\d]+\])/', $route['route'], $optionals)) {
             $optionals = array_filter(array_unique($optionals));
@@ -202,19 +205,25 @@ class Router
         $i = 1;
         $parametrized = implode('', array_merge([$requiredPart], $optionals));
         $parametrizedParts = array_filter(explode('/', $parametrized));
-        $regexParts = [];
+
+        $regexRequiredParts = [];
+        $regexOptionalParts = [];
 
         foreach ($parametrizedParts as $part) {
             if (strpos($part, ':') !== false) {
                 $params[str_replace(':', '', $part)] = $i;
-                $regexParts[] = '([\w\d]+)';
+                if(in_array("/$part", $optionals)) {
+                    $regexOptionalParts[] = '(\/[\w\d]+)?';
+                } else {
+                    $regexRequiredParts[] = '([\w\d]+)';
+                }
             } else {
-                $regexParts[] = "($part)";
+                $regexRequiredParts[] = "($part)";
             }
             $i++;
         }
 
-        $regex = '/^\/' . implode('\/', $regexParts) . '$/';
+        $regex = '/^\/' . implode('\/', $regexRequiredParts) . implode('', $regexOptionalParts) . '$/';
         $paramsMatches = [];
 
         $optionals = array_map(function ($e) {
@@ -223,10 +232,14 @@ class Router
 
         if (preg_match($regex, $url, $paramsMatches)) {
             foreach ($params as $key => $index) {
-                if ($paramsMatches[$index] == "" && !in_array($key, $optionals)) {
+                if (!in_array($key, $optionals) && $paramsMatches[$index] == "") {
                     throw new InvalidRequestException("Required argument $key not found");
                 }
-                $params[$key] = $paramsMatches[$index];
+                if(array_key_exists($index, $paramsMatches)) {
+                    $params[$key] = str_replace('/', '', $paramsMatches[$index]);
+                } else {
+                    $params[$key ] = null;
+                }
             }
         } else {
             if (count($params) && count($params) > count($optionals)) {

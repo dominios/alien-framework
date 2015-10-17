@@ -52,7 +52,25 @@ class RouterTest extends PHPUnit_Framework_TestCase {
                 'controller' => 'OptionalController',
                 'namespace' => 'Optional\Namespace',
                 'action' => 'doSomething'
-            ]
+            ],
+            'api' => [
+                'route' => '/api',
+                'namespace' => '',
+                'controller' => '',
+                'action' => '',
+                'childRoutes' => [
+                    'v1' => [
+                        'route' => '/v1',
+                        'childRoutes' => [
+                            'model' => [
+                                'route' => '/model/:method[/:id]',
+                                'controller' => 'Rest\Controllers\ModelController',
+                                'action' => 'methodAction'
+                            ]
+                        ]
+                    ]
+                ]
+            ],
         ];
         $this->router = new Router($routes);
     }
@@ -180,6 +198,34 @@ class RouterTest extends PHPUnit_Framework_TestCase {
             ]
         ];
         $this->assertEquals($expectedResult2, $this->router->getMatchedConfiguration($testRoute2));
+    }
+
+    public function testApiSubRoute() {
+        $testRouteGetList = '/api/v1/model/getList';
+        $testRouteFindOne = '/api/v1/model/findOne/123';
+        $expectedResultGetList = [
+            'route' => '/api/v1/model/:method[/:id]',
+            'namespace' => '',
+            'controller' => 'Rest\Controllers\ModelController',
+            'action' => 'methodAction',
+            'params' => [
+                'method' => 'getList',
+                'id' => null
+            ]
+        ];
+        $this->assertEquals($expectedResultGetList, $this->router->getMatchedConfiguration($testRouteGetList));
+
+        $expectedResultFindOne = [
+            'route' => '/api/v1/model/:method[/:id]',
+            'namespace' => '',
+            'controller' => 'Rest\Controllers\ModelController',
+            'action' => 'methodAction',
+            'params' => [
+                'method' => 'findOne',
+                'id' => 123
+            ]
+        ];
+        $this->assertEquals($expectedResultFindOne, $this->router->getMatchedConfiguration($testRouteFindOne));
     }
 
 }
