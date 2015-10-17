@@ -15,7 +15,8 @@ return [
     'services' => [
         'Router' => function (\Alien\Di\ServiceLocator $sl) {
             $routes = include 'routes.php';
-            return new \Alien\Routing\Router($routes);
+            $api = include 'api.php';
+            return new \Alien\Routing\Router(array_merge($routes, $api));
         },
         'Connection' => function (\Alien\Di\ServiceLocator $sl) {
             $conf = $sl->getService('\Alien\Configuration')->get('database');
