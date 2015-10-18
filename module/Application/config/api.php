@@ -11,11 +11,14 @@ return [
                 'namespace' => '',
                 'action' => '',
                 'childRoutes' => [
-                    'nav' => [
-                        'route' => '/nav/:method[/:id]',
+                    'navs' => [
+                        'route' => '/navs/:method[/:id]',
                         'namespace' => '',
                         'controller' => 'Application\Controllers\Rest\NavController',
-                        'action' => 'index'
+                        'action' => 'rest',
+                        'defaults' => [
+                            'method' => 'index',
+                        ]
                     ]
                 ]
             ]

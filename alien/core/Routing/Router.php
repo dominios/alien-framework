@@ -27,6 +27,7 @@ use Alien\Routing\Exception\RouteNotFoundException;
  * <li><b>controller</b>: with exact controller class name to use for handling the route,</li>
  * <li><b>namespace</b>: with exact namespace of used controller,</li>
  * <li><b>action</b>: with exact method name to call in used controller.</li>
+ * <li><b>defaults</b>: array with key/value pairs of default arguments values, if none given.</li>
  * </ul>
  *
  * When using <b>tree structure</b>, each <i>Route</i> may also
@@ -75,7 +76,7 @@ class Router
      *
      * Method accepts any string, which should be matched by router. Use slash as delimiter of tree-structure parts.
      * If match is found, associative array with following keys is returned:
-     * <code>["route", "namespace", "controller", "action", "params"]</code>
+     * <code>["route", "namespace", "controller", "action", "params", "defaults"]</code>
      *
      * @param string $requestString
      * @return array configuration of found match
@@ -90,7 +91,8 @@ class Router
             'namespace' => null,
             'controller' => null,
             'action' => null,
-            'params' => null
+            'params' => null,
+            'defaults' => [],
         );
 
         // add slash at beginning of string if not present
@@ -154,6 +156,9 @@ class Router
             if (array_key_exists('action', $node)) {
                 $result['action'] = $node['action'];
             }
+            if(array_key_exists('defaults', $node)) {
+                $result['defaults'] = array_merge($result['defaults'], $node['defaults']);
+            }
             if (array_key_exists('childRoutes', $node)) {
                 $parts = array_values(array_filter(explode('/', $url)));
                 if (count($parts) > 1) {
@@ -172,6 +177,9 @@ class Router
     /**
      * Checks route configuration and retrieve values for route parameters.
      * Not present optional parameters are replaced with <code>null</code> value.
+     *
+     * <b>NOTE</b>: if none argument is given, <code>defaults</code> part of configuration
+     * is searched. If value is found, it is used as it was given in <i>Uri</i>.
      *
      * @param string $url requested URL
      * @param array $route route configuration
@@ -231,15 +239,27 @@ class Router
         }, $optionals);
 
         if (preg_match($regex, $url, $paramsMatches)) {
+
+            $defaults = array_key_exists('defaults', $route) ? $route['defaults'] : [];
+
             foreach ($params as $key => $index) {
-                if (!in_array($key, $optionals) && $paramsMatches[$index] == "") {
+
+                $hasFromDefault = false;
+                if(array_key_exists($key, $defaults)) {
+                    $params[$key] = $defaults[$key];
+                    $hasFromDefault = true;
+                }
+
+                if (!!in_array($key, $optionals) && $paramsMatches[$index] == "" && $hasFromDefault) {
                     throw new InvalidRequestException("Required argument $key not found");
                 }
+
                 if(array_key_exists($index, $paramsMatches)) {
                     $params[$key] = str_replace('/', '', $paramsMatches[$index]);
                 } else {
                     $params[$key ] = null;
                 }
+
             }
         } else {
             if (count($params) && count($params) > count($optionals)) {

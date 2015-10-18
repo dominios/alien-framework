@@ -98,7 +98,8 @@ class RouterTest extends PHPUnit_Framework_TestCase {
             'controller' => 'ExampleController',
             'namespace' => 'Example\Namespace',
             'action' => 'index',
-            'params' => []
+            'params' => [],
+            'defaults' => []
         ];
         $result = $this->router->getMatchedConfiguration($testRoute);
         $this->assertEquals($expectedResult, $result);
@@ -111,7 +112,8 @@ class RouterTest extends PHPUnit_Framework_TestCase {
             'controller' => 'ExampleController',
             'namespace' => 'Example\Namespace',
             'action' => 'child1',
-            'params' => []
+            'params' => [],
+            'defaults' => []
         ];
         $result = $this->router->getMatchedConfiguration($testRoute);
         $this->assertEquals($expectedResult, $result);
@@ -122,7 +124,8 @@ class RouterTest extends PHPUnit_Framework_TestCase {
             'controller' => 'ChildController',
             'namespace' => 'Child\Namespace',
             'action' => 'child2',
-            'params' => []
+            'params' => [],
+            'defaults' => []
         ];
         $result = $this->router->getMatchedConfiguration($testRoute);
         $this->assertEquals($expectedResult, $result);
@@ -135,7 +138,8 @@ class RouterTest extends PHPUnit_Framework_TestCase {
             'controller' => 'ExampleController',
             'namespace' => 'Example\Namespace',
             'action' => 'index',
-            'params' => []
+            'params' => [],
+            'defaults' => []
         ];
         $result = $this->router->getMatchedConfiguration($testRoute);
         $this->assertEquals($expectedResult, $result);
@@ -156,7 +160,8 @@ class RouterTest extends PHPUnit_Framework_TestCase {
             'action' => 'doSomething',
             'params' => [
                 'foo' => 'bar'
-            ]
+            ],
+            'defaults' => []
         ];
         $this->assertEquals($expectedResult, $this->router->getMatchedConfiguration($testRoute1));
 
@@ -169,7 +174,8 @@ class RouterTest extends PHPUnit_Framework_TestCase {
             'params' => [
                 'foo1' => 'bar1',
                 'foo2' => 'bar2'
-            ]
+            ],
+            'defaults' => []
         ];
         $this->assertEquals($expectedResult, $this->router->getMatchedConfiguration($testRoute2));
     }
@@ -183,7 +189,8 @@ class RouterTest extends PHPUnit_Framework_TestCase {
             'action' => 'doSomething',
             'params' => [
                 'foo' => 'bar'
-            ]
+            ],
+            'defaults' => []
         ];
         $this->assertEquals($expectedResult1, $this->router->getMatchedConfiguration($testRoute1));
 
@@ -195,7 +202,8 @@ class RouterTest extends PHPUnit_Framework_TestCase {
             'action' => 'doSomething',
             'params' => [
                 'foo' => null
-            ]
+            ],
+            'defaults' => []
         ];
         $this->assertEquals($expectedResult2, $this->router->getMatchedConfiguration($testRoute2));
     }
@@ -211,7 +219,8 @@ class RouterTest extends PHPUnit_Framework_TestCase {
             'params' => [
                 'method' => 'getList',
                 'id' => null
-            ]
+            ],
+            'defaults' => []
         ];
         $this->assertEquals($expectedResultGetList, $this->router->getMatchedConfiguration($testRouteGetList));
 
@@ -223,7 +232,8 @@ class RouterTest extends PHPUnit_Framework_TestCase {
             'params' => [
                 'method' => 'findOne',
                 'id' => 123
-            ]
+            ],
+            'defaults' => []
         ];
         $this->assertEquals($expectedResultFindOne, $this->router->getMatchedConfiguration($testRouteFindOne));
     }
