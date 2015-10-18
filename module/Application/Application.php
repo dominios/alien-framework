@@ -34,7 +34,11 @@ class Application extends \Alien\Application
         $response = $controller->getResponses()[0];
 
         header('Content-Type: ' . $response->getContentType());
-        echo $response->getContent();
+        $content = $response->getContent();
+        if(strpos($response->getContentType(), 'json') !== false) {
+            $content = json_encode($content);
+        }
+        echo $content;
 
 
     }
