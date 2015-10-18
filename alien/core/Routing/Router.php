@@ -250,7 +250,7 @@ class Router
                     $hasFromDefault = true;
                 }
 
-                if (!!in_array($key, $optionals) && $paramsMatches[$index] == "" && $hasFromDefault) {
+                if (!in_array($key, $optionals) && $paramsMatches[$index] == "" && $hasFromDefault) {
                     throw new InvalidRequestException("Required argument $key not found");
                 }
 
