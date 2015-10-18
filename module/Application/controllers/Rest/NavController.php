@@ -7,9 +7,9 @@ use Alien\Rest\BaseRestfulController;
 class NavController extends BaseRestfulController
 {
 
-    function indexAction()
+    function listAction()
     {
-        $this->getResponse()->setContent([
+        $data = [
             [
                 'label' => 'Home',
                 'link' => 'home'
@@ -35,7 +35,9 @@ class NavController extends BaseRestfulController
                 'link' => 'contact'
             ]
 
-        ]);
+        ];
+
+        return $this->dataResponse($data);
     }
 
 }

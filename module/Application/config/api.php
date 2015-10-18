@@ -12,12 +12,12 @@ return [
                 'action' => '',
                 'childRoutes' => [
                     'navs' => [
-                        'route' => '/navs/:method[/:id]',
+                        'route' => '/navs[/:method][/:id]',
                         'namespace' => '',
                         'controller' => 'Application\Controllers\Rest\NavController',
                         'action' => 'rest',
                         'defaults' => [
-                            'method' => 'index',
+                            'method' => 'list',
                         ]
                     ]
                 ]

@@ -214,7 +214,18 @@ class HttpRequest implements RequestInterface
     }
 
     /**
+     * Returns HTTP protocol
+     * @return string
+     */
+    public function getProtocol()
+    {
+        return $this->getVersion();
+    }
+
+    /**
      * Returns HTTP protocol version
+     *
+     * Alias of <code>getProtocol()</code>.
      * @return string
      */
     public function getVersion()
@@ -263,4 +274,31 @@ class HttpRequest implements RequestInterface
         return $this->method === self::METHOD_POST;
     }
 
+    /**
+     * Returns parameters
+     * @return array
+     */
+    public function getParams()
+    {
+        return $this->params;
+    }
+
+    /**
+     * Sets key/value parameters
+     * @param array $params
+     */
+    public function setParams(array $params)
+    {
+        $this->params = $params;
+    }
+
+    /**
+     * Returns single parameter by name
+     * @param string $key parameter name
+     * @return mixed
+     */
+    public function getParam($key)
+    {
+        return $this->params[$key];
+    }
 }

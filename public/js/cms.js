@@ -3,8 +3,8 @@ var app = angular.module('AlienCMS', ['ngResource', 'navbarServices']);
 
 app.controller('navbarCtrl', function ($scope, NavbarApi) {
 
-    $promise = NavbarApi.getList().$promise.then(function (response) {
-        $scope.links = response;
+    NavbarApi.list().$promise.then(function (response) {
+        $scope.links = response['data'];
         $scope.tempLinks = angular.copy($scope.links);
     });
 

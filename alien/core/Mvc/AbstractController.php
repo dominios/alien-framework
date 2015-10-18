@@ -184,6 +184,15 @@ class AbstractController
     }
 
     /**
+     * Returns request object
+     * @return RequestInterface
+     */
+    public function getRequest()
+    {
+        return $this->request;
+    }
+
+    /**
      * Sets request
      * @param RequestInterface $request
      */
@@ -291,7 +300,7 @@ class AbstractController
      */
     protected function prepareResponse()
     {
-        return new Response(null, Response::HTTP_SUCCESS, 'text/plain;charset=UTF8');
+        return new Response(null, Response::STATUS_OK, 'text/plain;charset=UTF8');
     }
 
     /**

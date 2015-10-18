@@ -237,10 +237,9 @@ class Router
         $optionals = array_map(function ($e) {
             return str_replace('/:', '', $e);
         }, $optionals);
+        $defaults = array_key_exists('defaults', $route) ? $route['defaults'] : [];
 
         if (preg_match($regex, $url, $paramsMatches)) {
-
-            $defaults = array_key_exists('defaults', $route) ? $route['defaults'] : [];
 
             foreach ($params as $key => $index) {
 
@@ -256,7 +255,7 @@ class Router
 
                 if(array_key_exists($index, $paramsMatches)) {
                     $params[$key] = str_replace('/', '', $paramsMatches[$index]);
-                } else {
+                } else if (!$hasFromDefault) {
                     $params[$key ] = null;
                 }
 
