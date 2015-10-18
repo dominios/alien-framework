@@ -83,7 +83,7 @@ class Uri {
      * Example of URI:<br>
      * <i>foo://username:password@example.com:8042/over/there/index.dtb?type=animal&name=narwhal#nose<i>
      *
-     * @param $string URI in string
+     * @param string $string URI in string
      * @return Uri object
      * @throws InvalidArgumentException when given string is not valid URI
      */

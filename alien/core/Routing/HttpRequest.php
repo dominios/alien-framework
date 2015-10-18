@@ -107,6 +107,27 @@ class HttpRequest implements RequestInterface
     }
 
     /**
+     * Factory method for <i>HttpRequest</i> creation from server
+     *
+     * This method uses superglobal array <code>$_SERVER</code> to build single
+     * Request-Line consisting of <i>METHOD</i>, <i>URI</i> and <i>PROTOCOL</i>.
+     * Headers and content is created via functions <code>getallheaders()</code>
+     * and <code>file_get_contents()</code>.
+     *
+     * @return HttpRequest request object
+     */
+    public static function createFromServer()
+    {
+        $request = new self;
+        $request->setMethod($_SERVER['REQUEST_METHOD']);
+        $request->setUri($_SERVER['REQUEST_URI']);
+        $request->setVersion($_SERVER['SERVER_PROTOCOL']);
+        $request->setHeaders(getallheaders());
+        $request->setContent(file_get_contents('php://input'));
+        return $request;
+    }
+
+    /**
      * Returns HTTP request header(s)
      * When optional argument <code>$name</code> is used, returns specific header by name.
      * Otherwise, array of all headers is returned.
@@ -122,12 +143,34 @@ class HttpRequest implements RequestInterface
     }
 
     /**
+     * Sets request headers
+     * @param \string[] $headers
+     * @return HttpRequest
+     */
+    public function setHeaders($headers)
+    {
+        $this->headers = $headers;
+        return $this;
+    }
+
+    /**
      * Returns HTTP request content
      * @return string
      */
     public function getContent()
     {
         return $this->content;
+    }
+
+    /**
+     * Sets request content
+     * @param string $content
+     * @return HttpRequest
+     */
+    public function setContent($content)
+    {
+        $this->content = $content;
+        return $this;
     }
 
     /**
@@ -140,6 +183,17 @@ class HttpRequest implements RequestInterface
     }
 
     /**
+     * Sets request method
+     * @param string $method
+     * @return HttpRequest
+     */
+    public function setMethod($method)
+    {
+        $this->method = $method;
+        return $this;
+    }
+
+    /**
      * Returns URI
      * @return string
      */
@@ -149,12 +203,34 @@ class HttpRequest implements RequestInterface
     }
 
     /**
+     * Sets request URI
+     * @param string $uri
+     * @return HttpRequest
+     */
+    public function setUri($uri)
+    {
+        $this->uri = $uri;
+        return $this;
+    }
+
+    /**
      * Returns HTTP protocol version
      * @return string
      */
     public function getVersion()
     {
         return $this->version;
+    }
+
+    /**
+     * Sets request version
+     * @param string $version
+     * @return HttpRequest
+     */
+    public function setVersion($version)
+    {
+        $this->version = $version;
+        return $this;
     }
 
     /**
@@ -185,61 +261,6 @@ class HttpRequest implements RequestInterface
     public function isPost()
     {
         return $this->method === self::METHOD_POST;
-    }
-
-    /**
-     * Sets request headers
-     * @param \string[] $headers
-     * @return HttpRequest
-     */
-    public function setHeaders($headers)
-    {
-        $this->headers = $headers;
-        return $this;
-    }
-
-    /**
-     * Sets request content
-     * @param string $content
-     * @return HttpRequest
-     */
-    public function setContent($content)
-    {
-        $this->content = $content;
-        return $this;
-    }
-
-    /**
-     * Sets request method
-     * @param string $method
-     * @return HttpRequest
-     */
-    public function setMethod($method)
-    {
-        $this->method = $method;
-        return $this;
-    }
-
-    /**
-     * Sets request version
-     * @param string $version
-     * @return HttpRequest
-     */
-    public function setVersion($version)
-    {
-        $this->version = $version;
-        return $this;
-    }
-
-    /**
-     * Sets request URI
-     * @param string $uri
-     * @return HttpRequest
-     */
-    public function setUri($uri)
-    {
-        $this->uri = $uri;
-        return $this;
     }
 
 }

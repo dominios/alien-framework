@@ -4,6 +4,7 @@ namespace Application;
 
 use Alien\Mvc\AbstractController;
 use Alien\Mvc\Response;
+use Alien\Routing\HttpRequest;
 use Alien\Routing\Route;
 use Alien\Routing\Router;
 use Alien\Routing\Uri;
@@ -21,7 +22,7 @@ class Application extends \Alien\Application
 
         $this->router = $this->getServiceLocator()->getService('Router');
 
-        $uri = Uri::createFromString($_SERVER['REQUEST_URI']);
+        $uri = Uri::createFromString($this->getRequest()->getUri());
         $route = Route::createFromRouteConfiguration($this->router->getMatchedConfiguration($uri->getPath()));
 
         $controllerClass = $route->getControllerClass();

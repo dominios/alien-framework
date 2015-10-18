@@ -6,6 +6,7 @@ use Alien\Di\ServiceLocatorInterface;
 use Alien\Mvc\Exception\NoResponseException;
 use Alien\Mvc\Exception\NotFoundException;
 use Alien\Routing;
+use Alien\Routing\RequestInterface;
 use Alien\Routing\RouteInterface;
 
 /**
@@ -56,6 +57,12 @@ class AbstractController
      * @var View
      */
     protected $view = null;
+
+    /**
+     * Current HTTP request
+     * @var RequestInterface
+     */
+    protected $request;
 
     /**
      * Automatically prepared response instance
@@ -174,6 +181,15 @@ class AbstractController
     public function setRoute(RouteInterface $route)
     {
         $this->route = $route;
+    }
+
+    /**
+     * Sets request
+     * @param RequestInterface $request
+     */
+    public function setRequest(RequestInterface $request)
+    {
+        $this->request = $request;
     }
 
     /**
