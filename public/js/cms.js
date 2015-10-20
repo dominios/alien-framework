@@ -14,43 +14,72 @@ app.controller('navbarCtrl', function ($scope, $notification, NavbarApi) {
     $scope.tempEditingLink = {};
     $scope.tempLinks = angular.copy($scope.links);
 
+    var cancelEditing = function () {
+        $scope.isEditing = false;
+        $scope.isLinkEditing = false;
+        $scope.links = angular.copy($scope.tempLinks);
+        $scope.editingLink = {};
+    };
+
+    var startEditing = function () {
+        $scope.isEditing = true;
+        $scope.tempLinks = angular.copy($scope.links);
+    };
+
+    var startLinkEditing = function () {
+        startEditing();
+        $scope.isLinkEditing = true;
+    }
+
+    var cancelLinkEditing = function () {
+        $scope.isLinkEditing = false;
+        $scope.editingLink = {};
+    }
+
     $scope.createNewLink = function () {
-        $scope.links.push({
+        var newLink = {
             'link': '#',
             'label': 'nový link'
-        })
-    }
+        };
+        $scope.links.push(newLink);
+        $scope.editLink(newLink);
+    };
 
     $scope.setToEditMode = function () {
-        $scope.isEditing = true;
-    }
+        startEditing();
+    };
 
     $scope.cancelEditMode = function () {
-        $scope.isEditing = false;
-        $scope.links = angular.copy($scope.tempLinks);
-    }
+        cancelEditing();
+    };
 
     $scope.saveEditing = function () {
-        $scope.isEditing = false;
         $scope.tempLinks = angular.copy($scope.links);
+        cancelEditing();
         NavbarApi.update($scope.links);
         $notification.success("Úspech!", "Zmeny boli úspešne uložené.");
     };
 
     $scope.editLink = function (link) {
-        $scope.tempEditingLink = angular.copy(link);
+        if(link !== $scope.editingLink) {
+            cancelLinkEditing();
+        }
+        startLinkEditing();
         $scope.editingLink = link;
-        $scope.isLinkEditing = true;
-    }
+    };
 
     $scope.saveLinkEdit = function () {
         $scope.tempLinks = angular.copy($scope.links);
-        $scope.isLinkEditing = false;
-    }
+        cancelLinkEditing();
+    };
 
     $scope.cancelLinkEdit = function () {
-        $scope.links = angular.copy($scope.tempLinks);
-        $scope.isLinkEditing = false;
-    }
+        cancelLinkEditing();
+    };
+
+    $scope.deleteLink = function () {
+        $scope.links.splice($scope.links.indexOf($scope.editingLink), 1);
+        $scope.saveLinkEdit();
+    };
 
 });

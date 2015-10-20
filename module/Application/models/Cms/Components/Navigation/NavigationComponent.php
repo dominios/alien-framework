@@ -15,7 +15,7 @@ class NavigationComponent extends \Alien\Mvc\Component\NavigationComponent {
                         <i class="fa fa-pencil"></i> Začať úpravy
                     </button>
                     <button class="btn btn-success" ng-show="isEditing" ng-click="saveEditing();">
-                        <i class="fa fa-check"></i> Uložiť
+                        <i class="fa fa-save"></i> Zapísať zmeny
                     </button>
                     <button class="btn btn-danger" ng-show="isEditing" ng-click="cancelEditMode();">
                         <i class="fa fa-ban"></i> Zrušiť
@@ -39,8 +39,11 @@ class NavigationComponent extends \Alien\Mvc\Component\NavigationComponent {
                             <label>
                                 Link: <input type="text" ng-model="editingLink.link">
                             </label>
+                            <button class="btn btn-primary" ng-click="deleteLink();">
+                                <i class="fa fa-trash"></i> Zmazať
+                            </button>
                             <button class="btn btn-success" ng-click="saveLinkEdit();">
-                                <i class="fa fa-check"></i> Uložiť
+                                <i class="fa fa-check"></i> Potvrdiť
                             </button>
                             <button class="btn btn-danger" ng-click="cancelLinkEdit();">
                                 <i class="fa fa-ban"></i> Zrušiť
