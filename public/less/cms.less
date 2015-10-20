@@ -1,3 +1,11 @@
+@import "notifications.less";
+
+@cms-color-primary: #3c8dbc;
+@cms-color-info: #00c0ef;
+@cms-color-success: #00a65a;
+@cms-color-warning: #f39c12;
+@cms-color-danger: #f56954;
+
 .editable {
     position: relative;
     &:after {
@@ -12,4 +20,35 @@
         background: rgba(255, 255, 0, 0.3);
         width: 100%;*/
     }
+}
+
+.cms-notifications {
+  .alert {
+      background: @cms-color-primary;
+      color: #fff;
+      line-height: 2em;
+      border-radius: 0;
+      border: none;
+      border-left: 5px solid darken(@cms-color-primary, 10%);
+      strong {
+          display: block;
+          font-size: 1.2em;
+      }
+  }
+  .alert-info {
+      background: @cms-color-info;
+      border-left: 5px solid darken(@cms-color-info, 10%);
+  }
+  .alert-success {
+      background: @cms-color-success;
+      border-left: 5px solid darken(@cms-color-success, 10%);
+  }
+  .alert-warning {
+      background: @cms-color-warning;
+      border-left: 5px solid darken(@cms-color-warning, 10%);
+  }
+  .alert-danger {
+      background: @cms-color-danger;
+      border-left: 5px solid darken(@cms-color-danger, 10%);
+  }
 }

@@ -1,7 +1,7 @@
-var app = angular.module('AlienCMS', ['ngResource', 'navbarServices']);
+var app = angular.module('AlienCMS', ['ngResource', 'notifications', 'navbarServices']);
 
 
-app.controller('navbarCtrl', function ($scope, NavbarApi) {
+app.controller('navbarCtrl', function ($scope, $notification, NavbarApi) {
 
     NavbarApi.list().$promise.then(function (response) {
         $scope.links = response['data'];
@@ -34,7 +34,8 @@ app.controller('navbarCtrl', function ($scope, NavbarApi) {
         $scope.isEditing = false;
         $scope.tempLinks = angular.copy($scope.links);
         NavbarApi.update($scope.links);
-    }
+        $notification.success("Úspech!", "Zmeny boli úspešne uložené.");
+    };
 
     $scope.editLink = function (link) {
         $scope.tempEditingLink = angular.copy(link);
