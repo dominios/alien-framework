@@ -18,6 +18,7 @@ class HttpRequest implements RequestInterface
     const METHOD_GET = 'GET';
     const METHOD_HEAD = 'HEAD';
     const METHOD_POST = 'POST';
+    const METHOD_PATCH = 'PATCH';
     const METHOD_PUT = 'PUT';
     const METHOD_DELETE = 'DELETE';
     const METHOD_TRACE = 'TRACE';
@@ -272,6 +273,16 @@ class HttpRequest implements RequestInterface
     public function isPost()
     {
         return $this->method === self::METHOD_POST;
+    }
+
+    /**
+     * Checks if request method is PATCH
+     * <b>NOTE:</b> this method is case-sensitive!
+     * @return bool
+     */
+    public function isPatch()
+    {
+        return $this->method === self::METHOD_PATCH;
     }
 
     /**

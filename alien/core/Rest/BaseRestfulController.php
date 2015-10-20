@@ -13,11 +13,22 @@ abstract class BaseRestfulController extends AbstractController
     {
         $request = $this->getRequest();
         if ($request instanceof HttpRequest) {
-            $methodName = $request->getParam('method') . 'Action';
+            $method = $request->getParam('method');
+
+            if(!strlen(trim($method))) {
+                if($request->isGet()) {
+                    $method = 'list';
+                }
+                if($request->isPost() || $request->isPatch()) {
+                    $method = 'patch';
+                }
+            }
+
+            $methodName = $method . 'Action';
             if (!method_exists($this, $methodName)) {
                 $errors = [
                     'code' => Response::STATUS_BAD_REQUEST,
-                    'description' => "Method " . $request->getParam('method') . " is not defined or accessible."
+                    'description' => "Method $method is not defined or accessible."
                 ];
                 return $this->errorResponse(Response::STATUS_BAD_REQUEST, 'Invalid method', 'Server cannot fulfill your request due to unsupported or malformed method name given.', $errors);
             } else {

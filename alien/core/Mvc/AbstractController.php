@@ -6,7 +6,7 @@ use Alien\Di\ServiceLocatorInterface;
 use Alien\Mvc\Exception\NoResponseException;
 use Alien\Mvc\Exception\NotFoundException;
 use Alien\Routing;
-use Alien\Routing\RequestInterface;
+use Alien\Routing\HttpRequest;
 use Alien\Routing\RouteInterface;
 
 /**
@@ -60,7 +60,7 @@ class AbstractController
 
     /**
      * Current HTTP request
-     * @var RequestInterface
+     * @var HttpRequest
      */
     protected $request;
 
@@ -185,7 +185,7 @@ class AbstractController
 
     /**
      * Returns request object
-     * @return RequestInterface
+     * @return HttpRequest
      */
     public function getRequest()
     {
@@ -194,9 +194,9 @@ class AbstractController
 
     /**
      * Sets request
-     * @param RequestInterface $request
+     * @param HttpRequest $request
      */
-    public function setRequest(RequestInterface $request)
+    public function setRequest(HttpRequest $request)
     {
         $this->request = $request;
     }

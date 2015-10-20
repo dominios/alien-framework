@@ -12,7 +12,7 @@ return [
                 'action' => '',
                 'childRoutes' => [
                     'navs' => [
-                        'route' => '/navs[/:method][/:id]',
+                        'route' => '/navs[/:id][/:method]',
                         'namespace' => '',
                         'controller' => 'Application\Controllers\Rest\NavController',
                         'action' => 'rest',

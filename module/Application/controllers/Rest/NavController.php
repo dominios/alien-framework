@@ -7,37 +7,22 @@ use Alien\Rest\BaseRestfulController;
 class NavController extends BaseRestfulController
 {
 
+    private function getStorageFileName()
+    {
+        return __DIR__ . '/../../../../storage/navigation.serialized';
+    }
+
     function listAction()
     {
-        $data = [
-            [
-                'label' => 'Home',
-                'link' => 'home'
-            ],
-            [
-                'label' => 'Projects',
-                'link' => 'projects'
-            ],
-            [
-                'label' => 'Services',
-                'link' => 'services'
-            ],
-            [
-                'label' => 'Downloads',
-                'link' => 'downloads'
-            ],
-            [
-                'label' => 'About',
-                'link' => 'about'
-            ],
-            [
-                'label' => 'Contact',
-                'link' => 'contact'
-            ]
+        $data = file_get_contents($this->getStorageFileName());
+        return $this->dataResponse(json_decode(unserialize($data), true));
+    }
 
-        ];
-
-        return $this->dataResponse($data);
+    function patchAction()
+    {
+        $fileContent = $this->getRequest()->getContent();
+        file_put_contents($this->getStorageFileName(), serialize($fileContent));
+        return $this->dataResponse([]);
     }
 
 }

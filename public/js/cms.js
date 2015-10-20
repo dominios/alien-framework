@@ -33,6 +33,7 @@ app.controller('navbarCtrl', function ($scope, NavbarApi) {
     $scope.saveEditing = function () {
         $scope.isEditing = false;
         $scope.tempLinks = angular.copy($scope.links);
+        NavbarApi.update($scope.links);
     }
 
     $scope.editLink = function (link) {
