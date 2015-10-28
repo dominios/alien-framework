@@ -1,4 +1,4 @@
-var app = angular.module('AlienCMS', ['ngResource', 'notifications', 'navbarServices']);
+var app = angular.module('AlienCMS', ['ngResource', 'notifications', 'navbarServices', 'textServices']);
 
 
 app.controller('navbarCtrl', function ($scope, $notification, NavbarApi) {
@@ -82,4 +82,61 @@ app.controller('navbarCtrl', function ($scope, $notification, NavbarApi) {
         $scope.saveLinkEdit();
     };
 
+});
+
+app.controller('textCtrl', function($scope, $notification, TextApi) {
+
+    TextApi.one({'id':1}).$promise.then(function (response) {
+        $scope.component = response['data']
+    });
+
+    $scope.isEditing = false;
+
+    $scope.setToEditMode = function() {
+        startEditing();
+    };
+
+    $scope.cancelEditMode = function() {
+        stopEditing(false);
+    };
+
+    $scope.saveEditing = function() {
+        stopEditing(true);
+    };
+
+    function startEditing() {
+        $scope.isEditing = true;
+    }
+
+    function stopEditing(save) {
+        $scope.isEditing = false;
+        if(save) {
+            // todo
+            console.log($scope.component);
+            //TextApi.patch();
+            $notification.success("Úspech!", "Zmeny boli úspešne uložené.");
+        }
+    }
+
+});
+
+app.directive("contenteditable", function() {
+    return {
+        restrict: "A",
+        require: "ngModel",
+        link: function(scope, element, attrs, ngModel) {
+
+            function read() {
+                ngModel.$setViewValue(element.html());
+            }
+
+            ngModel.$render = function() {
+                element.html(ngModel.$viewValue || "");
+            };
+
+            element.bind("blur keyup change", function() {
+                scope.$apply(read);
+            });
+        }
+    };
 });

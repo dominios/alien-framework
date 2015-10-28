@@ -1,0 +1,19 @@
+<div class="row">
+    <div class="col-xs-12" ng-controller="textCtrl">
+
+        <div>
+            <button class="btn btn-primary" ng-show="!isEditing" ng-click="setToEditMode();">
+                <i class="fa fa-pencil"></i> Začať úpravy
+            </button>
+            <button class="btn btn-success" ng-show="isEditing" ng-click="saveEditing();">
+                <i class="fa fa-save"></i> Zapísať zmeny
+            </button>
+            <button class="btn btn-danger" ng-show="isEditing" ng-click="cancelEditMode();">
+                <i class="fa fa-ban"></i> Zrušiť
+            </button>
+        </div>
+
+        <?//= $this->content; ?>
+        <div contenteditable="{{isEditing}}" ng-model="component.content"></div>
+    </div>
+</div>

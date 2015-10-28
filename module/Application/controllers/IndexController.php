@@ -3,8 +3,6 @@
 namespace Application\Controllers;
 
 use Alien\Mvc\AbstractController;
-use Alien\Mvc\Component\NavigationComponent;
-use Alien\Mvc\Component\TextComponent;
 use Alien\Mvc\View;
 use Application\Models\Cms\Cms;
 
@@ -32,6 +30,7 @@ class IndexController extends AbstractController
     {
         $this->view->setVariable('projectName', 'ALiEN Framework CMS');
         $this->view->addComponent($this->createComponentFromFactory('nav'));
+        $this->view->addComponent(new \Application\Models\Cms\Components\Text\TextComponent('Text'));
         $this->view->setVariable('cms', $this->cms->getHeader()->render());
         $this->getResponse()->setContentType('text/html;charset=UTF8');
         $this->getResponse()->setContent($this->view->render());

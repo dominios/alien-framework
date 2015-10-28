@@ -19,6 +19,15 @@ return [
                         'defaults' => [
                             'method' => 'list',
                         ]
+                    ],
+                    'texts' => [
+                        'route' => '/texts[/:id][/:method]',
+                        'namespace' => '',
+                        'controller' => 'Application\Controllers\Rest\TextController',
+                        'action' => 'rest',
+                        'defaults' => [
+                            'method' => 'list',
+                        ]
                     ]
                 ]
             ]
