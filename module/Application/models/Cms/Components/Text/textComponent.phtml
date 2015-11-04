@@ -14,6 +14,9 @@
         </div>
 
         <?//= $this->content; ?>
-        <div contenteditable="{{isEditing}}" ng-model="component.content"></div>
+        <div ng-hide="isEditing" ng-bind-html="escapedContent"></div>
+        <div ng-show="isEditing">
+            <textarea ng-show="false" ng-model="component.content" ck-editor></textarea>
+        </div>
     </div>
 </div>

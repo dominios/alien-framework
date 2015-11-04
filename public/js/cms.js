@@ -1,6 +1,5 @@
 var app = angular.module('AlienCMS', ['ngResource', 'notifications', 'navbarServices', 'textServices']);
 
-
 app.controller('navbarCtrl', function ($scope, $notification, NavbarApi) {
 
     NavbarApi.list().$promise.then(function (response) {
@@ -84,10 +83,12 @@ app.controller('navbarCtrl', function ($scope, $notification, NavbarApi) {
 
 });
 
-app.controller('textCtrl', function($scope, $notification, TextApi) {
+app.controller('textCtrl', function($scope, $notification, TextApi, $sce) {
 
     TextApi.one({'id':1}).$promise.then(function (response) {
-        $scope.component = response['data']
+        $scope.component = response['data'];
+        $scope.escapedContent = $sce.trustAsHtml($scope.component.content);
+        //$scope.ckEditor = {value:$scope.component['content']};
     });
 
     $scope.isEditing = false;
@@ -102,6 +103,7 @@ app.controller('textCtrl', function($scope, $notification, TextApi) {
 
     $scope.saveEditing = function() {
         stopEditing(true);
+        $scope.escapedContent = $sce.trustAsHtml($scope.component.content);
     };
 
     function startEditing() {
@@ -120,23 +122,22 @@ app.controller('textCtrl', function($scope, $notification, TextApi) {
 
 });
 
-app.directive("contenteditable", function() {
+app.directive('ckEditor', [function () {
     return {
-        restrict: "A",
-        require: "ngModel",
-        link: function(scope, element, attrs, ngModel) {
+        require: '?ngModel',
+        link: function ($scope, elm, attr, ngModel) {
 
-            function read() {
-                ngModel.$setViewValue(element.html());
-            }
+            var ck = CKEDITOR.inline(elm[0]);
 
-            ngModel.$render = function() {
-                element.html(ngModel.$viewValue || "");
-            };
-
-            element.bind("blur keyup change", function() {
-                scope.$apply(read);
+            ck.on('pasteState', function () {
+                $scope.$apply(function () {
+                    ngModel.$setViewValue(ck.getData());
+                });
             });
+
+            ngModel.$render = function (value) {
+                ck.setData(ngModel.$modelValue);
+            };
         }
     };
-});
+}])
