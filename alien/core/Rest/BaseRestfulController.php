@@ -2,6 +2,7 @@
 
 namespace Alien\Rest;
 
+use Alien\FordbiddenException;
 use Alien\Mvc\AbstractController;
 use Alien\Mvc\Response;
 use Alien\Routing\HttpRequest;
@@ -35,7 +36,13 @@ abstract class BaseRestfulController extends AbstractController
                 ];
                 return $this->errorResponse(Response::STATUS_BAD_REQUEST, 'Invalid method', 'Server cannot fulfill your request due to unsupported or malformed method name given.', $errors);
             } else {
-                $response = $this->$methodName();
+                try {
+                    $response = $this->$methodName();
+                } catch(\BadMethodCallException $e) {
+                    $response = $this->authorizationFailedResponse($e->getMessage());
+                } catch(\Exception $e) {
+                    $response = $this->errorResponse(Response::STATUS_INTERNAL_SERVER_ERROR, $e->getMessage(), "");
+                }
                 return $response;
             }
         } else {
@@ -100,6 +107,23 @@ abstract class BaseRestfulController extends AbstractController
     protected function prepareResponse()
     {
         return new Response([], Response::STATUS_OK, Response::MIME_JSON);
+    }
+
+    protected function authorizationFailedResponse($message)
+    {
+        $errors = [
+            'code' => Response::STATUS_UNAUTHORIZED,
+            'message' => $message
+        ];
+        return $this->errorResponse(Response::STATUS_UNAUTHORIZED, 'Authorization failed', $errors);
+    }
+
+    protected function authorize()
+    {
+        $token = $_GET['authorization_token'];
+        if (!$token || $token !== 'heslo1234') {
+            throw new \BadMethodCallException('None or invalid authorization token given.');
+        }
     }
 
 }
