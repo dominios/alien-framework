@@ -15,14 +15,14 @@ abstract class BaseRestfulController extends AbstractController
         if ($request instanceof HttpRequest) {
             $method = $request->getParam('method');
 
-            if(!strlen(trim($method))) {
-                if($request->isGet()) {
+            if (!strlen(trim($method))) {
+                if ($request->isGet()) {
                     $method = 'list';
                 }
-                if($request->isGet() && $request->getParam('id')) {
+                if ($request->isGet() && $request->getParam('id')) {
                     $method = 'get';
                 }
-                if($request->isPost() || $request->isPatch()) {
+                if ($request->isPost() || $request->isPatch()) {
                     $method = 'patch';
                 }
             }
@@ -44,17 +44,6 @@ abstract class BaseRestfulController extends AbstractController
 
     }
 
-    protected function dataResponse($data = [], $code = Response::STATUS_OK) {
-        $response = $this->getResponse();
-        $response->setContent([
-            'response' => [
-                'status' => $code,
-            ],
-            'data' => $data
-        ]);
-        return $response;
-    }
-
     protected function errorResponse($code, $message, $description, $errors = [])
     {
         return new Response([
@@ -67,6 +56,45 @@ abstract class BaseRestfulController extends AbstractController
                 $errors
             ]
         ], $code, Response::MIME_JSON);
+    }
+
+    public function listAction()
+    {
+        $errors = [
+            'code' => Response::STATUS_BAD_REQUEST,
+            'description' => "Method list is not defined or accessible."
+        ];
+        return $this->errorResponse(Response::STATUS_BAD_REQUEST, 'Invalid method', 'Server cannot fulfill your request due to unsupported or malformed method name given.', $errors);
+    }
+
+    public function getAction()
+    {
+        $errors = [
+            'code' => Response::STATUS_BAD_REQUEST,
+            'description' => "Method get is not defined or accessible."
+        ];
+        return $this->errorResponse(Response::STATUS_BAD_REQUEST, 'Invalid method', 'Server cannot fulfill your request due to unsupported or malformed method name given.', $errors);
+    }
+
+    public function patchAction()
+    {
+        $errors = [
+            'code' => Response::STATUS_BAD_REQUEST,
+            'description' => "Method patch is not defined or accessible."
+        ];
+        return $this->errorResponse(Response::STATUS_BAD_REQUEST, 'Invalid method', 'Server cannot fulfill your request due to unsupported or malformed method name given.', $errors);
+    }
+
+    protected function dataResponse($data = [], $code = Response::STATUS_OK)
+    {
+        $response = $this->getResponse();
+        $response->setContent([
+            'response' => [
+                'status' => $code,
+            ],
+            'data' => $data
+        ]);
+        return $response;
     }
 
     protected function prepareResponse()
