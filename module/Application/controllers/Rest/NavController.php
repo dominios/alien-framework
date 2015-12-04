@@ -14,7 +14,6 @@ class NavController extends BaseRestfulController
 
     function listAction()
     {
-        $this->authorize();
         $data = file_get_contents($this->getStorageFileName());
         return $this->dataResponse(json_decode(unserialize($data), true));
     }
