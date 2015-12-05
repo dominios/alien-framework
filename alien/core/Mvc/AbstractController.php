@@ -7,7 +7,10 @@ use Alien\Mvc\Exception\NoResponseException;
 use Alien\Mvc\Exception\NotFoundException;
 use Alien\Routing;
 use Alien\Routing\HttpRequest;
+use Alien\Routing\RequestInterface;
+use Alien\Routing\Route;
 use Alien\Routing\RouteInterface;
+use InvalidArgumentException;
 
 /**
  * Basic controller logic, parent of any controller defined in application
@@ -21,6 +24,10 @@ use Alien\Routing\RouteInterface;
  * With calling of action, instance of <i>\Alien\View</i> is created, used for rendering.
  *
  * Instance of <i>\Alien\Di\ServiceLocator</i> is injected into controller automatically.
+ *
+ * <b>USAGE</b>:
+ *
+ *  ...
  *
  * <b>WARNING:</b> each child controller should be named with postfix <i>Controller</i>, otherwise some of functionality may not work properly!
  *
@@ -163,7 +170,7 @@ class AbstractController
     {
 
         // call every action at most 1 time
-        $this->actions = array_unique($this->actions);
+        $this->actions = array_unique($this->actions, SORT_REGULAR);
 
         $responses = [];
 
@@ -171,28 +178,33 @@ class AbstractController
         if (!sizeof($this->actions)) {
             $this->actions[] = $this->defaultAction;
         }
-
-        // checks if action name ends with postfix Action and adds it if not
-        $this->actions = array_map(function ($action) {
-            return preg_match('/(\w+)Action$/', $action) ? $action : $action . 'Action';
-        }, $this->actions);
-
+        
         // execute actions queue
         foreach ($this->actions as $action) {
 
-            $this->view = $this->prepareView($action);
-
-            if (!method_exists($this, $action)) {
-                throw new NotFoundException("Action $action not found");
+            $args = [];
+            $actionName = $action;
+            if($action instanceof Route) {
+                $actionName = $action->getAction();
+                $args = array_values($action->getParams());
             }
 
-            $response = $this->$action();
+            $this->view = $this->prepareView($actionName);
+
+            $actionName = preg_match('/(\w+)Action$/', $actionName) ? $actionName : $actionName . 'Action';
+
+            if (!method_exists($this, $actionName)) {
+                throw new NotFoundException("Action $actionName not found");
+            }
+
+            $response = call_user_func_array([$this, $actionName], array_values($args));
+
             if (is_null($response)) {
                 array_push($responses, $this->getResponse());
             } else if ($response instanceof ResponseInterface) {
                 array_push($responses, $response);
             } else {
-                throw new NoResponseException("Response of action $action is empty");
+                throw new NoResponseException("Response of action $actionName is empty");
             }
 
         }
@@ -209,7 +221,7 @@ class AbstractController
     {
         $src = '';
         $src .= 'view/';
-        $src .= strip_namespace(str_replace('Controller', '', get_called_class()));
+        $src .= \Alien\Stdlib\StringFunctions::stripNamespace(str_replace('Controller', '', get_called_class()));
         $src .= '/' . $action;
         $src .= '.php';
         return new View($src);
@@ -218,6 +230,7 @@ class AbstractController
     /**
      * Returns last prepared Response object if exists or prepare one
      * @return Response
+     * @todo rename method or set as protected: currently, there is confusion betweeb getResponse() and getResponses() !
      */
     public function getResponse()
     {
@@ -249,11 +262,12 @@ class AbstractController
 
     /**
      * Forces to execute given action.
-     * All actions are removed from queue by calling this method. Execution continues with given action name.
+     * All actions are removed from queue by calling this method. Execution continues with given action.
      *
      * <b>NOTE:</b> any action inserted into queue <i>after</i> calling this method is executed as well.
      *
      * @param string $action action name to execute
+     * @todo it's force action: this should also force executing this action
      */
     public function forceAction($action)
     {
@@ -262,11 +276,21 @@ class AbstractController
     }
 
     /**
-     * Adds action into execution queue defined by it's name
-     * @param $action string
+     * Append action to queue.
+     *
+     * By calling this method, <code>$action</code> is added to the end of actions queue.
+     * Action can be either string or Request object. If string is given, it is considered
+     * as action name without any arguments. When object is given, it must be instance of
+     * <code>RequestInterface</code> to be able to extract needed information.
+     *
+     * @param $action string|RequestInterface
+     * @throws InvalidArgumentException when unsupported type is passed as argument
      */
     public function addAction($action)
     {
+        if (!is_string($action) && !($action instanceof Route)) {
+            throw new InvalidArgumentException("Invalid action type given: " . gettype($action));
+        }
         $this->actions[] = $action;
     }
 

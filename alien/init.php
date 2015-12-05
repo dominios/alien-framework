@@ -35,5 +35,3 @@ set_error_handler(function ($errno, $errstr, $errfile, $errline) {
     }
 });
 
-// @todo urobit samostatnu zlozku a loadovat z configu
-include_once 'functions.php';
