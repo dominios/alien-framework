@@ -2,7 +2,6 @@
 
 namespace Alien\Rest;
 
-use Alien\FordbiddenException;
 use Alien\Mvc\AbstractController;
 use Alien\Mvc\Response;
 use Alien\Routing\HttpRequest;
@@ -109,6 +108,17 @@ abstract class BaseRestfulController extends AbstractController
         return new Response([], Response::STATUS_OK, Response::MIME_JSON);
     }
 
+    protected function successResponse()
+    {
+        $response = $this->prepareResponse();
+        $response->setContent([
+            'response' => [
+                'status' => Response::STATUS_OK
+            ]
+        ]);
+        return $response;
+    }
+
     protected function authorizationFailedResponse($message)
     {
         $errors = [
@@ -120,8 +130,8 @@ abstract class BaseRestfulController extends AbstractController
 
     protected function authorize()
     {
-        $token = $_GET['authorization_token'];
-        if (!$token || $token !== 'heslo1234') {
+        // example usage
+        if (false) {
             throw new \BadMethodCallException('None or invalid authorization token given.');
         }
     }

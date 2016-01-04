@@ -11,6 +11,7 @@ use Alien\Routing\HttpRequest;
 use Alien\Routing\Route;
 use Alien\Routing\RouteInterface;
 use Alien\Stdlib\Exception\NullException;
+use Alien\Stdlib\StringFunctions;
 use BadMethodCallException;
 use InvalidArgumentException;
 
@@ -244,7 +245,7 @@ class AbstractController implements ServiceLocatorAwareInterface
     {
         $src = '';
         $src .= 'view/';
-        $src .= \Alien\Stdlib\StringFunctions::stripNamespace(str_replace('Controller', '', get_called_class()));
+        $src .= StringFunctions::stripNamespace(str_replace('Controller', '', get_called_class()));
         $src .= '/' . $action;
         $src .= '.php';
         return new View($src);

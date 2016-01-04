@@ -3,6 +3,7 @@
 namespace Application\Controllers\Rest;
 
 use Alien\Rest\BaseRestfulController;
+use Alien\Filesystem\File;
 
 class NavController extends BaseRestfulController
 {
@@ -12,17 +13,40 @@ class NavController extends BaseRestfulController
         return __DIR__ . '/../../../../storage/navigation.serialized';
     }
 
-    function listAction()
+    protected function getFakeContent()
     {
-        $data = file_get_contents($this->getStorageFileName());
-        return $this->dataResponse(json_decode(unserialize($data), true));
+        return [
+            [
+                'link' => '#link',
+                'label' => 'link'
+            ],
+            [
+                'link2' => '#link2',
+                'label' => 'link2'
+            ]
+        ];
     }
 
-    function patchAction()
+    public function listAction()
+    {
+        $file = new File($this->getStorageFileName());
+        $content = unserialize($file->getFileContent());
+        $file->close();
+        return $this->dataResponse($content);
+    }
+
+    public function patchAction()
     {
         $fileContent = $this->getRequest()->getContent();
-        file_put_contents($this->getStorageFileName(), serialize($fileContent));
-        return $this->dataResponse([]);
+        $json = json_decode($fileContent, true);
+
+        $file = new File($this->getStorageFileName());
+        $file->setFileContent(serialize($json));
+        $file->save();
+        $file->close();
+
+        return $this->successResponse();
+
     }
 
 }
