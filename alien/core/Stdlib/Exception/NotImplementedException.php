@@ -1,6 +1,6 @@
 <?php
 
-namespace Alien\Exception;
+namespace Alien\Stdlib\Exception;
 
 /**
  * Thrown when using not implemented features.

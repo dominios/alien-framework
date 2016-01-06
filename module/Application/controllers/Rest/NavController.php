@@ -10,7 +10,7 @@ class NavController extends BaseRestfulController
 
     private function getStorageFileName()
     {
-        return __DIR__ . '/../../../../storage/navigation.serialized';
+        return 'navigation.serialized';
     }
 
     protected function getFakeContent()
@@ -29,7 +29,9 @@ class NavController extends BaseRestfulController
 
     public function listAction()
     {
-        $file = new File($this->getStorageFileName());
+        /* @var $fs \Alien\Filesystem\Filesystem */
+        $fs = $this->getServiceLocator()->getService('NavbarStorage');
+        $file = $fs->get($this->getStorageFileName());
         $content = unserialize($file->getFileContent());
         $file->close();
         return $this->dataResponse($content);
@@ -40,7 +42,10 @@ class NavController extends BaseRestfulController
         $fileContent = $this->getRequest()->getContent();
         $json = json_decode($fileContent, true);
 
-        $file = new File($this->getStorageFileName());
+        /* @var $fs \Alien\Filesystem\Filesystem */
+        $fs = $this->getServiceLocator()->getService('NavbarStorage');
+        $file = $fs->get($this->getStorageFileName());
+
         $file->setFileContent(serialize($json));
         $file->save();
         $file->close();

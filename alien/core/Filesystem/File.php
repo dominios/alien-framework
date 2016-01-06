@@ -2,7 +2,7 @@
 
 namespace Alien\Filesystem;
 
-use Alien\Exception\IOException;
+use Alien\Stdlib\Exception\IOException;
 use SplFileObject;
 
 class File extends \SplFileInfo implements FileInterface
@@ -29,7 +29,7 @@ class File extends \SplFileInfo implements FileInterface
      */
     protected function getFileObject()
     {
-        if($this->fileObject === null) {
+        if ($this->fileObject === null) {
             $this->fileObject = $this->openFile('r+');
         }
         return $this->fileObject;
@@ -66,11 +66,11 @@ class File extends \SplFileInfo implements FileInterface
      */
     public function save()
     {
-        if(!$this->isWritable()) {
+        if (!$this->isWritable()) {
             throw new IOException(sprintf("File %s is not writable.", $this->getBasename()));
         }
         $bytesWritten = $this->getFileObject()->fwrite($this->fileContent);
-        if($bytesWritten === null || (strlen($this->fileContent) > 0 && $bytesWritten === 0)) {
+        if ($bytesWritten === null || (strlen($this->fileContent) > 0 && $bytesWritten === 0)) {
             throw new IOException(sprintf("Could not write to file %s.", $this->getBasename()));
         }
         return $bytesWritten;
