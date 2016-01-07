@@ -56,7 +56,7 @@ abstract class Application
 
         $sl = new ServiceLocator($this->getConfiguration());
         $this->serviceLocator = $sl;
-        $sl->registerService($configuration);
+        $sl->register($configuration);
 
     }
 

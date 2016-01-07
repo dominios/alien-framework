@@ -7,6 +7,14 @@ namespace Alien\Di;
  */
 interface ServiceConfigurationInterface
 {
+
+    /**
+     * Returns identifier of service.
+     *
+     * @return string
+     */
+    public function getName();
+
     /**
      * Returns alias name of service.
      *
@@ -14,18 +22,16 @@ interface ServiceConfigurationInterface
      *
      * @return null|string
      */
-    public function getAlias();
+    public function getAliases();
 
     /**
      * Returns function with creates new service instance.
      *
      * Execution of returned function creates new instance of service.
-     * <code>$serviceLocator</code> is automatically injected.
      *
-     * @param ServiceLocatorInterface $serviceLocator
      * @return callable
      */
-    public function getFactory(ServiceLocatorInterface $serviceLocator);
+    public function getFactory();
 
     /**
      * Specify if service should have only one instance, or create new instance on each call.
@@ -37,9 +43,9 @@ interface ServiceConfigurationInterface
     /**
      * Returns any user defined option by key.
      *
-     * @param $key option key to look for
+     * @param string $key option key to look for
      * @return mixed
      */
     public function getOption($key); // get any custom option defined
-    
+
 }

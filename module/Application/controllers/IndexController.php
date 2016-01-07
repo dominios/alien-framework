@@ -21,7 +21,7 @@ class IndexController extends AbstractController
     }
 
     protected function createComponentFromFactory($name) {
-        $config = $this->getServiceLocator()->getService('Alien\Configuration');
+        $config = $this->getServiceLocator()->get('Alien\Configuration');
         $factories = $config->get('controllers')[__CLASS__]['components'];
         return $factories[$name]();
     }

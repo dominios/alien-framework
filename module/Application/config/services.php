@@ -9,7 +9,7 @@ return [
             return new \Alien\Routing\Router(array_merge($routes, $api));
         },
         'Connection' => function (\Alien\Di\ServiceLocator $sl) {
-            $conf = $sl->getService('\Alien\Configuration')->get('database');
+            $conf = $sl->get('\Alien\Configuration')->get('database');
             $connection = new Alien\Db\Connection(
                 $conf['host'],
                 $conf['user'],

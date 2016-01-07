@@ -3,7 +3,6 @@
 namespace Application\Controllers\Rest;
 
 use Alien\Rest\BaseRestfulController;
-use Alien\Filesystem\File;
 
 class NavController extends BaseRestfulController
 {
@@ -30,7 +29,7 @@ class NavController extends BaseRestfulController
     public function listAction()
     {
         /* @var $fs \Alien\Filesystem\Filesystem */
-        $fs = $this->getServiceLocator()->getService('NavbarStorage');
+        $fs = $this->getServiceLocator()->get('NavbarStorage');
         $file = $fs->get($this->getStorageFileName());
         $content = unserialize($file->getFileContent());
         $file->close();
@@ -43,7 +42,7 @@ class NavController extends BaseRestfulController
         $json = json_decode($fileContent, true);
 
         /* @var $fs \Alien\Filesystem\Filesystem */
-        $fs = $this->getServiceLocator()->getService('NavbarStorage');
+        $fs = $this->getServiceLocator()->get('NavbarStorage');
         $file = $fs->get($this->getStorageFileName());
 
         $file->setFileContent(serialize($json));

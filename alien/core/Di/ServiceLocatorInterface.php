@@ -3,23 +3,26 @@
 namespace Alien\Di;
 
 /**
- * ServiceLocatorInterface
- * @package Alien\Di
+ * Interface ServiceLocatorInterface.
  */
 interface ServiceLocatorInterface
 {
 
     /**
-     * Register instance provided by argument as service
-     * @param $service object
-     * @return void
+     * Register object provided by argument as service.
+     *
+     * @param object $service instance of any object.
+     * @param string $name identifier of service.
+     * @return
      */
-    public function registerService($service);
+    public function register($service, $name);
 
     /**
-     * Returns registered service by name
-     * @param $name string service identifier
-     * @return object
+     * Returns registered service by name.
+     *
+     * @param string $name service identifier.
+     * @return mixed service instance.
      */
-    public function getService($name);
+    public function get($name);
+
 }

@@ -182,7 +182,7 @@ class Authorization {
 
     public function login($login, $password) {
 
-        $db = $this->serviceManager->getService('PDO');
+        $db = $this->serviceManager->get('PDO');
         $userDao = $this->serviceManager->getDao('UserDao');
 
         $user = $userDao->getByLogin($login);

@@ -20,7 +20,7 @@ class Application extends \Alien\Application
     public function run()
     {
 
-        $this->router = $this->getServiceLocator()->getService('Router');
+        $this->router = $this->getServiceLocator()->get('Router');
 
         $uri = Uri::createFromString($this->getRequest()->getUri());
         $route = Route::createFromRouteConfiguration($this->router->getMatchedConfiguration($uri->getPath()));
