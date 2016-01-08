@@ -2,6 +2,6 @@
 
 namespace Alien\Di\Exception;
 
-use RuntimeException;
-
-class InvalidServiceException extends RuntimeException {}
+class InvalidServiceException extends \RuntimeException
+{
+}

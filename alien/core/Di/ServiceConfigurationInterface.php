@@ -43,7 +43,7 @@ interface ServiceConfigurationInterface
     /**
      * Returns any user defined option by key.
      *
-     * @param string $key option key to look for
+     * @param string $key option key to look for.
      * @return mixed
      */
     public function getOption($key); // get any custom option defined

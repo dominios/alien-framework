@@ -1,6 +1,7 @@
 <?php
 
 use Alien\Di\ServiceConfigurationInterface;
+use Alien\Di\ServiceLocatorInterface;
 
 /**
  * @todo delete this class, mock instead
@@ -35,7 +36,7 @@ class SingletonExampleServiceConfiguration implements ServiceConfigurationInterf
 
     public function getFactory()
     {
-        return function (\Alien\Di\ServiceLocatorInterface $serviceLocator) {
+        return function (ServiceLocatorInterface $serviceLocator) {
             return new SingletonExampleService();
         };
     }
@@ -55,7 +56,7 @@ class ServiceLocatorTest extends PHPUnit_Framework_TestCase
 {
 
     /**
-     * @var \Alien\Di\ServiceLocatorInterface
+     * @var ServiceLocatorInterface
      */
     protected $serviceLocator;
 
@@ -72,6 +73,30 @@ class ServiceLocatorTest extends PHPUnit_Framework_TestCase
         $test = $this->serviceLocator->get("RegisteredSingleton");
 
         $this->assertInstanceOf('SingletonExampleService', $test);
+    }
+
+    public function testBuildFromArray()
+    {
+        $service = [
+            'MyService' => [
+                'aliases' => [
+                    'Service123', 'Service456'
+                ],
+                'factory' => function (ServiceLocatorInterface $serviceLocator) {
+                    return new SingletonExampleService();
+                },
+                'shared' => false
+            ]
+        ];
+
+        $configuration = \Alien\Di\ServiceConfiguration::createFromArray($service);
+        $sl = $this->serviceLocator;
+        $this->assertEquals('MyService', $configuration->getName());
+        $this->assertEquals(false, $configuration->isShared());
+        $this->assertEquals(['Service123', 'Service456'], $configuration->getAliases());
+        $sl->register($configuration);
+        $this->assertInstanceOf('SingletonExampleService', $sl->get('MyService'));
+
     }
 
 }
