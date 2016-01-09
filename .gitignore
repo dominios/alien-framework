@@ -6,3 +6,4 @@ cache/*
 bin/
 phpdocs/*
 storage
+/phpunit.xml
