@@ -7,3 +7,4 @@ bin/
 phpdocs/*
 storage
 /phpunit.xml
+tmp
