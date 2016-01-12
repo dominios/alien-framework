@@ -6,21 +6,13 @@ use Alien\ConfigurationInterface;
 use Alien\Di\Exception\InvalidServiceException;
 use Alien\Di\Exception\ServiceAlreadyExistsException;
 use Alien\Di\Exception\ServiceNotFoundException;
-use Closure;
-use ReflectionClass;
+use InvalidArgumentException;
 
 /**
  * Register of known services and dependency injection container.
  */
 class ServiceLocator implements ServiceLocatorInterface
 {
-
-    /**
-     * Array of known factories.
-     *
-     * @var callable[]
-     */
-    private $factories = [];
 
     /**
      * Array of known service configurations.
@@ -31,7 +23,7 @@ class ServiceLocator implements ServiceLocatorInterface
     /**
      * Array of registered instances.
      *
-     * @var object[]
+     * @var object[]~
      */
     private $sharedInstances = [];
 
@@ -46,7 +38,7 @@ class ServiceLocator implements ServiceLocatorInterface
     public function __construct(ConfigurationInterface $configuration = null)
     {
         if ($configuration !== null) {
-            $this->factories = $configuration->get('services');
+            $this->configurations = $configuration->get('services');
         }
     }
 
@@ -85,8 +77,12 @@ class ServiceLocator implements ServiceLocatorInterface
             }
         };
 
-        $newInstance = function (callable $factory) {
-            return $factory($this);
+        $newInstance = function ($factory) {
+            if (is_callable($factory)) {
+                return $factory($this);
+            } else {
+                return $factory;
+            }
         };
 
         $registerInstance = function ($instance, $name, array $aliases = null) {
@@ -100,6 +96,14 @@ class ServiceLocator implements ServiceLocatorInterface
 
         if (array_key_exists($name, $this->configurations)) {
             $configuration = $this->configurations[$name];
+            if (!($configuration instanceof ServiceConfigurationInterface)) {
+                if (is_array($configuration)) {
+                    $configuration = Configuration::createFromArray($configuration);
+                } else {
+                    $configuration = $this->createConfiguration($configuration);
+                }
+                $this->configurations[$name] = $configuration;
+            }
             if ($configuration->isShared()) {
                 try {
                     $instance = $fetchInstance($name);
@@ -116,15 +120,6 @@ class ServiceLocator implements ServiceLocatorInterface
         // @todo this should be also changed - when registering any class, configuration should be also created as well
         if (!is_object($instance) && array_key_exists($name, $this->sharedInstances)) {
             return $this->sharedInstances[$name];
-        }
-
-        // remove; each factory should be internally converted to configuration
-        // then, this block will not be needed
-        // @todo read above
-        if (array_key_exists($name, $this->factories)) {
-            $service = $this->factories[$name]($this);
-            $this->register($service, $name);
-            return $service;
         }
 
         if ($instance === null || !is_object($instance)) {
@@ -159,39 +154,41 @@ class ServiceLocator implements ServiceLocatorInterface
      */
     public function register($service, $name = null)
     {
-
-        if ($service instanceof ServiceConfigurationInterface) {
-            $this->handleConfigurationInterface($service, $name);
-            return;
+        if (is_array($service)) {
+            $configuration = Configuration::createFromArray($service);
+        } else if (is_object($service) && !($service instanceof ServiceConfigurationInterface)) {
+            $configuration = $this->createConfiguration($service, $name);
+        } else if (is_object($service) && $service instanceof ServiceConfigurationInterface) {
+            $configuration = $service;
+        } else {
+            throw new InvalidArgumentException("Invalid service format given.");
         }
-
-        // @todo when it is not configuration, create new one
-
-        if (!is_object($service) || $service instanceof Closure) {
-            throw new InvalidServiceException("Trying to register invalid object as a service.");
-        }
-
-        if (is_null($name)) {
-            // @todo debug if reflection is needed
-            $reflection = new ReflectionClass($service);
-            $name = $reflection->getName();
-        }
-
-        if (array_key_exists($name, $this->sharedInstances)) {
-            throw new ServiceAlreadyExistsException(sprintf("Service %s is already registered", $name));
-        }
-
-        $this->sharedInstances[$name] = $service;
-
+        $this->handleConfigurationInterface($configuration, $name);
     }
 
     /**
-     * @param $object
-     * @todo
+     * Creates new configuration corresponding given object.
+     *
+     * If none <code>$name</code> is given, class name (type) is used as identifier.
+     *
+     * All configuration values are set to default.
+     *
+     * @param mixed $object instance of object to create configuration for.
+     * @param string $name [optional] service name.
+     * @return ServiceConfigurationInterface
      */
-    protected function createConfiguration($object)
+    protected function createConfiguration($object, $name = null)
     {
-
+        if (!is_object($object)) {
+            throw new InvalidArgumentException(sprintf("Invalid type given: %s.", gettype($object)));
+        }
+        $name = $name ?: get_class($object);
+        $config = [
+            $name => [
+                'factory' => $object
+            ]
+        ];
+        return Configuration::createFromArray($config);
     }
 
     /**

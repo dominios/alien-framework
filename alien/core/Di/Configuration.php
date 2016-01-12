@@ -6,7 +6,7 @@ use Alien\Di\Exception\InvalidConfigurationException;
 use Alien\Stdlib\Exception\NullException;
 use InvalidArgumentException;
 
-class ServiceConfiguration implements ServiceConfigurationInterface
+class Configuration implements ServiceConfigurationInterface
 {
 
     /**
@@ -42,13 +42,13 @@ class ServiceConfiguration implements ServiceConfigurationInterface
     /**
      * Creates new service configuration.
      *
-     * @param callable $factory function which creates service new instance.
+     * @param callable|object $factory function which creates service new instance or instance itself.
      * @param string $name service identifier.
      * @param string[] $aliases [optional] array of service aliases.
      * @param bool $isShared [optional] if service is shared (default: true).
      * @param array $options [optional] any user defined options.
      */
-    public function __construct(callable $factory, $name, array $aliases = [], $isShared = true, $options = [])
+    public function __construct($factory, $name, array $aliases = [], $isShared = true, $options = [])
     {
         $this->factory = $factory;
         $this->name = $name;
@@ -78,7 +78,7 @@ class ServiceConfiguration implements ServiceConfigurationInterface
      *      "aliases" => [                                                  // [optional] array of strings (alias names)
      *          "OtherServiceName", "CustomService"
      *      ],
-     *      "shared" => false,                                            // [optional] if service is shared (default is true)
+     *      "shared" => false,                                              // [optional] if service is shared (default is true)
      *      "options" => [                                                  // [optional] any user defined values
      *          "foo" => "bar"
      *      ]
@@ -104,12 +104,15 @@ class ServiceConfiguration implements ServiceConfigurationInterface
             throw new InvalidConfigurationException(sprintf("Missing factory function for service %s.", $name));
         }
         $factory = $configuration[$name]['factory'];
+        if (!is_object($factory) && !is_callable($factory)) {
+            throw new InvalidConfigurationException(sprintf("Invalid factory for service %s.", $name));
+        }
 
         $aliases = array_key_exists('aliases', $configuration[$name]) ? $configuration[$name]['aliases'] : [];
         $isShared = array_key_exists('shared', $configuration[$name]) ? $configuration[$name]['shared'] : true;
         $options = array_key_exists('options', $configuration[$name]) ? $configuration[$name]['options'] : [];
 
-        return new ServiceConfiguration($factory, $name, $aliases, $isShared, $options);
+        return new Configuration($factory, $name, $aliases, $isShared, $options);
 
     }
 

@@ -65,16 +65,6 @@ class ServiceLocatorTest extends PHPUnit_Framework_TestCase
         $this->serviceLocator = new \Alien\Di\ServiceLocator();
     }
 
-    public function testRegisterService()
-    {
-        $configuration = new SingletonExampleServiceConfiguration();
-        $this->serviceLocator->register($configuration, "RegisteredSingleton");
-
-        $test = $this->serviceLocator->get("RegisteredSingleton");
-
-        $this->assertInstanceOf('SingletonExampleService', $test);
-    }
-
     public function testBuildFromArray()
     {
         $service = [
@@ -89,7 +79,7 @@ class ServiceLocatorTest extends PHPUnit_Framework_TestCase
             ]
         ];
 
-        $configuration = \Alien\Di\ServiceConfiguration::createFromArray($service);
+        $configuration = \Alien\Di\Configuration::createFromArray($service);
         $sl = $this->serviceLocator;
         $this->assertEquals('MyService', $configuration->getName());
         $this->assertEquals(false, $configuration->isShared());
@@ -97,6 +87,23 @@ class ServiceLocatorTest extends PHPUnit_Framework_TestCase
         $sl->register($configuration);
         $this->assertInstanceOf('SingletonExampleService', $sl->get('MyService'));
 
+    }
+
+    public function testRegisterService()
+    {
+        $configuration = new SingletonExampleServiceConfiguration();
+        $this->serviceLocator->register($configuration, "RegisteredSingleton");
+
+        $test = $this->serviceLocator->get("RegisteredSingleton");
+
+        $this->assertInstanceOf('SingletonExampleService', $test);
+    }
+
+    public function testRegisterObject()
+    {
+        $object = $this->getMock('stdClass');
+        $this->serviceLocator->register($object, 'Service');
+        $this->assertInstanceOf('stdClass', $this->serviceLocator->get('Service'));
     }
 
 }
