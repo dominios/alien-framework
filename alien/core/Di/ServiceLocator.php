@@ -23,7 +23,7 @@ class ServiceLocator implements ServiceLocatorInterface
     /**
      * Array of registered instances.
      *
-     * @var object[]~
+     * @var object[]
      */
     private $sharedInstances = [];
 
