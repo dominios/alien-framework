@@ -7,6 +7,11 @@
 @cms-color-warning: #f39c12;
 @cms-color-danger: #f06752;
 
+.cms-font() {
+    font-family: 'Basic', sans-serif;
+    //font-stretch: semi-condensed;
+}
+
 .editable {
     position: relative;
     &:after {
@@ -56,24 +61,28 @@
 
 [ng-controller] {
     .cms-button(@color) {
-        border-radius: 0;
-        font-family: sans-serif;
+        .cms-font;
+        font-size: 12px;
+        //border-radius: 0;
         text-transform: uppercase;
-        font-stretch: condensed;
         box-shadow: none;
         outline: none;
         margin-top: 8px;
         margin-bottom: 8px;
         border: none;
-        padding: 10px 17px 12px 10px;
-        background: @color;;
-        border-left: 5px solid darken(@color, 8%);
+        padding: 8px 7px 8px 5px;
+        //background: @color;
+        background: #fff;
+        border: 1px solid #ccc;
+        color: @color;
+        border-left: 3px solid darken(@color, 8%);
         transition: background .3s, padding .3s;
         transition-timing-function: ease-in-out;
         &:hover {
             background: darken(@color, 12%);
-            padding-left: 20px;
-            padding-right: 27px;
+            color: #fff;
+            padding-left: 15px;
+            padding-right: 22px;
         }
     }
     .btn-default {
