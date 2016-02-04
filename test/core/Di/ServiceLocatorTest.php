@@ -1,56 +1,6 @@
 <?php
 
-use Alien\Di\ServiceConfigurationInterface;
 use Alien\Di\ServiceLocatorInterface;
-
-/**
- * @todo delete this class, mock instead
- */
-class SingletonExampleService
-{
-    public function doSomething()
-    {
-        return true;
-    }
-}
-
-/**
- * @todo delete this class, mock instead
- */
-class SingletonExampleServiceConfiguration implements ServiceConfigurationInterface
-{
-
-    protected $options = [
-        'foo' => 'bar'
-    ];
-
-    public function getName()
-    {
-        return "SingletonExampleService";
-    }
-
-    public function getAliases()
-    {
-        return ['SingletonAbc', 'SingletonDef'];
-    }
-
-    public function getFactory()
-    {
-        return function (ServiceLocatorInterface $serviceLocator) {
-            return new SingletonExampleService();
-        };
-    }
-
-    public function isShared()
-    {
-        return true;
-    }
-
-    public function getOption($key)
-    {
-        return $this->options[$key];
-    }
-}
 
 class ServiceLocatorTest extends PHPUnit_Framework_TestCase
 {
@@ -67,13 +17,15 @@ class ServiceLocatorTest extends PHPUnit_Framework_TestCase
 
     public function testBuildFromArray()
     {
+
+
         $service = [
             'MyService' => [
                 'aliases' => [
                     'Service123', 'Service456'
                 ],
                 'factory' => function (ServiceLocatorInterface $serviceLocator) {
-                    return new SingletonExampleService();
+                    return new stdClass;
                 },
                 'shared' => false
             ]
@@ -85,18 +37,24 @@ class ServiceLocatorTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(false, $configuration->isShared());
         $this->assertEquals(['Service123', 'Service456'], $configuration->getAliases());
         $sl->register($configuration);
-        $this->assertInstanceOf('SingletonExampleService', $sl->get('MyService'));
+        $this->assertInstanceOf('stdClass', $sl->get('MyService'));
 
     }
 
     public function testRegisterService()
     {
-        $configuration = new SingletonExampleServiceConfiguration();
-        $this->serviceLocator->register($configuration, "RegisteredSingleton");
+        $mockConfiguration = $this->getMock('ServiceConfigurationInterface');
+        $mockConfiguration->method('getName')->willReturn('TestingService');
+        $mockConfiguration->method('getAliases')->willReturn(['AAA', 'BBB']);
+        $mockConfiguration->method('getFactory')->willReturn(new stdClass());
+        $mockConfiguration->method('isShared')->willReturn(false);
+        $mockConfiguration->method('getOption')->with('foo')->willReturn('bar');
 
-        $test = $this->serviceLocator->get("RegisteredSingleton");
+        $this->serviceLocator->register($mockConfiguration, "TestingService");
 
-        $this->assertInstanceOf('SingletonExampleService', $test);
+        $test = $this->serviceLocator->get("TestingService");
+
+        $this->assertInstanceOf('stdClass', $test);
     }
 
     public function testRegisterObject()
