@@ -3,7 +3,7 @@
 namespace Application\Controllers;
 
 use Alien\Mvc\AbstractController;
-use Alien\Mvc\View;
+use Alien\Mvc\Template;
 use Application\Models\Cms\Cms;
 
 class IndexController extends AbstractController
@@ -17,7 +17,7 @@ class IndexController extends AbstractController
 
     protected function prepareView($action)
     {
-        return new View(__DIR__ . '/../views/index/' . str_replace('Action', '', $action) . '.phtml');
+        return new Template(__DIR__ . '/../views/index/' . str_replace('Action', '', $action) . '.phtml');
     }
 
     protected function createComponentFromFactory($name) {
@@ -28,10 +28,10 @@ class IndexController extends AbstractController
 
     protected function indexAction()
     {
-        $this->view->setVariable('projectName', 'ALiEN Framework CMS');
-        $this->view->addComponent($this->createComponentFromFactory('nav'));
-        $this->view->addComponent(new \Application\Models\Cms\Components\Text\TextComponent('Text'));
-        $this->view->setVariable('cms', $this->cms->getHeader()->render());
+        $this->view->bindVariable('projectName', 'ALiEN Framework CMS');
+        $this->view->bindComponent($this->createComponentFromFactory('nav'));
+        $this->view->bindComponent(new \Application\Models\Cms\Components\Text\TextComponent('Text'));
+        $this->view->bindVariable('cms', $this->cms->getHeader()->render());
         $this->getResponse()->setContentType('text/html;charset=UTF8');
         $this->getResponse()->setContent($this->view->render());
     }

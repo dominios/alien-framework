@@ -4,7 +4,7 @@ return [
     'controllers' => [
         'Application\Controllers\IndexController' => [
             'prepareView' => function($action) {
-                return new \Alien\Mvc\View(__DIR__ . '/views/index/' . str_replace('Action', '', $action) . '.phtml');
+                return new \Alien\Mvc\Template(__DIR__ . '/views/index/' . str_replace('Action', '', $action) . '.phtml');
             },
             'components' => [
                 'nav' => function() {

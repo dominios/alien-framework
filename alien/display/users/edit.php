@@ -159,7 +159,7 @@
                 </table>
                 <?
                 //                foreach ($this->userGroups as $group):
-                //                    $partialView = new \Alien\View('display/common/item.php');
+                //                    $partialView = new \Alien\Template('display/common/item.php');
                 //                    $partialView->icon = 'group';
                 //                    $partialView->item = $group;
                 //                    $partialView->dropLink = \Alien\Controllers\ AbstractController:: staticActionURL('users', 'removeGroup', array('user' => $this->user->getId(), 'group' => $group->getId()));

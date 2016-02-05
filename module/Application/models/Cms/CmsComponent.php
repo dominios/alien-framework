@@ -3,7 +3,7 @@
 namespace Application\Models\Cms;
 
 use Alien\Mvc\Component\ComponentInterface;
-use Alien\Mvc\View;
+use Alien\Mvc\Template;
 
 class CmsComponent implements ComponentInterface
 {
@@ -22,7 +22,7 @@ class CmsComponent implements ComponentInterface
      */
     public function render()
     {
-        $helper = new View(__DIR__ . "/../../views/cms/cms.phtml");
+        $helper = new Template(__DIR__ . "/../../views/cms/cms.phtml");
         return $helper;
     }
 }

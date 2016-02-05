@@ -24,13 +24,13 @@ use InvalidArgumentException;
  * When undefined action is called, controller first tries to execute it's default action, which is stored in <code>$defaultAction</code> property.
  * When even default action does not exists, execution ends by throw of <code>NotFoundException</code>.
  *
- * By calling of any action, instance of <code>View</code> is created, used for rendering.
+ * By calling of any action, instance of <code>Template</code> is created, used for rendering.
  *
  * Instance of <i>\Alien\Di\ServiceLocator</i> is injected into controller automatically.
  *
  * <b>WARNING:</b> each child controller should be named with postfix <i>Controller</i>, otherwise some of functionality may not work properly!
  *
- * @todo default View can be also XML/JSON - use Strategy pattern for it's creation
+ * @todo default Template can be also XML/JSON - use Strategy pattern for it's creation
  */
 class AbstractController implements ServiceLocatorAwareInterface
 {
@@ -60,8 +60,8 @@ class AbstractController implements ServiceLocatorAwareInterface
     protected $route;
 
     /**
-     * Automatically prepared View instance. (lazy loaded)
-     * @var View
+     * Automatically prepared Template instance. (lazy loaded)
+     * @var Template
      */
     private $view;
 
@@ -94,11 +94,11 @@ class AbstractController implements ServiceLocatorAwareInterface
     }
 
     /**
-     * Provides access to lazy loaded View or Response objects.
+     * Provides access to lazy loaded Template or Response objects.
      *
      * @param string $name <i>view</i> or <i>response</i>
-     * @return Response|View
-     * @throws BadMethodCallException when accessing other property then View or Response.
+     * @return Response|Template
+     * @throws BadMethodCallException when accessing other property then Template or Response.
      */
     public function __get($name)
     {
@@ -169,13 +169,13 @@ class AbstractController implements ServiceLocatorAwareInterface
      *
      * This method filters queue and ensure, that each action will be executed just once.
      * Each action name is then checked, if contains suffix <i>Action</i> and adds it if not.
-     * During execution, access to prepared <code>View</code> or <code>Response</code> is created via
+     * During execution, access to prepared <code>Template</code> or <code>Response</code> is created via
      * <code>getView()</code> or <code>getResponse()</code>. These objects are lazy loaded when needed.
      *
      * Each action should modify prepared <code>>Response</code> (set it's content etc.) while returning nothing,
      * or return new instance instead. Otherwise, <code>NoResponseException</code> is thrown.
      *
-     * <b>WARNING:</b> if multiple actions are in queue, <i>View</i> and <i>Response</i> instances are re-created for each action execution.
+     * <b>WARNING:</b> if multiple actions are in queue, <i>Template</i> and <i>Response</i> instances are re-created for each action execution.
      *
      * @return Response[]
      * @throws NoResponseException when action provides no valid response object.
@@ -231,7 +231,7 @@ class AbstractController implements ServiceLocatorAwareInterface
     }
 
     /**
-     * Create automatically available View object.
+     * Create automatically available Template object.
      *
      * By default, path to the template is following:<br>
      * <code>view/[controllerName]/[actionName].php</code>.
@@ -239,7 +239,7 @@ class AbstractController implements ServiceLocatorAwareInterface
      * <b>NOTE:</b> Whole namespace information is stripped from controller name. Suffix <i>Controller</i> is also removed.
      *
      * @param string $action name of current action processed.
-     * @return View
+     * @return Template
      */
     protected function prepareView($action)
     {
@@ -248,12 +248,12 @@ class AbstractController implements ServiceLocatorAwareInterface
         $src .= StringFunctions::stripNamespace(str_replace('Controller', '', get_called_class()));
         $src .= '/' . $action;
         $src .= '.php';
-        return new View($src);
+        return new Template($src);
     }
 
     /**
-     * Returns last prepared View object if exists or create one.
-     * @return View
+     * Returns last prepared Template object if exists or create one.
+     * @return Template
      */
     protected function getView()
     {

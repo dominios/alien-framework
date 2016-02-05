@@ -4,7 +4,7 @@ namespace Application\Models\Cms\Components\Text;
 
 use Alien\Mvc\Component\ComponentInterface;
 use Alien\Mvc\Component\Renderable;
-use Alien\Mvc\View;
+use Alien\Mvc\Template;
 
 class TextComponent implements ComponentInterface {
 
@@ -17,7 +17,7 @@ class TextComponent implements ComponentInterface {
 
     public function cmsRender()
     {
-        $view = new View(__DIR__ . '/textComponent.phtml');
+        $view = new Template(__DIR__ . '/textComponent.phtml');
         return $view;
     }
 
