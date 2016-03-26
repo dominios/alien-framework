@@ -57,7 +57,7 @@ class Template implements Renderable
     {
         $this->filename = $filename;
         if (count($variables)) {
-
+            $this->variables = $variables;
         }
     }
 

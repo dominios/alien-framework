@@ -49,7 +49,8 @@ abstract class Application
                     RecursiveIteratorIterator::SELF_FIRST
                 );
                 foreach ($files as $fileinfo) {
-                    require_once $fileinfo->getBasename();
+                    /** @var \SplFileInfo $fileinfo */
+                    require_once $fileinfo->getRealPath();
                 }
             }
         }

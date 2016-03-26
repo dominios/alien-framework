@@ -12,4 +12,8 @@ return [
         'prefix' => 'test'
     ],
 
+    'autoload' => [
+        __DIR__ . '/../autoload'
+    ]
+
 ];
