@@ -1,0 +1,8 @@
+{
+  "name": "alien/framework",
+  "autoload": {
+    "psr-4" : {
+      "Alien" : "alien"
+    }
+  }
+}
