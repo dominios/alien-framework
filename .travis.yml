@@ -8,5 +8,8 @@ php:
   - '5.6'
   - '7.0'
 
-#script: phpunit --configuration phpunit.xml.dist --coverage-text
+before_script:
+  - flags=""
+  - composer install $flags
+
 script: phpunit --coverage-text
