@@ -2,29 +2,14 @@
 
 namespace Alien\Form;
 
-use Alien\Form\Input\Button;
-use Alien\Form\Input\Checkbox;
-use Alien\Form\Input\Color;
-use Alien\Form\Input\Csrf;
-use Alien\Form\Input\DateTimeLocal;
-use Alien\Form\Input\Hidden;
-use Alien\Form\Input\Password;
-use Alien\Form\Input\Radio;
-use Alien\Form\Input\Select;
-use Alien\Form\Input\Submit;
-use Alien\Form\Input\Text;
-use Alien\Form\Input\Textarea;
 use Alien\Form\Validator\ValidatorException;
-use DateTime;
 use InvalidArgumentException;
 
 /**
  * Abstract representation of every Input
- *
- * Class Input
- * @package Alien\Forms
  */
-abstract class Input {
+abstract class Input
+{
 
     /**
      * If set to true, all inputs are automatically hydrated with data from Input::$hydratorArray
@@ -147,6 +132,11 @@ abstract class Input {
     protected $linkedInputs = array();
 
     /**
+     * @var array Array of any custom attributes.
+     */
+    protected $attrs = [];
+
+    /**
      * Constructs new Input instance with given attributes
      *
      * @param string $name Input name attribute
@@ -154,15 +144,26 @@ abstract class Input {
      * @param string $defaultValue Input default value
      * @param string $value current Input value
      * @param int $size Input size attribute
+     * @todo remove hardcoded dependency on superglobals
      */
-    protected function __construct($name, $type, $defaultValue, $value = null, $size = null) {
+    public function __construct($name, $type, $defaultValue, $value = null, $size = null)
+    {
+
         if (!is_array(self::$hydratorArray) && sizeof($_POST)) {
             self::$hydratorArray = $_POST;
         }
-        $this->name = $name;
-        $this->type = $type;
-        $this->value = $value;
-        $this->size = $size;
+
+
+        $el = DOMElement::create('<input>');
+        $el->attr('name', $name)
+            ->attr('type', $type)
+            ->attr('value', $value)
+            ->attr('size', $size)
+        ;
+
+        echo $el;
+        die;
+
         $this->defaultValue = $defaultValue;
         $this->hydrate();
     }
@@ -171,8 +172,9 @@ abstract class Input {
      * Sets autoHydrate
      * @param $bool
      */
-    public static function setAutoHydrate($bool) {
-        self::$autoHydrate = (bool) $bool;
+    public static function setAutoHydrate($bool)
+    {
+        self::$autoHydrate = (bool)$bool;
     }
 
     /**
@@ -180,7 +182,8 @@ abstract class Input {
      * @param $array
      * @throws \InvalidArgumentException
      */
-    public static function setHydratorArray($array) {
+    public static function setHydratorArray($array)
+    {
         if (is_array($array)) {
             self::$hydratorArray = $array;
         } else {
@@ -192,219 +195,21 @@ abstract class Input {
      * Finds value corresponding value in hydrator array and fill Input's value by it
      * @return $this
      */
-    public function hydrate() {
+    public function hydrate()
+    {
         if (self::$autoHydrate) {
             if (is_array(self::$hydratorArray) && array_key_exists($this->name, self::$hydratorArray)) {
-                $this->value = (string) self::$hydratorArray[$this->name];
+                $this->value = (string)self::$hydratorArray[$this->name];
             }
         }
         return $this;
     }
 
-    /**
-     * Factory method for CSRF input
-     * @return Csrf
-     */
-    public static function csrf() {
-        return new Csrf();
-    }
 
-    /**
-     * Factory method for hidden input
-     * @param string $name
-     * @param string|null $value
-     * @return Hidden
-     */
-    public static function hidden($name, $value = null) {
-        $input = new Hidden($name, $value);
-        return $input;
-    }
 
-    /**
-     * Factory method for password input
-     * @param string $name
-     * @param string $defaultValue
-     * @param string|null $value
-     * @param int|null $size
-     * @return Password
-     */
-    public static function password($name, $defaultValue, $value = null, $size = null) {
-        $input = new Password($name, $defaultValue, $value, $size);
-        return $input;
-    }
 
-    /**
-     * Factory method fod color input
-     * @param string $name
-     * @param string $defaultValue
-     * @param string|null $value
-     * @return Color
-     */
-    public static function color($name, $defaultValue, $value = null) {
-        return new Color($name, $defaultValue, $value, 2);
-    }
 
-    /**
-     * Factory method for text input
-     * @param string $name
-     * @param string $defaultValue
-     * @param string|null $value
-     * @param int|null $size
-     * @return Text
-     */
-    public static function text($name, $defaultValue, $value = null, $size = null) {
-        $input = new Text($name, $defaultValue, $value, $size);
-        return $input;
-    }
 
-    /**
-     * Factory method for select input
-     * @param string $name
-     * @return Select
-     */
-    public static function select($name) {
-        $input = new Select($name);
-        return $input;
-    }
-
-    /**
-     * Factory method for textarea
-     * @param string $name
-     * @param string|null $defaultValue
-     * @param string|null $value
-     * @return Textarea
-     */
-    public static function textarea($name, $defaultValue = null, $value = null) {
-        $input = new Textarea($name, $defaultValue, $value);
-        return $input;
-    }
-
-    /**
-     * Factory method for checkbox input
-     * @param string $name
-     * @param string $value
-     * @param bool $checked
-     * @return Checkbox
-     */
-    public static function checkbox($name, $value, $checked) {
-        $input = new Checkbox($name, $value, $checked);
-        return $input;
-    }
-
-    /**
-     * Factory method for radio input
-     * @param string $name
-     * @param string $value
-     * @return Radio
-     */
-    public static function radio($name, $value) {
-        $input = new Radio($name, $value);
-        return $input;
-    }
-
-    /**
-     * Factory method for button element
-     * @param string $action
-     * @param string $text
-     * @param string|null $icon
-     * @return Button
-     */
-    public static function button($action, $text, $icon = null) {
-        $input = new Button($action, $text, $icon);
-        return $input;
-    }
-
-    /**
-     * Factory method for submit button
-     * @param string $name
-     * @param string|null $value
-     * @return Submit
-     */
-    public static function submit($name = '', $value = null) {
-        $input = new Submit($name, $value);
-        return $input;
-    }
-
-    public static function dateTimeLocal($name, DateTime $defaultValue = null, DateTime $value = null) {
-        $input = new DateTimeLocal($name, $defaultValue, $value);
-        return $input;
-    }
-
-    /**
-     * Gets all HTML common attributes like style, class, autocomplete...
-     * @param bool $toString if set to true, returns string to render, otherwise array of attribtues
-     * @return array|string
-     */
-    protected function commonRenderAttributes($toString = false) {
-        $attr = array();
-        if (!$this->validate() && sizeof($_POST)) {
-            $this->addCssClass('invalid');
-            if (strlen($this->errorMessage)) {
-                $attr[] = 'data-errorMsg="' . $this->errorMessage . '"';
-            }
-        }
-        if ($this->disabled) {
-            $this->addCssClass('disabled');
-        }
-        if (sizeof($this->cssClass)) {
-            $class = 'class="' . implode(' ', array_unique($this->cssClass, SORT_STRING)) . '"';
-            $attr[] = $class;
-        }
-        if ($this->cssStyle != '') {
-            $style = 'style="' . $this->cssStyle . '"';
-            $attr[] = $style;
-        }
-        if ($this->disabled === true) {
-            $attr[] = 'disabled';
-        }
-        if ($this->domId) {
-            $attr[] = 'id="' . $this->domId . '"';
-        } else {
-            $attr[] = 'id="' . $this->name . '"';
-        }
-
-        return $toString ? implode(' ', $attr) : $attr;
-    }
-
-    /**
-     * Sets size attribute
-     * @param int $size
-     * @return $this
-     */
-    public function setSize($size) {
-        $this->size = (int) $size;
-        return $this;
-    }
-
-    /**
-     * Sets disabled attribute
-     * @param bool $disabled
-     * @return $this
-     */
-    public function setDisabled($disabled) {
-        $this->disabled = (bool) $disabled;
-        return $this;
-    }
-
-    /**
-     * Sets placeholder attribute
-     * @param string $placeholder
-     * @return $this
-     */
-    public function setPlaceholder($placeholder) {
-        $this->placeholder = $placeholder;
-        return $this;
-    }
-
-    /**
-     * Sets autocomplete attribute
-     * @param bool $autocomplete
-     * @return $this
-     */
-    public function setAutocomplete($autocomplete) {
-        $this->autocomplete = (bool) $autocomplete;
-        return $this;
-    }
 
     /**
      * Adds css classes separated by comma
@@ -412,7 +217,8 @@ abstract class Input {
      * @param mixed $classes optional comma separated classes
      * @return $this
      */
-    public function addCssClass(/** ...  */) {
+    public function addCssClass(/** ...  */)
+    {
         for ($i = 0; $i < func_num_args(); $i++) {
             $this->cssClass[] = func_get_arg($i);
         }
@@ -424,52 +230,31 @@ abstract class Input {
      * @param string $cssClass needle
      * @return $this
      */
-    public function removeCssClass($cssClass) {
+    public function removeCssClass($cssClass)
+    {
         $this->cssClass = array_diff($this->cssClass, array($cssClass));
-        return $this;
-    }
-
-    /**
-     * Sets style attribute
-     * @param string $cssStyle
-     * @return $this
-     */
-    public function setCssStyle($cssStyle) {
-        $this->cssStyle = $cssStyle;
         return $this;
     }
 
     /**
      * Resets style attribute
      */
-    public function clearCssStyle() {
+    public function clearCssStyle()
+    {
         $this->cssStyle = '';
     }
 
-    /**
-     * Gets value
-     * @return null|string
-     */
-    public function getValue() {
-        return $this->value;
-    }
 
-    /**
-     * Sets value
-     * @param string $value
-     * @return $this
-     */
-    public function setValue($value) {
-        $this->value = $value;
-        return $this;
-    }
+
+
 
     /**
      * Attach validator to chain
      * @param Validator $validator
      * @return $this
      */
-    public function addValidator(Validator $validator) {
+    public function addValidator(Validator $validator)
+    {
         $this->validators[] = $validator;
         return $this;
     }
@@ -478,7 +263,8 @@ abstract class Input {
      * Test value against all attached validators
      * @return bool
      */
-    public function validate() {
+    public function validate()
+    {
         if (is_bool($this->getValidationResult())) {
             return $this->getValidationResult();
         } else {
@@ -504,7 +290,8 @@ abstract class Input {
      * Ignore cached validation result and validate again
      * @return bool
      */
-    public function revalidate() {
+    public function revalidate()
+    {
         $this->validationResult = null;
         return $this->validate();
     }
@@ -513,16 +300,21 @@ abstract class Input {
      * Sets error message
      * @param string $errorMessage
      */
-    public function setErrorMessage($errorMessage) {
+    public function setErrorMessage($errorMessage)
+    {
         $this->errorMessage = $errorMessage;
     }
+
+
+
 
     /**
      * Attach Input to form
      * @param Form $form
      * @return $this
      */
-    public function addToForm(Form $form) {
+    public function addToForm(Form $form)
+    {
         $form->addElement($this);
         return $this;
     }
@@ -532,110 +324,42 @@ abstract class Input {
      * @param Fieldset $fieldset
      * @return $this
      */
-    public function addToFieldset(Fieldset $fieldset) {
+    public function addToFieldset(Fieldset $fieldset)
+    {
         $fieldset->push($this);
         return $this;
     }
 
-    /**
-     * Gets name attribute
-     * @return string
-     */
-    public function getName() {
-        return $this->name;
-    }
 
-    /**
-     * Sets name attribute
-     * @param string $name
-     * @return $this
-     */
-    public function setName($name) {
-        $this->name = $name;
-        return $this;
-    }
 
-    /**
-     * Gets type attribute
-     * @return string
-     */
-    public function getType() {
-        return $this->type;
-    }
-
-    /**
-     * Gets input attribute
-     * @return int|null
-     */
-    public function getSize() {
-        return $this->size;
-    }
-
-    /**
-     * Get placeholder attribute
-     * @return string
-     */
-    public function getPlaceholder() {
-        return (string) $this->placeholder;
-    }
 
     /**
      * Cache validation result so there is no need to validate again
      * @param bool $validationResult
      */
-    public function setValidationResult($validationResult) {
-        $this->validationResult = (bool) $validationResult;
+    public function setValidationResult($validationResult)
+    {
+        $this->validationResult = (bool)$validationResult;
     }
 
     /**
      * Gets cached validation result
      * @return bool
      */
-    public function getValidationResult() {
+    public function getValidationResult()
+    {
         return $this->validationResult;
     }
 
-    /**
-     * Sets icon class string
-     * @param string $icon
-     * @return $this
-     */
-    public function setIcon($icon) {
-        $this->icon = $icon;
-        return $this;
-    }
 
-    /**
-     * Gets icon class string
-     * @return string
-     */
-    public function getIcon() {
-        return $this->icon;
-    }
 
-    /**
-     * Sets label
-     * @param $label
-     * @return $this
-     */
-    public function setLabel($label) {
-        $this->label = $label;
-        return $this;
-    }
-
-    /**
-     * Gets label
-     * @return string
-     */
-    public function getLabel() {
-        return (string) $this->label;
-    }
 
     /**
      * Test if input is linked to another input
      * @return bool
      */
-    public function isLinked() {
+    public function isLinked()
+    {
         return $this->linkedTo instanceof Input;
     }
 
@@ -644,7 +368,8 @@ abstract class Input {
      * @param Input $input
      * @return $this
      */
-    public function linkTo(Input $input) {
+    public function linkTo(Input $input)
+    {
         $this->linkedTo = $input;
         $input->addLinkedInput($this);
         return $this;
@@ -654,7 +379,8 @@ abstract class Input {
      * Adds this input to given input's linked array
      * @param Input $input
      */
-    private function addLinkedInput(Input $input) {
+    private function addLinkedInput(Input $input)
+    {
         $this->linkedInputs[] = $input;
     }
 
@@ -662,7 +388,8 @@ abstract class Input {
      * Test if has any linked input
      * @return bool
      */
-    public function hasLinkedInputs() {
+    public function hasLinkedInputs()
+    {
         return count($this->linkedInputs) > 0;
     }
 
@@ -670,31 +397,9 @@ abstract class Input {
      * Gets all linked inputs
      * @return array
      */
-    public function getLinkedInputs() {
+    public function getLinkedInputs()
+    {
         return $this->linkedInputs;
     }
-
-    /**
-     * @param string $domId
-     * @return $this
-     */
-    public function setDomId($domId) {
-        $this->domId = $domId;
-        return $this;
-    }
-
-    /**
-     * @return string
-     */
-    public function getDomId() {
-        return $this->domId;
-    }
-
-
-    /**
-     * Converts to HTML representation.
-     * @return string
-     */
-    public abstract function __toString();
 
 }
