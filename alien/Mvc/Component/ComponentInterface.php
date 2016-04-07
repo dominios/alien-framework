@@ -2,9 +2,10 @@
 
 namespace Alien\Mvc\Component;
 
+use Alien\View\Renderable;
+
 /**
  * Interface ComponentInterface
- * @package Alien\Mvc\Component
  */
 interface ComponentInterface extends Renderable
 {
