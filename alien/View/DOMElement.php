@@ -16,7 +16,7 @@ class DOMElement implements Renderable
      * Default: <code>div</code>.
      * @var string
      */
-    protected $name = 'div';
+    protected $name = '';
 
     /**
      * If is paired element (e.g. has closing tag).
@@ -53,7 +53,7 @@ class DOMElement implements Renderable
      * Creates new DOMElement instance.
      * @param string $name element tag name.
      */
-    public function __construct($name)
+    public function __construct($name = 'div')
     {
         $this->name = $name;
     }
@@ -125,7 +125,7 @@ class DOMElement implements Renderable
 
     /**
      * WARNING: clears all other set classes!
-     * @param \string[] $class
+     * @param string $class
      * @return DOMElement
      */
     public function setClass($class)
@@ -171,7 +171,7 @@ class DOMElement implements Renderable
      */
     public function removeClass($class)
     {
-        $this->class = array_diff($this->class, $class);
+        $this->class = array_diff($this->class, [$class]);
         return $this;
     }
 
@@ -191,8 +191,16 @@ class DOMElement implements Renderable
      */
     public function append($element)
     {
-        $this->children = $element;
+        $this->children[] = $element;
         return $this;
+    }
+
+    /**
+     * @return bool
+     */
+    public function hasChildren()
+    {
+        return count($this->children) > 0;
     }
 
     /**
@@ -214,8 +222,48 @@ class DOMElement implements Renderable
      */
     public function render()
     {
-        // @TODO: Implement render() method.
-        throw new \RuntimeException("Not implemented.");
+        $ret = "";
+        if ($this->isPairTag) {
+            $attrs = $this->renderAttributes();
+            if (strlen($attrs)) {
+                $attrs = ' ' . $attrs;
+            }
+            $ret .= '<' . $this->name . $attrs . '>';
+            $ret .= htmlspecialchars($this->content);
+            if ($this->hasChildren()) {
+                foreach ($this->children as $child) {
+                    $ret .= $child->render();
+                }
+            }
+            $ret .= '</' . $this->name . '>';
+        } else {
+            $ret .= '<' . $this->name;
+            $attrs = $this->renderAttributes();
+            $ret .= strlen($attrs) ? ' ' . $attrs : '';
+            $ret .= '>';
+        }
+        return $ret;
     }
-    
+
+    /**
+     * @return string
+     */
+    protected function renderAttributes()
+    {
+        $attrs = [];
+        if ($this->id) {
+            $attrs[] = sprintf("id=\"%s\"", $this->id);
+        }
+        if (count($this->class)) {
+            $attrs[] = 'class="' . implode(' ', $this->class) . '"';
+        }
+        if (count($this->attributes)) {
+            foreach ($this->attributes as $key => $value) {
+                $attrs[] = sprintf("%s=\"%s\"", $key, $value);
+            }
+        }
+        $ret = implode(' ', $attrs);
+        return $ret;
+    }
+
 }
