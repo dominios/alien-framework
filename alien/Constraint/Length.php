@@ -21,13 +21,14 @@ class Length implements ConstraintInterface
 
     /**
      * Constructs new instance of length constraint.
-     * @param int $min minimum length.
-     * @param int $max maximum length,
+     * @param int $min [optional] minimum length (defaults: <code>0</code>).
+     * @param int $max [optional] maximum length (default: <code>INF</code>).
      */
     public function __construct($min = 0, $max = INF)
     {
         $this->min = $min;
         $this->max = $max;
+
     }
 
     public function validate($value)
