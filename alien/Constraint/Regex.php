@@ -39,7 +39,7 @@ class Regex implements ConstraintInterface
 
     public function validate($value)
     {
-        if (!preg_match("~" . $this->pattern . "~" . (string)$this->modifiers, $value)) {
+        if (!preg_match("~" . $this->pattern . "~" . (string) $this->modifiers, $value)) {
             throw new ValidationException('Entered value does not match regular expression.');
         }
         return true;
