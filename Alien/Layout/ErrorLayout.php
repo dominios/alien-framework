@@ -12,6 +12,6 @@ class ErrorLayout extends AdminLayout {
 
     public function __construct() {
         parent::__construct();
-        $this->appendStylesheet('/alien/display/layouts/error/error.css');
+        $this->appendStylesheet('/Alien/display/layouts/error/error.css');
     }
 }

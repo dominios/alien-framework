@@ -14,7 +14,7 @@ class AdminLayout extends Layout {
     const useNotifications = true;
     const useConsole = false;
 
-    private $layoutFolder = '/alien/display/layouts/admin';
+    private $layoutFolder = '/Alien/display/layouts/admin';
 
     private $title = '';
     private $mainMenu = '';
@@ -27,23 +27,23 @@ class AdminLayout extends Layout {
         $this->mainMenu = $this->generateTopMenu($this->topmenuItems());
         $this->prependScript('http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js');
         $this->appendScript($this->layoutFolder . '/js/bootstrap.min.js');
-        $this->appendScript('/alien/js/jquery-ui.js');
-        $this->appendScript('/alien/js/alien.js'); // TODO zbavit sa toho
-        $this->appendScript('/alien/js/alien2.js'); // TODO zbavit sa toho
-//        $this->appendScript('/alien/plugins/ckeditor/ckeditor.js');
-//        $this->appendStylesheet('/alien/display/alien-theme/jquery-ui-1.10.3.custom.css');
+        $this->appendScript('/Alien/js/jquery-ui.js');
+        $this->appendScript('/Alien/js/Alien.js'); // TODO zbavit sa toho
+        $this->appendScript('/Alien/js/alien2.js'); // TODO zbavit sa toho
+//        $this->appendScript('/Alien/plugins/ckeditor/ckeditor.js');
+//        $this->appendStylesheet('/Alien/display/Alien-theme/jquery-ui-1.10.3.custom.css');
 
         $this->prependStylesheet($this->layoutFolder . '/css/bootstrap.min.css');
         $this->appendStylesheet($this->layoutFolder . '/css/font-awesome.min.css');
-        $this->appendStylesheet($this->layoutFolder . '/css/alien-theme.css');
+        $this->appendStylesheet($this->layoutFolder . '/css/Alien-theme.css');
 
         $this->appendStylesheet('//cdn.datatables.net/1.10.3/css/jquery.dataTables.min.css');
         $this->appendScript('//cdn.datatables.net/1.10.3/js/jquery.dataTables.min.js');
-        $this->appendScript('/alien/js/moment-with-locales.js');
+        $this->appendScript('/Alien/js/moment-with-locales.js');
 //        $this->appendScript('//cdnjs.cloudflare.com/ajax/libs/fullcalendar/2.1.1/fullcalendar.min.js');
-        $this->appendScript('/alien/js/fullcalendar.min.js');
+        $this->appendScript('/Alien/js/fullcalendar.min.js');
 //        $this->appendStylesheet('//cdnjs.cloudflare.com/ajax/libs/fullcalendar/2.1.1/fullcalendar.min.css');
-        $this->appendStylesheet('/alien/display/fullcalendar.min.css');
+        $this->appendStylesheet('/Alien/display/fullcalendar.min.css');
         // TODO: nejako odlisit stylesheety podla typu (stylesheet, print, ...)
 //        $this->appendStylesheet('//cdnjs.cloudflare.com/ajax/libs/fullcalendar/2.1.1/fullcalendar.print.css');
     }

@@ -12,7 +12,7 @@
     verbose="true">
 
     <testsuites>
-        <testsuite name="Alien framewokr test suite">
+        <testsuite name="Alien framework test suite">
             <directory>./test</directory>
         </testsuite>
     </testsuites>
