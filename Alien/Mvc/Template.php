@@ -3,8 +3,8 @@
 namespace Alien\Mvc;
 
 use Alien\Mvc\Component\ComponentInterface;
-use Alien\Mvc\Component\Renderable;
 use Alien\Stdlib\Exception\IOException;
+use Alien\View\Renderable;
 
 /**
  * Template rendering tool.
