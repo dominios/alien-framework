@@ -11,6 +11,11 @@ class Regex implements ConstraintInterface
 {
 
     /**
+     * Default error message.
+     */
+    const ERROR_MESSAGE = 'Entered value does not match regular expression.';
+
+    /**
      * @var string pattern to validate against.
      */
     private $pattern;
@@ -40,7 +45,7 @@ class Regex implements ConstraintInterface
     public function validate($value)
     {
         if (!preg_match("~" . $this->pattern . "~" . (string) $this->modifiers, $value)) {
-            throw new ValidationException('Entered value does not match regular expression.');
+            throw new ValidationException(self::ERROR_MESSAGE);
         }
         return true;
     }
