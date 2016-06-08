@@ -1,9 +1,6 @@
 <?php
 
-namespace Alien\Form\Validator;
-
-use Alien\Constraint\Regex;
-use Alien\Form\Validator;
+namespace Alien\Constraint;
 
 /**
  * Validates string to correct email format.
