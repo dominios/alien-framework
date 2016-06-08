@@ -54,7 +54,6 @@ class RangeTest extends PHPUnit_Framework_TestCase
     {
         $rangeConstraint = new Range(-5, 5);
         $this->assertEquals(true, $rangeConstraint->validate("2"));
-        $this->assertEquals(true, $rangeConstraint->validate("0x539"));
         $this->assertEquals(true, $rangeConstraint->validate("1.34"));
     }
 
@@ -67,6 +66,7 @@ class RangeTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(true, $rangeConstraint->validate("foo"));
         $this->assertEquals(true, $rangeConstraint->validate([]));
         $this->assertEquals(true, $rangeConstraint->validate(new stdClass()));
+        $this->assertEquals(true, $rangeConstraint->validate("0x539"));
     }
 
 }
