@@ -4,6 +4,11 @@ namespace Alien\Constraint;
 
 use Alien\Constraint\Exception\ValidationException;
 
+/**
+ * Validates value to be non empty.
+ *
+ * Empty arrays or strings are not accepted, strings are trimmed.
+ */
 class Required
 {
 
