@@ -6,6 +6,11 @@ use Alien\Constraint\Exception\ValidationException;
 
 /**
  * Validates given value for one of the scalar types.
+ *
+ * <b>NOTE:</b> php native <code>is_*<code> functions are used.
+ *
+ * <b>NOTE:</b> when checking against type <code>Object</code> callable functions will pass
+ * because they are represented as <code>Closure</code> objcets.
  */
 class Type
 {
