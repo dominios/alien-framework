@@ -14,9 +14,9 @@ class Email extends Regex {
 
     const ERROR_MESSAGE = 'Entered value is not valid email address.';
 
-    public function __construct($modifiers)
+    public function __construct()
     {
-        parent::__construct(self::PATTERN, $modifiers);
+        parent::__construct(self::PATTERN, '');
     }
 
 }
