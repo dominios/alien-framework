@@ -102,4 +102,27 @@ class JsonValidatorTest extends PHPUnit_Framework_TestCase
             ]
         ];
     }
+
+
+    public function testMultiLevelJsonSuccess ()
+    {
+        $this->ruleSet = [
+            'foo' => [
+                'bar' => [
+                    new Alien\Constraint\Required(),
+                    new Alien\Constraint\Regex('baz')
+                ]
+            ]
+        ];
+
+        $json = [
+            'foo' => [
+                'bar' => 'baz'
+            ]
+        ];
+
+        $validator = new \Alien\Validator\JsonValidator($this->ruleSet);
+        $this->assertEquals(true, $validator->validate($json));
+    }
+
 }

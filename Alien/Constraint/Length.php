@@ -28,11 +28,11 @@ class Length implements ConstraintInterface
     {
         $this->min = $min;
         $this->max = $max;
-
     }
 
     public function validate($value)
     {
+        $value = filter_var($value, FILTER_SANITIZE_STRING);
         if (!is_null($this->min) && strlen($value) < $this->min) {
             throw new ValidationException("Entered value is shorter then minimum.");
         }

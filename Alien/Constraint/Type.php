@@ -10,9 +10,9 @@ use Alien\Constraint\Exception\ValidationException;
  * <b>NOTE:</b> php native <code>is_*<code> functions are used.
  *
  * <b>NOTE:</b> when checking against type <code>Object</code> callable functions will pass
- * because they are represented as <code>Closure</code> objcets.
+ * because they are represented as <code>Closure</code> objects.
  */
-class Type
+class Type implements ConstraintInterface
 {
 
     const TYPE_STRING = "string";

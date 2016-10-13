@@ -9,7 +9,7 @@ use Alien\Constraint\Exception\ValidationException;
  *
  * Empty arrays or strings are not accepted, strings are trimmed.
  */
-class Required
+class Required implements ConstraintInterface
 {
 
     /**
