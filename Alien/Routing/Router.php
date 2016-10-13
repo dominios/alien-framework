@@ -39,7 +39,11 @@ use Alien\Routing\Exception\RouteNotFoundException;
  *
  * <b>WARNING:</b> empty route name and single slash are handled as equal!
  *
- * @package Alien
+ * @todo remove namespace
+ * @todo rename childRoutes
+ * @todo HTTP method support
+ * @todo empty child route (only variable) /:id
+ * @todo rename to HttpRouter ?
  */
 class Router
 {
