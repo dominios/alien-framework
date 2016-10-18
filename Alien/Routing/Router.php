@@ -5,6 +5,7 @@ namespace Alien\Routing;
 use Alien\Routing\Exception\InvalidConfigurationException;
 use Alien\Routing\Exception\InvalidRequestException;
 use Alien\Routing\Exception\RouteNotFoundException;
+use InvalidArgumentException;
 
 /**
  * Matching string requests with defined configurations
@@ -40,7 +41,7 @@ use Alien\Routing\Exception\RouteNotFoundException;
  * <b>WARNING:</b> empty route name and single slash are handled as equal!
  *
  * @todo remove namespace
- * @todo rename childRoutes
+ * @todo rename sub_routes
  * @todo HTTP method support
  * @todo empty child route (only variable) /:id
  * @todo rename to HttpRouter ?
@@ -75,6 +76,91 @@ class Router
         return $route;
     }
 
+    public function match ($request) {
+        $method = HttpRequest::METHOD_GET;
+        if ($request instanceof HttpRequest) {
+            $uri = $request->getUri();
+            $method = $request->getMethod();
+        } else if (is_string($request)) {
+            $uri = $request;
+        } else {
+            throw new InvalidArgumentException("Invalid request given.");
+        }
+
+        // add slash at beginning of string if not present
+        if (strpos($uri, '/') !== 0) {
+            $uri = '/' . $uri;
+        }
+
+        $match = new RouteMatch();
+        $hasMatch = $this->handler($this->routes, $uri, $match);
+
+        if (!$hasMatch) {
+            throw new RouteNotFoundException(sprintf("Route %s was not found", $uri));
+        }
+        return $match;
+    }
+
+    private function handler ($routes, $uri, RouteMatch $match) {
+        $uriParts = array_filter(explode('/', $uri));
+        $search = '/' . array_shift($uriParts);
+        $hasMatch = false;
+
+        foreach ($routes as $route) {
+
+            $matches = [];
+            if (preg_match('~' . $search . '(/:\w)*~' , $route['route'], $matches)) {
+
+                $hasArguments = sizeof($matches) > 1;
+
+                $match->apply($route);
+                $hasMatch = true;
+
+                if ($hasArguments) {
+                    $args = $this->getPossibleArguments($route);
+                    if (count($args['required']) > $uriParts) {
+                        // @todo add test coverage
+                        throw new RouteNotFoundException("Not enough required arguments!");
+                    } else {
+                        $keys = array_keys($args['required']);
+                        foreach ($uriParts as $index => $part) {
+                            $args['required'][$keys[$index]] = $part;
+                        }
+                    }
+                    $match->setParams(array_merge($args['required'], $args['optional']));
+                }
+
+                // handle subroutes
+                if (sizeof($uriParts) && array_key_exists('child_routes', $route)) {
+                    // write test for situation when there are more uriParts but no child_routes => should be error
+                    $subMatch = $this->handler($route['child_routes'], implode('/', $uriParts), $match);
+                    if ($subMatch === false) {
+                        $hasMatch = false;
+                    }
+                }
+
+                break;
+            }
+        }
+        return $hasMatch ? $match : false;
+    }
+
+    private function getPossibleArguments ($route) {
+        $ret = [
+            'required' => [],
+            'optional' => []
+        ];
+        $matches = [];
+        preg_match_all('/(\:\w+)/', $route['route'], $matches);
+        if (sizeof($matches)) {
+            foreach ($matches[0] as $match) {
+                $key = str_replace(':', '', $match);
+                $ret['required'][$key] = null;
+            }
+        }
+        return $ret;
+    }
+
     /**
      * Search for route configuration
      *
@@ -82,17 +168,26 @@ class Router
      * If match is found, associative array with following keys is returned:
      * <code>["route", "namespace", "controller", "action", "params", "defaults"]</code>
      *
-     * @param string $requestString
-     * @return array configuration of found match
-     * @throws RouteNotFoundException when no match found in available routes
-     * @throws InvalidConfigurationException when configuration of matched route is invalid
+     * @param string|HttpRequest $request URL or HttpRequest to find match for.
+     * @return array configuration of found match.
+     * @throws RouteNotFoundException when no match found in available routes.
+     * @throws InvalidConfigurationException when configuration of matched route is invalid.
+     * @throws InvalidArgumentException when given argument is other than HttpRequest or string.
+     * @todo rename to something more self-explainable
      */
-    public function getMatchedConfiguration($requestString)
+    public function getMatchedConfiguration($request)
     {
+
+        if ($request instanceof HttpRequest) {
+            $requestString = $request->getUri();
+        } else if (is_string($request)) {
+            $requestString = $request;
+        } else {
+            throw new InvalidArgumentException("Invalid request given.");
+        }
 
         $result = array(
             'route' => null,
-            'namespace' => null,
             'controller' => null,
             'action' => null,
             'params' => null,
@@ -151,9 +246,6 @@ class Router
 
             $result['route'] .= $node['route'];
 
-            if (array_key_exists('namespace', $node)) {
-                $result['namespace'] = $node['namespace'];
-            }
             if (array_key_exists('controller', $node)) {
                 $result['controller'] = $node['controller'];
             }
@@ -163,13 +255,13 @@ class Router
             if(array_key_exists('defaults', $node)) {
                 $result['defaults'] = array_merge($result['defaults'], $node['defaults']);
             }
-            if (array_key_exists('childRoutes', $node)) {
+            if (array_key_exists('sub_routes', $node)) {
                 $parts = array_values(array_filter(explode('/', $url)));
                 if (count($parts) > 1) {
-                    if (array_key_exists($parts[1], $node['childRoutes'])) {
+                    if (array_key_exists($parts[1], $node['sub_routes'])) {
                         $key = array_search($parts[1], $parts);
                         $rest = array_slice($parts, $key);
-                        $this->parseNode(implode('/', $rest), $node['childRoutes'][$parts[1]], $result);
+                        $this->parseNode(implode('/', $rest), $node['sub_routes'][$parts[1]], $result);
                     }
                 }
             }
