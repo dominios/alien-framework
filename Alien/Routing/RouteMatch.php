@@ -146,6 +146,14 @@ class RouteMatch
     /**
      * @param array $params
      */
+    public function applyParams($params)
+    {
+        $this->params = array_merge($this->params, $params);
+    }
+
+    /**
+     * @param array $params
+     */
     public function setParams($params)
     {
         $this->params = $params;

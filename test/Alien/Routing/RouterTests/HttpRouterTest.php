@@ -198,9 +198,12 @@ class HttpRouter extends PHPUnit_Framework_TestCase
 
     public function parametrizedDataProvider ()
     {
+        $c = 'ArgumentsController';
+        $a = 'handle';
         return [
-            'single required' => [ new RouteMatch('/arg/s/:foo', 'handle', 'ArgumentsController', [ 'foo' => 123 ]), '/arg/s/123' ],
-            'multiple required' => [ new RouteMatch('/arg/m/:foo/:bar/:baz', 'handle', 'ArgumentsController', [ 'foo' => 'x', 'bar' => 'y', 'baz' => 'z' ]), '/arg/m/x/y/z' ],
+            'single required' => [ new RouteMatch('/arg/s/:foo', $a, $c, [ 'foo' => 123 ]), '/arg/s/123' ],
+            'multiple required' => [ new RouteMatch('/arg/m/:foo/:bar/:baz', $a, $c, [ 'foo' => 'x', 'bar' => 'y', 'baz' => 'z' ]), '/arg/m/x/y/z' ],
+            'multiple-separated-by-path' => [ new RouteMatch('/arg/p/:foo/path/:baz', $a, $c, [ 'foo' => 'x', 'baz' => 'y' ]), '/arg/p/x/path/y' ],
         ];
     }
 
@@ -215,38 +218,6 @@ class HttpRouter extends PHPUnit_Framework_TestCase
         $result = $this->router->getMatchedConfiguration($request);
         // use exception instead of false
         $this->assertEquals(false, $result);
-    }
-
-    public function testShouldHandleChildGetRouteRequest()
-    {
-        $request = new HttpRequest('/http/25', HttpRequest::METHOD_GET);
-        $expected = array_merge($this->expected, ['action' => 'get']);
-        $result = $this->router->getMatchedConfiguration($request);
-        $this->assertEquals($expected, $result);
-    }
-
-    public function testShouldHandleChildPatchRequest()
-    {
-        $request = new HttpRequest('/http/25', HttpRequest::METHOD_PATCH);
-        $expected = array_merge($this->expected, ['action' => 'patch']);
-        $result = $this->router->getMatchedConfiguration($request);
-        $this->assertEquals($expected, $result);
-    }
-
-    public function testShouldHandleChildPostRequest()
-    {
-        $request = new HttpRequest('/http/25', HttpRequest::METHOD_POST);
-        $expected = array_merge($this->expected, ['action' => 'patch']);
-        $result = $this->router->getMatchedConfiguration($request);
-        $this->assertEquals($expected, $result);
-    }
-
-    public function testShouldHandleChildDeleteRequest()
-    {
-        $request = new HttpRequest('/http/25', HttpRequest::METHOD_DELETE);
-        $expected = array_merge($this->expected, ['action' => 'delete']);
-        $result = $this->router->getMatchedConfiguration($request);
-        $this->assertEquals($expected, $result);
     }
 
     public function testShouldThrowExceptionWhenNoMethodMatch()

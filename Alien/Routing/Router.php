@@ -96,7 +96,7 @@ class Router
         $hasMatch = $this->handler($this->routes, $uri, $match);
 
         if (!$hasMatch) {
-            throw new RouteNotFoundException(sprintf("Route %s was not found", $uri));
+            throw new RouteNotFoundException(sprintf("Route '%s' was not found", $uri));
         }
         return $match;
     }
@@ -117,25 +117,48 @@ class Router
                 $hasMatch = true;
 
                 if ($hasArguments) {
-                    $args = $this->getPossibleArguments($route);
-                    if (count($args['required']) > $uriParts) {
+
+                    $arguments = $this->getPossibleArguments($route);
+                    $required = $arguments['required'];
+                    $optional = $arguments['optional'];
+                    $match->applyParams(array_merge($required, $optional));
+
+                    if (count($required) > $uriParts) {
                         // @todo add test coverage
                         throw new RouteNotFoundException("Not enough required arguments!");
                     } else {
-                        $keys = array_keys($args['required']);
-                        foreach ($uriParts as $index => $part) {
-                            $args['required'][$keys[$index]] = $part;
+                        $strippedPrefix = preg_replace("~^$search~", '', $route['route']);
+                        $parts = array_values(array_filter(explode('/', $strippedPrefix)));
+                        foreach ($parts as $index => $part) {
+                            if (strpos($part, ':') !== false) {
+                                // it is argument
+                                $key = str_replace(':', '', $part);
+                                $required[$key] = $uriParts[$index];
+                            } else {
+                                if ($uriParts[$index] !== $part) {
+                                    throw new RouteNotFoundException("Path inside error");
+                                }
+                            }
                         }
+                        $match->applyParams($required);
+                        break;
                     }
-                    $match->setParams(array_merge($args['required'], $args['optional']));
                 }
 
                 // handle subroutes
-                if (sizeof($uriParts) && array_key_exists('child_routes', $route)) {
-                    // write test for situation when there are more uriParts but no child_routes => should be error
-                    $subMatch = $this->handler($route['child_routes'], implode('/', $uriParts), $match);
-                    if ($subMatch === false) {
-                        $hasMatch = false;
+                if (sizeof($uriParts)) {
+                    if (array_key_exists('child_routes', $route)) {
+                        // write test for situation when there are more uriParts but no child_routes => should be error
+                        $subMatch = $this->handler($route['child_routes'], implode('/', $uriParts), $match);
+                        if ($subMatch === false) {
+                            $hasMatch = false;
+                        }
+                    }
+                    else {
+                        $subMatch = $this->handler([$route], implode('/', $uriParts), $match);
+                        if ($subMatch === false) {
+                            $hasMatch = false;
+                        }
                     }
                 }
 
