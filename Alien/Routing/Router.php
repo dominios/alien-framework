@@ -76,7 +76,8 @@ class Router
         return $route;
     }
 
-    public function match ($request) {
+    public function match($request)
+    {
         $method = HttpRequest::METHOD_GET;
         if ($request instanceof HttpRequest) {
             $uri = $request->getUri();
@@ -101,7 +102,9 @@ class Router
         return $match;
     }
 
-    private function handler ($routes, $uri, RouteMatch $match) {
+    private function handler($routes, $uri, RouteMatch $match)
+    {
+
         $uriParts = array_filter(explode('/', $uri));
         $search = '/' . array_shift($uriParts);
         $hasMatch = false;
@@ -109,7 +112,7 @@ class Router
         foreach ($routes as $route) {
 
             $matches = [];
-            if (preg_match('~' . $search . '(/:\w)*~' , $route['route'], $matches)) {
+            if (preg_match('~' . $search . '(\[?\/:\w+\]?)*~', $route['route'], $matches)) {
 
                 $hasArguments = sizeof($matches) > 1;
 
@@ -128,6 +131,7 @@ class Router
                         throw new RouteNotFoundException("Not enough required arguments!");
                     } else {
                         $strippedPrefix = preg_replace("~^$search~", '', $route['route']);
+                        $strippedPrefix = preg_replace('~\[?\]?~', '', $strippedPrefix);
                         $parts = array_values(array_filter(explode('/', $strippedPrefix)));
                         foreach ($parts as $index => $part) {
                             if (strpos($part, ':') !== false) {
@@ -136,6 +140,7 @@ class Router
                                 $required[$key] = $uriParts[$index];
                             } else {
                                 if ($uriParts[$index] !== $part) {
+                                    var_dump($index, $part);
                                     throw new RouteNotFoundException("Path inside error");
                                 }
                             }
@@ -153,8 +158,7 @@ class Router
                         if ($subMatch === false) {
                             $hasMatch = false;
                         }
-                    }
-                    else {
+                    } else {
                         $subMatch = $this->handler([$route], implode('/', $uriParts), $match);
                         if ($subMatch === false) {
                             $hasMatch = false;
@@ -168,19 +172,43 @@ class Router
         return $hasMatch ? $match : false;
     }
 
-    private function getPossibleArguments ($route) {
+    private function getPossibleArguments($route)
+    {
+
         $ret = [
             'required' => [],
             'optional' => []
         ];
-        $matches = [];
-        preg_match_all('/(\:\w+)/', $route['route'], $matches);
-        if (sizeof($matches)) {
-            foreach ($matches[0] as $match) {
-                $key = str_replace(':', '', $match);
-                $ret['required'][$key] = null;
-            }
+        $uri = $route['route'];
+        $uriRequired = $uri;
+        $uriOptional = '';
+
+        // strip all optional first
+        $optionalRegex = '~\[.+\]~';
+        $optionalMatches = [];
+        preg_match_all($optionalRegex, $uri, $optionalMatches);
+        if (count($optionalMatches)) {
+            $uriRequired = preg_replace($optionalRegex, '', $uri);
+            $uriOptional = implode('', $optionalMatches[0]);
+            $uriOptional = preg_replace('~[\[\]]~', '', $uriOptional);
         }
+
+        $extractArguments = function ($uri) {
+            $matches = [];
+            $ret = [];
+            preg_match_all('/(\:\w+)/', $uri, $matches);
+            if (sizeof($matches)) {
+                foreach ($matches[0] as $match) {
+                    $key = str_replace(':', '', $match);
+                    $ret[$key] = null;
+                }
+            }
+            return $ret;
+        };
+
+        $ret['optional'] = $extractArguments($uriOptional);
+        $ret['required'] = $extractArguments($uriRequired);
+
         return $ret;
     }
 
@@ -275,7 +303,7 @@ class Router
             if (array_key_exists('action', $node)) {
                 $result['action'] = $node['action'];
             }
-            if(array_key_exists('defaults', $node)) {
+            if (array_key_exists('defaults', $node)) {
                 $result['defaults'] = array_merge($result['defaults'], $node['defaults']);
             }
             if (array_key_exists('sub_routes', $node)) {
@@ -339,7 +367,7 @@ class Router
         foreach ($parametrizedParts as $part) {
             if (strpos($part, ':') !== false) {
                 $params[str_replace(':', '', $part)] = $i;
-                if(in_array("/$part", $optionals)) {
+                if (in_array("/$part", $optionals)) {
                     $regexOptionalParts[] = '(\/[\w\d]+)?';
                 } else {
                     $regexRequiredParts[] = '([\w\d]+)';
@@ -363,7 +391,7 @@ class Router
             foreach ($params as $key => $index) {
 
                 $hasFromDefault = false;
-                if(array_key_exists($key, $defaults)) {
+                if (array_key_exists($key, $defaults)) {
                     $params[$key] = $defaults[$key];
                     $hasFromDefault = true;
                 }
@@ -372,10 +400,10 @@ class Router
                     throw new InvalidRequestException("Required argument $key not found");
                 }
 
-                if(array_key_exists($index, $paramsMatches)) {
+                if (array_key_exists($index, $paramsMatches)) {
                     $params[$key] = str_replace('/', '', $paramsMatches[$index]);
                 } else if (!$hasFromDefault) {
-                    $params[$key ] = null;
+                    $params[$key] = null;
                 }
 
             }
